@@ -1,0 +1,42 @@
+import Link from 'next/link';
+import Splat from './Splat';
+
+export default function Footer() {
+  return (
+    <footer className="site-footer">
+      <Splat width="180px" height="160px" bottom="-55px" right="-50px" color="yellow" rotate={-15} radius="r1" />
+      <Splat width="110px" height="95px" top="-30px" left="-35px" color="lilac" rotate={16} radius="r2" />
+      <Splat width="60px" height="55px" bottom="18%" right="-25px" color="red" rotate={-8} radius="r3" />
+      <Splat width="55px" height="50px" top="10%" right="30%" color="red" rotate={12} radius="r4" />
+      <div className="wrap">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Link href="/" className="brand">MANCHA<span>.</span></Link>
+            <p>Una galería con pocos artistas a la vez. El arte cambia, tú también puedes.</p>
+          </div>
+          <div className="footer-links">
+            <div className="footer-col">
+              <h5>Explorar</h5>
+              <Link href="/#artistas">Temporada actual</Link>
+              <Link href="/#favoritos">Favoritos</Link>
+              <Link href="/postular">¿Eres artista?</Link>
+            </div>
+            <div className="footer-col">
+              <h5>Contacto</h5>
+              <a href="mailto:hola@mancha.art">hola@mancha.art</a>
+            </div>
+            <div className="footer-col">
+              <h5>Síguenos</h5>
+              <span>Instagram</span>
+              <span>Pinterest</span>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>© 2026 MANCHA. Galería independiente.</span>
+          <span>Temporada 01 cierra el 19 sep 2026</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
