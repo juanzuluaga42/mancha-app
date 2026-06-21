@@ -2,7 +2,7 @@ import { placeBid, toggleFavorite } from '@/app/actions';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 
-export default function PieceCard({ piece, index, isFavorited, favoriteCount, currentBid, hasBids }) {
+export default function PieceCard({ piece, index, isFavorited, favoriteCount, currentBid, hasBids, redirectTo = '/' }) {
   const gradientClass = GRADIENTS[index % GRADIENTS.length];
 
   return (
@@ -24,6 +24,7 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
       <div className="piece-side">
         <form action={toggleFavorite}>
           <input type="hidden" name="pieceId" value={piece.id} />
+          <input type="hidden" name="redirectTo" value={redirectTo} />
           <button className={`heart-btn${isFavorited ? ' active' : ''}`} type="submit" aria-pressed={isFavorited} aria-label="Marcar como favorito">
             <svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 21s-7.2-4.35-9.3-8.7C1 9 2.4 5.4 6 5.4c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5 3.6 3.3 6.9C19.2 16.65 12 21 12 21z" /></svg>
             <span className="heart-count">{favoriteCount}</span>
@@ -37,6 +38,7 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
 
         <form action={placeBid} className="bid-form">
           <input type="hidden" name="pieceId" value={piece.id} />
+          <input type="hidden" name="redirectTo" value={redirectTo} />
           <input
             type="number"
             name="amount"
