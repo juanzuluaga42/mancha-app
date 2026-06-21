@@ -3,8 +3,10 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import PaintTrail from '@/components/PaintTrail';
 import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
+import { tips } from '@/lib/tips';
 
 export default async function Home({ searchParams }) {
   const params = await searchParams;
@@ -42,12 +44,16 @@ export default async function Home({ searchParams }) {
       <Nav />
 
       <header className="hero" id="hero">
+        <PaintTrail />
         <div className="blob blob-1" />
         <div className="blob blob-2" />
         <div className="blob blob-3" />
         <div className="blob blob-4" />
         <Splat width="90px" height="80px" bottom="110px" right="6%" color="red" rotate={-12} radius="r3" />
         <Splat width="70px" height="60px" top="6%" right="32%" color="yellow" rotate={8} radius="r4" />
+        <Splat width="120px" height="100px" top="50%" left="50%" color="lilac" rotate={4} radius="r2" center />
+        <Splat width="60px" height="55px" top="62%" left="38%" color="red" rotate={-16} radius="r3" />
+        <Splat width="80px" height="70px" bottom="40px" left="44%" color="yellow" rotate={10} radius="r1" />
 
         <div className="hero-content">
           <p className="eyebrow">{seasonLabel}</p>
@@ -67,6 +73,8 @@ export default async function Home({ searchParams }) {
         <Splat width="110px" height="90px" bottom="-55px" left="25%" color="lilac" rotate={-18} radius="r2" />
         <Splat width="80px" height="70px" bottom="-50px" right="15%" color="yellow" rotate={10} radius="r4" />
         <Splat width="70px" height="70px" top="50%" right="-35px" color="lilac" rotate={6} radius="r1" center />
+        <Splat width="55px" height="50px" top="-40px" left="38%" color="red" rotate={18} radius="r4" />
+        <Splat width="50px" height="48px" bottom="-38px" right="42%" color="yellow" rotate={-10} radius="r2" />
         <div className="wrap">
           <p>No somos un catálogo infinito: elegimos pocos artistas a la vez, en piezas limitadas, y le damos espacio real a cada historia.</p>
           <div className="stat"><b>{allArtists.length}</b>artistas / temporada</div>
@@ -78,6 +86,8 @@ export default async function Home({ searchParams }) {
         <Splat width="90px" height="80px" bottom="-45px" left="6%" color="lilac" rotate={14} radius="r3" />
         <Splat width="60px" height="60px" top="30%" left="-30px" color="red" rotate={-8} radius="r4" />
         <Splat width="70px" height="60px" bottom="20%" right="-30px" color="lilac" rotate={10} radius="r1" />
+        <Splat width="65px" height="58px" top="8%" left="45%" color="red" rotate={20} radius="r2" />
+        <Splat width="55px" height="50px" bottom="10%" left="62%" color="yellow" rotate={-14} radius="r3" />
         <div className="wrap">
           <p className="eyebrow">Favoritos</p>
           <h2 style={{ fontSize: 'clamp(1.7rem,3.2vw,2.4rem)', marginTop: 14 }}>Lo más querido de la temporada</h2>
@@ -117,6 +127,8 @@ export default async function Home({ searchParams }) {
         <Splat width="100px" height="90px" top="20%" right="-40px" color="yellow" rotate={14} radius="r2" />
         <Splat width="90px" height="80px" bottom="15%" left="-35px" color="red" rotate={20} radius="r3" />
         <Splat width="110px" height="95px" bottom="-40px" right="-45px" color="lilac" rotate={-22} radius="r4" />
+        <Splat width="70px" height="62px" top="45%" left="48%" color="yellow" rotate={8} radius="r2" center />
+        <Splat width="60px" height="55px" top="8%" left="35%" color="red" rotate={-12} radius="r3" />
 
         <div className="wrap section-head">
           <p className="eyebrow">Artistas — {season?.name ?? 'Temporada actual'}</p>
@@ -166,6 +178,7 @@ export default async function Home({ searchParams }) {
         <Splat width="70px" height="60px" top="35%" right="-30px" color="yellow" rotate={8} radius="r4" />
         <Splat width="60px" height="55px" bottom="8%" left="-25px" color="red" rotate={-10} radius="r2" />
         <Splat width="55px" height="50px" top="-35px" left="48%" color="lilac" rotate={16} radius="r1" />
+        <Splat width="50px" height="46px" top="55%" left="42%" color="yellow" rotate={-8} radius="r3" />
         <div className="wrap section-head" style={{ paddingTop: 0 }}>
           <p className="eyebrow">Notas</p>
           <h2>Arte, mercado y oficio</h2>
@@ -184,6 +197,34 @@ export default async function Home({ searchParams }) {
                 </Link>
               </div>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="tips" id="tips">
+        <Splat width="160px" height="140px" top="-45px" right="-45px" color="yellow" rotate={-12} radius="r2" />
+        <Splat width="100px" height="90px" bottom="-35px" left="-35px" color="red" rotate={16} radius="r4" />
+        <Splat width="65px" height="58px" top="40%" right="4%" color="lilac" rotate={-8} radius="r1" />
+        <Splat width="55px" height="50px" bottom="12%" left="42%" color="yellow" rotate={10} radius="r3" />
+        <div className="wrap section-head" style={{ paddingTop: 0 }}>
+          <p className="eyebrow">Tips artísticos</p>
+          <h2>Cinco cosas que ayudan más de lo que parecen</h2>
+          <p className="section-note">Pensados para quien recién empieza a pintar como hobby — paso a paso, con un ejemplo concreto en cada uno.</p>
+        </div>
+        <div className="wrap">
+          {tips.map((tip) => (
+            <div className="tip-card" key={tip.title}>
+              <h3>{tip.title}</h3>
+              <ol className="tip-steps">
+                {tip.steps.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ol>
+              <div className="tip-example">
+                <b>Ejemplo</b>
+                {tip.example}
+              </div>
+            </div>
           ))}
         </div>
       </section>
