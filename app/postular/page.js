@@ -88,7 +88,7 @@ export default function PostularPage() {
               </div>
               <div className="faq-item">
                 <h4>¿Puedo cargar mis piezas apenas creo la cuenta?</h4>
-                <p>Sí, desde tu cuenta de artista podés completar tu perfil y subir hasta 3 piezas cuando quieras — nosotros revisamos y confirmamos tu lugar en la temporada.</p>
+                <p>Sí, desde tu cuenta de artista puedes completar tu perfil y subir hasta 3 piezas cuando quieras — nosotros revisamos y confirmamos tu lugar en la temporada.</p>
               </div>
               <div className="faq-item">
                 <h4>¿Quién se queda con el envío y el embalaje?</h4>
