@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CursorTrail from '@/components/CursorTrail';
 
 export const metadata = {
   title: 'MANCHA — No es para todos.',
@@ -8,6 +9,7 @@ export const metadata = {
 export default function ElegidosPage() {
   return (
     <div className="elegidos-page">
+      <CursorTrail />
       <div className="elegidos-nav">
         <Link href="/" className="elegidos-logo">MANCHA.</Link>
       </div>
@@ -38,7 +40,7 @@ export default function ElegidosPage() {
       <section className="elegidos-cta">
         <p className="elegidos-cta-line">¿Tu trabajo está listo para que lo veamos?</p>
         <Link href="/postular" className="elegidos-btn">Quiero ser de los elegidos →</Link>
-        <Link href="/" className="elegidos-back">o conocé MANCHA primero</Link>
+        <Link href="/" className="elegidos-back">o conoce MANCHA primero</Link>
       </section>
     </div>
   );
