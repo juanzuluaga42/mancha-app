@@ -3,14 +3,12 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
-import PieceCard from '@/components/PieceCard';
 import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
 
 export default async function Home({ searchParams }) {
   const params = await searchParams;
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
 
   const { data: season } = await supabase
     .from('seasons')
@@ -34,15 +32,6 @@ export default async function Home({ searchParams }) {
     .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
     .slice(0, 4)
     .filter((p) => (p.favorites?.length ?? 0) > 0);
-
-  function bidInfo(piece) {
-    const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
-    const hasBids = amounts.length > 0;
-    const currentBid = hasBids ? Math.max(...amounts) : Number(piece.min_bid);
-    const favoriteCount = piece.favorites?.length ?? 0;
-    const isFavorited = !!user && (piece.favorites ?? []).some((f) => f.buyer_id === user.id);
-    return { hasBids, currentBid, favoriteCount, isFavorited };
-  }
 
   const seasonLabel = season
     ? `${season.name} — ${new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} / ${new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}`
@@ -124,19 +113,15 @@ export default async function Home({ searchParams }) {
       </section>
 
       <section className="artists-section" id="artistas">
-        <Splat width="200px" height="180px" top="2%" left="-65px" color="lilac" rotate={-8} radius="r1" />
-        <Splat width="100px" height="90px" top="13%" right="-40px" color="yellow" rotate={14} radius="r2" />
-        <Splat width="80px" height="70px" top="27%" left="-35px" color="red" rotate={20} radius="r3" />
-        <Splat width="110px" height="95px" top="41%" right="-45px" color="lilac" rotate={-22} radius="r4" />
-        <Splat width="70px" height="65px" top="55%" left="-30px" color="yellow" rotate={10} radius="r1" />
-        <Splat width="120px" height="105px" top="68%" right="-50px" color="red" rotate={-6} radius="r2" />
-        <Splat width="85px" height="75px" top="82%" left="-35px" color="lilac" rotate={16} radius="r3" />
-        <Splat width="95px" height="85px" top="95%" right="-40px" color="yellow" rotate={-14} radius="r4" />
+        <Splat width="180px" height="160px" top="3%" left="-60px" color="lilac" rotate={-8} radius="r1" />
+        <Splat width="100px" height="90px" top="20%" right="-40px" color="yellow" rotate={14} radius="r2" />
+        <Splat width="90px" height="80px" bottom="15%" left="-35px" color="red" rotate={20} radius="r3" />
+        <Splat width="110px" height="95px" bottom="-40px" right="-45px" color="lilac" rotate={-22} radius="r4" />
 
         <div className="wrap section-head">
           <p className="eyebrow">Artistas — {season?.name ?? 'Temporada actual'}</p>
           <h2>Quiénes exponen ahora mismo</h2>
-          <p className="section-note">Cada pieza se subasta durante toda la temporada. Hay una puja mínima — quien ofrezca más cuando cierre la temporada se lleva la obra.</p>
+          <p className="section-note">Cada pieza se subasta durante toda la temporada. Entrá al perfil de cada artista para conocer su historia, ver sus piezas y pujar.</p>
         </div>
 
         <div className="wrap">
@@ -145,32 +130,32 @@ export default async function Home({ searchParams }) {
               Todavía no hay artistas confirmados para esta temporada. ¿Querés ser el primero? <Link href="/postular">Postular →</Link>
             </div>
           ) : (
-            allArtists.map((artist, ai) => (
-              <article className="artist-entry" key={artist.id}>
-                <div className="artist-info">
-                  <p className="eyebrow">{String(ai + 1).padStart(2, '0')}</p>
-                  <h3>{artist.display_name}</h3>
-                  <p className="artist-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
-                  <p className="artist-bio">{artist.bio}</p>
-                </div>
-                <div className="pieces">
-                  {(artist.pieces ?? []).map((piece, pi) => {
-                    const info = bidInfo(piece);
-                    return (
-                      <PieceCard
-                        key={piece.id}
-                        piece={piece}
-                        index={pi}
-                        isFavorited={info.isFavorited}
-                        favoriteCount={info.favoriteCount}
-                        currentBid={info.currentBid}
-                        hasBids={info.hasBids}
-                      />
-                    );
-                  })}
-                </div>
-              </article>
-            ))
+            <div className="artist-card-grid">
+              {allArtists.map((artist, ai) => {
+                const firstPiece = artist.pieces?.[0];
+                const gradientClass = `g${(ai % 12) + 1}`;
+                const pieceCount = artist.pieces?.length ?? 0;
+                return (
+                  <Link href={`/artistas/${artist.id}`} className="artist-card" key={artist.id}>
+                    <div className="artist-card-art">
+                      {firstPiece?.image_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={firstPiece.image_url} alt={artist.display_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
+                      )}
+                    </div>
+                    <div className="artist-card-info">
+                      <p className="eyebrow">{String(ai + 1).padStart(2, '0')}</p>
+                      <h3>{artist.display_name}</h3>
+                      <p className="artist-card-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
+                      <p className="artist-card-bio">{artist.bio}</p>
+                      <span className="artist-card-cta">Ver {pieceCount === 1 ? 'su pieza' : `sus ${pieceCount} piezas`} →</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           )}
         </div>
       </section>
