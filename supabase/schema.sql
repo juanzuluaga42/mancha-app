@@ -68,6 +68,7 @@ create table public.artists (
   bio text,
   location text,
   medium text,
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
   created_at timestamptz not null default now()
 );
 
@@ -95,6 +96,7 @@ create table public.pieces (
   year int,
   technique text,
   dimensions text,
+  description text,
   min_bid numeric not null check (min_bid > 0),
   image_url text,
   created_at timestamptz not null default now()
@@ -159,3 +161,38 @@ create policy "Cada uno agrega sus propios favoritos"
 create policy "Cada uno borra sus propios favoritos"
   on public.favorites for delete
   using (auth.uid() = buyer_id);
+
+-- Evita que un artista se autoapruebe editando su propio perfil.
+create or replace function public.protect_artist_status()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if auth.jwt() ->> 'email' is distinct from 'mancha.gallery@gmail.com' then
+    new.status := old.status;
+  end if;
+  return new;
+end;
+$$;
+
+create trigger protect_artist_status_trigger
+before update on public.artists
+for each row execute procedure public.protect_artist_status();
+
+-- LISTA DE ESPERA + INTERESADOS EN UNA OBRA PUNTUAL
+create table public.leads (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  piece_id uuid references public.pieces(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.leads enable row level security;
+
+create policy "Cualquiera puede registrarse"
+  on public.leads for insert with check (true);
+
+create policy "El founder ve todos los registros"
+  on public.leads for select
+  using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
