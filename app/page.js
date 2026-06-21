@@ -7,6 +7,7 @@ import PaintTrail from '@/components/PaintTrail';
 import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
+import HiddenMessage from '@/components/HiddenMessage';
 
 export const metadata = {
   title: 'MANCHA — Descubre artistas antes que el mundo',
@@ -288,6 +289,8 @@ export default async function Home({ searchParams }) {
           <WaitlistForm redirectTo="/" />
         </div>
       </section>
+
+      <HiddenMessage />
 
       <Footer />
     </>
