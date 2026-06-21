@@ -88,6 +88,11 @@ create policy "El artista edita su propio perfil"
   on public.artists for update
   using (auth.uid() = profile_id);
 
+create policy "El founder aprueba o rechaza postulaciones"
+  on public.artists for update
+  using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com')
+  with check (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
+
 -- PIEZAS (máximo 3 por artista, forzado acá abajo)
 create table public.pieces (
   id uuid primary key default gen_random_uuid(),
@@ -115,6 +120,15 @@ create policy "El artista sube hasta 3 piezas propias"
       where artists.id = pieces.artist_id and artists.profile_id = auth.uid()
     )
     and (select count(*) from public.pieces p where p.artist_id = pieces.artist_id) < 3
+  );
+
+create policy "El artista borra sus propias piezas"
+  on public.pieces for delete
+  using (
+    exists (
+      select 1 from public.artists
+      where artists.id = pieces.artist_id and artists.profile_id = auth.uid()
+    )
   );
 
 -- PUJAS
