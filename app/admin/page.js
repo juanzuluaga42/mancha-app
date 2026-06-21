@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { approveArtist, rejectArtist, approveApplication, rejectApplication, markAsSold } from './actions';
+import { approveArtist, rejectArtist, approveApplication, rejectApplication, markAsSold, sendPaymentReminder } from './actions';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -176,7 +176,13 @@ export default async function AdminPage() {
                       {r.paidAt ? (
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Pagado ✓</span>
                       ) : r.sold ? (
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>Vendida — pago pendiente</span>
+                        <>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)', display: 'block', marginBottom: 6 }}>Vendida — pago pendiente</span>
+                          <form action={sendPaymentReminder}>
+                            <input type="hidden" name="pieceId" value={r.id} />
+                            <button type="submit" className="piece-delete-btn" style={{ color: 'var(--ink)', borderColor: 'var(--ink)' }}>Enviar recordatorio</button>
+                          </form>
+                        </>
                       ) : r.leader ? (
                         <form action={markAsSold}>
                           <input type="hidden" name="pieceId" value={r.id} />
