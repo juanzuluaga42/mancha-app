@@ -25,8 +25,11 @@ export default function HiddenMessage() {
   }, []);
 
   return (
-    <div ref={ref} className="hidden-message" style={{ opacity: visible ? 1 : 0 }}>
-      Si llegaste hasta acá, ya tienes lo que hace falta para descubrir algo antes que el resto.
+    <div ref={ref} className="hidden-message">
+      <div className={`hidden-message-inner ${visible ? 'is-visible' : ''}`}>
+        <p className="hidden-message-eyebrow">Descubierto</p>
+        <p className="hidden-message-text">Si llegaste hasta acá, ya tienes lo que hace falta para descubrir algo antes que el resto.</p>
+      </div>
     </div>
   );
 }
