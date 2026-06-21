@@ -69,6 +69,14 @@ export default async function PiecePage({ params, searchParams }) {
 
             {piece.description && <p className="piece-description">{piece.description}</p>}
 
+            {(favoriteCount > 0 || hasBids) && (
+              <p className="piece-activity" style={{ marginTop: 18 }}>
+                {favoriteCount > 0 && <span>{favoriteCount} {favoriteCount === 1 ? 'persona sigue' : 'personas siguen'} esta obra</span>}
+                {favoriteCount > 0 && hasBids && <span className="dot-sep">·</span>}
+                {hasBids && <span>{piece.bids.length} {piece.bids.length === 1 ? 'puja registrada' : 'pujas registradas'}</span>}
+              </p>
+            )}
+
             <div className="piece-detail-actions">
               <form action={toggleFavorite}>
                 <input type="hidden" name="pieceId" value={piece.id} />
