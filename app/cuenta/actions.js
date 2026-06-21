@@ -48,12 +48,13 @@ export async function addPiece(formData) {
     year: Number(formData.get('year')) || null,
     technique: formData.get('technique'),
     dimensions: formData.get('dimensions'),
+    description: formData.get('description') || null,
     min_bid: Number(formData.get('min_bid')),
     image_url: formData.get('image_url') || null,
   });
 
   if (error) {
-    redirect(`/cuenta?error=${encodeURIComponent('No se pudo guardar la pieza — recordá que el máximo son 3 por artista.')}`);
+    redirect(`/cuenta?error=${encodeURIComponent('No se pudo guardar la pieza — recuerda que el máximo son 3 por artista.')}`);
   }
 
   revalidatePath('/cuenta');
