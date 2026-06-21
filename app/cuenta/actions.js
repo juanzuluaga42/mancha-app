@@ -109,3 +109,19 @@ export async function addPiece(formData) {
   revalidatePath('/cuenta');
   revalidatePath('/');
 }
+
+export async function deletePiece(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
+  const pieceId = formData.get('pieceId');
+
+  const { data: artist } = await supabase.from('artists').select('id').eq('profile_id', user.id).maybeSingle();
+  if (!artist) redirect('/cuenta');
+
+  await supabase.from('pieces').delete().eq('id', pieceId).eq('artist_id', artist.id);
+
+  revalidatePath('/cuenta');
+  revalidatePath('/');
+}
