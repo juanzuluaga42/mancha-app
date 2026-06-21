@@ -6,7 +6,6 @@ import Splat from '@/components/Splat';
 import PaintTrail from '@/components/PaintTrail';
 import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
-import { articles } from '@/lib/news';
 
 export const metadata = {
   title: 'MANCHA — Arte por temporadas',
@@ -83,45 +82,13 @@ export default async function Home({ searchParams }) {
 
         <div className="hero-content">
           <p className="eyebrow">{seasonLabel}</p>
-
-{season?.ends_at && <Countdown endsAt={season.ends_at} />}
-
-<h1>
-  Colecciona obras exclusivas
-  <br />
-  <em>antes de que termine la temporada.</em>
-</h1>
-
-<p className="hero-sub">
-  Solo unos pocos artistas son seleccionados.
-  <br />
-  Solo 3 obras por artista.
-  <br />
-  Solo 90 días para adquirirlas.
-  <br />
-  <br />
-  Cuando la temporada termina, las obras desaparecen y una nueva colección toma su lugar.
-</p>
-
-<div className="hero-ctas">
-  <a href="/obras" className="btn-primary">
-    Explorar Obras
-  </a>
-
-  <a
-    href="/postular"
-    className="btn-secondary"
-    style={{
-      marginLeft: '12px',
-      border: '1px solid currentColor',
-      padding: '12px 20px',
-      borderRadius: '999px'
-    }}
-  >
-    Postular como Artista
-  </a>
-</div>
-      </div>
+          {season?.ends_at && <Countdown endsAt={season.ends_at} />}
+          <h1>El arte no se queda <em>quieto.</em></h1>
+          <p className="hero-sub">Una galería con pocos artistas, elegidos a mano, donde cada uno expone solo tres piezas durante tres meses. Cuando termina la temporada, esa oportunidad no vuelve.</p>
+          <div className="hero-ctas">
+            <a href="#artistas" className="btn-primary">Ver temporada actual</a>
+          </div>
+        </div>
       </header>
 
       <Toast success={params?.success} error={params?.error} />
@@ -228,35 +195,6 @@ export default async function Home({ searchParams }) {
               })}
             </div>
           )}
-        </div>
-      </section>
-
-      <section className="news" id="notas">
-        <Splat width="170px" height="150px" top="-40px" left="-50px" color="red" rotate={20} radius="r3" />
-        <Splat width="110px" height="95px" bottom="-40px" right="-35px" color="lilac" rotate={-14} radius="r1" />
-        <Splat width="70px" height="60px" top="35%" right="-30px" color="yellow" rotate={8} radius="r4" />
-        <Splat width="60px" height="55px" bottom="8%" left="-25px" color="red" rotate={-10} radius="r2" />
-        <Splat width="55px" height="50px" top="-35px" left="48%" color="lilac" rotate={16} radius="r1" />
-        <Splat width="50px" height="46px" top="55%" left="42%" color="yellow" rotate={-8} radius="r3" />
-        <div className="wrap section-head" style={{ paddingTop: 0 }}>
-          <p className="eyebrow">Notas</p>
-          <h2>Arte, mercado y oficio</h2>
-        </div>
-        <div className="wrap news-list">
-          {articles.map((article) => (
-            <article className="news-item" key={article.slug}>
-              <p className="news-date">{article.date}</p>
-              <div>
-                <Link href={`/notas/${article.slug}`} className="news-title" style={{ display: 'block' }}>
-                  {article.title}
-                </Link>
-                <p className="news-excerpt">{article.excerpt}</p>
-                <Link href={`/notas/${article.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', borderBottom: '1.5px solid var(--ink)', paddingBottom: 2, display: 'inline-block', marginTop: 10 }}>
-                  Leer nota →
-                </Link>
-              </div>
-            </article>
-          ))}
         </div>
       </section>
 
