@@ -20,6 +20,17 @@ export async function createArtistProfile(formData) {
 
   const display_name = formData.get('display_name');
 
+  let initialStatus = 'pending';
+  if (user.email) {
+    const { data: matchingApp } = await supabase
+      .from('artist_applications')
+      .select('id')
+      .eq('email', user.email)
+      .eq('status', 'approved')
+      .maybeSingle();
+    if (matchingApp) initialStatus = 'approved';
+  }
+
   const { error } = await supabase.from('artists').insert({
     profile_id: user.id,
     season_id: season?.id ?? null,
@@ -27,7 +38,7 @@ export async function createArtistProfile(formData) {
     bio: formData.get('bio'),
     location: formData.get('location'),
     medium: formData.get('medium'),
-    status: 'pending',
+    status: initialStatus,
   });
 
   if (error) {
@@ -37,11 +48,13 @@ export async function createArtistProfile(formData) {
   if (user.email) {
     await sendEmail({
       to: user.email,
-      subject: 'Recibimos tu postulación a MANCHA',
+      subject: initialStatus === 'approved' ? '¡Tu cuenta de artista en MANCHA está lista!' : 'Recibimos tu postulación a MANCHA',
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">¡Recibimos tu postulación, ${display_name}!</h2>
-          <p>La estamos revisando. Te avisamos por correo apenas tengamos una respuesta — normalmente en pocos días.</p>
+          <h2 style="margin-bottom: 4px;">${initialStatus === 'approved' ? `¡Bienvenido/a, ${display_name}!` : `¡Recibimos tu postulación, ${display_name}!`}</h2>
+          <p>${initialStatus === 'approved'
+            ? 'Ya puedes entrar a tu cuenta y subir hasta 3 piezas para esta temporada.'
+            : 'La estamos revisando. Te avisamos por correo apenas tengamos una respuesta — normalmente en pocos días.'}</p>
           <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
         </div>
       `,
