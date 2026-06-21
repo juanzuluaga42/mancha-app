@@ -163,3 +163,49 @@ export async function markAsSold(formData) {
 
   revalidatePath('/admin');
 }
+
+export async function sendPaymentReminder(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const pieceId = formData.get('pieceId');
+
+  const { data: piece } = await supabase
+    .from('pieces')
+    .select('title, bids(amount, buyer:profiles(full_name, email))')
+    .eq('id', pieceId)
+    .maybeSingle();
+
+  const bids = [...(piece?.bids ?? [])].sort((a, b) => Number(b.amount) - Number(a.amount));
+  const winner = bids[0] ?? null;
+
+  if (winner?.buyer?.email) {
+    // El link de pago de Stripe vence a las 24hs, así que generamos uno nuevo
+    // en vez de reusar el que se mandó en el correo original.
+    const checkoutUrl = await createCheckoutLink({
+      pieceId,
+      pieceTitle: piece.title,
+      amountUsd: winner.amount,
+      buyerEmail: winner.buyer.email,
+    });
+
+    await sendEmail({
+      to: winner.buyer.email,
+      subject: `Recordatorio: tu pago por "${piece.title}" sigue pendiente — MANCHA`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">Hola ${winner.buyer.full_name || ''},</h2>
+          <p>Te escribimos porque ganaste la puja por <strong>"${piece.title}"</strong> y todavía no completaste el pago.</p>
+          ${checkoutUrl
+            ? `<p style="margin: 20px 0;"><a href="${checkoutUrl}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">Pagar ahora →</a></p>`
+            : `<p>Escríbenos para coordinar el pago.</p>`}
+          <p style="font-size: 13px; color: #666;">Si no completas el pago en los próximos días, nos reservamos el derecho de ofrecerle la pieza a la siguiente puja más alta.</p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
+  }
+
+  revalidatePath('/admin');
+}
