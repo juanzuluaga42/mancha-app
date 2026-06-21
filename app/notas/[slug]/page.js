@@ -11,7 +11,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = getArticleBySlug(slug);
-  return { title: article ? `MANCHA — ${article.title}` : 'MANCHA — Notas' };
+  if (!article) return { title: 'MANCHA — Notas' };
+  return {
+    title: `MANCHA — ${article.title}`,
+    description: article.excerpt,
+    openGraph: { title: article.title, description: article.excerpt, images: ['/og-default.jpg'], type: 'article' },
+    twitter: { card: 'summary_large_image', images: ['/og-default.jpg'] },
+  };
 }
 
 export default async function ArticlePage({ params }) {
