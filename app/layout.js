@@ -1,5 +1,6 @@
 import { Unbounded, Newsreader, Space_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import PulseTicker from '@/components/PulseTicker';
 import './globals.css';
 
 const unbounded = Unbounded({ subsets: ['latin'], weight: ['400','500','600','700','900'], variable: '--font-display-raw' });
@@ -15,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className={`${unbounded.variable} ${newsreader.variable} ${spaceMono.variable}`}>
-      <body>{children}<Analytics /></body>
+      <body>{children}<PulseTicker /><Analytics /></body>
     </html>
   );
 }
