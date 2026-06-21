@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { createArtistProfile, addPiece } from './actions';
+import { createArtistProfile, addPiece, deletePiece } from './actions';
+import SubmitButton from '@/components/SubmitButton';
 
 export const metadata = { title: 'MANCHA — Mi cuenta' };
 
@@ -70,7 +71,7 @@ async function ArtistDashboard({ supabase, userId }) {
             <label htmlFor="bio">Bio corta</label>
             <textarea id="bio" name="bio" rows={4} required />
           </div>
-          <button type="submit" className="auth-submit">Enviar postulación</button>
+          <SubmitButton pendingText="Enviando postulación...">Enviar postulación</SubmitButton>
         </form>
       </div>
     );
@@ -82,7 +83,7 @@ async function ArtistDashboard({ supabase, userId }) {
         <p className="eyebrow">Postulación en revisión</p>
         <h3>{artist.display_name}</h3>
         <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginTop: 10 }}>
-          Recibimos tu postulación. La estamos revisando — te avisamos por correo apenas tengamos una respuesta.
+          Recibimos tu postulación. La estamos revisando — te avisamos por correo apenas tengamos una respuesta. Apenas la aprobemos, vas a poder volver a esta misma página y cargar tus piezas acá.
         </p>
       </div>
     );
@@ -141,9 +142,17 @@ async function ArtistDashboard({ supabase, userId }) {
                   <p className="dash-piece-title">{p.title}</p>
                   <p className="dash-piece-meta">{p.technique} · {p.dimensions}</p>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p className="dash-piece-title">${Number(currentBid).toLocaleString('es-AR')}</p>
-                  <p className="dash-piece-meta">{amounts.length} {amounts.length === 1 ? 'puja' : 'pujas'}</p>
+                <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div>
+                    <p className="dash-piece-title">${Number(currentBid).toLocaleString('es-AR')}</p>
+                    <p className="dash-piece-meta">{amounts.length} {amounts.length === 1 ? 'puja' : 'pujas'}</p>
+                  </div>
+                  {amounts.length === 0 && (
+                    <form action={deletePiece}>
+                      <input type="hidden" name="pieceId" value={p.id} />
+                      <button type="submit" className="piece-delete-btn" title="Borrar pieza">Borrar</button>
+                    </form>
+                  )}
                 </div>
               </div>
             );
@@ -181,10 +190,19 @@ async function ArtistDashboard({ supabase, userId }) {
             </div>
             <div className="field">
               <label htmlFor="image_file">Foto de la pieza</label>
+              <div className="photo-guidelines">
+                <p>Para que el catálogo se vea parejo:</p>
+                <ul>
+                  <li>Foto de la obra sola, sin marco, pared, mano ni mueble alrededor.</li>
+                  <li>Luz natural y pareja — sin flash directo ni sombras fuertes de un lado.</li>
+                  <li>La pieza ocupando casi todo el encuadre, derecha (no en ángulo).</li>
+                  <li>Buena resolución: evita fotos borrosas o muy comprimidas.</li>
+                </ul>
+              </div>
               <input id="image_file" name="image_file" type="file" accept="image/*" />
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--ink-soft)', marginTop: 6 }}>Máximo 8 MB.</p>
             </div>
-            <button type="submit" className="auth-submit">Subir pieza</button>
+            <SubmitButton pendingText="Subiendo...">Subir pieza</SubmitButton>
           </form>
         </div>
       )}
