@@ -52,6 +52,10 @@ export async function placeBid(formData) {
     endsAtBefore = seasonBefore?.ends_at ?? null;
   }
 
+  if (endsAtBefore && new Date(endsAtBefore).getTime() < Date.now()) {
+    redirect(`${redirectTo}?error=${encodeURIComponent('Esta temporada ya cerró — ya no se pueden registrar pujas nuevas.')}`);
+  }
+
   const { error } = await supabase.from('bids').insert({
     piece_id: pieceId,
     buyer_id: user.id,
