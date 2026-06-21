@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { approveArtist, rejectArtist, approveApplication, rejectApplication } from './actions';
+import { approveArtist, rejectArtist, approveApplication, rejectApplication, markAsSold } from './actions';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -30,7 +30,7 @@ export default async function AdminPage() {
 
   const { data: artists } = await supabase
     .from('artists')
-    .select('display_name, pieces(id, title, min_bid, image_url, bids(amount, created_at, buyer:profiles(full_name, email)))')
+    .select('display_name, pieces(id, title, min_bid, image_url, sold, bids(amount, created_at, buyer:profiles(full_name, email)))')
     .eq('status', 'approved')
     .order('created_at', { ascending: true });
 
@@ -50,6 +50,7 @@ export default async function AdminPage() {
         artistName: artist.display_name,
         minBid: Number(piece.min_bid),
         bidCount: bids.length,
+        sold: piece.sold,
         leader,
       };
     })
@@ -152,6 +153,7 @@ export default async function AdminPage() {
                   <th>Pujas</th>
                   <th>Puja más alta</th>
                   <th>Quién va ganando</th>
+                  <th>Cierre</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,6 +169,16 @@ export default async function AdminPage() {
                           {r.leader.buyer?.full_name || 'Sin nombre'}
                           {r.leader.buyer?.email && <><br /><a href={`mailto:${r.leader.buyer.email}`}>{r.leader.buyer.email}</a></>}
                         </>
+                      ) : '—'}
+                    </td>
+                    <td>
+                      {r.sold ? (
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>Vendida ✓</span>
+                      ) : r.leader ? (
+                        <form action={markAsSold}>
+                          <input type="hidden" name="pieceId" value={r.id} />
+                          <button type="submit" className="piece-delete-btn" style={{ color: 'var(--ink)', borderColor: 'var(--ink)' }}>Marcar vendida y avisar</button>
+                        </form>
                       ) : '—'}
                     </td>
                   </tr>
