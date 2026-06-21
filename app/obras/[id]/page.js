@@ -98,45 +98,55 @@ export default async function PiecePage({ params, searchParams }) {
               </form>
 
               <div className="bid-min">
-                <p className="eyebrow">{hasBids ? 'Puja actual' : 'Puja mínima'}</p>
-                <p className="amount">${Number(currentBid).toLocaleString('es-AR')}</p>
+                <p className="eyebrow">{piece.sold ? 'Pieza vendida' : hasBids ? 'Puja actual' : 'Puja mínima'}</p>
+                <p className="amount">${Number(currentBid).toLocaleString('es-AR')} <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5em', color: 'var(--ink-soft)' }}>USD</span></p>
               </div>
 
-              <form action={placeBid} className="bid-form">
-                <input type="hidden" name="pieceId" value={piece.id} />
-                <input type="hidden" name="redirectTo" value={redirectTo} />
-                <input
-                  type="number"
-                  name="amount"
-                  min={Number(currentBid) + 1}
-                  step="1"
-                  required
-                  className="bid-input"
-                  placeholder={`${Number(currentBid) + 1}+`}
-                  aria-label="Monto de tu puja"
-                />
-                <button className="piece-buy" type="submit">Pujar →</button>
-              </form>
+              {piece.sold ? (
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Esta pieza ya se vendió.</p>
+              ) : (
+                <form action={placeBid} className="bid-form">
+                  <input type="hidden" name="pieceId" value={piece.id} />
+                  <input type="hidden" name="redirectTo" value={redirectTo} />
+                  <input
+                    type="number"
+                    name="amount"
+                    min={Number(currentBid) + 1}
+                    step="1"
+                    required
+                    className="bid-input"
+                    placeholder={`${Number(currentBid) + 1}+`}
+                    aria-label="Monto de tu puja"
+                  />
+                  <button className="piece-buy" type="submit">Pujar →</button>
+                </form>
+              )}
             </div>
 
-            <p className="bid-trust-note">
-              Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
-            </p>
+            {!piece.sold && (
+              <p className="bid-trust-note">
+                Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
+              </p>
+            )}
 
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${piece.artists.display_name} en MANCHA. ¿Está disponible para comprarla ya?`)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="whatsapp-cta"
-            >
-              ¿La quieres ya? Escríbenos por WhatsApp →
-            </a>
+            {!piece.sold && (
+              <>
+                <a
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${piece.artists.display_name} en MANCHA. ¿Está disponible para comprarla ya?`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="whatsapp-cta"
+                >
+                  ¿La quieres ya? Escríbenos por WhatsApp →
+                </a>
 
-            <div style={{ marginTop: 28 }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>¿Todavía no tienes cuenta?</p>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--ink-soft)', marginTop: 4 }}>Déjanos tu correo y te avisamos sobre esta pieza.</p>
-              <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
-            </div>
+                <div style={{ marginTop: 28 }}>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>¿Todavía no tienes cuenta?</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--ink-soft)', marginTop: 4 }}>Déjanos tu correo y te avisamos sobre esta pieza.</p>
+                  <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
