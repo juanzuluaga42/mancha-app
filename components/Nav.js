@@ -13,7 +13,7 @@ export default async function Nav() {
     { href: '/obras', label: 'Catálogo completo' },
     { href: '/temporadas', label: 'Temporadas pasadas' },
     { href: '/#favoritos', label: 'Favoritos' },
-    { href: '/#notas', label: 'Notas' },
+    { href: '/notas', label: 'Notas' },
     { href: '/tips', label: 'Tips artísticos' },
     { href: '/postular', label: '¿Eres artista?' },
   ];
