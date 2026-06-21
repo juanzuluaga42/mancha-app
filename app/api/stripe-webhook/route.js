@@ -25,6 +25,7 @@ export async function POST(request) {
   }
 
   console.log('Webhook recibido:', event.type);
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app';
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
@@ -78,6 +79,7 @@ export async function POST(request) {
             <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
               <h2 style="margin-bottom: 4px;">¡Gracias, ya es tuya!</h2>
               <p>Confirmamos tu pago de $${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')} por <strong>"${piece?.title ?? pieceId}"</strong>.</p>
+              <p style="margin: 20px 0;"><a href="${baseUrl}/obras/${pieceId}/certificado" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">Ver tu certificado de colección →</a></p>
               <p>Te escribimos por separado en las próximas horas para coordinar el envío.</p>
               <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
             </div>
