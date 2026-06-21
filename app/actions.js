@@ -40,6 +40,11 @@ export async function placeBid(formData) {
   const pieceId = formData.get('pieceId');
   const amount = Number(formData.get('amount'));
 
+  const { data: pieceCheck } = await supabase.from('pieces').select('sold').eq('id', pieceId).maybeSingle();
+  if (pieceCheck?.sold) {
+    redirect(`${redirectTo}?error=${encodeURIComponent('Esta pieza ya se vendió — ya no se puede pujar por ella.')}`);
+  }
+
   const { error } = await supabase.from('bids').insert({
     piece_id: pieceId,
     buyer_id: user.id,
