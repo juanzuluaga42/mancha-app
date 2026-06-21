@@ -36,7 +36,7 @@ export default function NavMenu({ links, authSlot }) {
               </li>
             ))}
           </ul>
-          <div className="nav-menu-auth" onClick={() => setOpen(false)}>
+          <div className="nav-menu-auth">
             {authSlot}
           </div>
         </div>
