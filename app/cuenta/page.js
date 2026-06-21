@@ -145,8 +145,8 @@ async function ArtistDashboard({ supabase, userId }) {
               <input id="min_bid" name="min_bid" type="number" min="1" required />
             </div>
             <div className="field">
-              <label htmlFor="image_url">URL de la foto (opcional por ahora)</label>
-              <input id="image_url" name="image_url" type="url" placeholder="https://..." />
+              <label htmlFor="image_file">Foto de la pieza</label>
+              <input id="image_file" name="image_file" type="file" accept="image/*" />
             </div>
             <button type="submit" className="auth-submit">Subir pieza</button>
           </form>
