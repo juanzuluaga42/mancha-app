@@ -45,17 +45,31 @@ export async function addPiece(formData) {
   let image_url = null;
   const file = formData.get('image_file');
 
-  if (file && file.size > 0) {
-    const ext = file.name.split('.').pop();
-    const path = `${user.id}/${Date.now()}.${ext}`;
-    const { error: uploadError } = await supabase.storage.from('pieces').upload(path, file);
-
-    if (uploadError) {
-      redirect(`/cuenta?error=${encodeURIComponent('No se pudo subir la foto. ' + uploadError.message)}`);
+  if (file && typeof file === 'object' && file.size > 0) {
+    if (file.size > 8 * 1024 * 1024) {
+      redirect(`/cuenta?error=${encodeURIComponent('La foto pesa demasiado — el máximo son 8 MB. Probá con una versión más liviana.')}`);
     }
 
-    const { data: publicUrl } = supabase.storage.from('pieces').getPublicUrl(path);
-    image_url = publicUrl.publicUrl;
+    let uploadErrorMessage = null;
+
+    try {
+      const ext = file.name.split('.').pop();
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('pieces').upload(path, file);
+
+      if (uploadError) {
+        uploadErrorMessage = uploadError.message;
+      } else {
+        const { data: publicUrl } = supabase.storage.from('pieces').getPublicUrl(path);
+        image_url = publicUrl.publicUrl;
+      }
+    } catch (e) {
+      uploadErrorMessage = 'Puede que falte correr la migración de almacenamiento en Supabase (migration-storage.sql).';
+    }
+
+    if (uploadErrorMessage) {
+      redirect(`/cuenta?error=${encodeURIComponent('No se pudo subir la foto: ' + uploadErrorMessage)}`);
+    }
   }
 
   const { error } = await supabase.from('pieces').insert({
