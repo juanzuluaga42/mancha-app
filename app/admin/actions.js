@@ -117,3 +117,39 @@ export async function rejectApplication(formData) {
 
   revalidatePath('/admin');
 }
+
+export async function markAsSold(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const pieceId = formData.get('pieceId');
+
+  const { data: piece } = await supabase
+    .from('pieces')
+    .select('title, bids(amount, buyer:profiles(full_name, email))')
+    .eq('id', pieceId)
+    .maybeSingle();
+
+  await supabase.from('pieces').update({ sold: true }).eq('id', pieceId);
+
+  const bids = [...(piece?.bids ?? [])].sort((a, b) => Number(b.amount) - Number(a.amount));
+  const winner = bids[0] ?? null;
+
+  if (winner?.buyer?.email) {
+    await sendEmail({
+      to: winner.buyer.email,
+      subject: `¡Ganaste la puja por "${piece.title}"! — MANCHA`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">¡Felicitaciones, ${winner.buyer.full_name || ''}!</h2>
+          <p>Tu puja de $${Number(winner.amount).toLocaleString('es-AR')} por <strong>"${piece.title}"</strong> fue la más alta. La pieza es tuya.</p>
+          <p>Te escribimos por separado para coordinar el pago y el envío.</p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
+  }
+
+  revalidatePath('/admin');
+}
