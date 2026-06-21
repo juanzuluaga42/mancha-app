@@ -210,3 +210,34 @@ create policy "Cualquiera puede registrarse"
 create policy "El founder ve todos los registros"
   on public.leads for select
   using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
+
+-- POSTULACIONES DE ARTISTAS (sin necesidad de cuenta)
+create table public.artist_applications (
+  id uuid primary key default gen_random_uuid(),
+  full_name text not null,
+  instagram text,
+  email text not null,
+  city text,
+  bio text not null,
+  portfolio_url text,
+  image_url_1 text,
+  image_url_2 text,
+  image_url_3 text,
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.artist_applications enable row level security;
+
+create policy "Cualquiera puede postularse"
+  on public.artist_applications for insert
+  with check (true);
+
+create policy "El founder ve las postulaciones"
+  on public.artist_applications for select
+  using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
+
+create policy "El founder actualiza el estado de la postulación"
+  on public.artist_applications for update
+  using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com')
+  with check (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
