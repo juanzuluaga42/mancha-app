@@ -86,7 +86,7 @@ export default async function Home({ searchParams }) {
 
 {season?.ends_at && <Countdown endsAt={season.ends_at} />}
 
-<h1>
+  </h1>
   Colecciona artistas
   <br />
   <em>antes de que el mundo los descubra.</em>
