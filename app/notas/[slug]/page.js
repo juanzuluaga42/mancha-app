@@ -30,7 +30,7 @@ export default async function ArticlePage({ params }) {
       <Nav />
       <header className="page-header">
         <div className="wrap" style={{ maxWidth: '760px' }}>
-          <Link href="/#notas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver a notas</Link>
+          <Link href="/notas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver a notas</Link>
           <p className="eyebrow">{article.date}</p>
           <h1 style={{ maxWidth: '20ch' }}>{article.title}</h1>
         </div>
