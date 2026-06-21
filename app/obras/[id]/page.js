@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Toast from '@/components/Toast';
+import WaitlistForm from '@/components/WaitlistForm';
 import { toggleFavorite, placeBid } from '@/app/actions';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
@@ -130,6 +131,12 @@ export default async function PiecePage({ params, searchParams }) {
             >
               ¿La quieres ya? Escríbenos por WhatsApp →
             </a>
+
+            <div style={{ marginTop: 28 }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>¿Todavía no tienes cuenta?</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--ink-soft)', marginTop: 4 }}>Déjanos tu correo y te avisamos sobre esta pieza.</p>
+              <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
+            </div>
           </div>
         </div>
       </section>
