@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { approveArtist, rejectArtist } from './actions';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -15,10 +16,23 @@ export default async function AdminPage() {
     redirect('/');
   }
 
+  const { data: pendingArtists } = await supabase
+    .from('artists')
+    .select('id, display_name, bio, medium, location, created_at, profiles(email)')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true });
+
   const { data: artists } = await supabase
     .from('artists')
     .select('display_name, pieces(id, title, min_bid, image_url, bids(amount, created_at, buyer:profiles(full_name, email)))')
+    .eq('status', 'approved')
     .order('created_at', { ascending: true });
+
+  const { data: leads } = await supabase
+    .from('leads')
+    .select('email, created_at, pieces(title)')
+    .order('created_at', { ascending: false })
+    .limit(100);
 
   const rows = (artists ?? []).flatMap((artist) =>
     (artist.pieces ?? []).map((piece) => {
@@ -50,6 +64,34 @@ export default async function AdminPage() {
 
       <section className="content">
         <div className="wrap admin-table-wrap">
+          <h2 style={{ marginBottom: 16 }}>Postulaciones pendientes ({(pendingArtists ?? []).length})</h2>
+          {(!pendingArtists || pendingArtists.length === 0) ? (
+            <div className="empty-state">No hay postulaciones esperando revisión.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
+              {pendingArtists.map((a) => (
+                <div className="dash-card" key={a.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+                  <div style={{ maxWidth: 480 }}>
+                    <h3>{a.display_name}</h3>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-soft)' }}>{a.medium}{a.location ? ` · ${a.location}` : ''}{a.profiles?.email ? ` · ${a.profiles.email}` : ''}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginTop: 10 }}>{a.bio}</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <form action={approveArtist}>
+                      <input type="hidden" name="artistId" value={a.id} />
+                      <button type="submit" className="auth-submit" style={{ background: 'var(--ink)' }}>Aprobar</button>
+                    </form>
+                    <form action={rejectArtist}>
+                      <input type="hidden" name="artistId" value={a.id} />
+                      <button type="submit" className="auth-submit" style={{ background: 'transparent', color: 'var(--ink)', border: '2px solid var(--ink)' }}>Rechazar</button>
+                    </form>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <h2 style={{ marginBottom: 16 }}>Quién va ganando cada pieza</h2>
           {rows.length === 0 ? (
             <div className="empty-state">Todavía no hay piezas cargadas.</div>
           ) : (
@@ -78,6 +120,30 @@ export default async function AdminPage() {
                         </>
                       ) : '—'}
                     </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <h2 style={{ margin: '40px 0 16px' }}>Lista de espera e interesados ({(leads ?? []).length})</h2>
+          {(!leads || leads.length === 0) ? (
+            <div className="empty-state">Todavía no hay registros.</div>
+          ) : (
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Correo</th>
+                  <th>Interés</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leads.map((l, i) => (
+                  <tr key={i}>
+                    <td><a href={`mailto:${l.email}`}>{l.email}</a></td>
+                    <td>{l.pieces?.title ? `Pieza: ${l.pieces.title}` : 'Lista de espera general'}</td>
+                    <td>{new Date(l.created_at).toLocaleDateString('es-AR')}</td>
                   </tr>
                 ))}
               </tbody>
