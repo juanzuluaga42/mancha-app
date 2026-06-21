@@ -63,3 +63,57 @@ export async function rejectArtist(formData) {
 
   revalidatePath('/admin');
 }
+
+export async function approveApplication(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const appId = formData.get('applicationId');
+  const { data: application } = await supabase.from('artist_applications').select('email, full_name').eq('id', appId).maybeSingle();
+
+  await supabase.from('artist_applications').update({ status: 'approved' }).eq('id', appId);
+
+  if (application?.email) {
+    await sendEmail({
+      to: application.email,
+      subject: '¡Tu postulación a MANCHA fue aceptada!',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">¡Bienvenido/a a MANCHA, ${application.full_name}!</h2>
+          <p>Tu postulación quedó aprobada. Para empezar a cargar tus piezas, crea tu cuenta de artista en mancha-app.vercel.app/registro usando este mismo correo (${application.email}) — va a quedar lista para subir piezas sin pasar por otra revisión.</p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
+  }
+
+  revalidatePath('/admin');
+}
+
+export async function rejectApplication(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const appId = formData.get('applicationId');
+  const { data: application } = await supabase.from('artist_applications').select('email, full_name').eq('id', appId).maybeSingle();
+
+  await supabase.from('artist_applications').update({ status: 'rejected' }).eq('id', appId);
+
+  if (application?.email) {
+    await sendEmail({
+      to: application.email,
+      subject: 'Tu postulación a MANCHA',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">Sobre tu postulación</h2>
+          <p>Gracias por postular a MANCHA, ${application.full_name}. Esta vez no avanzamos con tu perfil para la temporada actual — puedes volver a postular más adelante.</p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
+  }
+
+  revalidatePath('/admin');
+}
