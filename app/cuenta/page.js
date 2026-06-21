@@ -49,9 +49,9 @@ async function ArtistDashboard({ supabase, userId }) {
   if (!artist) {
     return (
       <div className="dash-card">
-        <h3>Completa tu perfil de artista</h3>
+        <h3>Postula como artista</h3>
         <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginBottom: 20 }}>
-          Esto es lo que va a ver la gente en el catálogo si tu postulación es aceptada.
+          Completa esto y lo revisamos — esto es lo que va a ver la gente en el catálogo si tu postulación es aceptada.
         </p>
         <form action={createArtistProfile}>
           <div className="field">
@@ -70,19 +70,45 @@ async function ArtistDashboard({ supabase, userId }) {
             <label htmlFor="bio">Bio corta</label>
             <textarea id="bio" name="bio" rows={4} required />
           </div>
-          <button type="submit" className="auth-submit">Guardar perfil</button>
+          <button type="submit" className="auth-submit">Enviar postulación</button>
         </form>
+      </div>
+    );
+  }
+
+  if (artist.status === 'pending') {
+    return (
+      <div className="dash-card">
+        <p className="eyebrow">Postulación en revisión</p>
+        <h3>{artist.display_name}</h3>
+        <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginTop: 10 }}>
+          Recibimos tu postulación. La estamos revisando — te avisamos por correo apenas tengamos una respuesta.
+        </p>
+      </div>
+    );
+  }
+
+  if (artist.status === 'rejected') {
+    return (
+      <div className="dash-card">
+        <p className="eyebrow">Postulación no aceptada esta vez</p>
+        <h3>{artist.display_name}</h3>
+        <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginTop: 10 }}>
+          Esta vez no avanzamos con tu postulación. Si quieres más detalle, escríbenos — y nada impide volver a postular más adelante con un perfil distinto.
+        </p>
       </div>
     );
   }
 
   const { data: pieces } = await supabase
     .from('pieces')
-    .select('*, bids(amount)')
+    .select('*, bids(amount), favorites(buyer_id)')
     .eq('artist_id', artist.id)
     .order('created_at', { ascending: true });
 
   const myPieces = pieces ?? [];
+  const totalBids = myPieces.reduce((sum, p) => sum + (p.bids?.length ?? 0), 0);
+  const totalFollowers = myPieces.reduce((sum, p) => sum + (p.favorites?.length ?? 0), 0);
 
   return (
     <>
@@ -90,6 +116,15 @@ async function ArtistDashboard({ supabase, userId }) {
         <h3>{artist.display_name}</h3>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-soft)' }}>{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
         <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', color: 'var(--ink-soft)', marginTop: 14 }}>{artist.bio}</p>
+      </div>
+
+      <div className="dash-card">
+        <h3>Tus números esta temporada</h3>
+        <div className="dash-stats">
+          <div><b>{myPieces.length}</b><span>{myPieces.length === 1 ? 'pieza activa' : 'piezas activas'}</span></div>
+          <div><b>{totalBids}</b><span>{totalBids === 1 ? 'puja recibida' : 'pujas recibidas'}</span></div>
+          <div><b>{totalFollowers}</b><span>{totalFollowers === 1 ? 'persona siguiendo' : 'personas siguiendo'}</span></div>
+        </div>
       </div>
 
       <div className="dash-card">
