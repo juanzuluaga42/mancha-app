@@ -6,6 +6,7 @@ const newsreader = Newsreader({ subsets: ['latin'], style: ['normal','italic'], 
 const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400','700'], variable: '--font-mono-raw' });
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app'),
   title: 'MANCHA — Arte por temporadas',
   description: 'Una galería con pocos artistas a la vez. Subastas por temporada, tres piezas por artista, tres meses por temporada.',
 };
