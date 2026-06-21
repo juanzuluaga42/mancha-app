@@ -4,6 +4,16 @@ import CursorTrail from '@/components/CursorTrail';
 export const metadata = {
   title: 'MANCHA — No es para todos.',
   description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
+  openGraph: {
+    title: 'MANCHA — No es para todos.',
+    description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MANCHA — No es para todos.',
+    description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
+  },
 };
 
 export default function ElegidosPage() {
