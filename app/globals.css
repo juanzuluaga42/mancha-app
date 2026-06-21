@@ -269,7 +269,30 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .catalog-select{border:var(--rule); border-radius:5px; padding:11px 14px; background:rgba(255,255,255,0.7); font-family:var(--font-mono); font-size:12px; color:var(--ink); text-transform:uppercase;}
 .catalog-count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin:20px 0 14px;}
 
-/* ---------- PIEZA MÁS ACCESIBLE ---------- */
+/* ---------- SECCIONES DE COPY NUEVAS ---------- */
+.que-es{padding:64px 0 24px; text-align:center;}
+.que-es h2{font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:10px;}
+.que-es .wrap{display:flex; flex-direction:column; align-items:center;}
+
+.why-buy{padding:56px 0; border-top:var(--rule);}
+.why-buy h2{font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:8px;}
+.why-buy-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:28px 40px; margin-top:32px;}
+.why-buy-grid b{font-family:var(--font-display); font-size:1.4rem; color:var(--red-deep);}
+.why-buy-grid p{font-family:var(--font-body); font-size:1rem; color:var(--ink-soft); margin-top:6px; line-height:1.55;}
+@media (max-width:680px){.why-buy-grid{grid-template-columns:1fr;}}
+
+.como-funciona{padding:60px 0; border-top:var(--rule); text-align:center;}
+.como-funciona h2{font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:8px;}
+.steps-row{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:36px; text-align:left;}
+.step-col .step-n{font-family:var(--font-display); font-size:1.6rem; color:var(--red-deep); display:block; margin-bottom:8px;}
+.step-col p{font-family:var(--font-body); font-size:0.95rem; color:var(--ink-soft); line-height:1.5;}
+@media (max-width:760px){.steps-row{grid-template-columns:1fr 1fr;}}
+@media (max-width:480px){.steps-row{grid-template-columns:1fr;}}
+
+.para-artistas{padding:70px 0; border-top:var(--rule); position:relative; overflow:hidden;}
+.para-artistas h2{font-size:clamp(1.9rem,3.6vw,2.7rem); max-width:680px; margin:10px auto 0;}
+
+/* ---------- SECCIONES DE COPY NUEVAS (fin) ---------- */
 .cheapest-pick{padding:50px 0; border-bottom:var(--rule);}
 .cheapest-pick-inner{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
 .cheapest-pick-art{position:relative; aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:2px solid var(--ink);}
