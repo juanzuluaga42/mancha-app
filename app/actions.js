@@ -49,8 +49,8 @@ export async function placeBid(formData) {
   revalidatePath(redirectTo);
 
   if (error) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrar tu puja — probá con un monto mayor, o revisá que tu cuenta sea de comprador.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrar tu puja — prueba con un monto mayor, o revisa que tu cuenta sea de comprador.')}`);
   }
 
-  redirect(`${redirectTo}?success=${encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora sos la oferta más alta de esa pieza.')}`);
+  redirect(`${redirectTo}?success=${encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora eres la oferta más alta de esa pieza.')}`);
 }
