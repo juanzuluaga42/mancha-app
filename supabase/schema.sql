@@ -104,6 +104,7 @@ create table public.pieces (
   description text,
   min_bid numeric not null check (min_bid > 0),
   image_url text,
+  sold boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -239,5 +240,10 @@ create policy "El founder ve las postulaciones"
 
 create policy "El founder actualiza el estado de la postulación"
   on public.artist_applications for update
+  using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com')
+  with check (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
+
+create policy "El founder marca piezas como vendidas"
+  on public.pieces for update
   using (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com')
   with check (auth.jwt() ->> 'email' = 'mancha.gallery@gmail.com');
