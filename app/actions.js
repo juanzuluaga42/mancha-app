@@ -40,9 +40,16 @@ export async function placeBid(formData) {
   const pieceId = formData.get('pieceId');
   const amount = Number(formData.get('amount'));
 
-  const { data: pieceCheck } = await supabase.from('pieces').select('sold').eq('id', pieceId).maybeSingle();
+  const { data: pieceCheck } = await supabase.from('pieces').select('sold, artist_id, artists(season_id)').eq('id', pieceId).maybeSingle();
   if (pieceCheck?.sold) {
     redirect(`${redirectTo}?error=${encodeURIComponent('Esta pieza ya se vendió — ya no se puede pujar por ella.')}`);
+  }
+
+  const seasonId = pieceCheck?.artists?.season_id;
+  let endsAtBefore = null;
+  if (seasonId) {
+    const { data: seasonBefore } = await supabase.from('seasons').select('ends_at').eq('id', seasonId).maybeSingle();
+    endsAtBefore = seasonBefore?.ends_at ?? null;
   }
 
   const { error } = await supabase.from('bids').insert({
@@ -50,6 +57,14 @@ export async function placeBid(formData) {
     buyer_id: user.id,
     amount,
   });
+
+  let extended = false;
+  if (seasonId && endsAtBefore) {
+    const { data: seasonAfter } = await supabase.from('seasons').select('ends_at').eq('id', seasonId).maybeSingle();
+    if (seasonAfter?.ends_at && new Date(seasonAfter.ends_at).getTime() !== new Date(endsAtBefore).getTime()) {
+      extended = true;
+    }
+  }
 
   revalidatePath('/');
   revalidatePath(redirectTo);
@@ -81,5 +96,9 @@ export async function placeBid(formData) {
     }
   }
 
-  redirect(`${redirectTo}?success=${encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora eres la oferta más alta de esa pieza.')}`);
+  redirect(`${redirectTo}?success=${encodeURIComponent(
+    extended
+      ? '¡Pujaste justo a tiempo! Como faltaba poco para el cierre, extendimos la temporada 5 minutos más.'
+      : '¡Listo! Tu puja quedó registrada — por ahora eres la oferta más alta de esa pieza.'
+  )}`);
 }
