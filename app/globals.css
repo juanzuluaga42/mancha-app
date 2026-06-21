@@ -226,6 +226,25 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .cd-sep{color:var(--ink-soft); opacity:0.4;}
 @media (max-width:520px){ .cd-unit b{font-size:15px;} .countdown{gap:10px; padding:8px 13px;} }
 
+/* ---------- ARCHIVO DE TEMPORADAS ---------- */
+.season-list{display:flex; flex-direction:column; gap:2px; margin-top:10px;}
+.season-row{display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 20px; border:var(--rule); border-radius:6px; background:rgba(255,255,255,0.35); flex-wrap:wrap;}
+.season-row:hover{border-color:rgba(22,17,13,0.32);}
+.season-row-name{font-family:var(--font-display); font-weight:600; font-size:1.1rem;}
+.season-row-dates{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:6px;}
+.season-row-right{display:flex; align-items:center; gap:14px;}
+.season-row-count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+.season-badge{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.05em; padding:5px 11px; border-radius:100px; border:1px solid var(--ink-soft); color:var(--ink-soft);}
+.season-badge.active{border-color:var(--red); color:var(--red);}
+.season-status-live{color:var(--red);}
+.season-status-closed{color:var(--ink-soft);}
+
+/* ---------- CATÁLOGO CON FILTROS ---------- */
+.catalog-filters{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;}
+.catalog-search{flex:1; min-width:200px; border:var(--rule); border-radius:5px; padding:11px 14px; background:rgba(255,255,255,0.7); font-family:var(--font-body); font-size:15px; color:var(--ink);}
+.catalog-select{border:var(--rule); border-radius:5px; padding:11px 14px; background:rgba(255,255,255,0.7); font-family:var(--font-mono); font-size:12px; color:var(--ink); text-transform:uppercase;}
+.catalog-count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin:20px 0 14px;}
+
 /* ---------- PÁGINA DE OBRA ---------- */
 .piece-detail{padding:60px 0 90px;}
 .piece-detail-art{width:100%; aspect-ratio:4/3; border-radius:10px; overflow:hidden; position:relative; margin-bottom:32px;}
