@@ -7,7 +7,6 @@ import PaintTrail from '@/components/PaintTrail';
 import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
-import { tips } from '@/lib/tips';
 
 export const metadata = {
   title: 'MANCHA — Arte por temporadas',
@@ -225,34 +224,6 @@ export default async function Home({ searchParams }) {
                 </Link>
               </div>
             </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="tips" id="tips">
-        <Splat width="160px" height="140px" top="-45px" right="-45px" color="yellow" rotate={-12} radius="r2" />
-        <Splat width="100px" height="90px" bottom="-35px" left="-35px" color="red" rotate={16} radius="r4" />
-        <Splat width="65px" height="58px" top="40%" right="4%" color="lilac" rotate={-8} radius="r1" />
-        <Splat width="55px" height="50px" bottom="12%" left="42%" color="yellow" rotate={10} radius="r3" />
-        <div className="wrap section-head" style={{ paddingTop: 0 }}>
-          <p className="eyebrow">Tips artísticos</p>
-          <h2>Cinco cosas que ayudan más de lo que parecen</h2>
-          <p className="section-note">Pensados para quien recién empieza a pintar como hobby — paso a paso, con un ejemplo concreto en cada uno.</p>
-        </div>
-        <div className="wrap">
-          {tips.map((tip) => (
-            <div className="tip-card" key={tip.title}>
-              <h3>{tip.title}</h3>
-              <ol className="tip-steps">
-                {tip.steps.map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))}
-              </ol>
-              <div className="tip-example">
-                <b>Ejemplo</b>
-                {tip.example}
-              </div>
-            </div>
           ))}
         </div>
       </section>
