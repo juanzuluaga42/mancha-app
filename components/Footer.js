@@ -24,7 +24,7 @@ export default function Footer() {
               <Link href="/#artistas">Temporada actual</Link>
               <Link href="/temporadas">Temporadas</Link>
               <Link href="/#favoritos">Favoritos</Link>
-              <Link href="/#notas">Notas</Link>
+              <Link href="/notas">Notas</Link>
               <Link href="/tips">Tips artísticos</Link>
               <Link href="/postular">¿Eres artista?</Link>
             </div>
