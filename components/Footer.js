@@ -27,6 +27,7 @@ export default function Footer() {
               <Link href="/notas">Notas</Link>
               <Link href="/tips">Tips artísticos</Link>
               <Link href="/postular">¿Eres artista?</Link>
+              <Link href="/legal">Términos y privacidad</Link>
             </div>
             <div className="footer-col">
               <h5>Contacto</h5>
