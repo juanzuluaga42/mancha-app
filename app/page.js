@@ -143,7 +143,7 @@ export default async function Home({ searchParams }) {
               <p className="eyebrow">Para empezar</p>
               <h2>La puja más accesible de la temporada</h2>
               <p className="cheapest-pick-title">{cheapestPiece.title} — {cheapestPiece.artistName}</p>
-              <p className="cheapest-pick-amount">${Number(cheapestPiece.currentPrice).toLocaleString('es-AR')}</p>
+              <p className="cheapest-pick-amount">${Number(cheapestPiece.currentPrice).toLocaleString('es-AR')} USD</p>
               <p className="section-note">{cheapestPiece.hasBids ? 'Puja actual más baja' : 'Puja mínima'} de toda la temporada — una buena forma de hacer tu primera puja en MANCHA.</p>
               <Link href={`/obras/${cheapestPiece.id}`} className="btn-primary">Ver esta pieza →</Link>
             </div>
