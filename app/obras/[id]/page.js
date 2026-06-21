@@ -33,11 +33,18 @@ export default async function PiecePage({ params, searchParams }) {
 
   const { data: piece } = await supabase
     .from('pieces')
-    .select('*, bids(amount), favorites(buyer_id), artists(id, display_name, location, medium)')
+    .select('*, bids(amount), favorites(buyer_id), artists(id, display_name, location, medium, season_id)')
     .eq('id', id)
     .maybeSingle();
 
   if (!piece) notFound();
+
+  let seasonEndsAt = null;
+  if (piece.artists?.season_id) {
+    const { data: season } = await supabase.from('seasons').select('ends_at').eq('id', piece.artists.season_id).maybeSingle();
+    seasonEndsAt = season?.ends_at ?? null;
+  }
+  const seasonClosed = !!seasonEndsAt && new Date(seasonEndsAt).getTime() < Date.now();
 
   const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
   const hasBids = amounts.length > 0;
@@ -98,12 +105,14 @@ export default async function PiecePage({ params, searchParams }) {
               </form>
 
               <div className="bid-min">
-                <p className="eyebrow">{piece.sold ? 'Pieza vendida' : hasBids ? 'Puja actual' : 'Puja mínima'}</p>
+                <p className="eyebrow">{piece.sold ? 'Pieza vendida' : seasonClosed ? 'Temporada cerrada' : hasBids ? 'Puja actual' : 'Puja mínima'}</p>
                 <p className="amount">${Number(currentBid).toLocaleString('es-AR')} <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5em', color: 'var(--ink-soft)' }}>USD</span></p>
               </div>
 
               {piece.sold ? (
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Esta pieza ya se vendió.</p>
+              ) : seasonClosed ? (
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Esta temporada ya cerró.</p>
               ) : (
                 <form action={placeBid} className="bid-form">
                   <input type="hidden" name="pieceId" value={piece.id} />
@@ -123,13 +132,13 @@ export default async function PiecePage({ params, searchParams }) {
               )}
             </div>
 
-            {!piece.sold && (
+            {!piece.sold && !seasonClosed && (
               <p className="bid-trust-note">
                 Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
               </p>
             )}
 
-            {!piece.sold && (
+            {!piece.sold && !seasonClosed && (
               <>
                 <a
                   href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${piece.artists.display_name} en MANCHA. ¿Está disponible para comprarla ya?`)}`}
