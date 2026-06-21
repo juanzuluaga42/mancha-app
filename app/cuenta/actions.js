@@ -42,6 +42,22 @@ export async function addPiece(formData) {
   const { data: artist } = await supabase.from('artists').select('id').eq('profile_id', user.id).maybeSingle();
   if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu perfil de artista.')}`);
 
+  let image_url = null;
+  const file = formData.get('image_file');
+
+  if (file && file.size > 0) {
+    const ext = file.name.split('.').pop();
+    const path = `${user.id}/${Date.now()}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from('pieces').upload(path, file);
+
+    if (uploadError) {
+      redirect(`/cuenta?error=${encodeURIComponent('No se pudo subir la foto. ' + uploadError.message)}`);
+    }
+
+    const { data: publicUrl } = supabase.storage.from('pieces').getPublicUrl(path);
+    image_url = publicUrl.publicUrl;
+  }
+
   const { error } = await supabase.from('pieces').insert({
     artist_id: artist.id,
     title: formData.get('title'),
@@ -50,7 +66,7 @@ export async function addPiece(formData) {
     dimensions: formData.get('dimensions'),
     description: formData.get('description') || null,
     min_bid: Number(formData.get('min_bid')),
-    image_url: formData.get('image_url') || null,
+    image_url,
   });
 
   if (error) {
