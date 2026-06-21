@@ -7,6 +7,7 @@ import Toast from '@/components/Toast';
 import { toggleFavorite, placeBid } from '@/app/actions';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
+const WHATSAPP_NUMBER = '529981163542';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -120,6 +121,15 @@ export default async function PiecePage({ params, searchParams }) {
             <p className="bid-trust-note">
               Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
             </p>
+
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${piece.artists.display_name} en MANCHA. ¿Está disponible para comprarla ya?`)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="whatsapp-cta"
+            >
+              ¿La quieres ya? Escríbenos por WhatsApp →
+            </a>
           </div>
         </div>
       </section>
