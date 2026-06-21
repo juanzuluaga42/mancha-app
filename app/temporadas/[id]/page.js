@@ -25,6 +25,7 @@ export default async function TemporadaPage({ params }) {
     .from('artists')
     .select('*, pieces(*, bids(amount))')
     .eq('season_id', id)
+    .eq('status', 'approved')
     .order('created_at', { ascending: true });
 
   const allArtists = artists ?? [];
