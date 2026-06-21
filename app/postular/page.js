@@ -6,6 +6,7 @@ import Toast from '@/components/Toast';
 import SubmitButton from '@/components/SubmitButton';
 import { createClient } from '@/utils/supabase/server';
 import { submitApplication } from './actions';
+import Countdown from '@/components/Countdown';
 
 export const metadata = {
   title: 'MANCHA — No publicamos arte. Elegimos artistas.',
@@ -19,6 +20,7 @@ export default async function PostularPage({ searchParams }) {
     .from('artists')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'approved');
+  const { data: season } = await supabase.from('seasons').select('ends_at').eq('is_current', true).maybeSingle();
 
   return (
     <>
@@ -34,6 +36,12 @@ export default async function PostularPage({ searchParams }) {
           <p className="eyebrow">Acceso por postulación</p>
           <h1>No publicamos arte.<br />Elegimos artistas.</h1>
           <p className="sub">MANCHA no es una vitrina abierta a cualquiera. Cada temporada, un grupo muy reducido entra — el resto espera la próxima. {artistCount ? `Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : 'Esta temporada recién empieza a llenarse.'} Si tu trabajo entra, no compartes página con miles de perfiles iguales — tienes la tuya, sola, durante tres meses completos.</p>
+          {season?.ends_at && (
+            <div style={{ marginTop: 22 }}>
+              <Countdown endsAt={season.ends_at} />
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', color: 'rgba(250,247,240,0.5)', marginTop: 8 }}>Lo que queda de la temporada actual. Si no llegas a esta, tu postulación queda guardada para la siguiente.</p>
+            </div>
+          )}
         </div>
       </header>
 
