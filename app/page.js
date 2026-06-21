@@ -121,6 +121,7 @@ export default async function Home({ searchParams }) {
     Postular como Artista
   </a>
 </div>
+      </div>
       </header>
 
       <Toast success={params?.success} error={params?.error} />
