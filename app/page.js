@@ -94,7 +94,7 @@ export default async function Home({ searchParams }) {
           <p className="section-note">Marca el corazón en cualquier pieza para sumarla a tus favoritos — esto no es la puja, solo ayuda a ver qué le gusta a la comunidad.</p>
 
           {topFavorites.length === 0 ? (
-            <div className="empty-state">Todavía nadie marcó favoritos esta temporada. Sé el primero — necesitás una cuenta de comprador para hacerlo. <Link href="/registro">Crear cuenta →</Link></div>
+            <div className="empty-state">Todavía nadie marcó favoritos esta temporada. Sé el primero — necesitas una cuenta de comprador para hacerlo. <Link href="/registro">Crear cuenta →</Link></div>
           ) : (
             <div className="favorites-grid">
               {topFavorites.map((piece, i) => (
