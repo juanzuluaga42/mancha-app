@@ -96,7 +96,7 @@ export default async function Home({ searchParams }) {
           <p className="eyebrow">{seasonLabel}</p>
           {season?.ends_at && <Countdown endsAt={season.ends_at} />}
           <h1>Descubre y colecciona artistas <em>antes</em> de que el mundo los descubra.</h1>
-          <p className="hero-sub">MANCHA elige a mano un puñado de artistas emergentes por temporada. Cada uno expone solo tres piezas, por tiempo limitado. Cuando la temporada cierra, esas piezas exactas dejan de estar disponibles — la oportunidad de llevártelas justo así no vuelve.</p>
+          <p className="hero-sub">MANCHA elige a mano un puñado de artistas emergentes por temporada — tres piezas cada uno, por tiempo limitado. Lo que ves hoy, después ya no está.</p>
           <div className="hero-ctas">
             <a href="#artistas" className="btn-primary">Ver temporada actual</a>
             <Link href="/postular" className="btn-ghost">Soy artista, quiero postular</Link>
