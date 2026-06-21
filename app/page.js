@@ -86,11 +86,12 @@ export default async function Home({ searchParams }) {
 
 {season?.ends_at && <Countdown endsAt={season.ends_at} />}
 
-  </h1>
-  Colecciona artistas
+<h1>
+  Colecciona obras exclusivas
   <br />
-  <em>antes de que el mundo los descubra.</em>
+  <em>antes de que termine la temporada.</em>
 </h1>
+
 <p className="hero-sub">
   Solo unos pocos artistas son seleccionados.
   <br />
@@ -122,7 +123,6 @@ export default async function Home({ searchParams }) {
 </div>
       </header>
 
-      
       <Toast success={params?.success} error={params?.error} />
 
       <section className="mission">
