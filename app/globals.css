@@ -269,6 +269,15 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .catalog-select{border:var(--rule); border-radius:5px; padding:11px 14px; background:rgba(255,255,255,0.7); font-family:var(--font-mono); font-size:12px; color:var(--ink); text-transform:uppercase;}
 .catalog-count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin:20px 0 14px;}
 
+/* ---------- PIEZA MÁS ACCESIBLE ---------- */
+.cheapest-pick{padding:50px 0; border-bottom:var(--rule);}
+.cheapest-pick-inner{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
+.cheapest-pick-art{position:relative; aspect-ratio:4/3; border-radius:18px; overflow:hidden; border:2px solid var(--ink);}
+.cheapest-pick-title{font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:.03em; margin-top:14px;}
+.cheapest-pick-amount{font-family:var(--font-display); font-size:clamp(2rem,4vw,2.8rem); margin-top:4px;}
+.cheapest-pick-info .btn-primary{margin-top:18px; display:inline-block;}
+@media (max-width:760px){.cheapest-pick-inner{grid-template-columns:1fr;}}
+
 /* ---------- PANEL ADMIN ---------- */
 .admin-table-wrap{overflow-x:auto;}
 .admin-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:12.5px;}
@@ -284,6 +293,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .piece-detail-info .piece-data{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft); margin-top:10px;}
 .piece-description{font-family:var(--font-body); font-size:1.05rem; line-height:1.7; color:var(--ink); margin-top:22px; max-width:60ch;}
 .bid-trust-note{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); line-height:1.6; margin-top:18px; max-width:48ch;}
+.whatsapp-cta{display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:11px 18px; border:2px solid var(--ink); border-radius:999px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink); text-decoration:none; transition:background .15s, color .15s;}
+.whatsapp-cta:hover{background:var(--ink); color:var(--paper);}
 .piece-detail-actions{
   display:flex; align-items:center; gap:24px; flex-wrap:wrap;
   margin-top:32px; padding-top:28px; border-top:var(--rule);
