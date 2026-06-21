@@ -13,6 +13,7 @@
     "react": "latest",
     "react-dom": "latest",
     "@supabase/ssr": "latest",
-    "@supabase/supabase-js": "latest"
+    "@supabase/supabase-js": "latest",
+    "nodemailer": "latest"
   }
 }
