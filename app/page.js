@@ -122,6 +122,7 @@ export default async function Home({ searchParams }) {
 </div>
       </header>
 
+      
       <Toast success={params?.success} error={params?.error} />
 
       <section className="mission">
