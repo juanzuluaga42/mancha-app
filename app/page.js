@@ -4,6 +4,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import PaintTrail from '@/components/PaintTrail';
+import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
 import { tips } from '@/lib/tips';
@@ -26,6 +27,12 @@ export default async function Home({ searchParams }) {
 
   const allArtists = artists ?? [];
 
+  // Piezas con imagen, para el fondo del hero
+  const heroPieces = allArtists
+    .flatMap((a) => a.pieces ?? [])
+    .filter((p) => p.image_url)
+    .slice(0, 5);
+
   // Aplanamos todas las piezas para armar el bloque de favoritos
   const allPieces = allArtists.flatMap((a) =>
     (a.pieces ?? []).map((p) => ({ ...p, artistName: a.display_name }))
@@ -45,6 +52,14 @@ export default async function Home({ searchParams }) {
 
       <header className="hero" id="hero">
         <PaintTrail />
+        {heroPieces.length > 0 && (
+          <div className="hero-gallery" aria-hidden="true">
+            {heroPieces.map((p, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={p.id} src={p.image_url} alt="" className={`hero-art hero-art-${i + 1}`} />
+            ))}
+          </div>
+        )}
         <div className="blob blob-1" />
         <div className="blob blob-2" />
         <div className="blob blob-3" />
@@ -57,6 +72,7 @@ export default async function Home({ searchParams }) {
 
         <div className="hero-content">
           <p className="eyebrow">{seasonLabel}</p>
+          {season?.ends_at && <Countdown endsAt={season.ends_at} />}
           <h1>El arte no se queda <em>quieto.</em></h1>
           <p className="hero-sub">Una galería con pocos artistas, elegidos a mano, donde cada uno expone solo tres piezas durante tres meses. Cuando termina la temporada, esa oportunidad no vuelve.</p>
           <div className="hero-ctas">
