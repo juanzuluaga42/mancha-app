@@ -11,6 +11,7 @@ export default async function Nav() {
       <div className="nav-inner">
         <Link href="/" className="brand">MANCHA<span>.</span></Link>
         <ul className="nav-links">
+          <li><Link href="/sobre-mancha">Sobre MANCHA</Link></li>
           <li><Link href="/#artistas">Temporada actual</Link></li>
           <li><Link href="/#favoritos">Favoritos</Link></li>
           <li><Link href="/#notas">Notas</Link></li>
