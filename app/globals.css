@@ -43,9 +43,11 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px; position:relative; z-index:1;}
 .eyebrow{font-family:var(--font-mono); font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-soft);}
 
+.hero-canvas{position:absolute; inset:0; pointer-events:none; z-index:2;}
+
 /* ---------- SCATTERED PAINT STAINS ---------- */
 .splat{position:absolute; z-index:0; pointer-events:none;}
-.splat-blob{position:absolute; inset:0; filter:blur(26px); opacity:0.36; mix-blend-mode:multiply;}
+.splat-blob{position:absolute; inset:0; filter:blur(20px); opacity:0.58; mix-blend-mode:multiply;}
 .splat-core{position:absolute; width:9px; height:9px; border-radius:50%; background:var(--red); top:46%; left:46%; transform:translate(-50%,-50%); opacity:0.9;}
 .r1{border-radius:46% 54% 62% 38% / 40% 46% 54% 60%;}
 .r2{border-radius:62% 38% 40% 60% / 55% 45% 60% 40%;}
@@ -177,6 +179,16 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .news-title{font-family:var(--font-display); font-size:1.08rem; font-weight:600; max-width:48ch;}
 .news-title:hover{color:var(--red);}
 .news-excerpt{font-family:var(--font-body); color:var(--ink-soft); margin-top:8px; max-width:62ch; font-size:0.98rem;}
+
+/* ---------- TIPS ARTÍSTICOS ---------- */
+.tips{border-top:var(--rule); padding:80px 0 90px; position:relative; overflow:hidden;}
+.tip-card{border:var(--rule); border-radius:8px; padding:28px 30px; margin-top:22px; background:rgba(255,255,255,0.4);}
+.tip-card h3{font-size:1.2rem; margin-top:6px; max-width:32ch;}
+.tip-steps{margin:16px 0 0; padding:0; counter-reset:tipstep;}
+.tip-steps li{list-style:none; counter-increment:tipstep; display:flex; gap:12px; padding:7px 0; font-family:var(--font-body); color:var(--ink-soft); font-size:0.96rem; line-height:1.5;}
+.tip-steps li::before{content:counter(tipstep); font-family:var(--font-mono); font-size:11px; color:var(--red); flex-shrink:0; width:20px; padding-top:2px;}
+.tip-example{margin-top:16px; padding:14px 16px; background:var(--paper-dark); border-radius:6px; font-family:var(--font-body); font-style:italic; font-size:0.92rem; color:var(--ink-soft);}
+.tip-example b{font-style:normal; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink); display:block; margin-bottom:6px;}
 
 /* ---------- FOOTER ---------- */
 .site-footer{border-top:var(--rule); padding:60px 0 36px; position:relative; overflow:hidden;}
