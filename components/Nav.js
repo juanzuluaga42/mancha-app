@@ -13,6 +13,8 @@ export default async function Nav() {
         <ul className="nav-links">
           <li><Link href="/#artistas">Temporada actual</Link></li>
           <li><Link href="/#favoritos">Favoritos</Link></li>
+          <li><Link href="/#notas">Notas</Link></li>
+          <li><Link href="/#tips">Tips</Link></li>
           <li><Link href="/postular">¿Eres artista?</Link></li>
           {user ? (
             <>
