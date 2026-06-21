@@ -25,6 +25,7 @@ export async function toggleFavorite(formData) {
   }
 
   revalidatePath('/');
+  redirect('/#artistas');
 }
 
 export async function placeBid(formData) {
@@ -42,8 +43,9 @@ export async function placeBid(formData) {
   });
 
   if (error) {
-    redirect('/?error=' + encodeURIComponent('No pudimos registrar tu puja — probá con un monto mayor, o revisá que tu cuenta sea de comprador.'));
+    redirect('/?error=' + encodeURIComponent('No pudimos registrar tu puja — probá con un monto mayor, o revisá que tu cuenta sea de comprador.') + '#artistas');
   }
 
   revalidatePath('/');
+  redirect('/?success=' + encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora sos la oferta más alta de esa pieza.') + '#artistas');
 }
