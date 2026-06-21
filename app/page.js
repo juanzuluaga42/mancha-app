@@ -9,6 +9,18 @@ import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
 import { tips } from '@/lib/tips';
 
+export const metadata = {
+  title: 'MANCHA — Arte por temporadas',
+  description: 'Una galería con pocos artistas a la vez. Subastas por temporada, tres piezas por artista, tres meses por temporada.',
+  openGraph: {
+    title: 'MANCHA — Arte por temporadas',
+    description: 'Una galería con pocos artistas a la vez. Subastas por temporada, tres piezas por artista, tres meses por temporada.',
+    images: ['/og-default.jpg'],
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image', images: ['/og-default.jpg'] },
+};
+
 export default async function Home({ searchParams }) {
   const params = await searchParams;
   const supabase = await createClient();
