@@ -72,7 +72,7 @@ export async function placeBid(formData) {
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
             <h2 style="margin-bottom: 4px;">¡Tu puja quedó registrada!</h2>
-            <p>Pujaste <strong>$${amount.toLocaleString('es-MX')}</strong> por <strong>"${piece.title}"</strong>, de ${piece.artists?.display_name ?? 'la temporada actual'}.</p>
+            <p>Pujaste <strong>$${amount.toLocaleString('es-MX')} USD</strong> por <strong>"${piece.title}"</strong>, de ${piece.artists?.display_name ?? 'la temporada actual'}.</p>
             <p>Eres la oferta más alta en este momento. Si alguien puja más alto antes de que cierre la temporada, te avisaremos. Si ganas, te contactaremos por correo para coordinar el pago y el envío.</p>
             <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
           </div>
