@@ -41,7 +41,7 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
 
         <div className="bid-min">
           <p className="eyebrow">{hasBids ? 'Puja actual' : 'Puja mínima'}</p>
-          <p className="amount">${Number(currentBid).toLocaleString('es-AR')}</p>
+          <p className="amount">${Number(currentBid).toLocaleString('es-AR')} <span style={{ fontSize: '0.55em', fontFamily: 'var(--font-mono)' }}>USD</span></p>
         </div>
 
         <form action={placeBid} className="bid-form">
