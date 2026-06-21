@@ -6,6 +6,7 @@ import Splat from '@/components/Splat';
 import PaintTrail from '@/components/PaintTrail';
 import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
+import WaitlistForm from '@/components/WaitlistForm';
 
 export const metadata = {
   title: 'MANCHA — Arte por temporadas',
@@ -33,6 +34,7 @@ export default async function Home({ searchParams }) {
     .from('artists')
     .select('*, pieces(*, bids(amount), favorites(buyer_id))')
     .eq('season_id', season?.id ?? '00000000-0000-0000-0000-000000000000')
+    .eq('status', 'approved')
     .order('created_at', { ascending: true });
 
   const allArtists = artists ?? [];
@@ -51,6 +53,16 @@ export default async function Home({ searchParams }) {
     .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
     .slice(0, 4)
     .filter((p) => (p.favorites?.length ?? 0) > 0);
+
+  // Pieza con el precio de entrada más accesible — buen primer punto de contacto para quien puja por primera vez
+  const piecesWithPrice = allPieces.map((p) => {
+    const bidAmounts = (p.bids ?? []).map((b) => Number(b.amount));
+    const currentPrice = bidAmounts.length > 0 ? Math.max(...bidAmounts) : Number(p.min_bid);
+    return { ...p, currentPrice, hasBids: bidAmounts.length > 0 };
+  });
+  const cheapestPiece = piecesWithPrice.length > 0
+    ? [...piecesWithPrice].sort((a, b) => a.currentPrice - b.currentPrice)[0]
+    : null;
 
   const seasonLabel = season
     ? `${season.name} — ${new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} / ${new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}`
@@ -92,6 +104,29 @@ export default async function Home({ searchParams }) {
       </header>
 
       <Toast success={params?.success} error={params?.error} />
+
+      {cheapestPiece && (
+        <section className="cheapest-pick">
+          <div className="wrap cheapest-pick-inner">
+            <div className="cheapest-pick-art">
+              {cheapestPiece.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={cheapestPiece.image_url} alt={cheapestPiece.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <div className="g3" style={{ position: 'absolute', inset: 0 }} />
+              )}
+            </div>
+            <div className="cheapest-pick-info">
+              <p className="eyebrow">Para empezar</p>
+              <h2>La puja más accesible de la temporada</h2>
+              <p className="cheapest-pick-title">{cheapestPiece.title} — {cheapestPiece.artistName}</p>
+              <p className="cheapest-pick-amount">${Number(cheapestPiece.currentPrice).toLocaleString('es-AR')}</p>
+              <p className="section-note">{cheapestPiece.hasBids ? 'Puja actual más baja' : 'Puja mínima'} de toda la temporada — una buena forma de hacer tu primera puja en MANCHA.</p>
+              <Link href={`/obras/${cheapestPiece.id}`} className="btn-primary">Ver esta pieza →</Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mission">
         <Splat width="120px" height="100px" top="-55px" left="10%" color="yellow" rotate={12} radius="r1" />
@@ -195,6 +230,15 @@ export default async function Home({ searchParams }) {
               })}
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="waitlist-section">
+        <div className="wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <p className="eyebrow">Lista de espera</p>
+          <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.2rem)', marginTop: 10 }}>Entérate antes que nadie</h2>
+          <p className="section-note" style={{ maxWidth: 460 }}>Te avisamos por correo cuando sumemos artistas nuevos o abramos la próxima temporada — sin spam, solo lo importante.</p>
+          <WaitlistForm redirectTo="/" />
         </div>
       </section>
 
