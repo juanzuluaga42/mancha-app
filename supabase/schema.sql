@@ -47,7 +47,7 @@ create table public.seasons (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   starts_at date not null,
-  ends_at date not null,
+  ends_at timestamptz not null,
   is_current boolean not null default false
 );
 
@@ -105,6 +105,7 @@ create table public.pieces (
   min_bid numeric not null check (min_bid > 0),
   image_url text,
   sold boolean not null default false,
+  paid_at timestamptz,
   created_at timestamptz not null default now()
 );
 
