@@ -21,6 +21,13 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
         <p className="piece-data">
           {piece.year ? `${piece.year} · ` : ''}{piece.technique}<br />{piece.dimensions}
         </p>
+        {(favoriteCount > 0 || hasBids) && (
+          <p className="piece-activity">
+            {favoriteCount > 0 && <span>{favoriteCount} {favoriteCount === 1 ? 'persona sigue' : 'personas siguen'} esta obra</span>}
+            {favoriteCount > 0 && hasBids && <span className="dot-sep">·</span>}
+            {hasBids && <span>{piece.bids.length} {piece.bids.length === 1 ? 'puja' : 'pujas'}</span>}
+          </p>
+        )}
       </div>
       <div className="piece-side">
         <form action={toggleFavorite}>
