@@ -4,27 +4,36 @@ import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import Toast from '@/components/Toast';
 import SubmitButton from '@/components/SubmitButton';
+import { createClient } from '@/utils/supabase/server';
 import { submitApplication } from './actions';
 
-export const metadata = { title: 'MANCHA — Postula como artista' };
+export const metadata = {
+  title: 'MANCHA — No publicamos arte. Elegimos artistas.',
+  description: 'MANCHA no es una vitrina abierta a cualquiera. Postula y entérate si tu trabajo tiene un lugar en la próxima temporada.',
+};
 
 export default async function PostularPage({ searchParams }) {
   const params = await searchParams;
+  const supabase = await createClient();
+  const { count: artistCount } = await supabase
+    .from('artists')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'approved');
 
   return (
     <>
       <Nav />
 
-      <header className="page-header">
+      <header className="page-header postular-header-dark">
         <Splat width="200px" height="175px" top="-55px" right="-40px" color="lilac" rotate={10} radius="r1" />
         <Splat width="110px" height="95px" bottom="-30px" left="-30px" color="yellow" rotate={-12} radius="r3" />
         <Splat width="70px" height="60px" top="55%" left="5%" color="red" rotate={6} radius="r4" />
         <Splat width="60px" height="55px" top="-30px" left="40%" color="red" rotate={-8} radius="r2" />
         <Splat width="55px" height="50px" bottom="-25px" right="25%" color="yellow" rotate={14} radius="r1" />
         <div className="wrap">
-          <p className="eyebrow">Para artistas</p>
-          <h1>No mandes un portfolio más. Postula.</h1>
-          <p className="sub">Elegimos pocos artistas por temporada y les damos espacio real — no un perfil perdido entre miles. Postula en cinco minutos, sin crear cuenta todavía.</p>
+          <p className="eyebrow">Acceso por postulación</p>
+          <h1>No publicamos arte.<br />Elegimos artistas.</h1>
+          <p className="sub">MANCHA no es una vitrina abierta a cualquiera. Cada temporada, un grupo muy reducido entra — el resto espera la próxima. {artistCount ? `Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : 'Esta temporada recién empieza a llenarse.'} Si tu trabajo entra, no compartes página con miles de perfiles iguales — tienes la tuya, sola, durante tres meses completos.</p>
         </div>
       </header>
 
@@ -35,7 +44,8 @@ export default async function PostularPage({ searchParams }) {
         <Splat width="85px" height="75px" top="48%" left="-35px" color="lilac" rotate={14} radius="r3" />
         <div className="wrap" style={{ maxWidth: 640 }}>
           <div className="dash-card">
-            <h3>Cuéntanos de tu trabajo</h3>
+            <h3>Tu turno de convencernos</h3>
+            <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', color: 'var(--ink-soft)', marginBottom: 20 }}>Sin currículum de galerías ni jerga de portfolio. Solo tu trabajo, dicho simple.</p>
             <form action={submitApplication}>
               <div className="field">
                 <label htmlFor="full_name">Nombre</label>
