@@ -18,7 +18,8 @@ export default async function ObrasPage() {
   const { data: artists } = await supabase
     .from('artists')
     .select('display_name, pieces(*, bids(amount), favorites(buyer_id))')
-    .eq('season_id', season?.id ?? '00000000-0000-0000-0000-000000000000');
+    .eq('season_id', season?.id ?? '00000000-0000-0000-0000-000000000000')
+    .eq('status', 'approved');
 
   const pieces = (artists ?? []).flatMap((artist) =>
     (artist.pieces ?? []).map((piece) => {
