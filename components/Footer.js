@@ -23,7 +23,7 @@ export default function Footer() {
             </div>
             <div className="footer-col">
               <h5>Contacto</h5>
-              <a href="mailto:hola@mancha.art">hola@mancha.art</a>
+              <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
             <div className="footer-col">
               <h5>Síguenos</h5>
