@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { sendEmail } from '@/lib/email';
 
 export async function signOut() {
   const supabase = await createClient();
@@ -17,17 +18,34 @@ export async function createArtistProfile(formData) {
 
   const { data: season } = await supabase.from('seasons').select('id').eq('is_current', true).maybeSingle();
 
+  const display_name = formData.get('display_name');
+
   const { error } = await supabase.from('artists').insert({
     profile_id: user.id,
     season_id: season?.id ?? null,
-    display_name: formData.get('display_name'),
+    display_name,
     bio: formData.get('bio'),
     location: formData.get('location'),
     medium: formData.get('medium'),
+    status: 'pending',
   });
 
   if (error) {
-    redirect(`/cuenta?error=${encodeURIComponent('No se pudo crear tu perfil de artista. ' + error.message)}`);
+    redirect(`/cuenta?error=${encodeURIComponent('No se pudo enviar tu postulación. ' + error.message)}`);
+  }
+
+  if (user.email) {
+    await sendEmail({
+      to: user.email,
+      subject: 'Recibimos tu postulación a MANCHA',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">¡Recibimos tu postulación, ${display_name}!</h2>
+          <p>La estamos revisando. Te avisamos por correo apenas tengamos una respuesta — normalmente en pocos días.</p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
   }
 
   revalidatePath('/cuenta');
@@ -39,8 +57,9 @@ export async function addPiece(formData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { data: artist } = await supabase.from('artists').select('id').eq('profile_id', user.id).maybeSingle();
-  if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu perfil de artista.')}`);
+  const { data: artist } = await supabase.from('artists').select('id, status').eq('profile_id', user.id).maybeSingle();
+  if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu postulación de artista.')}`);
+  if (artist.status !== 'approved') redirect(`/cuenta?error=${encodeURIComponent('Tu postulación todavía está en revisión — vas a poder cargar piezas apenas la aprobemos.')}`);
 
   let image_url = null;
   const file = formData.get('image_file');
