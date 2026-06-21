@@ -4,6 +4,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import PieceCard from '@/components/PieceCard';
+import Toast from '@/components/Toast';
 import { articles } from '@/lib/news';
 
 export default async function Home({ searchParams }) {
@@ -69,16 +70,7 @@ export default async function Home({ searchParams }) {
         </div>
       </header>
 
-      {params?.error && (
-        <div className="wrap" style={{ paddingTop: 20 }}>
-          <p className="auth-error">{params.error}</p>
-        </div>
-      )}
-      {params?.success && (
-        <div className="wrap" style={{ paddingTop: 20 }}>
-          <p className="auth-success">{params.success}</p>
-        </div>
-      )}
+      <Toast success={params?.success} error={params?.error} />
 
       <section className="mission">
         <Splat width="120px" height="100px" top="-55px" left="10%" color="yellow" rotate={12} radius="r1" />
