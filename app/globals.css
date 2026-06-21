@@ -327,8 +327,13 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 @media (max-width:760px){.steps-row{grid-template-columns:1fr 1fr;}}
 @media (max-width:480px){.steps-row{grid-template-columns:1fr;}}
 
-.para-artistas{padding:70px 0; border-top:var(--rule); position:relative; overflow:hidden;}
-.para-artistas h2{font-size:clamp(1.9rem,3.6vw,2.7rem); max-width:680px; margin:10px auto 0;}
+.para-artistas{padding:80px 0; position:relative; overflow:hidden; background:var(--ink); color:var(--paper);}
+.para-artistas .eyebrow{color:var(--yellow-deep);}
+.para-artistas h2{font-size:clamp(1.9rem,3.6vw,2.7rem); max-width:680px; margin:10px auto 0; color:var(--paper);}
+.para-artistas .section-note{color:rgba(250,247,240,0.7);}
+.para-artistas .splat-blob{mix-blend-mode:screen;}
+.para-artistas .btn-primary{background:var(--paper); color:var(--ink);}
+.para-artistas .btn-primary:hover{background:var(--red); color:var(--paper);}
 
 /* ---------- SECCIONES DE COPY NUEVAS (fin) ---------- */
 .cheapest-pick{padding:50px 0; border-bottom:var(--rule);}
