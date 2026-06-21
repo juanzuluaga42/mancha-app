@@ -48,7 +48,7 @@ export default function PulseTicker() {
   return (
     <div className="pulse-ticker">
       <span className="pulse-dot" />
-      <span>Alguien pujó por "{current.title}" {timeAgo(current.createdAt)}</span>
+      <span>Alguien pujó por &quot;{current.title}&quot; {timeAgo(current.createdAt)}</span>
     </div>
   );
 }
