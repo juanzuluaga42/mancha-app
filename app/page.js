@@ -121,31 +121,6 @@ export default async function Home({ searchParams }) {
   </a>
 </div>
       </header>
-      <section
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3,1fr)',
-    gap: '24px',
-    textAlign: 'center',
-    maxWidth: '900px',
-    margin: '0 auto 80px'
-  }}
->
-  <div>
-    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>5</h2>
-    <p>ARTISTAS POR TEMPORADA</p>
-  </div>
-
-  <div>
-    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>3</h2>
-    <p>OBRAS POR ARTISTA</p>
-  </div>
-
-  <div>
-    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>90</h2>
-    <p>DÍAS DE DURACIÓN</p>
-  </div>
-</section>
 
       <Toast success={params?.success} error={params?.error} />
 
