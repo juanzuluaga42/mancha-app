@@ -9,11 +9,11 @@ import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 
 export const metadata = {
-  title: 'MANCHA — Arte por temporadas',
-  description: 'Una galería con pocos artistas a la vez. Subastas por temporada, tres piezas por artista, tres meses por temporada.',
+  title: 'MANCHA — Descubre artistas antes que el mundo',
+  description: 'Descubre y colecciona artistas antes de que el mundo los descubra. Pocos artistas por temporada, piezas limitadas, espacio real para cada historia.',
   openGraph: {
-    title: 'MANCHA — Arte por temporadas',
-    description: 'Una galería con pocos artistas a la vez. Subastas por temporada, tres piezas por artista, tres meses por temporada.',
+    title: 'MANCHA — Descubre artistas antes que el mundo',
+    description: 'Descubre y colecciona artistas antes de que el mundo los descubra. Pocos artistas por temporada, piezas limitadas, espacio real para cada historia.',
     images: ['/og-default.jpg'],
     type: 'website',
   },
@@ -95,15 +95,39 @@ export default async function Home({ searchParams }) {
         <div className="hero-content">
           <p className="eyebrow">{seasonLabel}</p>
           {season?.ends_at && <Countdown endsAt={season.ends_at} />}
-          <h1>El arte no se queda <em>quieto.</em></h1>
-          <p className="hero-sub">Una galería con pocos artistas, elegidos a mano, donde cada uno expone solo tres piezas durante tres meses. Cuando termina la temporada, esa oportunidad no vuelve.</p>
+          <h1>Descubre y colecciona artistas <em>antes</em> de que el mundo los descubra.</h1>
+          <p className="hero-sub">MANCHA elige a mano un puñado de artistas emergentes por temporada. Cada uno expone solo tres piezas. Cuando la temporada cierra, esa oportunidad no vuelve — ni para el artista, ni para quien llegó primero.</p>
           <div className="hero-ctas">
             <a href="#artistas" className="btn-primary">Ver temporada actual</a>
+            <Link href="/postular" className="btn-ghost">Soy artista, quiero postular</Link>
           </div>
         </div>
       </header>
 
       <Toast success={params?.success} error={params?.error} />
+
+      <section className="que-es">
+        <div className="wrap">
+          <p className="eyebrow">¿Qué es MANCHA?</p>
+          <h2>Una galería, no un maratón de scroll.</h2>
+          <p className="section-note" style={{ maxWidth: 640 }}>Somos una plataforma donde coleccionistas descubren y adquieren obras de artistas emergentes, cuidadosamente seleccionados. Nada de catálogos infinitos: un grupo reducido por temporada, piezas limitadas, y espacio real para cada historia.</p>
+        </div>
+      </section>
+
+      {cheapestPiece && (
+        <section className="why-buy">
+          <div className="wrap">
+            <p className="eyebrow">¿Por qué comprar con nosotros?</p>
+            <h2>Porque llegaste antes.</h2>
+            <div className="why-buy-grid">
+              <div><b>01</b><p>Compras directo al artista. Sin intermediarios, sin comisión oculta del lado del comprador.</p></div>
+              <div><b>02</b><p>Cada obra tiene una historia real detrás, no una ficha genérica de catálogo.</p></div>
+              <div><b>03</b><p>Pocas piezas por temporada significa que lo que comprás sigue siendo raro.</p></div>
+              <div><b>04</b><p>Entrada accesible: no hace falta ser un coleccionista consagrado para empezar.</p></div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {cheapestPiece && (
         <section className="cheapest-pick">
@@ -137,7 +161,7 @@ export default async function Home({ searchParams }) {
         <Splat width="55px" height="50px" top="-40px" left="38%" color="red" rotate={18} radius="r4" />
         <Splat width="50px" height="48px" bottom="-38px" right="42%" color="yellow" rotate={-10} radius="r2" />
         <div className="wrap">
-          <p>No somos un catálogo infinito: elegimos pocos artistas a la vez, en piezas limitadas, y le damos espacio real a cada historia.</p>
+          <p>Existimos porque el talento emergente se ahoga en feeds infinitos. Nosotros elegimos por ti: pocos artistas, piezas limitadas, cero ruido. Así un coleccionista de verdad encuentra algo antes que el resto.</p>
           <div className="stat"><b>{allArtists.length}</b>artistas / temporada</div>
         </div>
       </section>
@@ -233,11 +257,35 @@ export default async function Home({ searchParams }) {
         </div>
       </section>
 
+      <section className="como-funciona">
+        <div className="wrap">
+          <p className="eyebrow">Cómo funciona</p>
+          <h2>Cuatro pasos, cero vueltas.</h2>
+          <div className="steps-row">
+            <div className="step-col"><span className="step-n">01</span><p>Elegimos a mano un grupo reducido de artistas por temporada.</p></div>
+            <div className="step-col"><span className="step-n">02</span><p>Cada uno expone hasta tres piezas, con su propia puja mínima.</p></div>
+            <div className="step-col"><span className="step-n">03</span><p>Tú pujas y sigues la pieza de cerca durante toda la temporada.</p></div>
+            <div className="step-col"><span className="step-n">04</span><p>Al cerrar, quien ofreció más se la lleva. Coordinamos pago y envío por correo.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="para-artistas">
+        <Splat width="140px" height="120px" top="-40px" right="5%" color="yellow" rotate={-10} radius="r2" />
+        <Splat width="90px" height="80px" bottom="-35px" left="8%" color="lilac" rotate={14} radius="r3" />
+        <div className="wrap" style={{ textAlign: 'center' }}>
+          <p className="eyebrow">Para artistas</p>
+          <h2>Si tu trabajo todavía no es obvio para el mundo, queremos verlo primero.</h2>
+          <p className="section-note" style={{ maxWidth: 520, margin: '14px auto 0' }}>Espacio real, no un perfil más perdido entre miles. 75% para ti, 25% para nosotros. Sin costo por postular, sin costo por exponer.</p>
+          <Link href="/postular" className="btn-primary" style={{ marginTop: 22, display: 'inline-block' }}>Postula tu trabajo →</Link>
+        </div>
+      </section>
+
       <section className="waitlist-section">
         <div className="wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <p className="eyebrow">Lista de espera</p>
-          <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.2rem)', marginTop: 10 }}>Entérate antes que nadie</h2>
-          <p className="section-note" style={{ maxWidth: 460 }}>Te avisamos por correo cuando sumemos artistas nuevos o abramos la próxima temporada — sin spam, solo lo importante.</p>
+          <p className="eyebrow">Última llamada</p>
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.4vw,2.6rem)', marginTop: 10 }}>El próximo nombre grande todavía no es obvio.</h2>
+          <p className="section-note" style={{ maxWidth: 460 }}>Sumate antes de que esto deje de ser un secreto — te avisamos por correo cuando sumemos artistas nuevos o abramos la próxima temporada.</p>
           <WaitlistForm redirectTo="/" />
         </div>
       </section>
