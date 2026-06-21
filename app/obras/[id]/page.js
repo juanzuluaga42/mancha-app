@@ -116,6 +116,10 @@ export default async function PiecePage({ params, searchParams }) {
                 <button className="piece-buy" type="submit">Pujar →</button>
               </form>
             </div>
+
+            <p className="bid-trust-note">
+              Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
+            </p>
           </div>
         </div>
       </section>
