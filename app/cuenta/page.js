@@ -144,7 +144,7 @@ async function ArtistDashboard({ supabase, userId }) {
                 </div>
                 <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div>
-                    <p className="dash-piece-title">${Number(currentBid).toLocaleString('es-AR')}</p>
+                    <p className="dash-piece-title">${Number(currentBid).toLocaleString('es-AR')} USD</p>
                     <p className="dash-piece-meta">{amounts.length} {amounts.length === 1 ? 'puja' : 'pujas'}</p>
                   </div>
                   {amounts.length === 0 && (
@@ -253,7 +253,7 @@ async function BuyerDashboard({ supabase, userId }) {
                 <p className="dash-piece-title">{f.pieces?.title}</p>
                 <p className="dash-piece-meta">{f.pieces?.artists?.display_name}</p>
               </div>
-              <p className="dash-piece-meta">Puja mínima ${Number(f.pieces?.min_bid).toLocaleString('es-AR')}</p>
+              <p className="dash-piece-meta">Puja mínima ${Number(f.pieces?.min_bid).toLocaleString('es-AR')} USD</p>
             </div>
           ))
         )}
