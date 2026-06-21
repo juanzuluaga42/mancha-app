@@ -145,6 +145,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .piece-title{font-family:var(--font-display); font-size:15px; font-weight:600;}
 .piece-title:hover{color:var(--red);}
 .piece-art:hover{opacity:0.88;}
+.piece-activity{font-family:var(--font-mono); font-size:10.5px; color:var(--red-deep); margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;}
+.piece-activity .dot-sep{opacity:0.4;}
 .piece-data{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); margin-top:6px; line-height:1.7;}
 .piece-side{display:flex; flex-direction:column; align-items:flex-end; gap:8px;}
 .bid-min{text-align:right;}
@@ -191,6 +193,36 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .tip-steps li::before{content:counter(tipstep); font-family:var(--font-mono); font-size:11px; color:var(--red); flex-shrink:0; width:20px; padding-top:2px;}
 .tip-example{margin-top:16px; padding:14px 16px; background:var(--paper-dark); border-radius:6px; font-family:var(--font-body); font-style:italic; font-size:0.92rem; color:var(--ink-soft);}
 .tip-example b{font-style:normal; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink); display:block; margin-bottom:6px;}
+
+/* ---------- HERO GALLERY (obra real de fondo) ---------- */
+.hero-gallery{position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden;}
+.hero-art{position:absolute; border-radius:8px; object-fit:cover; opacity:0.22; filter:saturate(1.1); box-shadow:0 18px 50px rgba(0,0,0,0.15); animation:heroFloat 14s ease-in-out infinite;}
+.hero-art-1{width:150px; height:190px; top:14%; left:6%; transform:rotate(-6deg); animation-delay:0s;}
+.hero-art-2{width:120px; height:150px; top:54%; left:13%; transform:rotate(5deg); animation-delay:-3s;}
+.hero-art-3{width:135px; height:170px; top:20%; right:9%; transform:rotate(7deg); animation-delay:-6s;}
+.hero-art-4{width:110px; height:140px; bottom:12%; right:14%; transform:rotate(-5deg); animation-delay:-9s;}
+.hero-art-5{width:100px; height:125px; top:46%; right:26%; transform:rotate(4deg); animation-delay:-12s;}
+@keyframes heroFloat{ 0%,100%{translate:0 0;} 50%{translate:0 -14px;} }
+@media (max-width:760px){ .hero-art-2, .hero-art-5{display:none;} .hero-art{opacity:0.16;} }
+@media (prefers-reduced-motion: reduce){ .hero-art{animation:none;} }
+
+/* ---------- MANIFIESTO ---------- */
+.manifesto .lead{font-family:var(--font-body); font-size:1.3rem; line-height:1.6; color:var(--ink); margin-bottom:28px;}
+.manifesto p{font-family:var(--font-body); font-size:1.05rem; line-height:1.75; color:var(--ink-soft); margin-bottom:20px;}
+.manifesto h2{font-size:1.4rem; margin:40px 0 14px;}
+.manifesto .closing{font-family:var(--font-display); font-size:1.4rem; font-weight:600; color:var(--ink); font-style:normal; margin:36px 0 0; max-width:24ch;}
+.manifesto-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-top:36px;}
+.btn-ghost{border:1.5px solid var(--ink); color:var(--ink); padding:13px 24px; border-radius:100px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:0.05em;}
+.btn-ghost:hover{background:var(--ink); color:var(--paper);}
+
+/* ---------- COUNTDOWN ---------- */
+.countdown{display:inline-flex; align-items:center; gap:14px; margin:18px 0 6px; padding:10px 16px; border:1.5px solid var(--ink); border-radius:100px; background:rgba(255,255,255,0.4);}
+.countdown-label{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--red); font-weight:600;}
+.countdown-units{display:flex; align-items:baseline; gap:8px;}
+.cd-unit{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:baseline; gap:3px;}
+.cd-unit b{font-family:var(--font-display); font-size:18px; color:var(--ink); font-weight:700;}
+.cd-sep{color:var(--ink-soft); opacity:0.4;}
+@media (max-width:520px){ .cd-unit b{font-size:15px;} .countdown{gap:10px; padding:8px 13px;} }
 
 /* ---------- PÁGINA DE OBRA ---------- */
 .piece-detail{padding:60px 0 90px;}
