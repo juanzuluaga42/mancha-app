@@ -83,14 +83,69 @@ export default async function Home({ searchParams }) {
 
         <div className="hero-content">
           <p className="eyebrow">{seasonLabel}</p>
-          {season?.ends_at && <Countdown endsAt={season.ends_at} />}
-          <h1>El arte no se queda <em>quieto.</em></h1>
-          <p className="hero-sub">Una galería con pocos artistas, elegidos a mano, donde cada uno expone solo tres piezas durante tres meses. Cuando termina la temporada, esa oportunidad no vuelve.</p>
-          <div className="hero-ctas">
-            <a href="#artistas" className="btn-primary">Ver temporada actual</a>
-          </div>
-        </div>
+
+{season?.ends_at && <Countdown endsAt={season.ends_at} />}
+
+<h1>
+  Colecciona artistas
+  <br />
+  <em>antes de que el mundo los descubra.</em>
+</h1>
+<p className="hero-sub">
+  Solo unos pocos artistas son seleccionados.
+  <br />
+  Solo 3 obras por artista.
+  <br />
+  Solo 90 días para adquirirlas.
+  <br />
+  <br />
+  Cuando la temporada termina, las obras desaparecen y una nueva colección toma su lugar.
+</p>
+
+<div className="hero-ctas">
+  <a href="/obras" className="btn-primary">
+    Explorar Obras
+  </a>
+
+  <a
+    href="/postular"
+    className="btn-secondary"
+    style={{
+      marginLeft: '12px',
+      border: '1px solid currentColor',
+      padding: '12px 20px',
+      borderRadius: '999px'
+    }}
+  >
+    Postular como Artista
+  </a>
+</div>
       </header>
+      <section
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3,1fr)',
+    gap: '24px',
+    textAlign: 'center',
+    maxWidth: '900px',
+    margin: '0 auto 80px'
+  }}
+>
+  <div>
+    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>5</h2>
+    <p>ARTISTAS POR TEMPORADA</p>
+  </div>
+
+  <div>
+    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>3</h2>
+    <p>OBRAS POR ARTISTA</p>
+  </div>
+
+  <div>
+    <h2 style={{ fontSize: '3rem', marginBottom: '8px' }}>90</h2>
+    <p>DÍAS DE DURACIÓN</p>
+  </div>
+</section>
 
       <Toast success={params?.success} error={params?.error} />
 
