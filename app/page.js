@@ -7,7 +7,6 @@ import PaintTrail from '@/components/PaintTrail';
 import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
-import PulseTicker from '@/components/PulseTicker';
 
 export const metadata = {
   title: 'MANCHA — Descubre artistas antes que el mundo',
@@ -101,7 +100,6 @@ export default async function Home({ searchParams }) {
           <div className="hero-ctas">
             <a href="#artistas" className="btn-primary">Ver temporada actual</a>
           </div>
-          <PulseTicker />
         </div>
       </header>
 
