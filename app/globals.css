@@ -295,6 +295,10 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .postular-header-dark .cd-unit{color:rgba(250,247,240,0.6);}
 .postular-header-dark .cd-unit b{color:#FAF3E6;}
 
+.pulse-ticker{display:inline-flex; align-items:center; gap:9px; font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); padding:8px 0;}
+.pulse-dot{width:7px; height:7px; border-radius:50%; background:var(--red); flex-shrink:0; animation:pulse-beat 1.8s ease-in-out infinite;}
+@keyframes pulse-beat{0%,100%{opacity:1; transform:scale(1);} 50%{opacity:0.35; transform:scale(0.7);}}
+
 /* ---------- SECCIONES DE COPY NUEVAS ---------- */
 .que-es{padding:64px 0 24px; text-align:center;}
 .que-es h2{font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:10px;}
