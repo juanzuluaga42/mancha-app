@@ -62,6 +62,20 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .nav-links{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
 .nav-links a{font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.06em;}
 .nav-links a:hover{color:var(--red);}
+.nav-dropdown{position:relative;}
+.nav-dropdown-btn{
+  font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.06em;
+  background:none; border:none; color:var(--ink); cursor:pointer; display:flex; align-items:center; gap:4px; padding:0;
+}
+.nav-dropdown-btn:hover{color:var(--red);}
+.nav-caret{font-size:9px; position:relative; top:-1px;}
+.nav-dropdown-menu{
+  position:absolute; top:calc(100% + 16px); left:0; min-width:200px; list-style:none;
+  background:var(--paper); border:var(--rule); border-radius:8px; box-shadow:0 14px 34px rgba(0,0,0,0.16);
+  padding:7px;
+}
+.nav-dropdown-menu li a{display:block; padding:9px 12px; border-radius:5px; font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink);}
+.nav-dropdown-menu li a:hover{background:var(--paper-dark); color:var(--red);}
 .nav-cta{background:var(--ink); color:var(--paper); padding:9px 16px; border-radius:100px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; cursor:pointer;}
 .nav-cta:hover{background:var(--red);}
 
