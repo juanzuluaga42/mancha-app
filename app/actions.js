@@ -7,7 +7,8 @@ import { revalidatePath } from 'next/cache';
 export async function toggleFavorite(formData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/login?next=/');
+  const redirectTo = formData.get('redirectTo') || '/';
+  if (!user) redirect(`/login?next=${encodeURIComponent(redirectTo)}`);
 
   const pieceId = formData.get('pieceId');
 
@@ -25,13 +26,15 @@ export async function toggleFavorite(formData) {
   }
 
   revalidatePath('/');
-  redirect('/#artistas');
+  revalidatePath(redirectTo);
+  redirect(redirectTo);
 }
 
 export async function placeBid(formData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/login?next=/');
+  const redirectTo = formData.get('redirectTo') || '/';
+  if (!user) redirect(`/login?next=${encodeURIComponent(redirectTo)}`);
 
   const pieceId = formData.get('pieceId');
   const amount = Number(formData.get('amount'));
@@ -42,10 +45,12 @@ export async function placeBid(formData) {
     amount,
   });
 
+  revalidatePath('/');
+  revalidatePath(redirectTo);
+
   if (error) {
-    redirect('/?error=' + encodeURIComponent('No pudimos registrar tu puja — probá con un monto mayor, o revisá que tu cuenta sea de comprador.') + '#artistas');
+    redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrar tu puja — probá con un monto mayor, o revisá que tu cuenta sea de comprador.')}`);
   }
 
-  revalidatePath('/');
-  redirect('/?success=' + encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora sos la oferta más alta de esa pieza.') + '#artistas');
+  redirect(`${redirectTo}?success=${encodeURIComponent('¡Listo! Tu puja quedó registrada — por ahora sos la oferta más alta de esa pieza.')}`);
 }
