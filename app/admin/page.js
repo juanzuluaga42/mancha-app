@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { approveArtist, rejectArtist } from './actions';
+import { approveArtist, rejectArtist, approveApplication, rejectApplication } from './actions';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -15,6 +15,12 @@ export default async function AdminPage() {
   if (!user || user.email !== ADMIN_EMAIL) {
     redirect('/');
   }
+
+  const { data: applications } = await supabase
+    .from('artist_applications')
+    .select('*')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true });
 
   const { data: pendingArtists } = await supabase
     .from('artists')
@@ -64,7 +70,50 @@ export default async function AdminPage() {
 
       <section className="content">
         <div className="wrap admin-table-wrap">
-          <h2 style={{ marginBottom: 16 }}>Postulaciones pendientes ({(pendingArtists ?? []).length})</h2>
+          <h2 style={{ marginBottom: 16 }}>Postulaciones nuevas ({(applications ?? []).length})</h2>
+          {(!applications || applications.length === 0) ? (
+            <div className="empty-state">No hay postulaciones nuevas esperando revisión.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
+              {applications.map((a) => (
+                <div className="dash-card" key={a.id}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+                    <div style={{ maxWidth: 480 }}>
+                      <h3>{a.full_name}</h3>
+                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-soft)' }}>
+                        {a.city ? `${a.city} · ` : ''}{a.email}
+                        {a.instagram && <> · <a href={`https://instagram.com/${a.instagram.replace('@', '')}`} target="_blank" rel="noreferrer">{a.instagram}</a></>}
+                        {a.portfolio_url && <> · <a href={a.portfolio_url} target="_blank" rel="noreferrer">Portfolio</a></>}
+                      </p>
+                      <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)', marginTop: 10 }}>{a.bio}</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <form action={approveApplication}>
+                        <input type="hidden" name="applicationId" value={a.id} />
+                        <button type="submit" className="auth-submit" style={{ background: 'var(--ink)' }}>Aprobar</button>
+                      </form>
+                      <form action={rejectApplication}>
+                        <input type="hidden" name="applicationId" value={a.id} />
+                        <button type="submit" className="auth-submit" style={{ background: 'transparent', color: 'var(--ink)', border: '2px solid var(--ink)' }}>Rechazar</button>
+                      </form>
+                    </div>
+                  </div>
+                  {(a.image_url_1 || a.image_url_2 || a.image_url_3) && (
+                    <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                      {[a.image_url_1, a.image_url_2, a.image_url_3].filter(Boolean).map((url, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <a href={url} target="_blank" rel="noreferrer" key={i}>
+                          <img src={url} alt={`Obra ${i + 1} de ${a.full_name}`} style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, border: '1.5px solid var(--ink)' }} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <h2 style={{ marginBottom: 16 }}>Cuentas de artista esperando aprobación ({(pendingArtists ?? []).length})</h2>
           {(!pendingArtists || pendingArtists.length === 0) ? (
             <div className="empty-state">No hay postulaciones esperando revisión.</div>
           ) : (
