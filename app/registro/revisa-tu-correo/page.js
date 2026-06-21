@@ -11,7 +11,7 @@ export default function RevisaTuCorreoPage() {
         <div className="wrap">
           <p className="eyebrow">Casi listo</p>
           <h1>Revisa tu correo</h1>
-          <p className="sub">Te enviamos un enlace de confirmación. Apenas lo abras, tu cuenta queda activa y podés iniciar sesión.</p>
+          <p className="sub">Te enviamos un enlace de confirmación. Apenas lo abras, tu cuenta queda activa y puedes iniciar sesión.</p>
         </div>
       </header>
       <Footer />
