@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { placeBid, toggleFavorite } from '@/app/actions';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
@@ -7,16 +8,16 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
 
   return (
     <div className="piece">
-      <div className="piece-art">
+      <Link href={`/obras/${piece.id}`} className="piece-art">
         {piece.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={piece.image_url} alt={piece.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
         )}
-      </div>
+      </Link>
       <div>
-        <p className="piece-title">{piece.title}</p>
+        <Link href={`/obras/${piece.id}`} className="piece-title" style={{ display: 'inline-block' }}>{piece.title}</Link>
         <p className="piece-data">
           {piece.year ? `${piece.year} · ` : ''}{piece.technique}<br />{piece.dimensions}
         </p>
