@@ -147,6 +147,7 @@ async function ArtistDashboard({ supabase, userId }) {
             <div className="field">
               <label htmlFor="image_file">Foto de la pieza</label>
               <input id="image_file" name="image_file" type="file" accept="image/*" />
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--ink-soft)', marginTop: 6 }}>Máximo 8 MB.</p>
             </div>
             <button type="submit" className="auth-submit">Subir pieza</button>
           </form>
