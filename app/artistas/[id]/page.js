@@ -31,6 +31,7 @@ export default async function ArtistPage({ params, searchParams }) {
     .from('artists')
     .select('*, pieces(*, bids(amount), favorites(buyer_id))')
     .eq('id', id)
+    .eq('status', 'approved')
     .maybeSingle();
 
   if (!artist) notFound();
