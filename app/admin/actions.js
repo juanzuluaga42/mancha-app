@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sendEmail } from '@/lib/email';
+import { createCheckoutLink } from '@/lib/stripe';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -137,6 +138,13 @@ export async function markAsSold(formData) {
   const winner = bids[0] ?? null;
 
   if (winner?.buyer?.email) {
+    const checkoutUrl = await createCheckoutLink({
+      pieceId,
+      pieceTitle: piece.title,
+      amountUsd: winner.amount,
+      buyerEmail: winner.buyer.email,
+    });
+
     await sendEmail({
       to: winner.buyer.email,
       subject: `¡Ganaste la puja por "${piece.title}"! — MANCHA`,
@@ -144,7 +152,9 @@ export async function markAsSold(formData) {
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
           <h2 style="margin-bottom: 4px;">¡Felicitaciones, ${winner.buyer.full_name || ''}!</h2>
           <p>Tu puja de $${Number(winner.amount).toLocaleString('es-AR')} por <strong>"${piece.title}"</strong> fue la más alta. La pieza es tuya.</p>
-          <p>Te escribimos por separado para coordinar el pago y el envío.</p>
+          ${checkoutUrl
+            ? `<p style="margin: 20px 0;"><a href="${checkoutUrl}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">Pagar ahora →</a></p><p style="font-size: 13px; color: #666;">Una vez que completes el pago, te escribimos por separado para coordinar el envío.</p>`
+            : `<p>Te escribimos por separado para coordinar el pago y el envío.</p>`}
           <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
         </div>
       `,
