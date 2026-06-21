@@ -137,6 +137,10 @@ async function ArtistDashboard({ supabase, userId }) {
               <input id="dimensions" name="dimensions" type="text" placeholder="Ej: 60 × 80 cm" />
             </div>
             <div className="field">
+              <label htmlFor="description">Descripción breve</label>
+              <textarea id="description" name="description" rows="3" placeholder="Una o dos frases sobre la pieza: de qué se trata, qué la inspiró, algo que ayude a entenderla."></textarea>
+            </div>
+            <div className="field">
               <label htmlFor="min_bid">Puja mínima (USD)</label>
               <input id="min_bid" name="min_bid" type="number" min="1" required />
             </div>
