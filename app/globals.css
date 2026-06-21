@@ -269,6 +269,12 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .catalog-select{border:var(--rule); border-radius:5px; padding:11px 14px; background:rgba(255,255,255,0.7); font-family:var(--font-mono); font-size:12px; color:var(--ink); text-transform:uppercase;}
 .catalog-count{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin:20px 0 14px;}
 
+.postular-header-dark{background:var(--ink); color:var(--paper);}
+.postular-header-dark .eyebrow{color:var(--yellow-deep);}
+.postular-header-dark h1{color:var(--paper); font-size:clamp(2.4rem,5.5vw,4.2rem);}
+.postular-header-dark .sub{color:rgba(250,247,240,0.78);}
+.postular-header-dark .splat-blob{mix-blend-mode:screen;}
+
 /* ---------- SECCIONES DE COPY NUEVAS ---------- */
 .que-es{padding:64px 0 24px; text-align:center;}
 .que-es h2{font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:10px;}
