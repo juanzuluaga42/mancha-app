@@ -30,7 +30,7 @@ export default async function AdminPage() {
 
   const { data: artists } = await supabase
     .from('artists')
-    .select('display_name, pieces(id, title, min_bid, image_url, sold, bids(amount, created_at, buyer:profiles(full_name, email)))')
+    .select('display_name, pieces(id, title, min_bid, image_url, sold, paid_at, bids(amount, created_at, buyer:profiles(full_name, email)))')
     .eq('status', 'approved')
     .order('created_at', { ascending: true });
 
@@ -51,6 +51,7 @@ export default async function AdminPage() {
         minBid: Number(piece.min_bid),
         bidCount: bids.length,
         sold: piece.sold,
+        paidAt: piece.paid_at,
         leader,
       };
     })
@@ -172,8 +173,10 @@ export default async function AdminPage() {
                       ) : '—'}
                     </td>
                     <td>
-                      {r.sold ? (
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>Vendida ✓</span>
+                      {r.paidAt ? (
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Pagado ✓</span>
+                      ) : r.sold ? (
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>Vendida — pago pendiente</span>
                       ) : r.leader ? (
                         <form action={markAsSold}>
                           <input type="hidden" name="pieceId" value={r.id} />
