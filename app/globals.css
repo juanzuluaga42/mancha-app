@@ -138,7 +138,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .artists-section{position:relative; overflow:hidden;}
 .section-head{padding:80px 0 36px;}
 .section-head h2{font-size:clamp(1.9rem,3.6vw,2.8rem); margin-top:14px; max-width:18ch;}
-.section-note{font-family:var(--font-body); font-style:italic; font-size:0.98rem; color:var(--ink-soft); margin-top:16px; max-width:62ch;}
+.section-note{font-family:var(--font-body); font-style:italic; font-size:1.12rem; color:var(--ink-soft); margin-top:16px; max-width:62ch; line-height:1.6;}
 
 .artist-entry{border-top:var(--rule); padding:56px 0; display:grid; grid-template-columns:0.85fr 1.15fr; gap:48px;}
 .artist-entry:last-of-type{border-bottom:var(--rule);}
