@@ -52,7 +52,7 @@ export default function PieceCard({ piece, index, isFavorited, favoriteCount, cu
 
         <div className="obra-card-footer">
           <div className="obra-card-price-block">
-            <p className="obra-card-label">{hasBids ? 'Puja actual' : 'Puja mínima'}</p>
+            <p className="obra-card-label">{piece.sold ? 'Precio final' : hasBids ? 'Puja actual' : 'Puja mínima'}</p>
             <p className="obra-card-price">
               ${Number(currentBid).toLocaleString('es-AR')}
               <span className="obra-card-currency"> USD</span>
