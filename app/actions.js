@@ -40,6 +40,10 @@ export async function placeBid(formData) {
   const pieceId = formData.get('pieceId');
   const amount = Number(formData.get('amount'));
 
+  if (!Number.isInteger(amount) || amount <= 0 || amount % 5 !== 0) {
+    redirect(`${redirectTo}?error=${encodeURIComponent('El monto de la puja debe ser múltiplo de 5 USD.')}`);
+  }
+
   const { data: pieceCheck } = await supabase.from('pieces').select('sold, artist_id, artists(season_id)').eq('id', pieceId).maybeSingle();
   if (pieceCheck?.sold) {
     redirect(`${redirectTo}?error=${encodeURIComponent('Esta pieza ya se vendió — ya no se puede pujar por ella.')}`);

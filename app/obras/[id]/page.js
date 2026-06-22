@@ -180,11 +180,11 @@ export default async function PiecePage({ params, searchParams }) {
                       <input
                         type="number"
                         name="amount"
-                        min={Number(currentBid) + 1}
-                        step="1"
+                        min={Number(currentBid) + 5}
+                        step="5"
                         required
                         className="piece-detail-bid-input"
-                        placeholder={`Mínimo $${(Number(currentBid) + 1).toLocaleString('es-AR')} USD`}
+                        placeholder={`Mínimo $${(Number(currentBid) + 5).toLocaleString('es-AR')} USD`}
                         aria-label="Monto de tu puja en USD"
                       />
                       <button className="btn-primary piece-detail-bid-btn" type="submit">
