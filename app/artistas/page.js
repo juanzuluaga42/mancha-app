@@ -3,18 +3,21 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import { cap } from '@/lib/utils';
 
 export const metadata = {
   title: 'MANCHA — Artistas de la temporada',
-  description: 'Conocé a los artistas seleccionados para esta temporada de MANCHA — su historia, su medio, y las piezas que tienen disponibles.',
+  description: 'Conoce a los artistas seleccionados para esta temporada de MANCHA — su historia, su medio, y las piezas que tienen disponibles.',
   openGraph: {
     title: 'MANCHA — Artistas de la temporada',
-    description: 'Conocé a los artistas seleccionados para esta temporada de MANCHA.',
+    description: 'Conoce a los artistas seleccionados para esta temporada de MANCHA.',
     images: ['/og-default.jpg'],
     type: 'website',
   },
   twitter: { card: 'summary_large_image', images: ['/og-default.jpg'] },
 };
+
+const PLACEHOLDER_GRADIENTS = ['g1', 'g4', 'g7'];
 
 export default async function ArtistasPage() {
   const supabase = await createClient();
@@ -44,15 +47,47 @@ export default async function ArtistasPage() {
         <div className="wrap">
           <p className="eyebrow">Artistas — {season?.name ?? 'Temporada actual'}</p>
           <h1>Quiénes exponen ahora mismo</h1>
-          <p className="sub" style={{ margin: 0 }}>Cada pieza se subasta durante toda la temporada. Entrá al perfil de cada artista para conocer su historia, ver sus piezas y pujar.</p>
+          <p className="sub" style={{ margin: 0 }}>Cada pieza se subasta durante toda la temporada. Entra al perfil de cada artista para conocer su historia, ver sus piezas y pujar.</p>
         </div>
       </header>
 
       <section className="artists-section">
         <div className="wrap">
           {allArtists.length === 0 ? (
-            <div className="empty-state">
-              Todavía no hay artistas confirmados para esta temporada. ¿Querés ser el primero? <Link href="/postular">Postular →</Link>
+            <div className="artists-empty-wrap">
+              <div className="artist-card-grid" aria-hidden="true">
+                {PLACEHOLDER_GRADIENTS.map((grad, i) => (
+                  <div className="artist-card artist-card-ph" key={i}>
+                    <div className="artist-card-art">
+                      <div className={grad} style={{ position: 'absolute', inset: 0 }} />
+                      <div className="artist-card-ph-overlay" />
+                    </div>
+                    <div className="artist-card-info">
+                      <p className="eyebrow">{String(i + 1).padStart(2, '0')}</p>
+                      <div className="ph-bar ph-bar-name" />
+                      <div className="ph-bar ph-bar-meta" />
+                      <div className="ph-bar ph-bar-bio-1" />
+                      <div className="ph-bar ph-bar-bio-2" />
+                      <div style={{ marginTop: 16 }}>
+                        <Link href="/postular" className="artist-card-cta" style={{ color: 'var(--red)', borderColor: 'var(--red)' }}>
+                          Tu trabajo aquí →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="artists-empty-msg">
+                <p className="eyebrow">Convocatoria abierta</p>
+                <h2>Los artistas de esta temporada están siendo elegidos.</h2>
+                <p className="section-note">
+                  MANCHA selecciona a mano un grupo muy reducido cada temporada. Tres piezas por artista, espacio real para cada historia, sin competir contra catálogos infinitos. Si tu trabajo podría ocupar uno de estos lugares, es el momento de postular.
+                </p>
+                <Link href="/postular" className="btn-primary" style={{ marginTop: 22, display: 'inline-block' }}>
+                  Postular tu trabajo →
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="artist-card-grid">
@@ -65,14 +100,14 @@ export default async function ArtistasPage() {
                     <div className="artist-card-art">
                       {firstPiece?.image_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={firstPiece.image_url} alt={artist.display_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={firstPiece.image_url} alt={cap(artist.display_name)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
                         <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
                       )}
                     </div>
                     <div className="artist-card-info">
                       <p className="eyebrow">{String(ai + 1).padStart(2, '0')}</p>
-                      <h3>{artist.display_name}</h3>
+                      <h3>{cap(artist.display_name)}</h3>
                       <p className="artist-card-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
                       <p className="artist-card-bio">{artist.bio}</p>
                       <span className="artist-card-cta">Ver {pieceCount === 1 ? 'su pieza' : `sus ${pieceCount} piezas`} →</span>

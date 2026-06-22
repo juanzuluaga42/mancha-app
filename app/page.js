@@ -162,7 +162,9 @@ export default async function Home({ searchParams }) {
         <Splat width="50px" height="48px" bottom="-38px" right="42%" color="yellow" rotate={-10} radius="r2" />
         <div className="wrap">
           <p>Existimos porque el talento emergente se ahoga en feeds infinitos. Nosotros elegimos por ti: pocos artistas, piezas limitadas, cero ruido. Así un coleccionista de verdad encuentra algo antes que el resto.</p>
-          <div className="stat"><b>{allArtists.length}</b>artistas / temporada</div>
+          {allArtists.length > 0 && (
+            <div className="stat"><b>{allArtists.length}</b>artistas / temporada</div>
+          )}
         </div>
       </section>
 

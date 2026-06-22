@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import PieceCard from '@/components/PieceCard';
 
@@ -28,6 +29,22 @@ export default function ObrasCatalog({ pieces }) {
     return list;
   }, [pieces, search, technique, sort]);
 
+  if (pieces.length === 0) {
+    return (
+      <div className="catalog-empty">
+        <p className="eyebrow">Temporada 01 — Piezas próximamente</p>
+        <h2>El catálogo se revela cuando los artistas son confirmados.</h2>
+        <p className="section-note">
+          Cuando los artistas seleccionados carguen sus obras, las encontrarás aquí con todos los detalles para pujar. La selección está en curso — puedes postular tu trabajo o sumarte a la lista de espera para que te avisemos.
+        </p>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 24 }}>
+          <Link href="/postular" className="btn-primary">Postular tu trabajo →</Link>
+          <Link href="/artistas" className="btn-secondary">Ver artistas →</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="catalog-filters">
@@ -52,7 +69,7 @@ export default function ObrasCatalog({ pieces }) {
       <p className="catalog-count">{filtered.length} {filtered.length === 1 ? 'pieza' : 'piezas'}</p>
 
       {filtered.length === 0 ? (
-        <div className="empty-state">No hay piezas que coincidan con la búsqueda.</div>
+        <div className="empty-state">Ninguna pieza coincide con esa búsqueda.</div>
       ) : (
         <div className="pieces">
           {filtered.map((piece, i) => (

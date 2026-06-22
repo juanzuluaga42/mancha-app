@@ -5,18 +5,20 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import PieceCard from '@/components/PieceCard';
 import Toast from '@/components/Toast';
+import { cap } from '@/lib/utils';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const supabase = await createClient();
   const { data: artist } = await supabase.from('artists').select('display_name, bio, pieces(image_url)').eq('id', id).maybeSingle();
   if (!artist) return { title: 'MANCHA — Artista' };
+  const name = cap(artist.display_name);
   const image = artist.pieces?.find((p) => p.image_url)?.image_url || '/og-default.jpg';
   const description = artist.bio?.slice(0, 160) || 'Una galería con pocos artistas a la vez.';
   return {
-    title: `MANCHA — ${artist.display_name}`,
+    title: `MANCHA — ${name}`,
     description,
-    openGraph: { title: `MANCHA — ${artist.display_name}`, description, images: [image], type: 'profile' },
+    openGraph: { title: `MANCHA — ${name}`, description, images: [image], type: 'profile' },
     twitter: { card: 'summary_large_image', images: [image] },
   };
 }
@@ -56,7 +58,7 @@ export default async function ArtistPage({ params, searchParams }) {
         <div className="wrap">
           <Link href="/artistas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver al catálogo</Link>
           <p className="eyebrow">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
-          <h1>{artist.display_name}</h1>
+          <h1>{cap(artist.display_name)}</h1>
           <p className="sub">{artist.bio}</p>
         </div>
       </header>

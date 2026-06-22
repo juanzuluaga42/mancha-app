@@ -495,6 +495,25 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .faq-item h4{font-family:var(--font-display); font-size:15.5px; font-weight:600;}
 .faq-item p{font-family:var(--font-body); color:var(--ink-soft); margin-top:8px; max-width:60ch;}
 
+/* ---------- ARTISTAS EMPTY STATE ---------- */
+.artists-empty-wrap{padding:40px 0 60px;}
+.artist-card-ph{pointer-events:none; opacity:0.72;}
+.artist-card-ph .artist-card-cta{pointer-events:auto;}
+.artist-card-ph-overlay{position:absolute; inset:0; background:rgba(250,243,230,0.15);}
+.ph-bar{border-radius:3px; background:rgba(22,17,13,0.09); margin-top:8px;}
+.ph-bar-name{height:20px; width:65%;}
+.ph-bar-meta{height:10px; width:42%; margin-top:8px;}
+.ph-bar-bio-1{height:10px; width:88%;}
+.ph-bar-bio-2{height:10px; width:72%;}
+.artists-empty-msg{text-align:center; padding:52px 20px 8px; max-width:560px; margin:0 auto;}
+.artists-empty-msg h2{font-size:clamp(1.7rem,3.2vw,2.3rem); margin-top:10px; max-width:22ch; margin-left:auto; margin-right:auto;}
+.artists-empty-msg .section-note{margin-top:14px;}
+
+/* ---------- OBRAS EMPTY STATE ---------- */
+.catalog-empty{padding:20px 0 40px;}
+.catalog-empty h2{font-size:clamp(1.6rem,3vw,2.2rem); margin-top:10px; max-width:22ch;}
+.catalog-empty .section-note{margin-top:14px; max-width:56ch;}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:880px){
   .favorites-grid{grid-template-columns:repeat(2,1fr);}
