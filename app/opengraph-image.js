@@ -102,9 +102,9 @@ export default async function Image() {
           </div>
 
           {/* Footer */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 48 }}>
-            <span style={{ fontSize: 18, fontWeight: 700, color: '#FAF3E6', letterSpacing: 3 }}>MANCHA.</span>
-            <div style={{ width: 1, height: 16, backgroundColor: 'rgba(250,243,230,0.2)', display: 'flex' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 48 }}>
+            <span style={{ fontSize: 32, fontWeight: 800, color: '#FAF3E6', letterSpacing: 4 }}>MANCHA.</span>
+            <div style={{ width: 1, height: 22, backgroundColor: 'rgba(250,243,230,0.2)', display: 'flex' }} />
             <span style={{ fontSize: 14, color: 'rgba(250,243,230,0.35)', letterSpacing: 1 }}>mancha-app.vercel.app</span>
           </div>
         </div>

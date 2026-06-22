@@ -69,7 +69,7 @@ export default async function Image() {
           }}
         >
           {/* Marca */}
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#E5402B', letterSpacing: 6, textTransform: 'uppercase', marginBottom: 40 }}>
+          <span style={{ fontSize: 36, fontWeight: 800, color: '#E5402B', letterSpacing: 6, textTransform: 'uppercase', marginBottom: 40 }}>
             MANCHA.
           </span>
 
