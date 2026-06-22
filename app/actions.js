@@ -44,7 +44,7 @@ export async function placeBid(formData) {
     redirect(`${redirectTo}?error=${encodeURIComponent('El monto de la puja debe ser múltiplo de 5 USD.')}`);
   }
 
-  const { data: pieceCheck } = await supabase.from('pieces').select('sold, artist_id, artists(season_id)').eq('id', pieceId).maybeSingle();
+  const { data: pieceCheck } = await supabase.from('pieces').select('sold, artist_id, title, artists(season_id, display_name)').eq('id', pieceId).maybeSingle();
   if (pieceCheck?.sold) {
     redirect(`${redirectTo}?error=${encodeURIComponent('Esta pieza ya se vendió — ya no se puede pujar por ella.')}`);
   }
@@ -59,6 +59,16 @@ export async function placeBid(formData) {
   if (endsAtBefore && new Date(endsAtBefore).getTime() < Date.now()) {
     redirect(`${redirectTo}?error=${encodeURIComponent('Esta temporada ya cerró — ya no se pueden registrar pujas nuevas.')}`);
   }
+
+  // Identificar al líder anterior para notificarle si lo superan
+  const { data: prevBids } = await supabase
+    .from('bids')
+    .select('amount, buyer_id, buyer:profiles(email, full_name)')
+    .eq('piece_id', pieceId)
+    .order('amount', { ascending: false })
+    .limit(1);
+  const prevLeader = prevBids?.[0] ?? null;
+  const prevLeaderIsOther = prevLeader && prevLeader.buyer_id !== user.id;
 
   const { error } = await supabase.from('bids').insert({
     piece_id: pieceId,
@@ -79,6 +89,28 @@ export async function placeBid(formData) {
 
   if (error) {
     redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrar tu puja — prueba con un monto mayor, o revisa que tu cuenta sea de comprador.')}`);
+  }
+
+  // Email al ex-líder: "te superaron"
+  if (!error && prevLeaderIsOther && prevLeader.buyer?.email) {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app';
+    await sendEmail({
+      to: prevLeader.buyer.email,
+      subject: `Alguien superó tu puja por "${pieceCheck.title}" — MANCHA`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
+          <h2 style="margin-bottom: 4px;">Te superaron, ${prevLeader.buyer.full_name || ''}.</h2>
+          <p>Alguien acaba de pujar más alto que tú por <strong>"${pieceCheck.title}"</strong> de ${pieceCheck.artists?.display_name ?? 'la temporada actual'}.</p>
+          <p>Puedes volver a pujar cuando quieras — la temporada sigue abierta.</p>
+          <p style="margin: 24px 0;">
+            <a href="${baseUrl}/obras/${pieceId}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">
+              Volver a pujar →
+            </a>
+          </p>
+          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
+        </div>
+      `,
+    });
   }
 
   if (user.email) {
