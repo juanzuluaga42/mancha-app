@@ -46,9 +46,9 @@ export default function SobreManchaPage() {
         <div className="wrap">
           <div className="sobre-numbers-grid">
             <div className="sobre-number-item">
-              <b className="sobre-number-dig">3</b>
+              <b className="sobre-number-dig sobre-number-word">Pocos.</b>
               <p className="sobre-number-label">Artistas<br />por temporada</p>
-              <p className="sobre-number-note">No cientos. No decenas. Tres — los que realmente elegimos.</p>
+              <p className="sobre-number-note">No un catálogo abierto. Una selección hecha a mano, temporada por temporada.</p>
             </div>
             <div className="sobre-number-item">
               <b className="sobre-number-dig">3</b>
@@ -56,9 +56,9 @@ export default function SobreManchaPage() {
               <p className="sobre-number-note">Lo mejor que tienen. Sin relleno. Sin obra de catálogo.</p>
             </div>
             <div className="sobre-number-item sobre-number-last">
-              <b className="sobre-number-dig">75<span className="sobre-number-pct">%</span></b>
-              <p className="sobre-number-label">Para el<br />artista</p>
-              <p className="sobre-number-note">El resto sostiene la galería. Sin intermediarios, sin letra chica.</p>
+              <b className="sobre-number-dig">3</b>
+              <p className="sobre-number-label">Meses<br />por temporada</p>
+              <p className="sobre-number-note">Cuando cierra, se fue. Lo que ves hoy puede no volver a estar disponible.</p>
             </div>
           </div>
         </div>
@@ -105,30 +105,15 @@ export default function SobreManchaPage() {
       <section className="sobre-puja">
         <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
         <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
-        <div className="wrap sobre-puja-inner">
-          <div className="sobre-puja-text">
-            <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
-            <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
-            <p className="sobre-puja-body">
-              Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Cuando cierra, quien ofreció más se lleva la obra — y paga exactamente eso, sin cargos extra del lado del comprador.
-            </p>
-            <p className="sobre-puja-body">
-              Del valor final, el 75% es para el artista y el 25% sostiene la galería. Sin intermediarios, sin comisiones ocultas, sin letra chica.
-            </p>
-          </div>
-          <div className="sobre-puja-split">
-            <div className="sobre-split-bar">
-              <div className="sobre-split-artist">
-                <b>75%</b>
-                <span>Artista</span>
-              </div>
-              <div className="sobre-split-mancha">
-                <b>25%</b>
-                <span>MANCHA</span>
-              </div>
-            </div>
-            <p className="sobre-split-note">Solo cobramos cuando se cierra una subasta — no antes.</p>
-          </div>
+        <div className="wrap sobre-puja-inner sobre-puja-single">
+          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
+          <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
+          <p className="sobre-puja-body">
+            Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Cuando cierra, quien ofreció más se lleva la obra — y paga exactamente eso, sin cargos extra del lado del comprador.
+          </p>
+          <p className="sobre-puja-body">
+            Sin intermediarios, sin comisiones ocultas, sin letra chica. Solo la obra, el precio que pusiste, y el artista que la hizo.
+          </p>
         </div>
       </section>
 
