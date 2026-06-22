@@ -4,6 +4,7 @@ import CursorTrail from '@/components/CursorTrail';
 export const metadata = {
   title: 'MANCHA — Arte seleccionado a mano.',
   description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
+  robots: { index: false, follow: false },
   openGraph: {
     title: 'MANCHA — Arte seleccionado a mano.',
     description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
