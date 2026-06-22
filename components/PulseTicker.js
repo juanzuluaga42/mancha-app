@@ -15,6 +15,7 @@ function timeAgo(dateStr) {
 export default function PulseTicker() {
   const [activity, setActivity] = useState([]);
   const [index, setIndex] = useState(0);
+  const [shown, setShown] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -41,12 +42,28 @@ export default function PulseTicker() {
     return () => clearInterval(rotate);
   }, [activity]);
 
+  // Aparece unos segundos cada 5 minutos en vez de quedarse pegado siempre.
+  useEffect(() => {
+    let hideTimer;
+    function reveal() {
+      setShown(true);
+      hideTimer = setTimeout(() => setShown(false), 13000);
+    }
+    const firstShow = setTimeout(reveal, 5000);
+    const interval = setInterval(reveal, 300000);
+    return () => {
+      clearTimeout(firstShow);
+      clearTimeout(hideTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
   if (activity.length === 0) return null;
 
   const current = activity[index % activity.length];
 
   return (
-    <div className="pulse-ticker">
+    <div className={`pulse-ticker${shown ? ' is-visible' : ''}`}>
       <span className="pulse-dot" />
       <span>Alguien pujó por &quot;{current.title}&quot; {timeAgo(current.createdAt)}</span>
     </div>
