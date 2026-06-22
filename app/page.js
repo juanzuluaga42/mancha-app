@@ -8,6 +8,7 @@ import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 import HiddenMessage from '@/components/HiddenMessage';
+import WelcomeModal from '@/components/WelcomeModal';
 
 export const metadata = {
   title: 'MANCHA — Primero tú. Después el mundo.',
@@ -63,6 +64,7 @@ export default async function Home({ searchParams }) {
 
   return (
     <>
+      <WelcomeModal />
       <Nav />
 
       {/* ── HERO ─────────────────────────────────────────── */}
