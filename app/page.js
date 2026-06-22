@@ -99,7 +99,7 @@ export default async function Home({ searchParams }) {
           <h1>Descubre y colecciona artistas <em>antes</em> de que el mundo los descubra.</h1>
           <p className="hero-sub">MANCHA elige a mano un puñado de artistas emergentes por temporada — tres piezas cada uno, por tiempo limitado. Lo que ves hoy, después ya no está.</p>
           <div className="hero-ctas">
-            <a href="#artistas" className="btn-primary">Ver temporada actual</a>
+            <a href="/artistas" className="btn-primary">Ver temporada actual</a>
           </div>
         </div>
       </header>
@@ -120,10 +120,10 @@ export default async function Home({ searchParams }) {
             <p className="eyebrow">¿Por qué comprar con nosotros?</p>
             <h2>Porque llegaste antes.</h2>
             <div className="why-buy-grid">
-              <div><b>01</b><p>Compras directo al artista. Sin intermediarios, sin comisión oculta del lado del comprador.</p></div>
-              <div><b>02</b><p>Cada obra tiene una historia real detrás, no una ficha genérica de catálogo.</p></div>
-              <div><b>03</b><p>Pocas piezas por temporada significa que lo que comprás sigue siendo raro.</p></div>
-              <div><b>04</b><p>Entrada accesible: no hace falta ser un coleccionista consagrado para empezar.</p></div>
+              <div><b>01</b><p>Pagas exactamente lo que pujaste. La comisión la cubre el artista, no tú — sin cargos ocultos del lado del comprador, ni sorpresas al cerrar la puja.</p></div>
+              <div><b>02</b><p>Cada obra llega con la historia real de quien la hizo: quién es, dónde trabaja, qué la inspiró. No una ficha genérica de catálogo sin contexto.</p></div>
+              <div><b>03</b><p>Curamos pocos artistas y máximo tres piezas por cada uno, por temporada. Lo que ves hoy puede no volver a estar disponible nunca.</p></div>
+              <div><b>04</b><p>No hace falta ser coleccionista para empezar: cada temporada tiene piezas con puja mínima accesible, pensadas para tu primera compra de arte.</p></div>
             </div>
           </div>
         </section>
@@ -207,65 +207,15 @@ export default async function Home({ searchParams }) {
         </div>
       </section>
 
-      <section className="artists-section" id="artistas">
-        <Splat width="180px" height="160px" top="3%" left="-60px" color="lilac" rotate={-8} radius="r1" />
-        <Splat width="100px" height="90px" top="20%" right="-40px" color="yellow" rotate={14} radius="r2" />
-        <Splat width="90px" height="80px" bottom="15%" left="-35px" color="red" rotate={20} radius="r3" />
-        <Splat width="110px" height="95px" bottom="-40px" right="-45px" color="lilac" rotate={-22} radius="r4" />
-        <Splat width="70px" height="62px" top="45%" left="48%" color="yellow" rotate={8} radius="r2" center />
-        <Splat width="60px" height="55px" top="8%" left="35%" color="red" rotate={-12} radius="r3" />
-
-        <div className="wrap section-head">
-          <p className="eyebrow">Artistas — {season?.name ?? 'Temporada actual'}</p>
-          <h2>Quiénes exponen ahora mismo</h2>
-          <p className="section-note">Cada pieza se subasta durante toda la temporada. Entrá al perfil de cada artista para conocer su historia, ver sus piezas y pujar.</p>
-        </div>
-
-        <div className="wrap">
-          {allArtists.length === 0 ? (
-            <div className="empty-state">
-              Todavía no hay artistas confirmados para esta temporada. ¿Querés ser el primero? <Link href="/postular">Postular →</Link>
-            </div>
-          ) : (
-            <div className="artist-card-grid">
-              {allArtists.map((artist, ai) => {
-                const firstPiece = artist.pieces?.[0];
-                const gradientClass = `g${(ai % 12) + 1}`;
-                const pieceCount = artist.pieces?.length ?? 0;
-                return (
-                  <Link href={`/artistas/${artist.id}`} className="artist-card" key={artist.id}>
-                    <div className="artist-card-art">
-                      {firstPiece?.image_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={firstPiece.image_url} alt={artist.display_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
-                      )}
-                    </div>
-                    <div className="artist-card-info">
-                      <p className="eyebrow">{String(ai + 1).padStart(2, '0')}</p>
-                      <h3>{artist.display_name}</h3>
-                      <p className="artist-card-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
-                      <p className="artist-card-bio">{artist.bio}</p>
-                      <span className="artist-card-cta">Ver {pieceCount === 1 ? 'su pieza' : `sus ${pieceCount} piezas`} →</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
-
       <section className="como-funciona">
         <div className="wrap">
           <p className="eyebrow">Cómo funciona</p>
           <h2>Cuatro pasos, cero vueltas.</h2>
           <div className="steps-row">
-            <div className="step-col"><span className="step-n">01</span><p>Elegimos a mano un grupo reducido de artistas por temporada.</p></div>
-            <div className="step-col"><span className="step-n">02</span><p>Cada uno expone hasta tres piezas, con su propia puja mínima.</p></div>
-            <div className="step-col"><span className="step-n">03</span><p>Tú pujas y sigues la pieza de cerca durante toda la temporada.</p></div>
-            <div className="step-col"><span className="step-n">04</span><p>Al cerrar, quien ofreció más se la lleva. Coordinamos pago y envío por correo.</p></div>
+            <div className="step-col"><span className="step-n">01</span><p>Exploras el catálogo de la temporada: pocos artistas, piezas únicas, sin scroll infinito.</p></div>
+            <div className="step-col"><span className="step-n">02</span><p>Eliges una pieza y pujas el monto que quieras ofrecer, por encima de la puja mínima.</p></div>
+            <div className="step-col"><span className="step-n">03</span><p>Sigues la puja de cerca durante la temporada — si alguien te supera, puedes volver a pujar.</p></div>
+            <div className="step-col"><span className="step-n">04</span><p>Si ganas, te contactamos por correo para coordinar el pago seguro y el envío.</p></div>
           </div>
         </div>
       </section>
