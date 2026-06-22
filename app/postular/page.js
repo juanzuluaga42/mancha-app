@@ -47,6 +47,19 @@ export default async function PostularPage({ searchParams }) {
 
       <Toast success={params?.success} error={params?.error} />
 
+      <section className="como-funciona">
+        <div className="wrap">
+          <p className="eyebrow">Cómo funciona para artistas</p>
+          <h2>Cuatro pasos, cero vueltas.</h2>
+          <div className="steps-row">
+            <div className="step-col"><span className="step-n">01</span><p>Postulas con tu trabajo: sin currículum de galerías, solo unas fotos y tu historia en tus palabras.</p></div>
+            <div className="step-col"><span className="step-n">02</span><p>Si te seleccionamos, expones hasta tres piezas durante toda la temporada, con tu propio espacio.</p></div>
+            <div className="step-col"><span className="step-n">03</span><p>Los coleccionistas pujan por tus piezas en vivo — tú solo subes el trabajo, nosotros nos encargamos del resto.</p></div>
+            <div className="step-col"><span className="step-n">04</span><p>Cuando una pieza se vende, recibes el 75%. Coordinamos el pago y el envío contigo directamente.</p></div>
+          </div>
+        </div>
+      </section>
+
       <section className="content">
         <Splat width="130px" height="115px" top="6%" right="-40px" color="yellow" rotate={-10} radius="r2" />
         <Splat width="85px" height="75px" top="48%" left="-35px" color="lilac" rotate={14} radius="r3" />
