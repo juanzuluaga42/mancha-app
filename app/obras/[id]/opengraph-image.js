@@ -10,11 +10,13 @@ export default async function Image({ params }) {
   const supabase = await createClient();
   const { data: piece } = await supabase
     .from('pieces')
-    .select('title, image_url, artists(display_name)')
+    .select('title, image_url, min_bid, artists(display_name)')
     .eq('id', id)
     .maybeSingle();
 
   const hasPhoto = !!piece?.image_url;
+  const title = piece?.title ?? 'Una pieza de MANCHA';
+  const artist = piece?.artists?.display_name ?? '';
 
   return new ImageResponse(
     (
@@ -23,28 +25,98 @@ export default async function Image({ params }) {
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          backgroundColor: '#FAF3E6',
-          backgroundImage: hasPhoto ? `url(${piece.image_url})` : undefined,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundColor: '#16110D',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        {/* Imagen de fondo */}
+        {hasPhoto && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={piece.image_url}
+            alt={title}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 0.45,
+            }}
+          />
+        )}
+
+        {/* Gradiente lateral: oscuro a la derecha para el texto */}
         <div
           style={{
+            position: 'absolute',
+            inset: 0,
+            background: hasPhoto
+              ? 'linear-gradient(90deg, rgba(22,17,13,0.15) 0%, rgba(22,17,13,0.7) 48%, rgba(22,17,13,0.97) 100%)'
+              : 'linear-gradient(135deg, #1e1510 0%, #16110D 100%)',
+            display: 'flex',
+          }}
+        />
+
+        {/* Acento rojo vertical */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 60,
+            right: 0,
+            width: 4,
+            height: 120,
+            backgroundColor: '#E5402B',
+            display: 'flex',
+          }}
+        />
+
+        {/* Contenido */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
             display: 'flex',
             flexDirection: 'column',
-            padding: '64px 70px',
-            background: hasPhoto ? 'linear-gradient(transparent, rgba(22,17,13,0.88))' : 'transparent',
+            justifyContent: 'space-between',
+            padding: '56px 70px',
           }}
         >
-          <div style={{ display: 'flex', fontSize: 26, color: '#E5402B', letterSpacing: 4, textTransform: 'uppercase' }}>MANCHA</div>
-          <div style={{ display: 'flex', fontSize: 58, fontWeight: 700, color: hasPhoto ? '#FAF3E6' : '#16110D', marginTop: 14, lineHeight: 1.1 }}>
-            {piece?.title ?? 'Una pieza de MANCHA'}
+          {/* Top: marca */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#FAF3E6', letterSpacing: 4, textTransform: 'uppercase' }}>
+              MANCHA.
+            </span>
+            <div style={{ width: 1, height: 16, backgroundColor: 'rgba(250,243,230,0.2)', display: 'flex' }} />
+            <span style={{ fontSize: 13, color: 'rgba(250,243,230,0.45)', letterSpacing: 2, textTransform: 'uppercase' }}>
+              Subasta en curso
+            </span>
           </div>
-          <div style={{ display: 'flex', fontSize: 30, color: hasPhoto ? 'rgba(250,247,240,0.82)' : '#6B6359', marginTop: 10 }}>
-            {piece?.artists?.display_name ?? ''}
+
+          {/* Bottom: título + artista */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <div style={{ display: 'flex', width: 48, height: 3, backgroundColor: '#E5402B', marginBottom: 20 }} />
+            <div
+              style={{
+                display: 'flex',
+                fontSize: title.length > 32 ? 52 : 64,
+                fontWeight: 700,
+                color: '#FAF3E6',
+                lineHeight: 1.05,
+                maxWidth: 900,
+              }}
+            >
+              {title}
+            </div>
+            {artist && (
+              <div style={{ display: 'flex', fontSize: 28, color: '#E5402B', marginTop: 16, fontStyle: 'italic' }}>
+                {artist}
+              </div>
+            )}
+            <div style={{ display: 'flex', fontSize: 16, color: 'rgba(250,243,230,0.4)', marginTop: 16, letterSpacing: 1 }}>
+              mancha-app.vercel.app
+            </div>
           </div>
         </div>
       </div>
