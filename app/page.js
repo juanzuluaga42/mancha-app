@@ -61,9 +61,17 @@ export default async function Home({ searchParams }) {
     ? `${season.name} — ${new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} / ${new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}`
     : 'Temporada actual';
 
-  const tickerItems = allArtists.length > 0
-    ? allArtists.map((a) => a.display_name)
-    : ['Arte emergente', 'Seleccionado a mano', 'Temporada limitada', 'Colecciona ahora', 'Antes que el mundo'];
+  const tickerItems = [
+    'Arte emergente seleccionado a mano',
+    'Primero tú, después el mundo',
+    'Pocos artistas por temporada',
+    'Cuando cierra, cierra para siempre',
+    'Sin algoritmos. Solo criterio',
+    'Lo que pasa por MANCHA no se quita',
+    'El próximo nombre grande aún no es obvio',
+    'Tres piezas por artista',
+    'Colecciona antes que el resto',
+  ];
 
   return (
     <>
@@ -99,7 +107,7 @@ export default async function Home({ searchParams }) {
           </div>
           <div className="hp-hero-right" aria-hidden="true">
             <span className="hp-hero-num">01</span>
-            <span className="hp-hero-tagline">Arte<br />de antes<br />que sea<br />obvio.</span>
+            <span className="hp-hero-tagline">Arte<br />con<br />criterio.</span>
           </div>
         </div>
       </header>
