@@ -5,7 +5,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.
 
 export default async function sitemap() {
   const staticRoutes = [
-    '', '/obras', '/temporadas', '/sobre-mancha', '/postular',
+    '', '/artistas', '/obras', '/temporadas', '/sobre-mancha', '/postular',
     '/notas', '/tips', '/legal', '/login', '/registro',
   ].map((path) => ({
     url: `${SITE_URL}${path}`,
