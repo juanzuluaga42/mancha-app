@@ -11,7 +11,7 @@ export const metadata = {
 const REGLAS = [
   'Menos artistas significa más atención para cada obra.',
   'La restricción no es un error — es el punto.',
-  'El 75% siempre es del artista. Siempre.',
+  'El artista siempre se lleva la mayor parte. Siempre.',
   'No hay catálogo abierto. Hay selección.',
   'Lo que ves hoy puede no estar mañana.',
 ];
