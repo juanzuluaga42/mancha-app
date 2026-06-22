@@ -570,6 +570,88 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .sobre-closing-ghost:hover{color:var(--paper); border-color:var(--paper);}
 .sobre-closing .splat-blob{mix-blend-mode:screen;}
 
+/* ---------- POSTULAR ── HERO TRUST LIST ---------- */
+.postular-trust{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:26px; padding:0; list-style:none;}
+.postular-trust li{font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:rgba(250,247,240,0.55); display:flex; align-items:center; gap:7px;}
+.postular-trust li::before{content:'✓'; color:var(--yellow); font-size:12px;}
+
+/* ---------- POSTULAR ── COMMISSION (pre-form motivator) ---------- */
+.postular-commission-wrap{background:var(--ink); padding:0 0 56px;}
+.postular-commission-card{margin:0;}
+
+/* ---------- POSTULAR ── FORM SECTION ---------- */
+.postular-form-section{padding:64px 0 90px; position:relative; overflow:hidden;}
+
+/* ---------- POSTULAR ── CARD ---------- */
+.postular-card{background:#fff; border:1px solid rgba(22,17,13,0.12); border-radius:14px; overflow:hidden; box-shadow:0 4px 32px rgba(22,17,13,0.07);}
+.postular-card-head{padding:32px 36px 28px; border-bottom:1px solid rgba(22,17,13,0.1); background:var(--ink);}
+.postular-card-head h3{font-size:clamp(1.4rem,2.6vw,1.9rem); color:var(--paper); margin:0;}
+.postular-card-head p{font-family:var(--font-body); font-style:italic; color:rgba(250,247,240,0.6); margin-top:8px; font-size:1rem; line-height:1.5;}
+
+/* ---------- POSTULAR ── FORM INNER ---------- */
+.postular-form-inner{padding:0 36px 36px;}
+
+.form-section{padding-top:30px; margin-top:30px; border-top:1px solid rgba(22,17,13,0.09);}
+.form-section:first-of-type{margin-top:0; border-top:none; padding-top:30px;}
+
+.form-section-head{display:flex; align-items:baseline; gap:10px; margin-bottom:20px;}
+.form-section-n{font-family:var(--font-display); font-size:1.3rem; font-weight:800; color:var(--red); line-height:1; flex-shrink:0;}
+.form-section-title{font-family:var(--font-display); font-size:1rem; font-weight:700; color:var(--ink); text-transform:uppercase; letter-spacing:.04em;}
+.form-section-note{font-family:var(--font-body); font-style:italic; font-size:0.92rem; color:var(--ink-soft); margin-bottom:18px; line-height:1.55; max-width:52ch;}
+
+.form-row-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media(max-width:560px){.form-row-2{grid-template-columns:1fr;}}
+
+/* Override field styles inside the new card */
+.postular-form-inner .field{margin-bottom:14px;}
+.postular-form-inner .field label{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); display:flex; align-items:center; gap:6px; margin-bottom:6px;}
+.postular-form-inner .field input,
+.postular-form-inner .field textarea{
+  border:1.5px solid rgba(22,17,13,0.15); border-radius:8px;
+  padding:12px 14px; background:rgba(250,243,230,0.45);
+  color:var(--ink); font-family:var(--font-body); font-size:15px;
+  width:100%; transition:border-color .15s, background .15s;
+}
+.postular-form-inner .field input:focus,
+.postular-form-inner .field textarea:focus{
+  outline:none; border-color:var(--ink); background:#fff;
+}
+.postular-form-inner .field textarea{resize:vertical; min-height:120px; line-height:1.55;}
+
+.field-req{color:var(--red); font-size:13px; font-style:normal;}
+.field-opt{font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; background:rgba(22,17,13,0.07); border-radius:100px; padding:2px 7px; color:var(--ink-soft); font-weight:400;}
+.field-hint{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); margin-top:6px; line-height:1.5; opacity:.75;}
+
+/* ---------- POSTULAR ── UPLOAD ZONES ---------- */
+.upload-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+@media(max-width:480px){.upload-grid{grid-template-columns:1fr;}}
+
+.upload-zone{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:7px; border:2px dashed rgba(22,17,13,0.18); border-radius:10px;
+  padding:24px 12px; cursor:pointer; position:relative; text-align:center;
+  background:rgba(250,243,230,0.5); transition:border-color .15s, background .15s;
+  min-height:110px;
+}
+.upload-zone:hover{border-color:var(--ink); background:#fff;}
+.upload-icon{color:var(--ink-soft); flex-shrink:0; transition:color .15s;}
+.upload-zone:hover .upload-icon{color:var(--ink);}
+.upload-zone-label{font-family:var(--font-display); font-size:13px; font-weight:600; color:var(--ink);}
+.upload-zone-hint{font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+.upload-input{position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;}
+
+/* ---------- POSTULAR ── SUBMIT ---------- */
+.postular-submit-wrap{padding-top:28px; border-top:1px solid rgba(22,17,13,0.09); margin-top:30px;}
+.postular-submit{
+  width:100%; background:var(--ink); color:var(--paper);
+  padding:16px; border-radius:100px; border:none;
+  font-family:var(--font-mono); font-size:13px; text-transform:uppercase;
+  letter-spacing:.06em; cursor:pointer; transition:background .15s;
+}
+.postular-submit:hover{background:var(--red);}
+.postular-submit:disabled{opacity:.5; cursor:not-allowed;}
+.postular-submit-note{font-family:var(--font-body); font-style:italic; font-size:0.88rem; color:var(--ink-soft); text-align:center; margin-top:14px; line-height:1.5;}
+
 /* ---------- ARTISTAS EMPTY STATE ---------- */
 .artists-empty-wrap{padding:40px 0 60px;}
 .artist-card-ph{pointer-events:none; opacity:0.72;}

@@ -26,128 +26,237 @@ export default async function PostularPage({ searchParams }) {
     <>
       <Nav />
 
+      {/* ── HERO ─────────────────────────────────────────── */}
       <header className="page-header postular-header-dark">
         <Splat width="200px" height="175px" top="-55px" right="-40px" color="lilac" rotate={10} radius="r1" />
         <Splat width="110px" height="95px" bottom="-30px" left="-30px" color="yellow" rotate={-12} radius="r3" />
         <Splat width="70px" height="60px" top="55%" left="5%" color="red" rotate={6} radius="r4" />
         <Splat width="60px" height="55px" top="-30px" left="40%" color="red" rotate={-8} radius="r2" />
-        <Splat width="55px" height="50px" bottom="-25px" right="25%" color="yellow" rotate={14} radius="r1" />
         <div className="wrap">
-          <p className="eyebrow">Acceso por postulación</p>
+          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Acceso por postulación</p>
           <h1>No publicamos arte.<br />Elegimos artistas.</h1>
-          <p className="sub">MANCHA no es una vitrina abierta a cualquiera. Cada temporada, un grupo muy reducido entra — el resto espera la próxima. {artistCount ? `Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : 'Esta temporada recién empieza a llenarse.'} Si tu trabajo entra, no compartes página con miles de perfiles iguales — tienes la tuya, sola, durante tres meses completos.</p>
+          <p className="sub">
+            MANCHA no es una vitrina abierta a cualquiera. Cada temporada, un grupo muy reducido entra.
+            {artistCount ? ` Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : ''}
+            {' '}Si tu trabajo entra, tienes tu propio espacio — solo, durante tres meses completos.
+          </p>
           {season?.ends_at && (
-            <div style={{ marginTop: 22 }}>
+            <div style={{ marginTop: 24 }}>
               <Countdown endsAt={season.ends_at} />
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', color: 'rgba(250,247,240,0.5)', marginTop: 8 }}>Lo que queda de la temporada actual. Si no llegas a esta, tu postulación queda guardada para la siguiente.</p>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', color: 'rgba(250,247,240,0.45)', marginTop: 8 }}>
+                Tiempo restante esta temporada — si no llegas, tu postulación queda para la siguiente.
+              </p>
             </div>
           )}
+          <ul className="postular-trust">
+            <li>Sin costo por postular</li>
+            <li>Sin costo por exponer</li>
+            <li>75% de cada venta para ti</li>
+          </ul>
         </div>
       </header>
 
       <Toast success={params?.success} error={params?.error} />
 
+      {/* ── CÓMO FUNCIONA ────────────────────────────────── */}
       <section className="como-funciona">
         <div className="wrap">
           <p className="eyebrow">Cómo funciona para artistas</p>
           <h2>Cuatro pasos, cero vueltas.</h2>
           <div className="steps-row">
-            <div className="step-col"><span className="step-n">01</span><p>Postulas con tu trabajo: sin currículum de galerías, solo unas fotos y tu historia en tus palabras.</p></div>
-            <div className="step-col"><span className="step-n">02</span><p>Si te seleccionamos, expones hasta tres piezas durante toda la temporada, con tu propio espacio.</p></div>
-            <div className="step-col"><span className="step-n">03</span><p>Los coleccionistas pujan por tus piezas en vivo — tú solo subes el trabajo, nosotros nos encargamos del resto.</p></div>
-            <div className="step-col"><span className="step-n">04</span><p>Cuando una pieza se vende, recibes el 75%. Coordinamos el pago y el envío contigo directamente.</p></div>
+            <div className="step-col">
+              <span className="step-n">01</span>
+              <p>Postulas en minutos: sin CV de galerías, sin jerga. Solo tu trabajo y quién eres, en tus palabras.</p>
+            </div>
+            <div className="step-col">
+              <span className="step-n">02</span>
+              <p>Lo revisamos a mano. Si tu trabajo entra, te escribimos por correo con los pasos para crear tu perfil.</p>
+            </div>
+            <div className="step-col">
+              <span className="step-n">03</span>
+              <p>Expones hasta tres piezas con tu propio espacio durante toda la temporada. Los coleccionistas pujan en vivo.</p>
+            </div>
+            <div className="step-col">
+              <span className="step-n">04</span>
+              <p>Cuando una pieza se vende, <strong>recibes el 75%</strong> de la puja ganadora. El envío lo coordinamos contigo directamente.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="content">
-        <Splat width="130px" height="115px" top="6%" right="-40px" color="yellow" rotate={-10} radius="r2" />
-        <Splat width="85px" height="75px" top="48%" left="-35px" color="lilac" rotate={14} radius="r3" />
-        <div className="wrap" style={{ maxWidth: 640 }}>
-          <div className="dash-card">
-            <h3>Tu turno de convencernos</h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', color: 'var(--ink-soft)', marginBottom: 20 }}>Sin currículum de galerías ni jerga de portfolio. Solo tu trabajo, dicho simple.</p>
-            <form action={submitApplication}>
-              <div className="field">
-                <label htmlFor="full_name">Nombre</label>
-                <input id="full_name" name="full_name" type="text" required />
-              </div>
-              <div className="field">
-                <label htmlFor="instagram">Instagram</label>
-                <input id="instagram" name="instagram" type="text" placeholder="@tu_usuario" />
-              </div>
-              <div className="field">
-                <label htmlFor="email">Correo</label>
-                <input id="email" name="email" type="email" required />
-              </div>
-              <div className="field">
-                <label htmlFor="city">Ciudad</label>
-                <input id="city" name="city" type="text" placeholder="Ciudad, país" />
-              </div>
-              <div className="field">
-                <label htmlFor="portfolio_url">Portfolio o sitio web</label>
-                <input id="portfolio_url" name="portfolio_url" type="url" placeholder="https://" />
-              </div>
-              <div className="field">
-                <label htmlFor="bio">Biografía</label>
-                <textarea id="bio" name="bio" rows={4} required placeholder="Quién eres, qué técnica trabajas, qué te mueve a pintar."></textarea>
+      {/* ── COMISIÓN ─────────────────────────────────────── */}
+      <div className="postular-commission-wrap">
+        <div className="wrap" style={{ maxWidth: 680 }}>
+          <div className="commission-card postular-commission-card">
+            <p className="eyebrow" style={{ color: 'rgba(250,243,230,0.55)' }}>Cómo se reparte una venta</p>
+            <div className="split">
+              <div className="for-artist"><b>75%</b><span>Para ti</span></div>
+              <div className="for-mancha"><b>25%</b><span>Comisión MANCHA</span></div>
+            </div>
+            <p className="small">Sin costo por postular, sin costo por exponer. Solo cobramos si se cierra una venta — nunca antes.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── FORMULARIO ───────────────────────────────────── */}
+      <section className="postular-form-section">
+        <Splat width="130px" height="115px" top="4%" right="-40px" color="yellow" rotate={-10} radius="r2" />
+        <Splat width="85px" height="75px" top="52%" left="-35px" color="lilac" rotate={14} radius="r3" />
+
+        <div className="wrap" style={{ maxWidth: 660 }}>
+          <div className="postular-card">
+
+            <div className="postular-card-head">
+              <h3>Tu turno de convencernos.</h3>
+              <p>Sin currículum de galerías ni jerga de portfolio.<br />Solo tu trabajo, dicho en tus palabras.</p>
+            </div>
+
+            <form action={submitApplication} className="postular-form-inner">
+
+              {/* 01 — Tu perfil */}
+              <div className="form-section">
+                <div className="form-section-head">
+                  <span className="form-section-n">01</span>
+                  <span className="form-section-title">Tu perfil</span>
+                </div>
+
+                <div className="form-row-2">
+                  <div className="field">
+                    <label htmlFor="full_name">
+                      Nombre <span className="field-req">*</span>
+                    </label>
+                    <input
+                      id="full_name" name="full_name" type="text" required
+                      placeholder="Tu nombre artístico o real"
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="email">
+                      Correo <span className="field-req">*</span>
+                    </label>
+                    <input
+                      id="email" name="email" type="email" required
+                      placeholder="donde te escribimos si entras"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row-2">
+                  <div className="field">
+                    <label htmlFor="instagram">
+                      Instagram <span className="field-opt">opcional</span>
+                    </label>
+                    <input id="instagram" name="instagram" type="text" placeholder="@tu_usuario" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="city">
+                      Ciudad <span className="field-opt">opcional</span>
+                    </label>
+                    <input id="city" name="city" type="text" placeholder="Ciudad, país" />
+                  </div>
+                </div>
               </div>
 
-              <div className="photo-guidelines">
-                <p>3 imágenes de tus obras</p>
-                <ul>
-                  <li>La obra sola, sin marco ni pared alrededor, bien iluminada.</li>
-                  <li>Puedes postular con solo 1 o 2 si todavía no tienes las tres — no es obligatorio completar las tres.</li>
-                </ul>
-              </div>
-              <div className="field">
-                <label htmlFor="image_1">Imagen 1</label>
-                <input id="image_1" name="image_1" type="file" accept="image/*" />
-              </div>
-              <div className="field">
-                <label htmlFor="image_2">Imagen 2</label>
-                <input id="image_2" name="image_2" type="file" accept="image/*" />
-              </div>
-              <div className="field">
-                <label htmlFor="image_3">Imagen 3</label>
-                <input id="image_3" name="image_3" type="file" accept="image/*" />
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--ink-soft)', marginTop: 6 }}>Máximo 8 MB por imagen.</p>
+              {/* 02 — Tu trabajo */}
+              <div className="form-section">
+                <div className="form-section-head">
+                  <span className="form-section-n">02</span>
+                  <span className="form-section-title">Tu trabajo</span>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="bio">
+                    ¿Quién eres y qué haces? <span className="field-req">*</span>
+                  </label>
+                  <textarea
+                    id="bio" name="bio" rows={5} required
+                    placeholder="Qué técnica trabajas, de dónde viene tu trabajo, qué te mueve. No hace falta sonar como un artista — escribe como hablas. Eso es exactamente lo que queremos leer."
+                  />
+                  <p className="field-hint">Esto es lo primero que leemos. Sé específico/a.</p>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="portfolio_url">
+                    Portfolio o sitio web <span className="field-opt">opcional</span>
+                  </label>
+                  <input
+                    id="portfolio_url" name="portfolio_url" type="url"
+                    placeholder="https://"
+                  />
+                  <p className="field-hint">Un link a tu Instagram también sirve si ahí está tu trabajo.</p>
+                </div>
               </div>
 
-              <SubmitButton pendingText="Enviando postulación...">Enviar postulación</SubmitButton>
+              {/* 03 — Tus obras */}
+              <div className="form-section">
+                <div className="form-section-head">
+                  <span className="form-section-n">03</span>
+                  <span className="form-section-title">Tus obras</span>
+                </div>
+                <p className="form-section-note">
+                  Entre 1 y 3 imágenes de trabajos que quieras mostrar. La obra sola, bien iluminada, sin marco ni pared alrededor. Máximo 8 MB por imagen.
+                </p>
+
+                <div className="upload-grid">
+                  {[
+                    { n: 1, label: 'Primera obra', hint: 'Obligatoria' },
+                    { n: 2, label: 'Segunda obra', hint: 'Opcional' },
+                    { n: 3, label: 'Tercera obra', hint: 'Opcional' },
+                  ].map(({ n, label, hint }) => (
+                    <label key={n} className="upload-zone" htmlFor={`image_${n}`}>
+                      <svg className="upload-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
+                      <span className="upload-zone-label">{label}</span>
+                      <span className="upload-zone-hint">{hint}</span>
+                      <input
+                        id={`image_${n}`} name={`image_${n}`}
+                        type="file" accept="image/*"
+                        className="upload-input"
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="postular-submit-wrap">
+                <SubmitButton className="postular-submit" pendingText="Enviando postulación…">
+                  Enviar postulación →
+                </SubmitButton>
+                <p className="postular-submit-note">
+                  Te confirmamos por correo al instante. Si tu trabajo entra, te avisamos antes de que empiece la próxima temporada.
+                </p>
+              </div>
+
             </form>
           </div>
 
-          <div className="commission-card" style={{ marginTop: 28 }}>
-            <div>
-              <p className="eyebrow">Cómo se reparte una venta</p>
-              <div className="split">
-                <div className="for-artist"><b>75%</b><span>Para el artista</span></div>
-                <div className="for-mancha"><b>25%</b><span>Comisión MANCHA</span></div>
-              </div>
-              <p className="small">Sin costo por postular, sin costo por exponer. Solo cobramos cuando se cierra una subasta.</p>
-            </div>
-          </div>
-
-          <div className="faq" style={{ marginTop: 40 }}>
+          {/* ── FAQ ──────────────────────────────────────── */}
+          <div className="faq" style={{ marginTop: 56 }}>
             <p className="eyebrow">Preguntas frecuentes</p>
             <h2>Antes de postular</h2>
             <div className="faq-list">
               <div className="faq-item">
                 <h4>¿Qué pasa después de postular?</h4>
-                <p>Revisamos tu trabajo. Si entras a la próxima temporada, te escribimos por correo para que crees tu cuenta de artista y cargues tus piezas directo, sin pasar por otra revisión.</p>
+                <p>Revisamos tu trabajo a mano. Si entras a la próxima temporada, te escribimos por correo para que crees tu cuenta de artista y cargues tus piezas directamente, sin pasar por otra revisión.</p>
               </div>
               <div className="faq-item">
                 <h4>¿Cuántos artistas entran por temporada?</h4>
-                <p>Un grupo chico — preferimos darle espacio real a pocos antes que diluir a muchos en la misma página.</p>
+                <p>Un grupo pequeño — preferimos darle espacio real a pocos antes que diluir a muchos en la misma página. Si no entraste en esta, tu postulación queda para la siguiente.</p>
               </div>
               <div className="faq-item">
-                <h4>¿Qué pasa si una pieza no recibe pujas que superen el mínimo?</h4>
-                <p>La pieza no se vende al cerrar la temporada y puedes incluirla en una próxima postulación.</p>
+                <h4>¿Qué pasa si una pieza no recibe pujas?</h4>
+                <p>La pieza no se vende al cerrar la temporada y puedes incluirla de nuevo en la próxima postulación. El riesgo es cero: no te cobramos nada por exponer.</p>
               </div>
               <div className="faq-item">
-                <h4>¿Quién se queda con el envío y el embalaje?</h4>
-                <p>Eso se conversa al confirmar la venta — todavía no está automatizado, lo coordinamos por correo con cada artista.</p>
+                <h4>¿Quién se encarga del envío?</h4>
+                <p>Lo coordinamos contigo por correo una vez confirmada la venta. Todavía no está automatizado — lo hacemos de forma directa con cada artista.</p>
+              </div>
+              <div className="faq-item">
+                <h4>¿Puedo postular si nunca expuse en ningún lado?</h4>
+                <p>Sí — de hecho eso es exactamente lo que buscamos. Muchos de los artistas que elegimos exponen en forma individual por primera vez aquí.</p>
               </div>
             </div>
           </div>
