@@ -23,15 +23,14 @@ export default function Footer() {
               <Link href="/artistas">Temporada actual</Link>
               <Link href="/obras">Catálogo</Link>
               <Link href="/seleccionados">Los elegidos</Link>
-              <Link href="/criterio">El criterio</Link>
               <Link href="/temporadas">Temporadas</Link>
-              <Link href="/notas">Notas</Link>
-              <Link href="/tips">Tips artísticos</Link>
               <Link href="/postular">¿Eres artista?</Link>
               <Link href="/legal">Términos y privacidad</Link>
             </div>
             <div className="footer-col">
-              <h5>Contacto</h5>
+              <h5>Editorial</h5>
+              <Link href="/notas">Blog de arte →</Link>
+              <h5 style={{ marginTop: 24 }}>Contacto</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
           </div>
