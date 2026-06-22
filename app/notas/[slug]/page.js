@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import Splat from '@/components/Splat';
 import { getArticleBySlug, articles } from '@/lib/news';
 
 export function generateStaticParams() {
@@ -25,26 +26,54 @@ export default async function ArticlePage({ params }) {
   const article = getArticleBySlug(slug);
   if (!article) notFound();
 
+  const idx = articles.findIndex((a) => a.slug === slug);
+  const prev = idx < articles.length - 1 ? articles[idx + 1] : null;
+  const next = idx > 0 ? articles[idx - 1] : null;
+
   return (
     <>
       <Nav />
-      <header className="page-header">
-        <div className="wrap" style={{ maxWidth: '760px' }}>
-          <Link href="/notas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver a notas</Link>
-          <p className="eyebrow">{article.date}</p>
-          <h1 style={{ maxWidth: '20ch' }}>{article.title}</h1>
+
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <header className="nota-header">
+        <Splat width="180px" height="155px" top="-50px" right="-40px" color="red" rotate={-14} radius="r2" />
+        <Splat width="100px" height="88px" bottom="-35px" left="-25px" color="yellow" rotate={12} radius="r4" />
+        <div className="wrap" style={{ maxWidth: 820 }}>
+          <Link href="/notas" className="nota-back">← Todas las notas</Link>
+          <p className="nota-header-date">{article.date}</p>
+          <h1 className="nota-header-title">{article.title}</h1>
+          <p className="nota-header-excerpt">{article.excerpt}</p>
         </div>
       </header>
 
-      <section className="content" style={{ paddingTop: 50 }}>
-        <div className="wrap" style={{ maxWidth: '720px' }}>
+      {/* ── CUERPO ───────────────────────────────────────── */}
+      <article className="nota-body">
+        <div className="wrap nota-content">
           {article.body.map((paragraph, i) => (
-            <p key={i} style={{ fontFamily: 'var(--font-body)', fontSize: '1.08rem', lineHeight: 1.75, color: 'var(--ink)', marginBottom: 22 }}>
-              {paragraph}
-            </p>
+            <p key={i}>{paragraph}</p>
           ))}
         </div>
-      </section>
+
+        {/* Navegación entre notas */}
+        {(prev || next) && (
+          <div className="nota-nav">
+            <div className="wrap nota-nav-inner">
+              {prev ? (
+                <Link href={`/notas/${prev.slug}`} className="nota-nav-link nota-nav-prev">
+                  <span className="nota-nav-dir">← Anterior</span>
+                  <span className="nota-nav-label">{prev.title}</span>
+                </Link>
+              ) : <div />}
+              {next && (
+                <Link href={`/notas/${next.slug}`} className="nota-nav-link nota-nav-next">
+                  <span className="nota-nav-dir">Siguiente →</span>
+                  <span className="nota-nav-label">{next.title}</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
+      </article>
 
       <Footer />
     </>

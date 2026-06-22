@@ -5,38 +5,56 @@ import { tips } from '@/lib/tips';
 
 export const metadata = {
   title: 'MANCHA — Tips artísticos',
-  description: 'Cinco consejos paso a paso, con ejemplo, para quien recién empieza a pintar como hobby.',
+  description: 'Cinco consejos concretos para quien empieza a pintar — paso a paso, con ejemplo real en cada uno.',
 };
 
 export default function TipsPage() {
   return (
     <>
       <Nav />
-      <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
-        <Splat width="160px" height="140px" top="-30px" right="-40px" color="yellow" rotate={-12} radius="r2" />
-        <Splat width="100px" height="90px" bottom="-30px" left="-30px" color="red" rotate={16} radius="r4" />
+
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <header className="tips-header">
+        <Splat width="200px" height="175px" top="-50px" right="-40px" color="yellow" rotate={-12} radius="r2" />
+        <Splat width="120px" height="105px" bottom="-40px" left="-30px" color="red" rotate={16} radius="r4" />
+        <Splat width="68px" height="60px" top="44%" left="7%" color="lilac" rotate={10} radius="r1" />
         <div className="wrap">
-          <p className="eyebrow">Tips artísticos</p>
-          <h1>Cinco cosas que ayudan más de lo que parecen</h1>
-          <p className="sub">Pensados para quien recién empieza a pintar como hobby — paso a paso, con un ejemplo concreto en cada uno.</p>
+          <p className="eyebrow tips-eyebrow">Tips artísticos</p>
+          <h1 className="tips-title">
+            Cinco cosas que<br />
+            <em>ayudan más de lo que parecen.</em>
+          </h1>
+          <p className="tips-sub">
+            Para quien recién empieza a pintar como hobby — paso a paso,
+            con un ejemplo concreto en cada uno.
+          </p>
         </div>
       </header>
 
-      <section className="tips" style={{ borderTop: 'none' }}>
-        <Splat width="65px" height="58px" top="20%" right="4%" color="lilac" rotate={-8} radius="r1" />
-        <Splat width="55px" height="50px" bottom="12%" left="42%" color="yellow" rotate={10} radius="r3" />
-        <div className="wrap">
-          {tips.map((tip) => (
-            <div className="tip-card" key={tip.title}>
-              <h3>{tip.title}</h3>
-              <ol className="tip-steps">
-                {tip.steps.map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))}
-              </ol>
-              <div className="tip-example">
-                <b>Ejemplo</b>
-                {tip.example}
+      {/* ── TIPS ─────────────────────────────────────────── */}
+      <section className="tips-section">
+        <div className="wrap tips-wrap">
+          {tips.map((tip, i) => (
+            <div className="tip-item" key={tip.title}>
+              <div className="tip-item-head">
+                <span className="tip-item-n">{String(i + 1).padStart(2, '0')}</span>
+                <h2 className="tip-item-title">{tip.title}</h2>
+              </div>
+
+              <div className="tip-item-body">
+                <ol className="tip-item-steps">
+                  {tip.steps.map((step, j) => (
+                    <li key={j}>
+                      <span className="tip-step-n">{j + 1}</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+
+                <div className="tip-item-example">
+                  <p className="tip-example-label">Ejemplo concreto</p>
+                  <p className="tip-example-text">{tip.example}</p>
+                </div>
               </div>
             </div>
           ))}

@@ -6,40 +6,56 @@ import { articles } from '@/lib/news';
 
 export const metadata = {
   title: 'MANCHA — Notas',
-  description: 'Arte, mercado y oficio — notas de MANCHA.',
+  description: 'Arte, mercado y oficio — notas de MANCHA sobre el mundo del arte emergente.',
 };
 
 export default function NotasPage() {
   return (
     <>
       <Nav />
-      <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
-        <Splat width="160px" height="140px" top="-30px" left="-40px" color="red" rotate={18} radius="r3" />
-        <Splat width="100px" height="90px" bottom="-30px" right="-30px" color="lilac" rotate={-12} radius="r1" />
+
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <header className="notas-header">
+        <Splat width="200px" height="175px" top="-55px" left="-40px" color="red" rotate={18} radius="r3" />
+        <Splat width="120px" height="105px" bottom="-40px" right="-30px" color="lilac" rotate={-12} radius="r1" />
+        <Splat width="72px" height="64px" top="38%" right="8%" color="yellow" rotate={6} radius="r2" />
         <div className="wrap">
-          <p className="eyebrow">Notas</p>
-          <h1>Arte, mercado y oficio</h1>
+          <p className="eyebrow notas-eyebrow">Notas</p>
+          <h1 className="notas-title">
+            Arte, mercado<br />
+            <em>y oficio.</em>
+          </h1>
+          <p className="notas-sub">
+            Lo que no cabe en una ficha de catálogo — el contexto, la conversación,
+            el fondo detrás de cada pieza y cada temporada.
+          </p>
         </div>
       </header>
 
-      <section className="news" style={{ borderTop: 'none' }}>
-        <Splat width="70px" height="60px" top="20%" right="-25px" color="yellow" rotate={8} radius="r4" />
-        <Splat width="55px" height="50px" bottom="10%" left="-20px" color="red" rotate={-10} radius="r2" />
-        <div className="wrap news-list">
-          {articles.map((article) => (
-            <article className="news-item" key={article.slug}>
-              <p className="news-date">{article.date}</p>
-              <div>
-                <Link href={`/notas/${article.slug}`} className="news-title" style={{ display: 'block' }}>
-                  {article.title}
+      {/* ── ARTÍCULOS ────────────────────────────────────── */}
+      <section className="notas-section">
+        <div className="wrap notas-wrap">
+          {articles.length === 0 ? (
+            <div className="empty-state">No hay notas publicadas todavía.</div>
+          ) : (
+            <div className="notas-grid">
+              {articles.map((article, i) => (
+                <Link href={`/notas/${article.slug}`} className="nota-card" key={article.slug}>
+                  <div className="nota-card-inner">
+                    <div className={`nota-card-art g${(i % 12) + 1}`} aria-hidden="true">
+                      <span className="nota-card-num">{String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div className="nota-card-body">
+                      <p className="nota-card-date">{article.date}</p>
+                      <h2 className="nota-card-title">{article.title}</h2>
+                      <p className="nota-card-excerpt">{article.excerpt}</p>
+                      <span className="nota-card-cta">Leer nota →</span>
+                    </div>
+                  </div>
                 </Link>
-                <p className="news-excerpt">{article.excerpt}</p>
-                <Link href={`/notas/${article.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', borderBottom: '1.5px solid var(--ink)', paddingBottom: 2, display: 'inline-block', marginTop: 10 }}>
-                  Leer nota →
-                </Link>
-              </div>
-            </article>
-          ))}
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import { cap } from '@/lib/utils';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 
@@ -29,36 +30,65 @@ export default async function TemporadaPage({ params }) {
     .order('created_at', { ascending: true });
 
   const allArtists = artists ?? [];
+  const totalPieces = allArtists.reduce((s, a) => s + (a.pieces?.length ?? 0), 0);
+  const totalBids = allArtists.reduce((s, a) => s + (a.pieces ?? []).reduce((ps, p) => ps + (p.bids?.length ?? 0), 0), 0);
 
   return (
     <>
       <Nav />
-      <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
-        <Splat width="130px" height="115px" top="-25px" left="-30px" color="red" rotate={-10} radius="r3" />
+
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <header className="temporada-header">
+        <Splat width="200px" height="175px" top="-55px" right="-40px" color="yellow" rotate={-10} radius="r1" />
+        <Splat width="120px" height="105px" bottom="-40px" left="-30px" color="lilac" rotate={14} radius="r3" />
+        <Splat width="68px" height="60px" top="50%" left="5%" color="red" rotate={8} radius="r4" />
         <div className="wrap">
-          <Link href="/temporadas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Todas las temporadas</Link>
-          <p className="eyebrow">
-            {new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
-            {' — '}
-            {new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
-            {' · '}
-            <span className={season.is_current ? 'season-status-live' : 'season-status-closed'}>{season.is_current ? 'Temporada actual' : 'Temporada cerrada'}</span>
-          </p>
-          <h1>{season.name}</h1>
+          <Link href="/temporadas" className="temporada-back">← Todas las temporadas</Link>
+
+          <div className="temporada-status-row">
+            <span className={`temporada-badge${season.is_current ? ' temporada-badge-live' : ''}`}>
+              {season.is_current ? '● En curso' : 'Cerrada'}
+            </span>
+            <span className="temporada-dates">
+              {new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {' — '}
+              {new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          </div>
+
+          <h1 className="temporada-title">{season.name}</h1>
+
+          <div className="temporada-stats">
+            <div className="temporada-stat">
+              <b>{allArtists.length}</b>
+              <span>{allArtists.length === 1 ? 'artista' : 'artistas'}</span>
+            </div>
+            <div className="temporada-stat-sep" />
+            <div className="temporada-stat">
+              <b>{totalPieces}</b>
+              <span>{totalPieces === 1 ? 'pieza' : 'piezas'}</span>
+            </div>
+            <div className="temporada-stat-sep" />
+            <div className="temporada-stat">
+              <b>{totalBids}</b>
+              <span>{totalBids === 1 ? 'puja' : 'pujas'}</span>
+            </div>
+          </div>
         </div>
       </header>
 
-      <section className="content">
+      {/* ── ARTISTAS ─────────────────────────────────────── */}
+      <section className="temporada-body">
         <div className="wrap">
           {allArtists.length === 0 ? (
-            <div className="empty-state">Esta temporada no tiene artistas registrados.</div>
+            <div className="empty-state">Esta temporada no tiene artistas registrados todavía.</div>
           ) : (
             <div className="artist-card-grid">
               {allArtists.map((artist, ai) => {
                 const firstPiece = artist.pieces?.[0];
                 const gradientClass = GRADIENTS[ai % GRADIENTS.length];
                 const pieceCount = artist.pieces?.length ?? 0;
-                const totalBids = (artist.pieces ?? []).reduce((sum, p) => sum + (p.bids?.length ?? 0), 0);
+                const bids = (artist.pieces ?? []).reduce((s, p) => s + (p.bids?.length ?? 0), 0);
                 return (
                   <Link href={`/artistas/${artist.id}`} className="artist-card" key={artist.id}>
                     <div className="artist-card-art">
@@ -71,11 +101,12 @@ export default async function TemporadaPage({ params }) {
                     </div>
                     <div className="artist-card-info">
                       <p className="eyebrow">{String(ai + 1).padStart(2, '0')}</p>
-                      <h3>{artist.display_name}</h3>
+                      <h3>{cap(artist.display_name)}</h3>
                       <p className="artist-card-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
                       <p className="artist-card-bio">{artist.bio}</p>
                       <span className="artist-card-cta">
-                        {pieceCount === 1 ? 'Su pieza' : `Sus ${pieceCount} piezas`}{totalBids > 0 ? ` · ${totalBids} ${totalBids === 1 ? 'puja' : 'pujas'}` : ''} →
+                        {pieceCount === 1 ? 'Su pieza' : `Sus ${pieceCount} piezas`}
+                        {bids > 0 ? ` · ${bids} ${bids === 1 ? 'puja' : 'pujas'}` : ''} →
                       </span>
                     </div>
                   </Link>
