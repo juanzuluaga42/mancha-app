@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import Splat from '@/components/Splat';
 
 export const metadata = { title: 'MANCHA — Pago recibido' };
 
@@ -10,18 +12,25 @@ export default async function PagoExitoPage({ searchParams }) {
   return (
     <>
       <Nav />
-      <header className="page-header">
-        <div className="wrap" style={{ textAlign: 'center' }}>
-          <p className="eyebrow">Pago recibido</p>
-          <h1>Gracias — ya es tuya.</h1>
-          <p className="sub" style={{ margin: '0 auto' }}>Te escribimos por correo en las próximas horas para coordinar el envío. Si tienes alguna duda mientras tanto, escríbenos a mancha.gallery@gmail.com.</p>
+
+      <header className="auth-header auth-header-center">
+        <Splat width="180px" height="155px" top="-50px" right="-40px" color="yellow" rotate={-12} radius="r1" />
+        <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="red" rotate={14} radius="r3" />
+        <div className="wrap">
+          <p className="auth-header-eyebrow">Pago confirmado</p>
+          <h1 className="auth-header-title">Gracias — <em>ya es tuya.</em></h1>
+          <p className="auth-header-sub">
+            Te escribimos por correo en las próximas horas para coordinar el envío.
+            Cualquier duda: <a href="mailto:mancha.gallery@gmail.com" className="auth-header-mail">mancha.gallery@gmail.com</a>
+          </p>
           {pieceId && (
-            <a href={`/obras/${pieceId}/certificado`} target="_blank" rel="noreferrer" className="btn-primary" style={{ marginTop: 26, display: 'inline-block' }}>
+            <Link href={`/obras/${pieceId}/certificado`} className="auth-header-btn">
               Ver tu certificado de colección →
-            </a>
+            </Link>
           )}
         </div>
       </header>
+
       <Footer />
     </>
   );

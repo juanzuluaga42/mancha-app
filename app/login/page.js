@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import Splat from '@/components/Splat';
 import { logIn } from './actions';
 
 export const metadata = { title: 'MANCHA — Iniciar sesión' };
@@ -11,10 +12,13 @@ export default async function LoginPage({ searchParams }) {
   return (
     <>
       <Nav />
-      <header className="page-header">
+
+      <header className="auth-header">
+        <Splat width="160px" height="140px" top="-45px" right="-35px" color="red" rotate={-10} radius="r2" />
+        <Splat width="90px" height="80px" bottom="-28px" left="-22px" color="yellow" rotate={13} radius="r4" />
         <div className="wrap">
-          <p className="eyebrow">Bienvenido de nuevo</p>
-          <h1>Iniciar sesión</h1>
+          <p className="auth-header-eyebrow">Bienvenido de nuevo</p>
+          <h1 className="auth-header-title">Iniciar sesión</h1>
         </div>
       </header>
 

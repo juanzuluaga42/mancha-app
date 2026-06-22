@@ -33,11 +33,6 @@ export default function Footer() {
               <h5>Contacto</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
-            <div className="footer-col">
-              <h5>Síguenos</h5>
-              <span>Instagram</span>
-              <span>Pinterest</span>
-            </div>
           </div>
         </div>
         <div className="footer-bottom">
