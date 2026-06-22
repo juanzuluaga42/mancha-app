@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Splat from './Splat';
 
 const TEXT = 'Si llegaste hasta acá, ya tienes lo que hace falta para descubrir algo antes que el resto.';
-const COLORS = ['stain-red', 'stain-paper', 'stain-yellow', 'stain-paper', 'stain-lilac', 'stain-paper'];
-const TILTS = [-3, 0, 2, 0, -2, 0, 3, 0];
+
+// Colores tipo salpicadura de pintura, repartidos por palabra.
+const COLORS = ['c-red', 'c-paper', 'c-yellow', 'c-paper', 'c-lilac', 'c-paper', 'c-red', 'c-paper', 'c-yellow', 'c-lilac'];
+// Direcciones desde las que entra cada letra: izquierda, derecha, arriba, abajo.
+const DIRS = ['from-left', 'from-top', 'from-right', 'from-bottom'];
 
 export default function HiddenMessage() {
   const [visible, setVisible] = useState(false);
@@ -14,7 +16,6 @@ export default function HiddenMessage() {
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -22,30 +23,40 @@ export default function HiddenMessage() {
           observer.disconnect();
         }
       },
-      { threshold: 0.6 }
+      { threshold: 0.5 }
     );
-
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
 
   const words = TEXT.split(' ');
+  let letterIndex = 0;
 
   return (
     <div ref={ref} className="hidden-message">
       <div className={`hidden-message-inner ${visible ? 'is-visible' : ''}`}>
-        <Splat width="100px" height="86px" top="-30px" left="-28px" color="red" rotate={-14} radius="r2" />
-        <Splat width="75px" height="65px" bottom="-26px" right="-22px" color="lilac" rotate={12} radius="r4" />
-        <Splat width="50px" height="46px" top="40%" right="-18px" color="yellow" rotate={-8} radius="r1" center />
+        <span className="hm-splat hm-splat-1" />
+        <span className="hm-splat hm-splat-2" />
+        <span className="hm-splat hm-splat-3" />
+        <span className="hm-splat hm-splat-4" />
         <p className="hidden-message-eyebrow">Descubierto</p>
-        <p className="hidden-message-text">
-          {words.map((word, i) => (
-            <span
-              key={i}
-              className={`stain-word ${COLORS[i % COLORS.length]}`}
-              style={{ '--tilt': `${TILTS[i % TILTS.length]}deg` }}
-            >
-              {word}{' '}
+        <p className="hidden-message-text" aria-label={TEXT}>
+          {words.map((word, wi) => (
+            <span className={`hm-word ${COLORS[wi % COLORS.length]}`} key={wi} aria-hidden="true">
+              {word.split('').map((char, ci) => {
+                const dir = DIRS[letterIndex % DIRS.length];
+                const delay = letterIndex * 32;
+                letterIndex += 1;
+                return (
+                  <span
+                    className={`hm-letter ${dir}`}
+                    key={ci}
+                    style={{ transitionDelay: `${delay}ms` }}
+                  >
+                    {char}
+                  </span>
+                );
+              })}
             </span>
           ))}
         </p>
