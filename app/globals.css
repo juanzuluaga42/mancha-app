@@ -495,6 +495,79 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .faq-item h4{font-family:var(--font-display); font-size:15.5px; font-weight:600;}
 .faq-item p{font-family:var(--font-body); color:var(--ink-soft); margin-top:8px; max-width:60ch;}
 
+/* ---------- SOBRE MANCHA ── HERO ---------- */
+.sobre-hero{background:var(--ink); color:var(--paper); padding:110px 0 90px; position:relative; overflow:hidden;}
+.sobre-hero-inner{position:relative; z-index:1;}
+.sobre-hero-title{font-size:clamp(3rem,8vw,6.4rem); font-weight:800; line-height:1; letter-spacing:-0.03em; margin-top:20px; color:var(--paper);}
+.sobre-hero-title em{font-style:normal; color:var(--red);}
+.sobre-hero-sub{font-family:var(--font-body); font-style:italic; font-size:clamp(1.1rem,2vw,1.4rem); color:rgba(250,247,240,0.65); margin-top:32px; line-height:1.5;}
+.sobre-hero .splat-blob{mix-blend-mode:screen;}
+
+/* ---------- SOBRE MANCHA ── NÚMEROS ---------- */
+.sobre-numbers{padding:0; border-bottom:var(--rule);}
+.sobre-numbers-grid{display:grid; grid-template-columns:repeat(3,1fr);}
+.sobre-number-item{padding:56px 40px 52px; border-right:var(--rule);}
+.sobre-number-last{border-right:none;}
+.sobre-number-dig{font-family:var(--font-display); font-size:clamp(5rem,10vw,8rem); font-weight:800; line-height:1; color:var(--yellow); display:block; letter-spacing:-0.04em;}
+.sobre-number-pct{font-size:0.5em; vertical-align:super; letter-spacing:0;}
+.sobre-number-label{font-family:var(--font-display); font-size:1rem; font-weight:600; color:var(--ink); margin-top:10px; line-height:1.3;}
+.sobre-number-note{font-family:var(--font-body); font-style:italic; font-size:0.92rem; color:var(--ink-soft); margin-top:10px; line-height:1.55; max-width:22ch;}
+@media(max-width:680px){
+  .sobre-numbers-grid{grid-template-columns:1fr;}
+  .sobre-number-item{border-right:none; border-bottom:var(--rule); padding:36px 28px;}
+  .sobre-number-last{border-bottom:none;}
+}
+
+/* ---------- SOBRE MANCHA ── MANIFIESTO ---------- */
+.sobre-manifiesto{background:var(--ink); color:var(--paper); padding:90px 0; position:relative; overflow:hidden;}
+.sobre-manifiesto-inner{position:relative; z-index:1; max-width:760px;}
+.sobre-manifiesto-big{font-family:var(--font-display); font-size:clamp(1.8rem,3.8vw,2.9rem); font-weight:700; line-height:1.15; color:var(--paper); letter-spacing:-0.01em;}
+.sobre-manifiesto-body{font-family:var(--font-body); font-style:italic; font-size:1.15rem; color:rgba(250,247,240,0.7); margin-top:18px; line-height:1.65; max-width:58ch;}
+.sobre-manifiesto-divisor{width:48px; height:3px; background:var(--red); border-radius:2px; margin:52px 0;}
+.sobre-manifiesto .splat-blob{mix-blend-mode:screen;}
+
+/* ---------- SOBRE MANCHA ── REGLAS ---------- */
+.sobre-reglas{padding:80px 0; border-bottom:var(--rule);}
+.sobre-reglas .eyebrow{margin-bottom:36px;}
+.sobre-reglas-list{display:flex; flex-direction:column;}
+.sobre-regla{display:flex; gap:28px; align-items:baseline; padding:22px 0; border-top:var(--rule);}
+.sobre-reglas-list .sobre-regla:last-child{border-bottom:var(--rule);}
+.sobre-regla-n{font-family:var(--font-display); font-size:1.5rem; font-weight:800; color:var(--red); flex-shrink:0; width:44px; line-height:1;}
+.sobre-regla-text{font-family:var(--font-display); font-size:clamp(1.1rem,2.2vw,1.5rem); font-weight:600; color:var(--ink); line-height:1.25; margin:0;}
+
+/* ---------- SOBRE MANCHA ── CÓMO FUNCIONA LA PUJA ---------- */
+.sobre-puja{background:var(--ink); color:var(--paper); padding:80px 0; position:relative; overflow:hidden;}
+.sobre-puja-inner{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center; position:relative; z-index:1;}
+.sobre-puja-title{font-size:clamp(1.9rem,3.6vw,2.8rem); color:var(--paper); margin-top:12px;}
+.sobre-puja-body{font-family:var(--font-body); font-style:italic; color:rgba(250,247,240,0.72); margin-top:18px; line-height:1.65; font-size:1.05rem; max-width:52ch;}
+.sobre-split-bar{display:flex; border-radius:12px; overflow:hidden; border:1px solid rgba(250,247,240,0.12);}
+.sobre-split-artist{flex:75; background:var(--yellow); color:var(--ink); padding:28px 22px; display:flex; flex-direction:column; gap:6px;}
+.sobre-split-artist b{font-family:var(--font-display); font-size:2.2rem; font-weight:800; line-height:1;}
+.sobre-split-artist span{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.75;}
+.sobre-split-mancha{flex:25; background:rgba(250,247,240,0.08); color:rgba(250,247,240,0.6); padding:28px 18px; display:flex; flex-direction:column; gap:6px;}
+.sobre-split-mancha b{font-family:var(--font-display); font-size:2.2rem; font-weight:800; line-height:1; color:rgba(250,247,240,0.5);}
+.sobre-split-mancha span{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em;}
+.sobre-split-note{font-family:var(--font-mono); font-size:11px; color:rgba(250,247,240,0.4); margin-top:14px; line-height:1.5;}
+.sobre-puja .splat-blob{mix-blend-mode:screen;}
+@media(max-width:760px){.sobre-puja-inner{grid-template-columns:1fr;}}
+
+/* ---------- SOBRE MANCHA ── ETYMOLOGY ---------- */
+.sobre-etymology{padding:90px 0; border-top:var(--rule); border-bottom:var(--rule);}
+.sobre-etymology-inner{max-width:780px;}
+.sobre-etymology-inner .eyebrow{margin-bottom:28px;}
+.sobre-etymology-quote{font-family:var(--font-display); font-size:clamp(1.7rem,3.4vw,2.6rem); font-weight:700; color:var(--ink); line-height:1.2; margin:0 0 28px; border-left:4px solid var(--red); padding-left:24px;}
+.sobre-etymology-body{font-family:var(--font-body); font-style:italic; font-size:1.1rem; color:var(--ink-soft); line-height:1.7; max-width:56ch;}
+
+/* ---------- SOBRE MANCHA ── CLOSING ---------- */
+.sobre-closing{background:var(--ink); color:var(--paper); padding:100px 0 90px; position:relative; overflow:hidden; text-align:center;}
+.sobre-closing-inner{position:relative; z-index:1;}
+.sobre-closing-line{font-family:var(--font-display); font-size:clamp(2rem,4.5vw,3.6rem); font-weight:800; line-height:1.1; color:var(--paper); letter-spacing:-0.02em; margin:0;}
+.sobre-closing-accent{color:var(--red);}
+.sobre-closing-ctas{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:42px;}
+.sobre-closing-ghost{font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:.06em; color:rgba(250,247,240,0.55); border-bottom:1.5px solid rgba(250,247,240,0.25); padding-bottom:2px; align-self:center;}
+.sobre-closing-ghost:hover{color:var(--paper); border-color:var(--paper);}
+.sobre-closing .splat-blob{mix-blend-mode:screen;}
+
 /* ---------- ARTISTAS EMPTY STATE ---------- */
 .artists-empty-wrap{padding:40px 0 60px;}
 .artist-card-ph{pointer-events:none; opacity:0.72;}

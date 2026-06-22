@@ -4,44 +4,162 @@ import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 
 export const metadata = {
-  title: 'MANCHA — Sobre nosotros',
-  description: 'Por qué existe MANCHA: una galería con pocos artistas a la vez, tres piezas cada uno, tres meses por temporada.',
+  title: 'MANCHA — No somos una galería. Somos el filtro.',
+  description: 'Por qué existe MANCHA: pocos artistas, tres piezas cada uno, sin catálogos infinitos ni ruido.',
 };
+
+const REGLAS = [
+  'Menos artistas significa más atención para cada obra.',
+  'La restricción no es un error — es el punto.',
+  'El 75% siempre es del artista. Siempre.',
+  'No hay catálogo abierto. Hay selección.',
+  'Lo que ves hoy puede no estar mañana.',
+];
 
 export default function SobreManchaPage() {
   return (
     <>
       <Nav />
 
-      <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
-        <Splat width="150px" height="130px" top="-30px" right="-40px" color="red" rotate={-12} radius="r2" />
-        <Splat width="90px" height="80px" bottom="-30px" left="8%" color="lilac" rotate={14} radius="r3" />
-        <div className="wrap">
-          <p className="eyebrow">Sobre MANCHA</p>
-          <h1 style={{ maxWidth: '18ch' }}>Una galería que elige menos, a propósito.</h1>
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="sobre-hero">
+        <Splat width="220px" height="190px" top="-60px" right="-50px" color="red" rotate={-14} radius="r2" />
+        <Splat width="130px" height="110px" bottom="-40px" left="-30px" color="lilac" rotate={10} radius="r3" />
+        <Splat width="80px" height="70px" top="38%" right="6%" color="yellow" rotate={6} radius="r1" />
+        <Splat width="55px" height="50px" top="20%" left="42%" color="red" rotate={-8} radius="r4" />
+        <div className="wrap sobre-hero-inner">
+          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Sobre MANCHA</p>
+          <h1 className="sobre-hero-title">
+            No somos<br />
+            una galería.<br />
+            <em>Somos el filtro.</em>
+          </h1>
+          <p className="sobre-hero-sub">
+            Antes de que el mundo los descubra,<br />
+            nosotros ya los elegimos.
+          </p>
         </div>
-      </header>
+      </section>
 
-      <section className="content manifesto">
-        <div className="wrap" style={{ maxWidth: '720px' }}>
-          <p className="lead">MANCHA nació de una incomodidad: el arte joven se muestra hoy en ferias gigantes donde cientos de obras compiten por una mirada de tres segundos. Nos pareció que algo se perdía en ese ruido.</p>
+      {/* ── NÚMEROS ──────────────────────────────────────── */}
+      <section className="sobre-numbers">
+        <div className="wrap">
+          <div className="sobre-numbers-grid">
+            <div className="sobre-number-item">
+              <b className="sobre-number-dig">3</b>
+              <p className="sobre-number-label">Artistas<br />por temporada</p>
+              <p className="sobre-number-note">No cientos. No decenas. Tres — los que realmente elegimos.</p>
+            </div>
+            <div className="sobre-number-item">
+              <b className="sobre-number-dig">3</b>
+              <p className="sobre-number-label">Piezas<br />por artista</p>
+              <p className="sobre-number-note">Lo mejor que tienen. Sin relleno. Sin obra de catálogo.</p>
+            </div>
+            <div className="sobre-number-item sobre-number-last">
+              <b className="sobre-number-dig">75<span className="sobre-number-pct">%</span></b>
+              <p className="sobre-number-label">Para el<br />artista</p>
+              <p className="sobre-number-note">El resto sostiene la galería. Sin intermediarios, sin letra chica.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <p>Por eso construimos lo contrario. Una temporada en MANCHA dura tres meses y tiene pocos artistas — no cientos. Cada uno expone exactamente tres piezas. Ni una más. Esa restricción no es un capricho estético: obliga a cada artista a mostrar lo mejor que tiene, y le da a cada obra el espacio para ser vista de verdad.</p>
+      {/* ── MANIFIESTO ───────────────────────────────────── */}
+      <section className="sobre-manifiesto">
+        <Splat width="160px" height="140px" top="-50px" left="-40px" color="yellow" rotate={12} radius="r1" />
+        <Splat width="100px" height="88px" bottom="-40px" right="10%" color="lilac" rotate={-8} radius="r3" />
+        <Splat width="64px" height="58px" top="42%" right="-28px" color="red" rotate={16} radius="r2" />
+        <div className="wrap sobre-manifiesto-inner">
+          <p className="sobre-manifiesto-big">
+            El arte emergente muere en el ruido.
+          </p>
+          <p className="sobre-manifiesto-body">
+            En ferias donde cientos de obras compiten por una mirada de tres segundos. En perfiles que se pierden en el scroll. En portafolios que nadie abre.
+          </p>
+          <div className="sobre-manifiesto-divisor" />
+          <p className="sobre-manifiesto-big">
+            Construimos lo contrario.
+          </p>
+          <p className="sobre-manifiesto-body">
+            Una temporada dura tres meses. Tiene pocos artistas — los que elegimos, no los que alcanzaron a anotarse. Cada uno expone exactamente tres piezas. Ni una más. Esa restricción no es un capricho: obliga a mostrar lo mejor, y le da a cada obra el espacio para ser vista de verdad.
+          </p>
+        </div>
+      </section>
 
-          <h2>Cómo funciona</h2>
-          <p>Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Quien ofrece más cuando la temporada cierra se lleva la obra. Del valor final, el 75% es para el artista y el 25% sostiene la galería. Sin intermediarios, sin comisiones ocultas, sin letra chica.</p>
+      {/* ── REGLAS ───────────────────────────────────────── */}
+      <section className="sobre-reglas">
+        <div className="wrap">
+          <p className="eyebrow">Las reglas de MANCHA</p>
+          <div className="sobre-reglas-list">
+            {REGLAS.map((regla, i) => (
+              <div className="sobre-regla" key={i}>
+                <span className="sobre-regla-n">{String(i + 1).padStart(2, '0')}</span>
+                <p className="sobre-regla-text">{regla}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <h2>Cómo elegimos a los artistas</h2>
-          <p>No publicamos a cualquiera que se postule. Buscamos una voz que se note, una obra que tenga algo para decir aunque todavía no tenga nombre en el mercado. Muchos de nuestros artistas exponen de forma individual por primera vez. Esa es justamente la idea: ser el lugar donde se los ve antes de que se vuelvan inevitables.</p>
+      {/* ── CÓMO FUNCIONA LA PUJA ────────────────────────── */}
+      <section className="sobre-puja">
+        <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
+        <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
+        <div className="wrap sobre-puja-inner">
+          <div className="sobre-puja-text">
+            <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
+            <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
+            <p className="sobre-puja-body">
+              Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Cuando cierra, quien ofreció más se lleva la obra — y paga exactamente eso, sin cargos extra del lado del comprador.
+            </p>
+            <p className="sobre-puja-body">
+              Del valor final, el 75% es para el artista y el 25% sostiene la galería. Sin intermediarios, sin comisiones ocultas, sin letra chica.
+            </p>
+          </div>
+          <div className="sobre-puja-split">
+            <div className="sobre-split-bar">
+              <div className="sobre-split-artist">
+                <b>75%</b>
+                <span>Artista</span>
+              </div>
+              <div className="sobre-split-mancha">
+                <b>25%</b>
+                <span>MANCHA</span>
+              </div>
+            </div>
+            <p className="sobre-split-note">Solo cobramos cuando se cierra una subasta — no antes.</p>
+          </div>
+        </div>
+      </section>
 
-          <h2>Por qué "MANCHA"</h2>
-          <p>Una mancha es lo primero que cae sobre el lienzo en blanco — el gesto antes del control, la intención antes de la técnica. También es lo que queda, lo que no se va, lo que marca. Nos gustaba que el nombre significara las dos cosas al mismo tiempo: el comienzo de algo y la huella que deja.</p>
+      {/* ── POR QUÉ "MANCHA" ─────────────────────────────── */}
+      <section className="sobre-etymology">
+        <div className="wrap sobre-etymology-inner">
+          <p className="eyebrow">Por qué "MANCHA"</p>
+          <blockquote className="sobre-etymology-quote">
+            "Una mancha es el primer gesto sobre el lienzo en blanco."
+          </blockquote>
+          <p className="sobre-etymology-body">
+            Antes del control, antes de la técnica — la intención pura. También es lo que queda, lo que no se va, lo que marca. El nombre dice las dos cosas al mismo tiempo: el comienzo de algo y la huella que deja.
+          </p>
+        </div>
+      </section>
 
-          <p className="closing">El arte no se queda quieto. Tú tampoco tienes por qué hacerlo.</p>
-
-          <div className="manifesto-ctas">
-            <Link href="/artistas" className="btn-primary">Ver la temporada actual</Link>
-            <Link href="/postular" className="btn-ghost">Postular como artista</Link>
+      {/* ── CIERRE ───────────────────────────────────────── */}
+      <section className="sobre-closing">
+        <Splat width="180px" height="155px" top="-50px" left="-40px" color="lilac" rotate={10} radius="r1" />
+        <Splat width="110px" height="95px" bottom="-35px" right="-25px" color="yellow" rotate={-12} radius="r3" />
+        <Splat width="70px" height="62px" top="35%" right="12%" color="red" rotate={8} radius="r2" />
+        <div className="wrap sobre-closing-inner">
+          <p className="sobre-closing-line">El arte no se queda quieto.</p>
+          <p className="sobre-closing-line sobre-closing-accent">Tú tampoco tienes por qué hacerlo.</p>
+          <div className="sobre-closing-ctas">
+            <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+              Ver la temporada actual
+            </Link>
+            <Link href="/postular" className="sobre-closing-ghost">
+              Postular como artista →
+            </Link>
           </div>
         </div>
       </section>
