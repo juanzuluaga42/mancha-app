@@ -42,9 +42,15 @@ export default function NotasPage() {
               {articles.map((article, i) => (
                 <Link href={`/notas/${article.slug}`} className="nota-card" key={article.slug}>
                   <div className="nota-card-inner">
-                    <div className={`nota-card-art g${(i % 12) + 1}`} aria-hidden="true">
-                      <span className="nota-card-num">{String(i + 1).padStart(2, '0')}</span>
-                    </div>
+                    {article.image ? (
+                      <div className="nota-card-img-wrap">
+                        <img src={article.image} alt={article.imageAlt || article.title} className="nota-card-img" />
+                      </div>
+                    ) : (
+                      <div className={`nota-card-art g${(i % 12) + 1}`} aria-hidden="true">
+                        <span className="nota-card-num">{String(i + 1).padStart(2, '0')}</span>
+                      </div>
+                    )}
                     <div className="nota-card-body">
                       <p className="nota-card-date">{article.date}</p>
                       <h2 className="nota-card-title">{article.title}</h2>

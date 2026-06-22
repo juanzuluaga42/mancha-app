@@ -46,6 +46,16 @@ export default async function ArticlePage({ params }) {
         </div>
       </header>
 
+      {/* ── IMAGEN PORTADA ───────────────────────────────── */}
+      {article.image && (
+        <div className="nota-cover">
+          <img src={article.image} alt={article.imageAlt || article.title} className="nota-cover-img" />
+          {article.imageCaption && (
+            <p className="nota-cover-caption">{article.imageCaption}</p>
+          )}
+        </div>
+      )}
+
       {/* ── CUERPO ───────────────────────────────────────── */}
       <article className="nota-body">
         <div className="wrap nota-content">
