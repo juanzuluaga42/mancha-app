@@ -40,7 +40,7 @@ export default function SobreManchaPage() {
           <p className="closing">El arte no se queda quieto. Tú tampoco tienes por qué hacerlo.</p>
 
           <div className="manifesto-ctas">
-            <Link href="/#artistas" className="btn-primary">Ver la temporada actual</Link>
+            <Link href="/artistas" className="btn-primary">Ver la temporada actual</Link>
             <Link href="/postular" className="btn-ghost">Postular como artista</Link>
           </div>
         </div>
