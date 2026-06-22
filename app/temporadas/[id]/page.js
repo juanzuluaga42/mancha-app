@@ -47,7 +47,7 @@ export default async function TemporadaPage({ params }) {
 
           <div className="temporada-status-row">
             <span className={`temporada-badge${season.is_current ? ' temporada-badge-live' : ''}`}>
-              {season.is_current ? '● En curso' : 'Cerrada'}
+              {season.is_current ? '● En curso' : 'Cerrada para siempre'}
             </span>
             <span className="temporada-dates">
               {new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}

@@ -11,10 +11,12 @@ export default async function Nav() {
     { href: '/sobre-mancha', label: 'Sobre MANCHA' },
     { href: '/artistas', label: 'Temporada actual' },
     { href: '/obras', label: 'Catálogo completo' },
-    { href: '/temporadas', label: 'Temporadas pasadas' },
+    { href: '/seleccionados', label: 'Los elegidos' },
+    { href: '/temporadas', label: 'Temporadas' },
     { href: '/#favoritos', label: 'Favoritos' },
     { href: '/notas', label: 'Notas' },
     { href: '/tips', label: 'Tips artísticos' },
+    { href: '/criterio', label: 'El criterio' },
     { href: '/postular', label: '¿Eres artista?' },
   ];
 

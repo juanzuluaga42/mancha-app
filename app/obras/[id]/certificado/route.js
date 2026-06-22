@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
 
   const { data: piece } = await supabase
     .from('pieces')
-    .select('title, technique, dimensions, year, image_url, sold, artists(display_name), bids(amount, buyer:profiles(full_name))')
+    .select('title, technique, dimensions, year, image_url, sold, artists(display_name, season:seasons(name)), bids(amount, buyer:profiles(full_name))')
     .eq('id', id)
     .maybeSingle();
 
@@ -22,8 +22,12 @@ export async function GET(request, { params }) {
   const collectorName = winner?.buyer?.full_name || 'Un coleccionista de MANCHA';
   const finalAmount = winner ? `$${Number(winner.amount).toLocaleString('es-AR')} USD` : '';
   const artistName = piece.artists?.display_name ?? '';
+  const seasonName = piece.artists?.season?.name ?? null;
   const meta = [piece.technique, piece.dimensions, piece.year].filter(Boolean).join(' · ');
   const today = new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' });
+  const discoveryLine = seasonName
+    ? `${collectorName} descubrió a ${artistName} en la ${seasonName} de MANCHA.`
+    : `${collectorName} descubrió a ${artistName} en MANCHA.`;
 
   return new ImageResponse(
     (
@@ -144,9 +148,9 @@ export async function GET(request, { params }) {
             <span style={{ fontSize: 10, color: 'rgba(250,243,230,0.4)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 8 }}>
               Adquirida por
             </span>
-            <span style={{ fontSize: 22, color: '#FAF3E6', fontWeight: 600 }}>{collectorName}</span>
+            <span style={{ fontSize: 20, color: '#FAF3E6', fontWeight: 600, lineHeight: 1.3, maxWidth: '100%' }}>{discoveryLine}</span>
             {finalAmount && (
-              <span style={{ fontSize: 14, color: '#F2B705', marginTop: 6, letterSpacing: 1 }}>{finalAmount}</span>
+              <span style={{ fontSize: 14, color: '#F2B705', marginTop: 8, letterSpacing: 1 }}>{finalAmount}</span>
             )}
           </div>
 

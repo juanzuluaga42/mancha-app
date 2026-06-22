@@ -30,7 +30,7 @@ export default async function CuentaPage({ searchParams }) {
         <Splat width="180px" height="155px" top="-50px" right="-40px" color="yellow" rotate={-12} radius="r2" />
         <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="red" rotate={14} radius="r4" />
         <div className="wrap">
-          <p className="cuenta-eyebrow">{isArtist ? 'Cuenta de artista' : 'Mi cuenta'}</p>
+          <p className="cuenta-eyebrow">{isArtist ? 'Cuenta de artista' : 'Cuenta de coleccionista'}</p>
           <h1 className="cuenta-title">
             {firstName ? <>Hola, <em>{cap(firstName)}.</em></> : <>Hola, de <em>nuevo.</em></>}
           </h1>

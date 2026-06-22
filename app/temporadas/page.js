@@ -109,7 +109,7 @@ export default async function TemporadasPage() {
                             <b>{s.artists?.length ?? 0}</b>
                             <span>artistas</span>
                           </div>
-                          <span className="season-card-badge">Cerrada</span>
+                          <span className="season-card-badge">Cerrada para siempre</span>
                         </div>
                         <div className="season-card-arrow">→</div>
                       </Link>

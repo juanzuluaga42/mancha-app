@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import Splat from '@/components/Splat';
 import PieceCard from '@/components/PieceCard';
 import Toast from '@/components/Toast';
+import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { cap } from '@/lib/utils';
 
 export async function generateMetadata({ params }) {
@@ -31,7 +33,7 @@ export default async function ArtistPage({ params, searchParams }) {
 
   const { data: artist } = await supabase
     .from('artists')
-    .select('*, pieces(*, bids(amount), favorites(buyer_id))')
+    .select('*, season:seasons(name), pieces(*, bids(amount), favorites(buyer_id))')
     .eq('id', id)
     .eq('status', 'approved')
     .maybeSingle();
@@ -39,6 +41,7 @@ export default async function ArtistPage({ params, searchParams }) {
   if (!artist) notFound();
 
   const redirectTo = `/artistas/${artist.id}`;
+  const seasonName = artist.season?.name ?? null;
 
   function bidInfo(piece) {
     const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
@@ -54,23 +57,33 @@ export default async function ArtistPage({ params, searchParams }) {
       <Nav />
       <Toast success={sp?.success} error={sp?.error} />
 
-      <header className="page-header">
+      {/* ── HEADER ───────────────────────────────────────── */}
+      <header className="artist-header">
+        <Splat width="180px" height="155px" top="-50px" right="-40px" color="red" rotate={-13} radius="r2" />
+        <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="yellow" rotate={15} radius="r4" />
+        <Splat width="60px" height="53px" top="46%" left="5%" color="lilac" rotate={7} radius="r1" />
         <div className="wrap">
-          <Link href="/artistas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver al catálogo</Link>
-          <p className="eyebrow">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
-          <h1>{cap(artist.display_name)}</h1>
-          <p className="sub">{artist.bio}</p>
+          <Link href="/artistas" className="artist-header-back">← Temporada actual</Link>
+          <div className="artist-header-meta">
+            <p className="artist-header-technique">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
+          </div>
+          <h1 className="artist-header-name">{cap(artist.display_name)}</h1>
+          <SelloSeleccionado seasonName={seasonName} />
+          {artist.bio && <p className="artist-header-bio">{artist.bio}</p>}
         </div>
       </header>
 
-      <section className="content" style={{ paddingTop: 50 }}>
-        <div className="wrap" style={{ maxWidth: '760px' }}>
-          <p className="eyebrow" style={{ marginBottom: 20 }}>Piezas en subasta esta temporada</p>
+      {/* ── PIEZAS ───────────────────────────────────────── */}
+      <section className="artist-pieces">
+        <div className="wrap artist-pieces-wrap">
+          <p className="artist-pieces-label">
+            {(artist.pieces ?? []).length === 1 ? 'Su pieza esta temporada' : `Sus ${(artist.pieces ?? []).length} piezas esta temporada`}
+          </p>
 
           {(artist.pieces ?? []).length === 0 ? (
             <div className="empty-state">Este artista todavía no subió piezas.</div>
           ) : (
-            <div className="pieces">
+            <div className="obras-grid">
               {artist.pieces.map((piece, pi) => {
                 const info = bidInfo(piece);
                 return (

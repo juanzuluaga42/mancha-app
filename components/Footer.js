@@ -20,10 +20,11 @@ export default function Footer() {
             <div className="footer-col">
               <h5>Explorar</h5>
               <Link href="/sobre-mancha">Sobre MANCHA</Link>
-              <Link href="/obras">Catálogo</Link>
               <Link href="/artistas">Temporada actual</Link>
+              <Link href="/obras">Catálogo</Link>
+              <Link href="/seleccionados">Los elegidos</Link>
+              <Link href="/criterio">El criterio</Link>
               <Link href="/temporadas">Temporadas</Link>
-              <Link href="/#favoritos">Favoritos</Link>
               <Link href="/notas">Notas</Link>
               <Link href="/tips">Tips artísticos</Link>
               <Link href="/postular">¿Eres artista?</Link>

@@ -101,6 +101,24 @@ export default function SobreManchaPage() {
         </div>
       </section>
 
+      {/* ── EL FILTRO ────────────────────────────────────── */}
+      <section className="el-filtro">
+        <div className="wrap el-filtro-wrap">
+          <h2 className="el-filtro-title">No miramos tus seguidores.<br />Miramos tu obra.</h2>
+          <div className="el-filtro-body">
+            <p>
+              Cada postulación la revisa una persona, no un algoritmo. No nos importa si tienes mil seguidores o ninguno,
+              si vienes de una academia o aprendiste solo. Nos importa una sola cosa: que la obra tenga algo que el resto todavía no vio.
+            </p>
+            <p>
+              La mayoría de las postulaciones no entran. No por castigo — por estándar.
+              Cada artista que aceptamos lleva el nombre de MANCHA con él.
+            </p>
+          </div>
+          <Link href="/criterio" className="el-filtro-link">Leer el criterio →</Link>
+        </div>
+      </section>
+
       {/* ── CÓMO FUNCIONA LA PUJA ────────────────────────── */}
       <section className="sobre-puja">
         <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />

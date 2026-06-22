@@ -20,7 +20,7 @@ export default async function RegistroPage({ searchParams }) {
         <div className="wrap">
           <p className="auth-header-eyebrow">Nueva cuenta</p>
           <h1 className="auth-header-title">Sumate a MANCHA</h1>
-          <p className="auth-header-sub">Para pujar y guardar favoritos, o para postular como artista.</p>
+          <p className="auth-header-sub">Para coleccionar y guardar favoritos, o para postular como artista.</p>
         </div>
       </header>
 
@@ -33,7 +33,7 @@ export default async function RegistroPage({ searchParams }) {
               <div className="role-toggle">
                 <label className="role-option">
                   <input type="radio" name="role" value="buyer" defaultChecked={defaultRole === 'buyer'} />
-                  Soy comprador
+                  Soy coleccionista
                 </label>
                 <label className="role-option">
                   <input type="radio" name="role" value="artist" defaultChecked={defaultRole === 'artist'} />

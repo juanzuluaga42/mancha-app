@@ -5,6 +5,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
+import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { toggleFavorite, placeBid } from '@/app/actions';
 import { cap } from '@/lib/utils';
 
@@ -41,9 +42,11 @@ export default async function PiecePage({ params, searchParams }) {
   if (!piece) notFound();
 
   let seasonEndsAt = null;
+  let seasonName = null;
   if (piece.artists?.season_id) {
-    const { data: season } = await supabase.from('seasons').select('ends_at').eq('id', piece.artists.season_id).maybeSingle();
+    const { data: season } = await supabase.from('seasons').select('ends_at, name').eq('id', piece.artists.season_id).maybeSingle();
     seasonEndsAt = season?.ends_at ?? null;
+    seasonName = season?.name ?? null;
   }
   const seasonClosed = !!seasonEndsAt && new Date(seasonEndsAt).getTime() < Date.now();
 
@@ -109,6 +112,7 @@ export default async function PiecePage({ params, searchParams }) {
                   <span className="piece-detail-location">{piece.artists.location}</span>
                 )}
               </div>
+              <SelloSeleccionado seasonName={seasonName} />
 
               {/* Título y datos */}
               <h1 className="piece-detail-title">{piece.title}</h1>
@@ -134,6 +138,14 @@ export default async function PiecePage({ params, searchParams }) {
                     <span>{bidCount} {bidCount === 1 ? 'puja registrada' : 'pujas registradas'}</span>
                   )}
                 </div>
+              )}
+
+              {/* Discovery line */}
+              {!piece.sold && !seasonClosed && (
+                <p className="piece-detail-discovery">
+                  Una pieza única de este artista esta temporada.
+                  Cuando cierra, no vuelve.
+                </p>
               )}
 
               {/* Precio + acciones */}
