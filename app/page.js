@@ -15,10 +15,9 @@ export const metadata = {
   openGraph: {
     title: 'MANCHA — Primero tú. Después el mundo.',
     description: 'Colecciona artistas emergentes seleccionados a mano antes de que el mundo los descubra. Pocos artistas por temporada, tres piezas cada uno, tiempo limitado.',
-    images: ['/og-default.jpg'],
     type: 'website',
   },
-  twitter: { card: 'summary_large_image', images: ['/og-default.jpg'] },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default async function Home({ searchParams }) {

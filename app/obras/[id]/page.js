@@ -17,13 +17,12 @@ export async function generateMetadata({ params }) {
   const supabase = await createClient();
   const { data: piece } = await supabase.from('pieces').select('title, description, image_url, artists(display_name)').eq('id', id).maybeSingle();
   if (!piece) return { title: 'MANCHA — Obra' };
-  const image = piece.image_url || '/og-default.jpg';
   const description = piece.description?.slice(0, 160) || `Una pieza de ${piece.artists?.display_name ?? 'la temporada actual'} en MANCHA.`;
   return {
     title: `MANCHA — ${piece.title}`,
     description,
-    openGraph: { title: `MANCHA — ${piece.title}`, description, images: [image], type: 'website' },
-    twitter: { card: 'summary_large_image', images: [image] },
+    openGraph: { title: `MANCHA — ${piece.title}`, description, type: 'website' },
+    twitter: { card: 'summary_large_image' },
   };
 }
 

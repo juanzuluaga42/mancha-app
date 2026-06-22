@@ -15,13 +15,12 @@ export async function generateMetadata({ params }) {
   const { data: artist } = await supabase.from('artists').select('display_name, bio, pieces(image_url)').eq('id', id).maybeSingle();
   if (!artist) return { title: 'MANCHA — Artista' };
   const name = cap(artist.display_name);
-  const image = artist.pieces?.find((p) => p.image_url)?.image_url || '/og-default.jpg';
   const description = artist.bio?.slice(0, 160) || 'Una galería con pocos artistas a la vez.';
   return {
     title: `MANCHA — ${name}`,
     description,
-    openGraph: { title: `MANCHA — ${name}`, description, images: [image], type: 'profile' },
-    twitter: { card: 'summary_large_image', images: [image] },
+    openGraph: { title: `MANCHA — ${name}`, description, type: 'profile' },
+    twitter: { card: 'summary_large_image' },
   };
 }
 
