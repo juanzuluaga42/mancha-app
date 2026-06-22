@@ -680,36 +680,71 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 /* ---------- FILTROS ---------- */
 .obras-filters{
-  display:flex; gap:12px; flex-wrap:wrap; align-items:center;
-  padding-bottom:20px; border-bottom:var(--rule);
+  display:flex; gap:14px; flex-wrap:wrap; align-items:center;
 }
 .obras-search-wrap{
-  flex:1; min-width:200px; position:relative;
+  flex:1; min-width:240px; position:relative;
+  display:flex; align-items:center;
 }
 .obras-search-icon{
-  position:absolute; left:13px; top:50%; transform:translateY(-50%);
+  position:absolute; left:18px; top:50%; transform:translateY(-50%);
+  color:var(--ink-soft); pointer-events:none; transition:color 0.18s ease;
+}
+.obras-search-wrap:focus-within .obras-search-icon{color:var(--ink);}
+.obras-search{
+  width:100%; padding:15px 44px 15px 48px;
+  border:1.5px solid var(--ink); border-radius:100px;
+  background:transparent; font-family:var(--font-body);
+  font-size:15px; color:var(--ink);
+  transition:box-shadow 0.18s ease, background 0.18s ease;
+}
+.obras-search::placeholder{color:var(--ink-soft); opacity:0.85;}
+.obras-search:focus{
+  outline:none; background:rgba(255,255,255,0.5);
+  box-shadow:4px 4px 0 var(--ink);
+}
+.obras-search-clear{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  display:flex; align-items:center; justify-content:center;
+  width:28px; height:28px; border-radius:50%;
+  border:none; background:var(--paper-dark); color:var(--ink-soft);
+  cursor:pointer; transition:background 0.16s ease, color 0.16s ease;
+}
+.obras-search-clear:hover{background:var(--ink); color:var(--paper);}
+
+.obras-select-group{display:flex; gap:10px; flex-wrap:wrap;}
+.obras-select-wrap{position:relative; display:flex; align-items:center;}
+.obras-select{
+  appearance:none; -webkit-appearance:none;
+  border:1.5px solid var(--rule); border-radius:100px;
+  padding:14px 38px 14px 18px; background:transparent;
+  font-family:var(--font-mono); font-size:11px;
+  color:var(--ink); text-transform:uppercase; letter-spacing:0.06em;
+  cursor:pointer; transition:border-color 0.18s ease;
+}
+.obras-select:hover{border-color:var(--ink);}
+.obras-select:focus{outline:none; border-color:var(--ink); box-shadow:3px 3px 0 var(--ink);}
+.obras-select-chevron{
+  position:absolute; right:16px; top:50%; transform:translateY(-50%);
   color:var(--ink-soft); pointer-events:none;
 }
-.obras-search{
-  width:100%; padding:11px 14px 11px 38px;
-  border:var(--rule); border-radius:8px;
-  background:rgba(255,255,255,0.7); font-family:var(--font-body);
-  font-size:15px; color:var(--ink);
-}
-.obras-search:focus{outline:2px solid var(--ink); outline-offset:0;}
-.obras-select{
-  border:var(--rule); border-radius:8px;
-  padding:11px 14px; background:rgba(255,255,255,0.7);
-  font-family:var(--font-mono); font-size:11.5px;
-  color:var(--ink); text-transform:uppercase; letter-spacing:0.04em;
-  cursor:pointer;
-}
-.obras-select:focus{outline:2px solid var(--ink); outline-offset:0;}
 
+.obras-count-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin:24px 0 26px;
+  padding-bottom:18px; border-bottom:var(--rule);
+}
 .obras-count{
   font-family:var(--font-mono); font-size:11px; text-transform:uppercase;
-  letter-spacing:0.06em; color:var(--ink-soft); margin:18px 0 24px;
+  letter-spacing:0.08em; color:var(--ink-soft); margin:0;
 }
+.obras-reset{
+  font-family:var(--font-mono); font-size:11px; text-transform:uppercase;
+  letter-spacing:0.06em; color:var(--ink-soft);
+  background:none; border:none; cursor:pointer; padding:0;
+  transition:color 0.16s ease;
+}
+.obras-reset:hover{color:var(--red);}
 
 .obras-no-results{
   padding:48px 0; text-align:center;
@@ -722,6 +757,12 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   border-bottom:1.5px solid var(--ink); cursor:pointer; padding-bottom:2px;
 }
 .obras-clear-btn:hover{color:var(--red); border-color:var(--red);}
+
+@media (max-width:540px){
+  .obras-select-group{width:100%;}
+  .obras-select-wrap{flex:1;}
+  .obras-select{width:100%;}
+}
 
 /* ---------- GRID DE OBRAS ---------- */
 .obras-grid{
