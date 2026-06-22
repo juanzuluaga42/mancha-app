@@ -5,15 +5,15 @@ import Splat from '@/components/Splat';
 import ObrasCatalog from '@/components/ObrasCatalog';
 
 export const metadata = {
-  title: 'MANCHA — Catálogo completo',
-  description: 'Todas las piezas en subasta esta temporada, con buscador y filtros.',
+  title: 'MANCHA — Catálogo de la temporada',
+  description: 'Todas las piezas en subasta esta temporada. Explora, sigue y puja por lo que te detenga.',
 };
 
 export default async function ObrasPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: season } = await supabase.from('seasons').select('id').eq('is_current', true).maybeSingle();
+  const { data: season } = await supabase.from('seasons').select('id, name').eq('is_current', true).maybeSingle();
 
   const { data: artists } = await supabase
     .from('artists')
@@ -35,17 +35,28 @@ export default async function ObrasPage() {
   return (
     <>
       <Nav />
-      <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
-        <Splat width="140px" height="120px" top="-25px" right="-30px" color="yellow" rotate={12} radius="r2" />
+
+      <header className="obras-header">
+        <Splat width="240px" height="210px" top="-65px" right="-50px" color="yellow" rotate={-10} radius="r1" />
+        <Splat width="140px" height="122px" bottom="-45px" left="-35px" color="lilac" rotate={14} radius="r3" />
+        <Splat width="80px" height="70px" top="40%" left="6%" color="red" rotate={8} radius="r4" />
+        <Splat width="60px" height="54px" top="-28px" left="42%" color="red" rotate={-12} radius="r2" />
         <div className="wrap">
-          <p className="eyebrow">Catálogo</p>
-          <h1>Todas las piezas de la temporada</h1>
-          <p className="sub">Buscá por nombre o artista, filtrá por técnica, u ordená por precio.</p>
+          <p className="eyebrow obras-header-eyebrow">{season?.name ?? 'Temporada actual'}</p>
+          <h1 className="obras-header-title">
+            Piezas únicas.<br />
+            <em>Por tiempo limitado.</em>
+          </h1>
+          <p className="obras-header-sub">
+            {pieces.length > 0
+              ? `${pieces.length} ${pieces.length === 1 ? 'pieza en subasta' : 'piezas en subasta'} — cada una elegida a mano. Lo que ves hoy puede no estar mañana.`
+              : 'El catálogo se revela cuando los artistas son confirmados. La selección está en curso.'}
+          </p>
         </div>
       </header>
 
-      <section className="content">
-        <div className="wrap" style={{ maxWidth: '780px' }}>
+      <section className="obras-catalog-section">
+        <div className="wrap obras-catalog-wrap">
           <ObrasCatalog pieces={pieces} />
         </div>
       </section>

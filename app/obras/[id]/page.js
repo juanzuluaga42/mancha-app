@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 import { toggleFavorite, placeBid } from '@/app/actions';
+import { cap } from '@/lib/utils';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 const WHATSAPP_NUMBER = '529981163542';
@@ -33,7 +34,7 @@ export default async function PiecePage({ params, searchParams }) {
 
   const { data: piece } = await supabase
     .from('pieces')
-    .select('*, bids(amount), favorites(buyer_id), artists(id, display_name, location, medium, season_id)')
+    .select('*, bids(amount, created_at), favorites(buyer_id), artists(id, display_name, location, medium, season_id)')
     .eq('id', id)
     .maybeSingle();
 
@@ -49,116 +50,184 @@ export default async function PiecePage({ params, searchParams }) {
   const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
   const hasBids = amounts.length > 0;
   const currentBid = hasBids ? Math.max(...amounts) : Number(piece.min_bid);
+  const bidCount = piece.bids?.length ?? 0;
   const favoriteCount = piece.favorites?.length ?? 0;
   const isFavorited = !!user && (piece.favorites ?? []).some((f) => f.buyer_id === user.id);
   const redirectTo = `/obras/${piece.id}`;
-  const gradientClass = GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)];
+  const gradientIndex = piece.id ? piece.id.charCodeAt(0) % GRADIENTS.length : 0;
+  const gradientClass = GRADIENTS[gradientIndex];
+  const artistName = cap(piece.artists?.display_name ?? '');
 
   return (
     <>
       <Nav />
       <Toast success={sp?.success} error={sp?.error} />
 
-      <section className="piece-detail">
-        <div className="wrap" style={{ maxWidth: '840px' }}>
-          <Link href={`/artistas/${piece.artists.id}`} className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>
-            ← Volver a {piece.artists.display_name}
-          </Link>
+      <div className="piece-page">
 
-          <div className="piece-detail-art">
-            {piece.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={piece.image_url} alt={piece.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
-            )}
-          </div>
-
-          <div className="piece-detail-info">
-            <p className="eyebrow">
-              <Link href={`/artistas/${piece.artists.id}`}>{piece.artists.display_name}</Link>
-              {piece.artists.location ? ` · ${piece.artists.location}` : ''}
-            </p>
-            <h1>{piece.title}</h1>
-            <p className="piece-data">
-              {piece.year ? `${piece.year} · ` : ''}{piece.technique}{piece.dimensions ? ` · ${piece.dimensions}` : ''}
-            </p>
-
-            {piece.description && <p className="piece-description">{piece.description}</p>}
-
-            {(favoriteCount > 0 || hasBids) && (
-              <p className="piece-activity" style={{ marginTop: 18 }}>
-                {favoriteCount > 0 && <span>{favoriteCount} {favoriteCount === 1 ? 'persona sigue' : 'personas siguen'} esta obra</span>}
-                {favoriteCount > 0 && hasBids && <span className="dot-sep">·</span>}
-                {hasBids && <span>{piece.bids.length} {piece.bids.length === 1 ? 'puja registrada' : 'pujas registradas'}</span>}
-              </p>
-            )}
-
-            <div className="piece-detail-actions">
-              <form action={toggleFavorite}>
-                <input type="hidden" name="pieceId" value={piece.id} />
-                <input type="hidden" name="redirectTo" value={redirectTo} />
-                <button className={`heart-btn${isFavorited ? ' active' : ''}`} type="submit" aria-pressed={isFavorited} aria-label="Marcar como favorito">
-                  <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 21s-7.2-4.35-9.3-8.7C1 9 2.4 5.4 6 5.4c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5 3.6 3.3 6.9C19.2 16.65 12 21 12 21z" /></svg>
-                  <span className="heart-count">{favoriteCount}</span>
-                </button>
-              </form>
-
-              <div className="bid-min">
-                <p className="eyebrow">{piece.sold ? 'Pieza vendida' : seasonClosed ? 'Temporada cerrada' : hasBids ? 'Puja actual' : 'Puja mínima'}</p>
-                <p className="amount">${Number(currentBid).toLocaleString('es-AR')} <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5em', color: 'var(--ink-soft)' }}>USD</span></p>
-              </div>
-
-              {piece.sold ? (
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Esta pieza ya se vendió.</p>
-              ) : seasonClosed ? (
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, textTransform: 'uppercase', color: 'var(--red-deep)' }}>Esta temporada ya cerró.</p>
-              ) : (
-                <form action={placeBid} className="bid-form">
-                  <input type="hidden" name="pieceId" value={piece.id} />
-                  <input type="hidden" name="redirectTo" value={redirectTo} />
-                  <input
-                    type="number"
-                    name="amount"
-                    min={Number(currentBid) + 1}
-                    step="1"
-                    required
-                    className="bid-input"
-                    placeholder={`${Number(currentBid) + 1}+`}
-                    aria-label="Monto de tu puja"
-                  />
-                  <button className="piece-buy" type="submit">Pujar →</button>
-                </form>
-              )}
-            </div>
-
-            {!piece.sold && !seasonClosed && (
-              <p className="bid-trust-note">
-                Al pujar te comprometes a pagar si eres quien más ofrece cuando cierre la temporada. Te contactamos por correo para coordinar el pago y el envío — sin letra chica.
-              </p>
-            )}
-
-            {!piece.sold && !seasonClosed && (
-              <>
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${piece.artists.display_name} en MANCHA. ¿Está disponible para comprarla ya?`)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="whatsapp-cta"
-                >
-                  ¿La quieres ya? Escríbenos por WhatsApp →
-                </a>
-
-                <div style={{ marginTop: 28 }}>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-soft)' }}>¿Todavía no tienes cuenta?</p>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, color: 'var(--ink-soft)', marginTop: 4 }}>Déjanos tu correo y te avisamos sobre esta pieza.</p>
-                  <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
-                </div>
-              </>
-            )}
+        {/* ── Breadcrumb ───────────────────────────────────── */}
+        <div className="piece-breadcrumb">
+          <div className="wrap">
+            <Link href="/obras" className="piece-breadcrumb-link">← Catálogo</Link>
+            <span className="piece-breadcrumb-sep">/</span>
+            <Link href={`/artistas/${piece.artists.id}`} className="piece-breadcrumb-link">{artistName}</Link>
+            <span className="piece-breadcrumb-sep">/</span>
+            <span className="piece-breadcrumb-current">{piece.title}</span>
           </div>
         </div>
-      </section>
+
+        {/* ── Layout split ─────────────────────────────────── */}
+        <div className="piece-split">
+
+          {/* Imagen */}
+          <div className="piece-split-left">
+            <div className="piece-main-art">
+              {piece.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={piece.image_url} alt={piece.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <div className={gradientClass} style={{ position: 'absolute', inset: 0 }} />
+              )}
+              {piece.sold && (
+                <div className="piece-sold-overlay">
+                  <span>Vendida</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Info + acciones */}
+          <div className="piece-split-right">
+            <div className="piece-split-sticky">
+
+              {/* Artista */}
+              <div className="piece-detail-artist-row">
+                <Link href={`/artistas/${piece.artists.id}`} className="piece-detail-artist-link">
+                  {artistName}
+                </Link>
+                {piece.artists.location && (
+                  <span className="piece-detail-location">{piece.artists.location}</span>
+                )}
+              </div>
+
+              {/* Título y datos */}
+              <h1 className="piece-detail-title">{piece.title}</h1>
+              {(piece.technique || piece.year || piece.dimensions) && (
+                <p className="piece-detail-meta">
+                  {[piece.year, piece.technique, piece.dimensions].filter(Boolean).join(' · ')}
+                </p>
+              )}
+
+              {/* Descripción */}
+              {piece.description && (
+                <p className="piece-detail-description">{piece.description}</p>
+              )}
+
+              {/* Social proof */}
+              {(favoriteCount > 0 || hasBids) && (
+                <div className="piece-detail-proof">
+                  {favoriteCount > 0 && (
+                    <span>{favoriteCount} {favoriteCount === 1 ? 'persona sigue' : 'personas siguen'} esta obra</span>
+                  )}
+                  {favoriteCount > 0 && hasBids && <span className="piece-detail-proof-sep">·</span>}
+                  {hasBids && (
+                    <span>{bidCount} {bidCount === 1 ? 'puja registrada' : 'pujas registradas'}</span>
+                  )}
+                </div>
+              )}
+
+              {/* Precio + acciones */}
+              <div className="piece-detail-bid-block">
+                <div className="piece-detail-price-row">
+                  <div>
+                    <p className="piece-detail-price-label">
+                      {piece.sold ? 'Precio final' : seasonClosed ? 'Temporada cerrada' : hasBids ? 'Puja actual' : 'Puja mínima'}
+                    </p>
+                    <p className="piece-detail-price">
+                      ${Number(currentBid).toLocaleString('es-AR')}
+                      <span className="piece-detail-currency"> USD</span>
+                    </p>
+                  </div>
+
+                  {/* Corazón */}
+                  <form action={toggleFavorite}>
+                    <input type="hidden" name="pieceId" value={piece.id} />
+                    <input type="hidden" name="redirectTo" value={redirectTo} />
+                    <button
+                      className={`heart-btn piece-detail-fav${isFavorited ? ' active' : ''}`}
+                      type="submit"
+                      aria-pressed={isFavorited}
+                      aria-label="Marcar como favorito"
+                    >
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M12 21s-7.2-4.35-9.3-8.7C1 9 2.4 5.4 6 5.4c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5 3.6 3.3 6.9C19.2 16.65 12 21 12 21z" />
+                      </svg>
+                      {favoriteCount > 0 && <span>{favoriteCount}</span>}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Formulario de puja */}
+                {piece.sold ? (
+                  <div className="piece-detail-status sold">Esta pieza ya se vendió.</div>
+                ) : seasonClosed ? (
+                  <div className="piece-detail-status closed">Esta temporada ya cerró.</div>
+                ) : (
+                  <>
+                    <form action={placeBid} className="piece-detail-bid-form">
+                      <input type="hidden" name="pieceId" value={piece.id} />
+                      <input type="hidden" name="redirectTo" value={redirectTo} />
+                      <input
+                        type="number"
+                        name="amount"
+                        min={Number(currentBid) + 1}
+                        step="1"
+                        required
+                        className="piece-detail-bid-input"
+                        placeholder={`Mínimo $${(Number(currentBid) + 1).toLocaleString('es-AR')} USD`}
+                        aria-label="Monto de tu puja en USD"
+                      />
+                      <button className="btn-primary piece-detail-bid-btn" type="submit">
+                        Registrar puja →
+                      </button>
+                    </form>
+
+                    <p className="piece-detail-trust">
+                      Al pujar te comprometes a pagar si eres quien más ofrece al cierre de la temporada.
+                      Te contactamos por correo para coordinar — sin costos extra.
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* WhatsApp */}
+              {!piece.sold && !seasonClosed && (
+                <a
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${artistName} en MANCHA. ¿Está disponible?`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="piece-detail-whatsapp"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  ¿La quieres ya? Escríbenos por WhatsApp
+                </a>
+              )}
+
+              {/* Waitlist */}
+              {!piece.sold && !seasonClosed && !user && (
+                <div className="piece-detail-waitlist">
+                  <p className="piece-detail-waitlist-label">¿Sin cuenta todavía?</p>
+                  <p className="piece-detail-waitlist-sub">Déjanos tu correo y te avisamos si hay novedades sobre esta pieza.</p>
+                  <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
+                </div>
+              )}
+
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Footer />
     </>

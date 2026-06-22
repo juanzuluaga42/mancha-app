@@ -32,14 +32,14 @@ export default function ObrasCatalog({ pieces }) {
   if (pieces.length === 0) {
     return (
       <div className="catalog-empty">
-        <p className="eyebrow">Temporada 01 — Piezas próximamente</p>
+        <p className="eyebrow">Piezas próximamente</p>
         <h2>El catálogo se revela cuando los artistas son confirmados.</h2>
         <p className="section-note">
-          Cuando los artistas seleccionados carguen sus obras, las encontrarás aquí con todos los detalles para pujar. La selección está en curso — puedes postular tu trabajo o sumarte a la lista de espera para que te avisemos.
+          La selección está en curso. Cuando los artistas carguen sus obras, las encontrarás aquí con todos los detalles para pujar.
         </p>
-        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 24 }}>
-          <Link href="/postular" className="btn-primary">Postular tu trabajo →</Link>
-          <Link href="/artistas" className="btn-secondary">Ver artistas →</Link>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 28 }}>
+          <Link href="/artistas" className="btn-primary">Ver artistas →</Link>
+          <Link href="/postular" className="btn-secondary">Postular tu trabajo →</Link>
         </div>
       </div>
     );
@@ -47,31 +47,52 @@ export default function ObrasCatalog({ pieces }) {
 
   return (
     <div>
-      <div className="catalog-filters">
-        <input
-          type="text"
-          placeholder="Buscar por obra o artista…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="catalog-search"
-        />
-        <select value={technique} onChange={(e) => setTechnique(e.target.value)} className="catalog-select">
+      {/* ── Filtros ── */}
+      <div className="obras-filters">
+        <div className="obras-search-wrap">
+          <svg className="obras-search-icon" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+            <circle cx="8.5" cy="8.5" r="5.5" />
+            <line x1="13" y1="13" x2="17" y2="17" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Busca por obra o artista…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="obras-search"
+          />
+        </div>
+        <select value={technique} onChange={(e) => setTechnique(e.target.value)} className="obras-select">
           <option value="">Todas las técnicas</option>
           {techniques.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
-        <select value={sort} onChange={(e) => setSort(e.target.value)} className="catalog-select">
+        <select value={sort} onChange={(e) => setSort(e.target.value)} className="obras-select">
           <option value="recientes">Más recientes</option>
           <option value="precio-asc">Precio: menor a mayor</option>
           <option value="precio-desc">Precio: mayor a menor</option>
         </select>
       </div>
 
-      <p className="catalog-count">{filtered.length} {filtered.length === 1 ? 'pieza' : 'piezas'}</p>
+      {/* ── Contador ── */}
+      <p className="obras-count">
+        {filtered.length === pieces.length
+          ? `${filtered.length} ${filtered.length === 1 ? 'pieza' : 'piezas'}`
+          : `${filtered.length} de ${pieces.length} ${pieces.length === 1 ? 'pieza' : 'piezas'}`}
+      </p>
 
+      {/* ── Resultados ── */}
       {filtered.length === 0 ? (
-        <div className="empty-state">Ninguna pieza coincide con esa búsqueda.</div>
+        <div className="obras-no-results">
+          <p>Ninguna pieza coincide con esa búsqueda.</p>
+          <button
+            className="obras-clear-btn"
+            onClick={() => { setSearch(''); setTechnique(''); }}
+          >
+            Limpiar filtros →
+          </button>
+        </div>
       ) : (
-        <div className="pieces">
+        <div className="obras-grid">
           {filtered.map((piece, i) => (
             <PieceCard
               key={piece.id}
