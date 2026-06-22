@@ -228,7 +228,7 @@ async function BuyerDashboard({ supabase, userId }) {
       <div className="dash-card">
         <h3>Tus pujas</h3>
         {(!bids || bids.length === 0) ? (
-          <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)' }}>Todavía no pujaste por ninguna pieza. <Link href="/#artistas">Ver temporada actual →</Link></p>
+          <p style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-soft)' }}>Todavía no pujaste por ninguna pieza. <Link href="/artistas">Ver temporada actual →</Link></p>
         ) : (
           bids.map((b) => (
             <div className="dash-piece-row" key={b.id}>
