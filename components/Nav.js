@@ -17,7 +17,6 @@ export default async function Nav() {
     { href: '/sobre-mancha', label: 'Sobre MANCHA' },
     { href: '/seleccionados', label: 'Los elegidos' },
     { href: '/obras', label: 'Catálogo completo' },
-    { href: '/temporadas', label: 'Temporadas' },
     { href: '/#favoritos', label: 'Favoritos' },
     { href: '/postular', label: '¿Eres artista?' },
     ...(isArtist ? [

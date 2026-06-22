@@ -22,7 +22,6 @@ export default function Footer() {
               <Link href="/sobre-mancha">Sobre MANCHA</Link>
               <Link href="/seleccionados">Los elegidos</Link>
               <Link href="/obras">Catálogo</Link>
-              <Link href="/temporadas">Temporadas</Link>
               <Link href="/postular">¿Eres artista?</Link>
               <Link href="/legal">Términos y privacidad</Link>
             </div>
