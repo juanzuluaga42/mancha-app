@@ -18,6 +18,7 @@ export default async function Nav() {
     { href: '/tips', label: 'Tips artísticos' },
     { href: '/criterio', label: 'El criterio' },
     { href: '/postular', label: '¿Eres artista?' },
+    { href: '/manifiesto', label: 'Manifiesto' },
   ];
 
   const authSlot = user ? (
