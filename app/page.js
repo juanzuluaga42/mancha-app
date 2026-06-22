@@ -86,9 +86,9 @@ export default async function Home({ searchParams }) {
           </h1>
 
           <p className="hero-sub">
-            Colecciona artistas emergentes antes de que el mundo los descubra.
-            Pocos elegidos por temporada, tres piezas cada uno, por tiempo limitado.
-            Lo que ves hoy puede no estar mañana.
+            Arte emergente seleccionado a mano.
+            Pocos artistas por temporada, tres piezas cada uno.
+            Cuando cierra la temporada, cierra para siempre.
           </p>
 
           <div className="hero-ctas">
@@ -128,7 +128,7 @@ export default async function Home({ searchParams }) {
       <section className="home-why">
         <div className="wrap">
           <p className="eyebrow">Por qué MANCHA</p>
-          <h2 className="home-why-title">Llegaste antes.<br />Eso tiene valor.</h2>
+          <h2 className="home-why-title">Arte emergente.<br />Elegido a mano.</h2>
           <div className="home-why-grid">
             <div className="home-why-item">
               <b>01</b>
@@ -142,8 +142,8 @@ export default async function Home({ searchParams }) {
             </div>
             <div className="home-why-item">
               <b>03</b>
-              <h3>Exclusividad de temporada</h3>
-              <p>Cubrimos pocos artistas y máximo tres piezas por temporada. Lo que ves hoy puede no volver a estar disponible nunca.</p>
+              <h3>Temporada cerrada</h3>
+              <p>Pocos artistas, máximo tres piezas cada uno. Cuando cierra la temporada, cierra para siempre.</p>
             </div>
             <div className="home-why-item">
               <b>04</b>
@@ -254,7 +254,7 @@ export default async function Home({ searchParams }) {
           <p className="eyebrow">Antes de que cierre</p>
           <h2 className="home-section-h2">El próximo nombre grande todavía no es obvio.</h2>
           <p className="section-note" style={{ maxWidth: 480, margin: '14px auto 0' }}>
-            Entra antes de que esto deje de ser un secreto — te avisamos cuando sumemos artistas nuevos o abramos la próxima temporada.
+            Te avisamos cuando sumemos artistas nuevos o abramos la próxima temporada.
           </p>
           <WaitlistForm redirectTo="/" />
         </div>

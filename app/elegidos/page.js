@@ -2,16 +2,16 @@ import Link from 'next/link';
 import CursorTrail from '@/components/CursorTrail';
 
 export const metadata = {
-  title: 'MANCHA — No es para todos.',
+  title: 'MANCHA — Arte seleccionado a mano.',
   description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
   openGraph: {
-    title: 'MANCHA — No es para todos.',
+    title: 'MANCHA — Arte seleccionado a mano.',
     description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MANCHA — No es para todos.',
+    title: 'MANCHA — Arte seleccionado a mano.',
     description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
   },
 };
@@ -36,20 +36,20 @@ export default function ElegidosPage() {
       </section>
 
       <section className="elegidos-beat">
-        <p>Cada temporada, un puñado muy reducido entra.</p>
+        <p>Cada temporada, un grupo entra.</p>
         <p>Tres piezas. Tres meses. Una página que es solo tuya —</p>
         <p>no un perfil más perdido entre miles.</p>
       </section>
 
       <section className="elegidos-beat">
-        <p>La mayoría de quienes postulan, no entra esta vez.</p>
-        <p className="elegidos-bold">Eso no es un castigo.</p>
-        <p>Es la razón por la que, cuando entras, importa.</p>
+        <p>La mayoría de quienes postulan, no entra esta temporada.</p>
+        <p className="elegidos-bold">El estándar es lo que hace</p>
+        <p>que entrar valga algo.</p>
       </section>
 
       <section className="elegidos-cta">
-        <p className="elegidos-cta-line">¿Tu trabajo está listo para que lo veamos?</p>
-        <Link href="/postular" className="elegidos-btn">Quiero ser de los elegidos →</Link>
+        <p className="elegidos-cta-line">Muéstranos tu trabajo.</p>
+        <Link href="/postular" className="elegidos-btn">Postular ahora →</Link>
         <Link href="/" className="elegidos-back">o conoce MANCHA primero</Link>
       </section>
     </div>

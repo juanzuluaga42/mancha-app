@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
-            <p>Una galería con pocos artistas a la vez. El arte cambia, tú también puedes.</p>
+            <p>Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.</p>
           </div>
           <div className="footer-links">
             <div className="footer-col">

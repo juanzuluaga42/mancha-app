@@ -10,7 +10,7 @@ import Countdown from '@/components/Countdown';
 
 export const metadata = {
   title: 'MANCHA — No publicamos arte. Elegimos artistas.',
-  description: 'MANCHA no es una vitrina abierta a cualquiera. Postula y entérate si tu trabajo tiene un lugar en la próxima temporada.',
+  description: 'MANCHA selecciona a mano un grupo reducido cada temporada. Sin costo por postular, sin costo por exponer. Solo tu trabajo.',
 };
 
 export default async function PostularPage({ searchParams }) {
@@ -36,7 +36,7 @@ export default async function PostularPage({ searchParams }) {
           <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Acceso por postulación</p>
           <h1>No publicamos arte.<br />Elegimos artistas.</h1>
           <p className="sub">
-            MANCHA no es una vitrina abierta a cualquiera. Cada temporada, un grupo muy reducido entra.
+            MANCHA no acepta todo. Cada temporada, un grupo entra.
             {artistCount ? ` Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : ''}
             {' '}Si tu trabajo entra, tienes tu propio espacio — solo, durante tres meses completos.
           </p>
@@ -80,7 +80,7 @@ export default async function PostularPage({ searchParams }) {
       <section className="como-funciona">
         <div className="wrap">
           <p className="eyebrow">Cómo funciona para artistas</p>
-          <h2>Cuatro pasos, cero vueltas.</h2>
+          <h2>Así funciona.</h2>
           <div className="steps-row">
             <div className="step-col">
               <span className="step-n">01</span>
@@ -125,7 +125,7 @@ export default async function PostularPage({ searchParams }) {
           <div className="postular-card">
 
             <div className="postular-card-head">
-              <h3>Tu turno de convencernos.</h3>
+              <h3>Muéstranos tu obra.</h3>
               <p>Sin currículum de galerías ni jerga de portfolio.<br />Solo tu trabajo, dicho en tus palabras.</p>
             </div>
 

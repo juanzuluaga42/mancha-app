@@ -35,8 +35,8 @@ export default function SobreManchaPage() {
             <em>Somos el filtro.</em>
           </h1>
           <p className="sobre-hero-sub">
-            Antes de que el mundo los descubra,<br />
-            nosotros ya los elegimos.
+            Los elegimos antes<br />
+            de que sean evidentes.
           </p>
         </div>
       </section>
@@ -155,7 +155,7 @@ export default function SobreManchaPage() {
         <Splat width="70px" height="62px" top="35%" right="12%" color="red" rotate={8} radius="r2" />
         <div className="wrap sobre-closing-inner">
           <p className="sobre-closing-line">El arte no se queda quieto.</p>
-          <p className="sobre-closing-line sobre-closing-accent">Tú tampoco tienes por qué hacerlo.</p>
+          <p className="sobre-closing-line sobre-closing-accent">Esta temporada todavía está abierta.</p>
           <div className="sobre-closing-ctas">
             <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
               Ver la temporada actual
