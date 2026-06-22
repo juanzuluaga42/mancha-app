@@ -9,7 +9,7 @@ export default async function Nav() {
 
   const links = [
     { href: '/sobre-mancha', label: 'Sobre MANCHA' },
-    { href: '/#artistas', label: 'Temporada actual' },
+    { href: '/artistas', label: 'Temporada actual' },
     { href: '/obras', label: 'Catálogo completo' },
     { href: '/temporadas', label: 'Temporadas pasadas' },
     { href: '/#favoritos', label: 'Favoritos' },
