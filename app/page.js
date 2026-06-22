@@ -101,7 +101,7 @@ export default async function Home({ searchParams }) {
               Cuando cierra la temporada, cierra para siempre.
             </p>
             <div className="hero-ctas">
-              <a href="/artistas" className="btn-primary hero-btn">Ver temporada actual</a>
+              <a href="/seleccionados" className="btn-primary hero-btn">Ver los elegidos</a>
               <a href="/sobre-mancha" className="hp-hero-ghost">¿Qué es MANCHA? →</a>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default async function Home({ searchParams }) {
                 <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>Temporada en curso</p>
                 <h2 className="hp-season-title">{season?.name ?? 'Artistas actuales'}</h2>
               </div>
-              <Link href="/artistas" className="hp-season-all">Ver todos →</Link>
+              <Link href="/seleccionados" className="hp-season-all">Ver todos →</Link>
             </div>
             <div className="hp-season-grid">
               {allArtists.slice(0, 6).map((artist, i) => {
@@ -321,8 +321,8 @@ export default async function Home({ searchParams }) {
             que no se borra. Eso es lo que coleccionas: el criterio de haber llegado primero.
           </p>
           <div className="hp-perm-ctas">
-            <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-              Ver la temporada actual
+            <Link href="/seleccionados" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+              Ver los elegidos
             </Link>
             <Link href="/manifiesto" className="hp-perm-ghost">Leer el manifiesto →</Link>
           </div>
