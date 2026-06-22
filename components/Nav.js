@@ -50,27 +50,3 @@ export default async function Nav() {
     </nav>
   );
 }
-
-  const authSlot = user ? (
-    <>
-      <Link href="/cuenta">Mi cuenta</Link>
-      <form action={signOut}>
-        <button type="submit">Salir</button>
-      </form>
-    </>
-  ) : (
-    <>
-      <Link href="/login">Iniciar sesión</Link>
-      <Link href="/registro" className="nav-cta">Crear cuenta</Link>
-    </>
-  );
-
-  return (
-    <nav className="nav">
-      <div className="nav-inner">
-        <Link href="/" className="brand">MANCHA<span>.</span></Link>
-        <NavMenu links={links} authSlot={authSlot} />
-      </div>
-    </nav>
-  );
-}
