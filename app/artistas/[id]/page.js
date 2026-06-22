@@ -54,7 +54,7 @@ export default async function ArtistPage({ params, searchParams }) {
 
       <header className="page-header">
         <div className="wrap">
-          <Link href="/#artistas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver al catálogo</Link>
+          <Link href="/artistas" className="eyebrow" style={{ display: 'inline-block', marginBottom: 18 }}>← Volver al catálogo</Link>
           <p className="eyebrow">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
           <h1>{artist.display_name}</h1>
           <p className="sub">{artist.bio}</p>
