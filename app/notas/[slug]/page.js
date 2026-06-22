@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import BlogImg from '@/components/BlogImg';
 import { getArticleBySlug, articles } from '@/lib/news';
 
 export function generateStaticParams() {
@@ -49,7 +50,9 @@ export default async function ArticlePage({ params }) {
       {/* ── IMAGEN PORTADA ───────────────────────────────── */}
       {article.image && (
         <div className="nota-cover">
-          <img src={article.image} alt={article.imageAlt || article.title} className="nota-cover-img" />
+          <div className="nota-cover-frame">
+            <BlogImg src={article.image} alt={article.imageAlt || article.title} color="var(--ink)" />
+          </div>
           {article.imageCaption && (
             <p className="nota-cover-caption">{article.imageCaption}</p>
           )}
