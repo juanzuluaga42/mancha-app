@@ -9,6 +9,9 @@ export const metadata = {
   description: 'Todas las piezas en subasta esta temporada. Explora, sigue y puja por lo que te detenga.',
 };
 
+// Página de subasta: los datos (pujas, vendidas) cambian en vivo, nunca cachear.
+export const dynamic = 'force-dynamic';
+
 export default async function ObrasPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

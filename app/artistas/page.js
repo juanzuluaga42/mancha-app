@@ -17,6 +17,9 @@ export const metadata = {
   twitter: { card: 'summary_large_image', images: ['/og-default.jpg'] },
 };
 
+// Datos de subasta en vivo (pujas, vendidas): siempre fresco.
+export const dynamic = 'force-dynamic';
+
 const PLACEHOLDER_GRADIENTS = ['g1', 'g4', 'g7'];
 
 export default async function ArtistasPage() {

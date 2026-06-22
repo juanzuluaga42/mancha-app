@@ -162,6 +162,10 @@ export async function markAsSold(formData) {
   }
 
   revalidatePath('/admin');
+  revalidatePath('/');
+  revalidatePath('/obras');
+  revalidatePath(`/obras/${pieceId}`);
+  revalidatePath('/artistas', 'layout');
 }
 
 export async function sendPaymentReminder(formData) {
