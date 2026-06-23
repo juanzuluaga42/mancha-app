@@ -2,10 +2,12 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import { isConvocatoria } from '@/lib/fase';
 
 export const metadata = { title: 'MANCHA — Página no encontrada' };
 
 export default function NotFound() {
+  const convocatoria = isConvocatoria();
   return (
     <>
       <Nav />
@@ -17,14 +19,16 @@ export default function NotFound() {
 
         <div className="wrap nf-inner">
           <p className="nf-num">404</p>
-          <h1 className="nf-title">Esta obra<br /><em>no está aquí.</em></h1>
+          <h1 className="nf-title">Esta página<br /><em>no está aquí.</em></h1>
           <p className="nf-sub">
-            El link que seguiste puede haber cambiado, o la pieza ya no está disponible.
-            Hay mucho más por descubrir.
+            El link que seguiste puede haber cambiado o ya no está disponible.
+            Hay mucho más por explorar.
           </p>
           <div className="nf-ctas">
             <Link href="/" className="btn-primary">Volver al inicio</Link>
-            <Link href="/seleccionados" className="nf-ghost">Ver los elegidos →</Link>
+            {convocatoria
+              ? <Link href="/postular" className="nf-ghost">Postular ahora →</Link>
+              : <Link href="/seleccionados" className="nf-ghost">Ver los elegidos →</Link>}
           </div>
         </div>
       </section>

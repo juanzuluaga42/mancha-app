@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import Splat from './Splat';
+import { isConvocatoria } from '@/lib/fase';
 
 export default function Footer() {
+  const convocatoria = isConvocatoria();
+
   return (
     <footer className="site-footer">
       <Splat width="180px" height="160px" bottom="-55px" right="-50px" color="yellow" rotate={-15} radius="r1" />
@@ -14,15 +17,28 @@ export default function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
-            <p>Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.</p>
+            <p>
+              {convocatoria
+                ? 'Temporada 01 — 31 de julio. Convocatoria abierta para artistas.'
+                : 'Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.'}
+            </p>
           </div>
           <div className="footer-links">
             <div className="footer-col">
-              <h5>Explorar</h5>
+              <h5>MANCHA</h5>
               <Link href="/sobre-mancha">Sobre MANCHA</Link>
-              <Link href="/seleccionados">Los elegidos</Link>
-              <Link href="/obras">Catálogo</Link>
-              <Link href="/postular">¿Eres artista?</Link>
+              {convocatoria ? (
+                <>
+                  <Link href="/postular">Postular →</Link>
+                  <Link href="/notas">Blog de arte</Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/seleccionados">Los elegidos</Link>
+                  <Link href="/obras">Catálogo</Link>
+                  <Link href="/postular">¿Eres artista?</Link>
+                </>
+              )}
               <Link href="/legal">Términos y privacidad</Link>
             </div>
             <div className="footer-col">
@@ -34,8 +50,10 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 MANCHA. Galería independiente.</span>
-          <span>Temporada 01 cierra el 19 sep 2026</span>
+          <span>© 2025 MANCHA. Galería independiente.</span>
+          {convocatoria
+            ? <span>Temporada 01 abre el 31 de julio de 2025</span>
+            : <span>Temporada en curso</span>}
         </div>
       </div>
     </footer>

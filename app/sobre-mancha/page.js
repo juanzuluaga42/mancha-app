@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import { isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — No somos una galería. Somos el filtro.',
@@ -17,6 +18,7 @@ const REGLAS = [
 ];
 
 export default function SobreManchaPage() {
+  const convocatoria = isConvocatoria();
   return (
     <>
       <Nav />
@@ -119,21 +121,40 @@ export default function SobreManchaPage() {
         </div>
       </section>
 
-      {/* ── CÓMO FUNCIONA LA PUJA ────────────────────────── */}
-      <section className="sobre-puja">
-        <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
-        <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
-        <div className="wrap sobre-puja-inner sobre-puja-single">
-          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
-          <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
-          <p className="sobre-puja-body">
-            Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Cuando cierra, quien ofreció más se lleva la obra — y paga exactamente eso, sin cargos extra del lado del comprador.
-          </p>
-          <p className="sobre-puja-body">
-            Sin intermediarios, sin comisiones ocultas, sin letra chica. Solo la obra, el precio que pusiste, y el artista que la hizo.
-          </p>
-        </div>
-      </section>
+      {/* ── CÓMO FUNCIONA: varía según fase ─────────────── */}
+      {convocatoria ? (
+        <section className="sobre-puja">
+          <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
+          <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
+          <div className="wrap sobre-puja-inner sobre-puja-single">
+            <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>La convocatoria</p>
+            <h2 className="sobre-puja-title">Sin cuotas. Sin trampa.</h2>
+            <p className="sobre-puja-body">
+              Postular a MANCHA es gratis. Revisamos cada postulación de forma personal — sin filtros automáticos, sin métricas de seguidores.
+              Si tu trabajo entra, te avisamos directamente y te guiamos en el proceso de subir tus piezas.
+            </p>
+            <p className="sobre-puja-body">
+              Cuando la Temporada 01 abra el 31 de julio, los coleccionistas van a poder explorar, pujar y llevarse tu obra.
+              Tú te llevas la mayor parte de lo que se vende. Siempre.
+            </p>
+          </div>
+        </section>
+      ) : (
+        <section className="sobre-puja">
+          <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
+          <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
+          <div className="wrap sobre-puja-inner sobre-puja-single">
+            <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
+            <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
+            <p className="sobre-puja-body">
+              Cada pieza tiene una puja mínima y se subasta durante toda la temporada. Cuando cierra, quien ofreció más se lleva la obra — y paga exactamente eso, sin cargos extra del lado del comprador.
+            </p>
+            <p className="sobre-puja-body">
+              Sin intermediarios, sin comisiones ocultas, sin letra chica. Solo la obra, el precio que pusiste, y el artista que la hizo.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* ── POR QUÉ "MANCHA" ─────────────────────────────── */}
       <section className="sobre-etymology">
@@ -154,16 +175,33 @@ export default function SobreManchaPage() {
         <Splat width="110px" height="95px" bottom="-35px" right="-25px" color="yellow" rotate={-12} radius="r3" />
         <Splat width="70px" height="62px" top="35%" right="12%" color="red" rotate={8} radius="r2" />
         <div className="wrap sobre-closing-inner">
-          <p className="sobre-closing-line">El arte no se queda quieto.</p>
-          <p className="sobre-closing-line sobre-closing-accent">Esta temporada todavía está abierta.</p>
-          <div className="sobre-closing-ctas">
-            <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-              Ver la temporada actual
-            </Link>
-            <Link href="/postular" className="sobre-closing-ghost">
-              Postular como artista →
-            </Link>
-          </div>
+          {convocatoria ? (
+            <>
+              <p className="sobre-closing-line">La Temporada 01 abre el 31 de julio.</p>
+              <p className="sobre-closing-line sobre-closing-accent">La convocatoria está abierta ahora.</p>
+              <div className="sobre-closing-ctas">
+                <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+                  Postular ahora →
+                </Link>
+                <Link href="/notas" className="sobre-closing-ghost">
+                  Leer el blog →
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="sobre-closing-line">El arte no se queda quieto.</p>
+              <p className="sobre-closing-line sobre-closing-accent">Esta temporada todavía está abierta.</p>
+              <div className="sobre-closing-ctas">
+                <Link href="/seleccionados" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+                  Ver los elegidos
+                </Link>
+                <Link href="/postular" className="sobre-closing-ghost">
+                  Postular como artista →
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

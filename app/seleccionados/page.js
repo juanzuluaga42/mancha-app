@@ -115,8 +115,10 @@ export default async function SeleccionadosPage() {
                   const topBid = allBids.length > 0 ? Math.max(...allBids) : null;
                   const minEntry = pieces.length > 0 ? Math.min(...pieces.map((p) => Number(p.min_bid ?? 0))) : null;
                   const color = accentColors[i % accentColors.length];
+                  const CardEl = convocatoria ? 'div' : Link;
+                  const cardProps = convocatoria ? {} : { href: `/artistas/${artist.id}` };
                   return (
-                    <Link href={`/artistas/${artist.id}`} className="sel-artist-card" key={artist.id}>
+                    <CardEl {...cardProps} className="sel-artist-card" key={artist.id}>
                       <div className="sel-artist-media" style={{ background: color }}>
                         {firstImg ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -154,7 +156,7 @@ export default async function SeleccionadosPage() {
                           <span className="sel-artist-cta">Ver →</span>
                         </div>
                       </div>
-                    </Link>
+                    </CardEl>
                   );
                 })}
               </div>
@@ -183,13 +185,13 @@ export default async function SeleccionadosPage() {
                       {new Date(season.ends_at).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
                     </p>
                   </div>
-                  <Link href={`/temporadas/${season.id}`} className="sel-past-link">Ver temporada →</Link>
+                  {!convocatoria && <Link href={`/temporadas/${season.id}`} className="sel-past-link">Ver temporada →</Link>}
                 </div>
                 <div className="sel-past-grid">
                   {season.artists.map((artist, ai) => {
                     const img = artist.pieces?.find((p) => p.image_url)?.image_url;
                     return (
-                      <Link href={`/artistas/${artist.id}`} className="sel-past-card" key={artist.id}>
+                      <Link href={convocatoria ? '#' : `/artistas/${artist.id}`} className="sel-past-card" key={artist.id} style={convocatoria ? { pointerEvents: 'none' } : {}}>
                         <div className="sel-past-art">
                           {img ? (
                             // eslint-disable-next-line @next/next/no-img-element

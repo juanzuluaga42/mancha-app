@@ -174,9 +174,10 @@ export default async function Home({ searchParams }) {
                 <em>debería estar aquí?</em>
               </h2>
               <p className="hp-conv-body">
-                Estamos seleccionando los artistas de la Temporada 01. Un comité elige a mano —
-                sin algoritmos, sin popularidad. Solo obra. Si crees que tu trabajo tiene algo
-                que decir, postúlate ahora. Las postulaciones cierran antes del 31 de julio.
+                Elegimos a mano los artistas que van a estar en la Temporada 01.
+                Sin métricas, sin popularidad, sin número de seguidores.
+                Solo la obra. Si crees que la tuya tiene algo que el resto todavía no vio,
+                postúlate antes del 31 de julio.
               </p>
               <div className="hp-conv-ctas">
                 <Link href="/postular" className="btn-primary">Postular ahora →</Link>
@@ -187,7 +188,7 @@ export default async function Home({ searchParams }) {
               <div className="hp-pillar">
                 <span className="hp-pillar-n">01</span>
                 <h3 className="hp-pillar-title">Selección a mano</h3>
-                <p className="hp-pillar-desc">Un comité elige cada artista. Sin convocatorias abiertas al azar. Sin votos.</p>
+                <p className="hp-pillar-desc">Elegimos cada artista a mano. Sin convocatorias abiertas al azar. Sin votos.</p>
               </div>
               <div className="hp-pillar">
                 <span className="hp-pillar-n">02</span>
@@ -377,7 +378,7 @@ export default async function Home({ searchParams }) {
               <div className="hp-steps-row">
                 {[
                   { n: '01', title: 'Postulas', body: 'Completas el formulario con tu trabajo, tu medio y un poco de contexto. Sin cuotas, sin trámites.' },
-                  { n: '02', title: 'Revisamos', body: 'Un comité revisa cada postulación. El criterio es la obra, no el follower count.' },
+                  { n: '02', title: 'Revisamos', body: 'Revisamos cada postulación de forma personal. El criterio es la obra, no el follower count.' },
                   { n: '03', title: 'Te avisamos', body: 'Si eres seleccionado, recibes un correo para configurar tu perfil y subir tus tres piezas.' },
                   { n: '04', title: 'Abres la Temporada 01', body: 'El 31 de julio todo se abre. Coleccionistas de todo el mundo pueden pujar por tu obra.' },
                 ].map(({ n, title, body }) => (
