@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -8,6 +8,7 @@ import PieceCard from '@/components/PieceCard';
 import Toast from '@/components/Toast';
 import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { cap } from '@/lib/utils';
+import { isConvocatoria } from '@/lib/fase';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArtistPage({ params, searchParams }) {
+  if (isConvocatoria()) redirect('/');
   const { id } = await params;
   const sp = await searchParams;
   const supabase = await createClient();
