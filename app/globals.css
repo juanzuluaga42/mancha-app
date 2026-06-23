@@ -2231,6 +2231,31 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .nf-ghost{font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.07em; color:rgba(250,243,230,0.5); border-bottom:1.5px solid rgba(250,243,230,0.22); padding-bottom:2px; transition:color .18s, border-color .18s;}
 .nf-ghost:hover{color:var(--paper); border-color:var(--paper);}
 
+/* ── CURIOSOS: blog preview ───────────────────────── */
+.hp-curiosos{background:var(--paper-dark); padding:100px 0; position:relative; overflow:hidden;}
+.hp-curiosos-head{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:end; margin-bottom:56px;}
+.hp-curiosos-title{font-family:var(--font-display); font-size:clamp(2rem,4.5vw,3.6rem); font-weight:800; line-height:1; letter-spacing:-0.02em; margin:10px 0 0;}
+.hp-curiosos-title em{font-style:italic; color:var(--red);}
+.hp-curiosos-aside{font-size:clamp(1rem,1.5vw,1.12rem); color:var(--ink-soft); line-height:1.65; max-width:38ch; align-self:end;}
+.hp-curiosos-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+.hp-curiosos-card{display:flex; flex-direction:column; background:var(--paper); border-radius:12px; overflow:hidden; transition:transform .2s, box-shadow .2s; text-decoration:none; color:var(--ink);}
+.hp-curiosos-card:hover{transform:translateY(-4px); box-shadow:0 12px 32px rgba(22,17,13,0.12);}
+.hp-curiosos-img{position:relative; aspect-ratio:16/9; overflow:hidden; background:var(--ink-soft);}
+.hp-curiosos-img img{display:block;}
+.hp-curiosos-info{padding:22px 24px 28px; display:flex; flex-direction:column; flex:1; gap:8px;}
+.hp-curiosos-date{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-soft);}
+.hp-curiosos-article-title{font-family:var(--font-display); font-size:clamp(1rem,1.5vw,1.22rem); font-weight:800; line-height:1.15; letter-spacing:-0.01em; margin:0;}
+.hp-curiosos-excerpt{font-size:0.93rem; color:var(--ink-soft); line-height:1.55; flex:1;}
+.hp-curiosos-cta{font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--red); margin-top:4px;}
+.hp-curiosos-footer{margin-top:48px; text-align:center;}
+@media(max-width:900px){
+  .hp-curiosos-head{grid-template-columns:1fr; gap:20px;}
+  .hp-curiosos-grid{grid-template-columns:1fr;}
+}
+@media(min-width:901px) and (max-width:1100px){
+  .hp-curiosos-grid{grid-template-columns:repeat(2,1fr);}
+}
+
 /* ── CONVOCATORIA: artistas ───────────────────────── */
 .hp-conv-artistas{background:var(--ink); color:var(--paper); padding:100px 0; position:relative; overflow:hidden;}
 .hp-conv-artistas .splat-blob{mix-blend-mode:screen;}

@@ -9,6 +9,7 @@ import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 import WelcomeModal from '@/components/WelcomeModal';
 import { isConvocatoria, isTemporadaActiva } from '@/lib/fase';
+import { articles } from '@/lib/news';
 
 export const metadata = {
   title: 'MANCHA — Primero tú. Después el mundo.',
@@ -411,6 +412,50 @@ export default async function Home({ searchParams }) {
           )}
         </div>
       </section>
+
+      {/* ── CURIOSOS: BLOG (solo en convocatoria) ────────── */}
+      {convocatoria && (
+        <section className="hp-curiosos">
+          <Splat width="160px" height="140px" top="-45px" right="-40px" color="red" rotate={-10} radius="r2" />
+          <Splat width="100px" height="88px" bottom="-35px" left="-30px" color="lilac" rotate={14} radius="r3" />
+          <Splat width="70px" height="62px" top="40%" left="5%" color="yellow" rotate={8} radius="r4" />
+          <div className="wrap">
+            <div className="hp-curiosos-head">
+              <div>
+                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>Para los curiosos</p>
+                <h2 className="hp-curiosos-title">
+                  ¿No eres artista<br />
+                  y andas explorando?<br />
+                  <em>Bienvenido.</em>
+                </h2>
+              </div>
+              <p className="hp-curiosos-aside">
+                El catálogo todavía no abre. Pero el tiempo y el conocimiento valen — mientras llega la Temporada 01, hay mucho por leer.
+              </p>
+            </div>
+            <div className="hp-curiosos-grid">
+              {articles.slice(0, 3).map((article) => (
+                <Link href={`/notas/${article.slug}`} className="hp-curiosos-card" key={article.slug}>
+                  <div className="hp-curiosos-img">
+                    {article.image
+                      ? <img src={article.image} alt={article.imageAlt || article.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <div style={{ position: 'absolute', inset: 0, background: 'var(--ink-soft)' }} />}
+                  </div>
+                  <div className="hp-curiosos-info">
+                    <p className="hp-curiosos-date">{article.date}</p>
+                    <h3 className="hp-curiosos-article-title">{article.title}</h3>
+                    <p className="hp-curiosos-excerpt">{article.excerpt}</p>
+                    <span className="hp-curiosos-cta">Leer →</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="hp-curiosos-footer">
+              <Link href="/notas" className="btn-primary">Ver todas las notas →</Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── COMPRADORES: AVÍSAME (solo en convocatoria) ──── */}
       {convocatoria && (
