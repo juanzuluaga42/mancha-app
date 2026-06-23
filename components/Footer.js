@@ -50,9 +50,9 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2025 MANCHA. Galería independiente.</span>
+          <span>© 2026 MANCHA. Galería independiente.</span>
           {convocatoria
-            ? <span>Temporada 01 abre el 31 de julio de 2025</span>
+            ? <span>Temporada 01 abre el 31 de julio de 2026</span>
             : <span>Temporada en curso</span>}
         </div>
       </div>
