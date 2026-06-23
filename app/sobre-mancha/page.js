@@ -5,14 +5,14 @@ import Splat from '@/components/Splat';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
-  title: 'MANCHA — No somos una galería. Somos el filtro.',
-  description: 'Por qué existe MANCHA: pocos artistas, tres piezas cada uno, sin catálogos infinitos ni ruido.',
+  title: 'MANCHA — Institución de descubrimiento artístico.',
+  description: 'Por qué existe MANCHA: una institución que elige antes de que sea evidente, con criterio propio y sin catálogos abiertos.',
 };
 
 const REGLAS = [
-  'Menos artistas significa más atención para cada obra.',
-  'La restricción no es un error — es el punto.',
-  'El creador siempre se lleva la mayor parte. Siempre.',
+  'Menos artistas. Más atención.',
+  'La restricción no es un error. Es el punto.',
+  'El creador se lleva la mayor parte. Siempre.',
   'No hay catálogo abierto. Hay selección.',
   'Lo que ves hoy puede no estar mañana.',
 ];
@@ -33,13 +33,13 @@ export default function SobreManchaPage() {
         <div className="wrap sobre-hero-inner">
           <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Sobre MANCHA</p>
           <h1 className="sobre-hero-title">
-            No somos<br />
-            una galería.<br />
-            <em>Somos el filtro.</em>
+            Elegimos antes<br />
+            de que sea<br />
+            <em>evidente.</em>
           </h1>
           <p className="sobre-hero-sub">
-            Los elegimos antes<br />
-            de que sean evidentes.
+            Institución de descubrimiento<br />
+            artístico. Est. 2026.
           </p>
         </div>
       </section>
@@ -77,14 +77,14 @@ export default function SobreManchaPage() {
             El arte emergente muere en el ruido.
           </p>
           <p className="sobre-manifiesto-body">
-            En ferias donde cientos de obras compiten por una mirada de tres segundos. En perfiles que se pierden en el scroll. En portafolios que nadie abre.
+            En ferias donde cientos de obras compiten por una mirada de tres segundos. En perfiles que se pierden en el scroll. En portafolios que nadie abre. El problema no es la falta de talento — es la falta de criterio.
           </p>
           <div className="sobre-manifiesto-divisor" />
           <p className="sobre-manifiesto-big">
-            Construimos lo contrario.
+            MANCHA es la respuesta institucional a ese problema.
           </p>
           <p className="sobre-manifiesto-body">
-            Una temporada dura tres meses. Tiene pocos artistas — los que elegimos, no los que alcanzaron a anotarse. Cada uno expone exactamente tres piezas. Ni una más. Esa restricción no es un capricho: obliga a mostrar lo mejor, y le da a cada obra el espacio para ser vista de verdad.
+            Una temporada tiene pocos artistas — los que elegimos, no los que alcanzaron a anotarse. Cada uno expone exactamente tres piezas. Ni una más. Esa restricción no es un capricho: obliga a mostrar lo mejor, le da a cada obra el espacio para ser vista de verdad, y protege la atención del coleccionista. El criterio es el producto.
           </p>
         </div>
       </section>
@@ -110,11 +110,11 @@ export default function SobreManchaPage() {
           <h2 className="el-filtro-title">No miramos tus seguidores.<br />Miramos tu obra.</h2>
           <div className="el-filtro-body">
             <p>
-              Cada postulación la revisa una persona, no un algoritmo. No nos importa si tienes mil seguidores o ninguno,
+              Cada solicitud la revisa una persona, no un algoritmo. No nos importa si tienes mil seguidores o ninguno,
               si vienes de una academia o aprendiste solo. Nos importa una sola cosa: que la obra tenga algo que el resto todavía no vio.
             </p>
             <p>
-              La mayoría de las postulaciones no entran. No por castigo — por estándar.
+              La mayoría de las solicitudes no entran. No por castigo — por estándar.
               Cada artista que aceptamos lleva el nombre de MANCHA con él.
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function SobreManchaPage() {
             <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>La convocatoria</p>
             <h2 className="sobre-puja-title">Sin cuotas. Sin trampa.</h2>
             <p className="sobre-puja-body">
-              Postular a MANCHA es gratis. Revisamos cada postulación de forma personal — sin filtros automáticos, sin métricas de seguidores.
+              Solicitar acceso a MANCHA es gratis. Revisamos cada solicitud de forma personal — sin filtros automáticos, sin métricas de seguidores.
               Si tu trabajo entra, te avisamos directamente y te guiamos en el proceso de subir tus piezas.
             </p>
             <p className="sobre-puja-body">
@@ -165,7 +165,7 @@ export default function SobreManchaPage() {
             "Una mancha es el primer gesto sobre el lienzo en blanco."
           </blockquote>
           <p className="sobre-etymology-body">
-            Antes del control, antes de la técnica — la intención pura. También es lo que queda, lo que no se va, lo que marca. El nombre dice las dos cosas al mismo tiempo: el comienzo de algo y la huella que deja.
+            Antes del control, antes de la técnica — la intención pura. También es lo que queda, lo que no se va, lo que marca. El nombre dice las dos cosas al mismo tiempo: el comienzo de algo y la huella que deja. Los artistas que pasan por MANCHA quedan en el registro. Eso no cambia.
           </p>
         </div>
       </section>
@@ -182,23 +182,23 @@ export default function SobreManchaPage() {
               <p className="sobre-closing-line sobre-closing-accent">La Temporada 01 arranca el 31 de julio.</p>
               <div className="sobre-closing-ctas">
                 <Link href="/registro" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-                  Crear cuenta →
+                  Solicitar acceso →
                 </Link>
                 <Link href="/notas" className="sobre-closing-ghost">
-                  Leer el blog →
+                  Leer las notas →
                 </Link>
               </div>
             </>
           ) : convocatoria ? (
             <>
-              <p className="sobre-closing-line">La convocatoria abre el 1 de julio.</p>
+              <p className="sobre-closing-line">La convocatoria está abierta.</p>
               <p className="sobre-closing-line sobre-closing-accent">La Temporada 01 arranca el 31 de julio.</p>
               <div className="sobre-closing-ctas">
                 <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-                  Postular ahora →
+                  Solicitar acceso →
                 </Link>
                 <Link href="/notas" className="sobre-closing-ghost">
-                  Leer el blog →
+                  Leer las notas →
                 </Link>
               </div>
             </>
@@ -211,7 +211,7 @@ export default function SobreManchaPage() {
                   Ver los elegidos
                 </Link>
                 <Link href="/postular" className="sobre-closing-ghost">
-                  Postular como artista →
+                  Solicitar acceso como artista →
                 </Link>
               </div>
             </>

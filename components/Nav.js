@@ -18,27 +18,26 @@ export default async function Nav() {
 
   const links = prelaunch
     ? [
-        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
-        { href: '/notas', label: 'Blog de arte' },
-        { href: '/#compradores', label: 'Avísame →' },
+        { href: '/sobre-mancha', label: 'La institución' },
+        { href: '/criterio', label: 'El criterio' },
+        { href: '/notas', label: 'Notas' },
+        { href: '/#compradores', label: 'Coleccionar →' },
       ]
     : convocatoria
     ? [
-        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
-        { href: '/postular', label: 'Postular →' },
-        { href: '/#compradores', label: 'Quiero coleccionar' },
+        { href: '/sobre-mancha', label: 'La institución' },
+        { href: '/criterio', label: 'El criterio' },
+        { href: '/postular', label: 'Solicitar acceso →' },
+        { href: '/#compradores', label: 'Coleccionar' },
         ...(isArtist ? [{ href: '/manifiesto', label: 'Manifiesto' }] : []),
       ]
     : [
-        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
+        { href: '/sobre-mancha', label: 'La institución' },
+        { href: '/criterio', label: 'El criterio' },
         { href: '/seleccionados', label: 'Los elegidos' },
-        { href: '/obras', label: 'Catálogo completo' },
-        { href: '/#favoritos', label: 'Favoritos' },
-        { href: '/postular', label: '¿Eres artista?' },
-        ...(isArtist ? [
-          { href: '/criterio', label: 'El criterio' },
-          { href: '/manifiesto', label: 'Manifiesto' },
-        ] : []),
+        { href: '/obras', label: 'Catálogo' },
+        { href: '/postular', label: 'Solicitar acceso' },
+        ...(isArtist ? [{ href: '/manifiesto', label: 'Manifiesto' }] : []),
       ];
 
   const authSlot = user ? (

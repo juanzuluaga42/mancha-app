@@ -11,8 +11,8 @@ import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 import { redirect } from 'next/navigation';
 
 export const metadata = {
-  title: 'MANCHA — No publicamos arte. Elegimos artistas.',
-  description: 'MANCHA selecciona a mano un grupo reducido cada temporada. Sin costo por postular, sin costo por exponer. Solo tu trabajo.',
+  title: 'MANCHA — Solicitar acceso. Temporada 01.',
+  description: 'MANCHA selecciona a mano un grupo reducido de artistas cada temporada. Sin costo por solicitar, sin costo por exponer. Solo tu trabajo.',
 };
 
 export default async function PostularPage({ searchParams }) {
@@ -39,7 +39,7 @@ export default async function PostularPage({ searchParams }) {
         <Splat width="70px" height="60px" top="55%" left="5%" color="red" rotate={6} radius="r4" />
         <Splat width="60px" height="55px" top="-30px" left="40%" color="red" rotate={-8} radius="r2" />
         <div className="wrap">
-          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Acceso por postulación</p>
+          <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Temporada 01 · Acceso restringido</p>
           <h1>No publicamos arte.<br />Elegimos artistas.</h1>
           <p className="sub">
             MANCHA no acepta todo. Cada temporada, un grupo entra.
@@ -59,7 +59,7 @@ export default async function PostularPage({ searchParams }) {
             </div>
           ) : null}
           <ul className="postular-trust">
-            <li>Sin costo por postular</li>
+            <li>Sin costo por solicitar</li>
             <li>Sin costo por exponer</li>
             <li>75% de cada venta para ti</li>
           </ul>
@@ -89,24 +89,24 @@ export default async function PostularPage({ searchParams }) {
       {/* ── CÓMO FUNCIONA ────────────────────────────────── */}
       <section className="como-funciona">
         <div className="wrap">
-          <p className="eyebrow">Cómo funciona para artistas</p>
+          <p className="eyebrow">El proceso</p>
           <h2>Así funciona.</h2>
           <div className="steps-row">
             <div className="step-col">
               <span className="step-n">01</span>
-              <p>Postulas en minutos: sin CV de galerías, sin jerga. Solo tu trabajo y quién eres, en tus palabras.</p>
+              <p>Envías tu trabajo. Sin CV de galerías, sin portfolio perfectamente armado. Solo lo que has hecho, dicho en tus palabras.</p>
             </div>
             <div className="step-col">
               <span className="step-n">02</span>
-              <p>Lo revisamos a mano. Si tu trabajo entra, te escribimos por correo con los pasos para crear tu perfil.</p>
+              <p>Lo revisamos. Una persona, no un algoritmo. Si tu trabajo entra, te escribimos directamente con los próximos pasos.</p>
             </div>
             <div className="step-col">
               <span className="step-n">03</span>
-              <p>Expones hasta tres piezas con tu propio espacio durante toda la temporada. Los coleccionistas pujan en vivo.</p>
+              <p>Expones tres piezas. Tu propio espacio durante toda la temporada. Los coleccionistas pujan en vivo — sin intermediarios.</p>
             </div>
             <div className="step-col">
               <span className="step-n">04</span>
-              <p>Cuando una pieza se vende, <strong>recibes el 75%</strong> de la puja ganadora. El envío lo coordinamos contigo directamente.</p>
+              <p>Cobras. <strong>El 75%</strong> de cada venta va directo a ti. MANCHA coordina el resto — envío, comunicación, logística.</p>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default async function PostularPage({ searchParams }) {
           <div className="postular-card">
 
             <div className="postular-card-head">
-              <h3>Muéstranos tu obra.</h3>
+              <h3>Tu trabajo primero.</h3>
               <p>Sin currículum de galerías ni jerga de portfolio.<br />Solo tu trabajo, dicho en tus palabras.</p>
             </div>
 
@@ -250,8 +250,8 @@ export default async function PostularPage({ searchParams }) {
               </div>
 
               <div className="postular-submit-wrap">
-                <SubmitButton className="postular-submit" pendingText="Enviando postulación…">
-                  Enviar postulación →
+                <SubmitButton className="postular-submit" pendingText="Enviando solicitud…">
+                  Solicitar acceso →
                 </SubmitButton>
                 <p className="postular-submit-note">
                   Te confirmamos por correo al instante. Si tu trabajo entra, te avisamos antes de que empiece la próxima temporada.
@@ -264,27 +264,27 @@ export default async function PostularPage({ searchParams }) {
           {/* ── FAQ ──────────────────────────────────────── */}
           <div className="faq" style={{ marginTop: 56 }}>
             <p className="eyebrow">Preguntas frecuentes</p>
-            <h2>Antes de postular</h2>
+            <h2>Antes de solicitar</h2>
             <div className="faq-list">
               <div className="faq-item">
-                <h4>¿Qué pasa después de postular?</h4>
-                <p>Revisamos tu trabajo a mano. Si entras a la próxima temporada, te escribimos por correo para que crees tu cuenta de artista y cargues tus piezas directamente, sin pasar por otra revisión.</p>
+                <h4>¿Qué significa que la selección es a mano?</h4>
+                <p>Una persona lee tu solicitud. Revisa tu trabajo, mira tus imágenes, lee lo que escribiste. No hay filtro automático, no hay puntaje de seguidores. Si algo en tu obra nos detiene, entramos en contacto.</p>
               </div>
               <div className="faq-item">
                 <h4>¿Cuántos artistas entran por temporada?</h4>
-                <p>Un grupo pequeño — preferimos darle espacio real a pocos antes que diluir a muchos en la misma página. Si no entraste en esta, tu postulación queda para la siguiente.</p>
+                <p>Un grupo pequeño — preferimos darle espacio real a pocos antes que diluir a muchos. Si tu solicitud no entra en esta temporada, queda registrada para la siguiente.</p>
               </div>
               <div className="faq-item">
-                <h4>¿Qué pasa si una pieza no recibe pujas?</h4>
-                <p>La pieza no se vende al cerrar la temporada y puedes incluirla de nuevo en la próxima postulación. El riesgo es cero: no te cobramos nada por exponer.</p>
+                <h4>¿Qué pasa si una pieza no se vende?</h4>
+                <p>La pieza cierra la temporada sin venta y puedes incluirla de nuevo en la siguiente. El riesgo es cero: solicitar es gratis, exponer es gratis. Solo cobramos si hay una venta.</p>
               </div>
               <div className="faq-item">
-                <h4>¿Quién se encarga del envío?</h4>
-                <p>Lo coordinamos contigo por correo una vez confirmada la venta. Todavía no está automatizado — lo hacemos de forma directa con cada artista.</p>
+                <h4>¿Cuánto cuesta solicitar acceso?</h4>
+                <p>Nada. Solicitar es gratis, exponer es gratis. MANCHA cobra el 25% solo cuando se cierra una venta — nunca antes, nunca por adelantado.</p>
               </div>
               <div className="faq-item">
-                <h4>¿Puedo postular si nunca expuse en ningún lado?</h4>
-                <p>Sí — de hecho eso es exactamente lo que buscamos. Muchos de los artistas que elegimos exponen en forma individual por primera vez aquí.</p>
+                <h4>¿Puedo solicitar si nunca expuse en ningún lado?</h4>
+                <p>Sí — de hecho eso es exactamente lo que buscamos. Muchos de los artistas que elegimos exponen en forma individual por primera vez aquí. La historia previa no es el criterio.</p>
               </div>
             </div>
           </div>

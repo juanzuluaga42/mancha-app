@@ -19,46 +19,45 @@ export default function Footer() {
           <div className="footer-brand">
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
             <p>
-              {prelaunch
-                ? 'Convocatoria abre el 1 de julio. Temporada 01 arranca el 31 de julio.'
-                : convocatoria
-                ? 'Convocatoria abre el 1 de julio. Temporada 01 arranca el 31 de julio.'
-                : 'Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.'}
+              {prelaunch || convocatoria
+                ? 'Institución de descubrimiento artístico. Est. 2026.'
+                : 'Institución de descubrimiento artístico. Est. 2026.'}
             </p>
           </div>
           <div className="footer-links">
             <div className="footer-col">
-              <h5>MANCHA</h5>
+              <h5>La institución</h5>
               <Link href="/sobre-mancha">Sobre MANCHA</Link>
+              <Link href="/criterio">El criterio</Link>
               {prelaunch ? (
                 <>
-                  <Link href="/notas">Blog de arte</Link>
+                  <Link href="/notas">Notas editoriales</Link>
                   <Link href="/registro">Crear cuenta</Link>
                 </>
               ) : convocatoria ? (
                 <>
-                  <Link href="/postular">Postular →</Link>
-                  <Link href="/notas">Blog de arte</Link>
+                  <Link href="/postular">Solicitar acceso →</Link>
+                  <Link href="/notas">Notas editoriales</Link>
                 </>
               ) : (
                 <>
                   <Link href="/seleccionados">Los elegidos</Link>
                   <Link href="/obras">Catálogo</Link>
-                  <Link href="/postular">¿Eres artista?</Link>
+                  <Link href="/postular">Solicitar acceso</Link>
                 </>
               )}
               <Link href="/legal">Términos y privacidad</Link>
             </div>
             <div className="footer-col">
               <h5>Editorial</h5>
-              <Link href="/notas">Blog de arte →</Link>
+              <Link href="/notas">Notas →</Link>
               <h5 style={{ marginTop: 24 }}>Contacto</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 MANCHA. Galería independiente.</span>
+          <span>© 2026 MANCHA. Institución de descubrimiento artístico.</span>
           {prelaunch || convocatoria
             ? <span>Convocatoria 1–31 jul · Temporada 01 abre 31 jul 2026</span>
             : <span>Temporada en curso</span>}

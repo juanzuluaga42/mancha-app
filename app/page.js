@@ -110,21 +110,20 @@ export default async function Home({ searchParams }) {
           <Splat width="65px" height="58px" top="60%" left="4%" color="yellow" rotate={-18} radius="r2" />
 
           <div className="wrap tsr-inner">
-            <p className="eyebrow tsr-eyebrow">MANCHA — Temporada 01</p>
+            <p className="eyebrow tsr-eyebrow">MANCHA — Temporada 01 · 2026</p>
             <h1 className="tsr-title">
-              El arte que<br />
-              todavía nadie vio.<br />
-              <em>Pronto.</em>
+              Elegimos primero.<br />
+              <em>El mundo descubre después.</em>
             </h1>
             <p className="tsr-sub">
-              Una galería independiente. Artistas emergentes seleccionados a mano.
-              Tres piezas por artista, una temporada completa, tiempo limitado.
+              Institución de descubrimiento artístico. Pocos artistas por temporada,
+              seleccionados a mano antes de que sean evidentes.
               La convocatoria abre el 1 de julio.
             </p>
-            <Countdown endsAt={CONV_OPEN_DATE} label="La convocatoria abre en" />
+            <Countdown endsAt={CONV_OPEN_DATE} label="Tiempo hasta la apertura" />
             <div className="tsr-ctas">
-              <a href="/registro" className="btn-primary tsr-btn">Crear cuenta →</a>
-              <a href="/notas" className="tsr-ghost">Leer el blog de arte →</a>
+              <a href="/registro" className="btn-primary tsr-btn">Solicitar acceso →</a>
+              <a href="/notas" className="tsr-ghost">Leer las notas →</a>
             </div>
           </div>
         </header>
@@ -132,28 +131,28 @@ export default async function Home({ searchParams }) {
         {/* ── QUÉ ES MANCHA ────────────────────────────────── */}
         <section className="tsr-que">
           <div className="wrap tsr-que-inner">
-            <p className="eyebrow" style={{ textAlign: 'center', color: 'var(--ink-soft)' }}>Qué es MANCHA</p>
-            <h2 className="tsr-que-title">Una galería con criterio.<br /><em>No con algoritmos.</em></h2>
+            <p className="eyebrow" style={{ textAlign: 'center', color: 'var(--ink-soft)' }}>Por qué existe MANCHA</p>
+            <h2 className="tsr-que-title">No es una galería abierta.<br /><em>Es un criterio.</em></h2>
             <div className="tsr-pillars">
               <div className="tsr-pillar">
                 <span className="tsr-pillar-icon">✦</span>
-                <h3>Selección a mano</h3>
-                <p>Elegimos cada artista persona a persona. Sin métricas, sin popularidad. Solo la obra.</p>
+                <h3>Selección, no catálogo</h3>
+                <p>No publicamos a todos los que aplican. Elegimos a los que tienen algo que el resto todavía no vio.</p>
               </div>
               <div className="tsr-pillar">
                 <span className="tsr-pillar-icon">◆</span>
-                <h3>Tiempo limitado</h3>
+                <h3>Temporadas cerradas</h3>
                 <p>Cada temporada dura lo que dura. Cuando cierra, cierra para siempre. No hay reposición.</p>
               </div>
               <div className="tsr-pillar">
                 <span className="tsr-pillar-icon">●</span>
-                <h3>Sin intermediarios</h3>
-                <p>Sin galerías que se quedan con la mitad. El 75% de cada venta va directo al artista.</p>
+                <h3>El artista primero</h3>
+                <p>El 75% de cada venta va directo al creador. Postular es gratis, exponer es gratis. Solo cobramos si hay venta.</p>
               </div>
               <div className="tsr-pillar">
                 <span className="tsr-pillar-icon">▲</span>
                 <h3>El registro permanente</h3>
-                <p>Lo que pasa por MANCHA no se quita. Cada artista queda en el registro para siempre.</p>
+                <p>Lo que pasa por MANCHA no se quita. Cada artista que elegimos queda en el registro para siempre.</p>
               </div>
             </div>
           </div>
@@ -166,8 +165,8 @@ export default async function Home({ searchParams }) {
           <div className="wrap">
             <div className="tsr-blog-head">
               <div>
-                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>Mientras tanto</p>
-                <h2 className="tsr-blog-title">El catálogo todavía no abre.<br /><em>Pero hay mucho por leer.</em></h2>
+                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>MANCHA Editorial</p>
+                <h2 className="tsr-blog-title">Lo que pensamos<br /><em>sobre el arte.</em></h2>
               </div>
               <a href="/notas" className="tsr-blog-all">Ver todas las notas →</a>
             </div>
@@ -254,7 +253,7 @@ export default async function Home({ searchParams }) {
 
             <h1 className="hero-title">
               {convocatoria ? (
-                <>La Temporada 01<br /><em>está por abrir.</em></>
+                <>No buscamos artistas.<br /><em>Los encontramos.</em></>
               ) : (
                 <>Primero tú.<br /><em>Después el mundo.</em></>
               )}
@@ -262,20 +261,20 @@ export default async function Home({ searchParams }) {
 
             <p className="hero-sub">
               {convocatoria
-                ? 'La convocatoria abre el 1 de julio y cierra el 31. MANCHA abre su primera temporada el 31 de julio con artistas emergentes seleccionados a mano — tres piezas cada uno, tiempo limitado.'
+                ? 'La convocatoria abre el 1 de julio y cierra el 31. MANCHA selecciona a mano un grupo reducido de artistas emergentes — tres piezas cada uno, sin costo por postular, sin costo por exponer.'
                 : 'Arte emergente seleccionado a mano. Pocos artistas por temporada, tres piezas cada uno. Cuando cierra la temporada, cierra para siempre.'}
             </p>
 
             <div className="hero-ctas">
               {convocatoria ? (
                 <>
-                  <a href="/postular" className="btn-primary hero-btn">Postular como artista →</a>
+                  <a href="/postular" className="btn-primary hero-btn">Solicitar acceso →</a>
                   <a href="#compradores" className="hp-hero-ghost">¿Quieres coleccionar? →</a>
                 </>
               ) : (
                 <>
                   <a href="/seleccionados" className="btn-primary hero-btn">Ver los elegidos</a>
-                  <a href="/sobre-mancha" className="hp-hero-ghost">¿Qué es MANCHA? →</a>
+                  <a href="/sobre-mancha" className="hp-hero-ghost">La institución →</a>
                 </>
               )}
             </div>

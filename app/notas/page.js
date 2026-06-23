@@ -10,11 +10,11 @@ import {
 } from '@/lib/atlas';
 
 export const metadata = {
-  title: 'MANCHA — Atlas del Arte',
-  description: 'Un blog de arte distinto: los 20 artistas más influyentes de la historia, los cuadros más caros del mundo, museos imprescindibles, premios y datos curiosos.',
+  title: 'MANCHA — Lo que pensamos sobre el arte.',
+  description: 'MANCHA Editorial: los 20 artistas más influyentes, los cuadros más caros, los grandes museos y lo que el arte dice sobre el mundo.',
   openGraph: {
-    title: 'MANCHA — Atlas del Arte',
-    description: 'Los 20 artistas más influyentes, los cuadros más caros, los grandes museos y datos curiosos del arte.',
+    title: 'MANCHA — Lo que pensamos sobre el arte.',
+    description: 'MANCHA Editorial: arte, historia, criterio. Sin algoritmos editoriales.',
     type: 'website',
   },
 };
@@ -32,14 +32,14 @@ export default function NotasPage() {
         <Splat width="150px" height="130px" bottom="-45px" left="-35px" color="lilac" rotate={12} radius="r3" />
         <Splat width="90px" height="80px" top="44%" left="10%" color="yellow" rotate={7} radius="r1" />
         <div className="wrap atlas-hero-inner">
-          <p className="eyebrow atlas-hero-eyebrow">El blog de MANCHA</p>
+          <p className="eyebrow atlas-hero-eyebrow">MANCHA Editorial</p>
           <h1 className="atlas-hero-title">
-            Atlas<br />
-            <em>del Arte.</em>
+            Lo que pensamos<br />
+            <em>sobre el arte.</em>
           </h1>
           <p className="atlas-hero-sub">
-            Cinco siglos de genios, récords imposibles, museos infinitos y datos
-            que nadie te contó. Un mapa para mirar el arte con otros ojos.
+            Arte, historia, criterio. Cinco siglos de genios, récords imposibles,
+            museos y datos que nadie te contó. Sin algoritmos editoriales.
           </p>
           <div className="atlas-hero-jump">
             <a href="#lecturas">Lecturas</a>
@@ -257,7 +257,7 @@ export default function NotasPage() {
             <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
               Ver la temporada actual
             </Link>
-            <Link href="/sobre-mancha" className="atlas-cierre-ghost">Conocer MANCHA →</Link>
+            <Link href="/sobre-mancha" className="atlas-cierre-ghost">La institución →</Link>
           </div>
         </div>
       </section>
