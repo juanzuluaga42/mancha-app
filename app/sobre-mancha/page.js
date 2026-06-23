@@ -134,7 +134,7 @@ export default function SobreManchaPage() {
               Si tu trabajo entra, te avisamos directamente y te guiamos en el proceso de subir tus piezas.
             </p>
             <p className="sobre-puja-body">
-              Cuando la Temporada 01 abra el 31 de julio, los coleccionistas van a poder explorar, pujar y llevarse tu obra.
+              Cuando la Temporada 01 abra el 1 de agosto, los coleccionistas van a poder explorar, pujar y llevarse tu obra.
               Tú te llevas la mayor parte de lo que se vende. Siempre.
             </p>
           </div>
@@ -177,8 +177,8 @@ export default function SobreManchaPage() {
         <div className="wrap sobre-closing-inner">
           {convocatoria ? (
             <>
-              <p className="sobre-closing-line">La Temporada 01 abre el 31 de julio.</p>
-              <p className="sobre-closing-line sobre-closing-accent">La convocatoria está abierta ahora.</p>
+              <p className="sobre-closing-line">La convocatoria cierra el 1 de julio.</p>
+              <p className="sobre-closing-line sobre-closing-accent">La Temporada 01 abre el 1 de agosto.</p>
               <div className="sobre-closing-ctas">
                 <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
                   Postular ahora →

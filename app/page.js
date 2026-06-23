@@ -22,7 +22,8 @@ export const metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
-const LAUNCH_DATE = '2026-07-31T00:00:00-05:00';
+const CONV_END_DATE = '2026-07-01T00:00:00-05:00';  // cierre de convocatoria
+const LAUNCH_DATE   = '2026-08-01T00:00:00-05:00';  // apertura Temporada 01
 
 const tickerItems = [
   'Arte emergente seleccionado a mano',
@@ -87,7 +88,7 @@ export default async function Home({ searchParams }) {
   const seasonLabel = season
     ? `${season.name} — ${new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} / ${new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}`
     : convocatoria
-      ? 'Convocatoria abierta — Temporada 01'
+      ? 'Convocatoria abierta — cierra 1 de julio'
       : 'Temporada actual';
 
   return (
@@ -109,7 +110,7 @@ export default async function Home({ searchParams }) {
             <p className="eyebrow hero-eyebrow">{seasonLabel}</p>
 
             {convocatoria ? (
-              <Countdown endsAt={LAUNCH_DATE} label="Apertura de la Temporada 01" />
+              <Countdown endsAt={CONV_END_DATE} label="La convocatoria cierra en" />
             ) : (
               season?.ends_at && <Countdown endsAt={season.ends_at} />
             )}
@@ -124,7 +125,7 @@ export default async function Home({ searchParams }) {
 
             <p className="hero-sub">
               {convocatoria
-                ? 'MANCHA abre su primera temporada el 31 de julio. Artistas emergentes seleccionados a mano — tres piezas cada uno, tiempo limitado. La convocatoria para artistas está abierta ahora.'
+                ? 'La convocatoria cierra el 1 de julio. MANCHA abre su primera temporada el 1 de agosto con artistas emergentes seleccionados a mano — tres piezas cada uno, tiempo limitado.'
                 : 'Arte emergente seleccionado a mano. Pocos artistas por temporada, tres piezas cada uno. Cuando cierra la temporada, cierra para siempre.'}
             </p>
 
@@ -178,7 +179,7 @@ export default async function Home({ searchParams }) {
                 Elegimos a mano los artistas que van a estar en la Temporada 01.
                 Sin métricas, sin popularidad, sin número de seguidores.
                 Solo la obra. Si crees que la tuya tiene algo que el resto todavía no vio,
-                postúlate antes del 31 de julio.
+                postúlate antes del 1 de julio.
               </p>
               <div className="hp-conv-ctas">
                 <Link href="/postular" className="btn-primary">Postular ahora →</Link>
@@ -381,7 +382,7 @@ export default async function Home({ searchParams }) {
                   { n: '01', title: 'Postulas', body: 'Completas el formulario con tu trabajo, tu medio y un poco de contexto. Sin cuotas, sin trámites.' },
                   { n: '02', title: 'Revisamos', body: 'Revisamos cada postulación de forma personal. El criterio es la obra, no el follower count.' },
                   { n: '03', title: 'Te avisamos', body: 'Si eres seleccionado, recibes un correo para configurar tu perfil y subir tus tres piezas.' },
-                  { n: '04', title: 'Abres la Temporada 01', body: 'El 31 de julio todo se abre. Coleccionistas de todo el mundo pueden pujar por tu obra.' },
+                  { n: '04', title: 'Abres la Temporada 01', body: 'El 1 de agosto todo se abre. Coleccionistas de todo el mundo pueden pujar por tu obra.' },
                 ].map(({ n, title, body }) => (
                   <div className="hp-step" key={n}>
                     <span className="hp-step-n">{n}</span>
@@ -484,7 +485,7 @@ export default async function Home({ searchParams }) {
                 <em>el primero en ver?</em>
               </h2>
               <p className="hp-compradores-sub">
-                La Temporada 01 abre el 31 de julio. Te avisamos cuando el catálogo esté listo
+                La Temporada 01 abre el 1 de agosto. Te avisamos cuando el catálogo esté listo
                 para que puedas explorar y pujar antes que nadie.
               </p>
             </div>

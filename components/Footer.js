@@ -19,7 +19,7 @@ export default function Footer() {
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
             <p>
               {convocatoria
-                ? 'Temporada 01 — 31 de julio. Convocatoria abierta para artistas.'
+                ? 'Convocatoria abierta hasta el 1 de julio. Temporada 01 abre el 1 de agosto.'
                 : 'Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.'}
             </p>
           </div>
@@ -52,7 +52,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <span>© 2026 MANCHA. Galería independiente.</span>
           {convocatoria
-            ? <span>Temporada 01 abre el 31 de julio de 2026</span>
+            ? <span>Convocatoria cierra 1 jul · Temporada 01 abre 1 ago 2026</span>
             : <span>Temporada en curso</span>}
         </div>
       </div>

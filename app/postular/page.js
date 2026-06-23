@@ -46,7 +46,7 @@ export default async function PostularPage({ searchParams }) {
           </p>
           {convocatoria ? (
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(250,247,240,0.5)', marginTop: 20 }}>
-              La Temporada 01 abre el 31 de julio de 2026 — postula antes de esa fecha.
+              La convocatoria cierra el 1 de julio de 2026. La Temporada 01 abre el 1 de agosto.
             </p>
           ) : season?.ends_at ? (
             <div style={{ marginTop: 24 }}>
