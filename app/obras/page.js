@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import Footer from '@/components/Footer';
+
 import ObrasCatalog from '@/components/ObrasCatalog';
 import { isTemporadaActiva } from '@/lib/fase';
 

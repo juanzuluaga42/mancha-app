@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import Footer from '@/components/Footer';
+
 import PieceCard from '@/components/PieceCard';
 import Toast from '@/components/Toast';
 import SelloSeleccionado from '@/components/SelloSeleccionado';

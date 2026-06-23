@@ -2949,3 +2949,24 @@ input, textarea, select {
   .como-funciona { padding: 88px 0; }
   .postular-form-section { padding: 88px 0; }
 }
+
+/* ── REMAINING PAGES: auth-submit, auth-card ── */
+.auth-submit { border-radius: 2px !important; }
+.auth-card { border-radius: 2px !important; background: rgba(255,255,255,0.6) !important; border: 1px solid rgba(22,17,13,0.1) !important; }
+
+/* Dark hero overrides: uniform to #0D0C0A */
+.criterio-header,
+.sel-header,
+.mf-hero,
+.auth-header { background: #0D0C0A !important; }
+
+/* obra-card sharp */
+.obra-card { border-radius: 2px !important; }
+.obra-card-cta { border-radius: 0 !important; }
+
+/* ── criterio sections ── */
+.criterio-header { padding: 120px 0 100px; }
+.criterio-title { font-size: clamp(3.4rem,8vw,6.5rem); }
+
+/* ── seleccionados closing splat section ── */
+.sel-closing { background: #0D0C0A !important; overflow: hidden; }

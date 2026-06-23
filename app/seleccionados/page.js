@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import Footer from '@/components/Footer';
+
 import { cap } from '@/lib/utils';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 import { redirect } from 'next/navigation';

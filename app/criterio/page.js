@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import Footer from '@/components/Footer';
+
 
 export const metadata = {
   title: 'MANCHA — El criterio',
