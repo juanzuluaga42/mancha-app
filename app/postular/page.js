@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import Splat from '@/components/Splat';
+import ScrollReveal from '@/components/ScrollReveal';
 import Toast from '@/components/Toast';
 import SubmitButton from '@/components/SubmitButton';
 import { createClient } from '@/utils/supabase/server';
@@ -31,13 +31,10 @@ export default async function PostularPage({ searchParams }) {
   return (
     <>
       <Nav />
+      <ScrollReveal />
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <header className="page-header postular-header-dark">
-        <Splat width="200px" height="175px" top="-55px" right="-40px" color="lilac" rotate={10} radius="r1" />
-        <Splat width="110px" height="95px" bottom="-30px" left="-30px" color="yellow" rotate={-12} radius="r3" />
-        <Splat width="70px" height="60px" top="55%" left="5%" color="red" rotate={6} radius="r4" />
-        <Splat width="60px" height="55px" top="-30px" left="40%" color="red" rotate={-8} radius="r2" />
         <div className="wrap">
           <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Temporada 01 · Acceso restringido</p>
           <h1>No publicamos arte.<br />Elegimos artistas.</h1>
@@ -128,9 +125,6 @@ export default async function PostularPage({ searchParams }) {
 
       {/* ── FORMULARIO ───────────────────────────────────── */}
       <section className="postular-form-section">
-        <Splat width="130px" height="115px" top="4%" right="-40px" color="yellow" rotate={-10} radius="r2" />
-        <Splat width="85px" height="75px" top="52%" left="-35px" color="lilac" rotate={14} radius="r3" />
-
         <div className="wrap" style={{ maxWidth: 660 }}>
           <div className="postular-card">
 

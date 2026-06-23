@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import Splat from '@/components/Splat';
+import ScrollReveal from '@/components/ScrollReveal';
 import BlogImg from '@/components/BlogImg';
 import { articles } from '@/lib/news';
 import {
@@ -25,12 +25,10 @@ export default function NotasPage() {
   return (
     <>
       <Nav />
+      <ScrollReveal />
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <header className="atlas-hero">
-        <Splat width="240px" height="205px" top="-70px" right="-55px" color="red" rotate={-15} radius="r2" />
-        <Splat width="150px" height="130px" bottom="-45px" left="-35px" color="lilac" rotate={12} radius="r3" />
-        <Splat width="90px" height="80px" top="44%" left="10%" color="yellow" rotate={7} radius="r1" />
         <div className="wrap atlas-hero-inner">
           <p className="eyebrow atlas-hero-eyebrow">MANCHA Editorial</p>
           <h1 className="atlas-hero-title">
@@ -118,8 +116,6 @@ export default function NotasPage() {
 
       {/* ── 20 ARTISTAS ──────────────────────────────────── */}
       <section className="atlas-artistas" id="artistas">
-        <Splat width="200px" height="175px" top="-50px" right="-40px" color="red" rotate={-12} radius="r1" />
-        <Splat width="110px" height="95px" bottom="6%" left="-30px" color="yellow" rotate={10} radius="r3" />
         <div className="wrap">
           <div className="atlas-section-head atlas-section-head-dark">
             <h2 className="atlas-section-title">Los 20 más influyentes</h2>
@@ -241,8 +237,6 @@ export default function NotasPage() {
 
       {/* ── CIERRE ───────────────────────────────────────── */}
       <section className="atlas-cierre">
-        <Splat width="180px" height="155px" top="-50px" left="-40px" color="lilac" rotate={10} radius="r1" />
-        <Splat width="110px" height="95px" bottom="-35px" right="-25px" color="yellow" rotate={-12} radius="r3" />
         <div className="wrap atlas-cierre-inner">
           <p className="atlas-cierre-pre">Toda esta historia empezó igual</p>
           <h2 className="atlas-cierre-title">

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import Splat from '@/components/Splat';
+import ScrollReveal from '@/components/ScrollReveal';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
@@ -23,13 +23,10 @@ export default function SobreManchaPage() {
   return (
     <>
       <Nav />
+      <ScrollReveal />
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="sobre-hero">
-        <Splat width="220px" height="190px" top="-60px" right="-50px" color="red" rotate={-14} radius="r2" />
-        <Splat width="130px" height="110px" bottom="-40px" left="-30px" color="lilac" rotate={10} radius="r3" />
-        <Splat width="80px" height="70px" top="38%" right="6%" color="yellow" rotate={6} radius="r1" />
-        <Splat width="55px" height="50px" top="20%" left="42%" color="red" rotate={-8} radius="r4" />
         <div className="wrap sobre-hero-inner">
           <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Sobre MANCHA</p>
           <h1 className="sobre-hero-title">
@@ -69,9 +66,6 @@ export default function SobreManchaPage() {
 
       {/* ── MANIFIESTO ───────────────────────────────────── */}
       <section className="sobre-manifiesto">
-        <Splat width="160px" height="140px" top="-50px" left="-40px" color="yellow" rotate={12} radius="r1" />
-        <Splat width="100px" height="88px" bottom="-40px" right="10%" color="lilac" rotate={-8} radius="r3" />
-        <Splat width="64px" height="58px" top="42%" right="-28px" color="red" rotate={16} radius="r2" />
         <div className="wrap sobre-manifiesto-inner">
           <p className="sobre-manifiesto-big">
             El arte emergente muere en el ruido.
@@ -125,8 +119,6 @@ export default function SobreManchaPage() {
       {/* ── CÓMO FUNCIONA: varía según fase ─────────────── */}
       {convocatoria ? (
         <section className="sobre-puja">
-          <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
-          <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
           <div className="wrap sobre-puja-inner sobre-puja-single">
             <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>La convocatoria</p>
             <h2 className="sobre-puja-title">Sin cuotas. Sin trampa.</h2>
@@ -142,8 +134,6 @@ export default function SobreManchaPage() {
         </section>
       ) : (
         <section className="sobre-puja">
-          <Splat width="120px" height="100px" top="-38px" right="8%" color="red" rotate={-10} radius="r2" />
-          <Splat width="80px" height="70px" bottom="-30px" left="5%" color="yellow" rotate={12} radius="r4" />
           <div className="wrap sobre-puja-inner sobre-puja-single">
             <p className="eyebrow" style={{ color: 'var(--yellow-deep)' }}>Cómo funciona</p>
             <h2 className="sobre-puja-title">Una subasta sin trampa.</h2>
@@ -172,9 +162,6 @@ export default function SobreManchaPage() {
 
       {/* ── CIERRE ───────────────────────────────────────── */}
       <section className="sobre-closing">
-        <Splat width="180px" height="155px" top="-50px" left="-40px" color="lilac" rotate={10} radius="r1" />
-        <Splat width="110px" height="95px" bottom="-35px" right="-25px" color="yellow" rotate={-12} radius="r3" />
-        <Splat width="70px" height="62px" top="35%" right="12%" color="red" rotate={8} radius="r2" />
         <div className="wrap sobre-closing-inner">
           {prelaunch ? (
             <>
