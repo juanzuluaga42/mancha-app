@@ -1,13 +1,16 @@
 import { createAdminClient } from '@/utils/supabase/admin';
 import { articles } from '@/lib/news';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app';
 
 export default async function sitemap() {
+  const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
 
-  const staticRoutes = (convocatoria
+  const staticRoutes = (prelaunch
+    ? ['', '/sobre-mancha', '/notas', '/legal', '/login', '/registro']
+    : convocatoria
     ? ['', '/sobre-mancha', '/postular', '/notas', '/legal', '/login', '/registro']
     : ['', '/seleccionados', '/obras', '/sobre-mancha', '/postular', '/notas', '/legal', '/login', '/registro', '/manifiesto']
   ).map((path) => ({
@@ -17,7 +20,7 @@ export default async function sitemap() {
   }));
 
   let dynamicRoutes = [];
-  if (!convocatoria) {
+  if (!prelaunch && !convocatoria) {
     try {
       const supabase = createAdminClient();
 

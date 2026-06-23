@@ -5,7 +5,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import { cap } from '@/lib/utils';
-import { isConvocatoria } from '@/lib/fase';
+import { isCatalogHidden } from '@/lib/fase';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function TemporadaPage({ params }) {
-  if (isConvocatoria()) redirect('/');
+  if (isCatalogHidden()) redirect('/');
   const { id } = await params;
   const supabase = await createClient();
 

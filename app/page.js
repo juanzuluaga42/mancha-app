@@ -8,7 +8,7 @@ import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 import WelcomeModal from '@/components/WelcomeModal';
-import { isConvocatoria, isTemporadaActiva } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { articles } from '@/lib/news';
 
 export const metadata = {
@@ -22,7 +22,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
-const CONV_OPEN_DATE = '2026-07-01T00:00:00-05:00';  // abre la convocatoria
+const CONV_OPEN_DATE = '2026-07-01T00:00:00-05:00';  // abre convocatoria (pre-launch → convocatoria)
 const LAUNCH_DATE    = '2026-07-31T00:00:00-05:00';  // cierra convocatoria + abre Temporada 01
 
 const tickerItems = [
@@ -39,6 +39,7 @@ const tickerItems = [
 
 export default async function Home({ searchParams }) {
   const params = await searchParams;
+  const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
   const temporadaActiva = isTemporadaActiva();
 
@@ -90,6 +91,142 @@ export default async function Home({ searchParams }) {
     : convocatoria
       ? 'Convocatoria — abre 1 jul, Temporada 01 el 31'
       : 'Temporada actual';
+
+  /* ── PRE-LAUNCH: portada teaser ──────────────────────────── */
+  if (prelaunch) {
+    return (
+      <>
+        <Nav />
+        <Toast success={params?.success} error={params?.error} />
+
+        {/* ── TEASER HERO ──────────────────────────────────── */}
+        <header className="tsr-hero">
+          <PaintTrail />
+          <Splat width="380px" height="340px" top="-100px" right="-80px" color="yellow" rotate={-12} radius="r1" />
+          <Splat width="260px" height="230px" bottom="-70px" left="-60px" color="lilac" rotate={18} radius="r2" />
+          <Splat width="140px" height="124px" top="38%" right="6%" color="red" rotate={-15} radius="r3" />
+          <Splat width="90px" height="80px" top="18%" left="10%" color="red" rotate={22} radius="r4" />
+          <Splat width="80px" height="72px" bottom="20%" right="20%" color="lilac" rotate={7} radius="r1" />
+          <Splat width="65px" height="58px" top="60%" left="4%" color="yellow" rotate={-18} radius="r2" />
+
+          <div className="wrap tsr-inner">
+            <p className="eyebrow tsr-eyebrow">MANCHA — Temporada 01</p>
+            <h1 className="tsr-title">
+              El arte que<br />
+              todavía nadie vio.<br />
+              <em>Pronto.</em>
+            </h1>
+            <p className="tsr-sub">
+              Una galería independiente. Artistas emergentes seleccionados a mano.
+              Tres piezas por artista, una temporada completa, tiempo limitado.
+              La convocatoria abre el 1 de julio.
+            </p>
+            <Countdown endsAt={CONV_OPEN_DATE} label="La convocatoria abre en" />
+            <div className="tsr-ctas">
+              <a href="/registro" className="btn-primary tsr-btn">Crear cuenta →</a>
+              <a href="/notas" className="tsr-ghost">Leer el blog de arte →</a>
+            </div>
+          </div>
+        </header>
+
+        {/* ── QUÉ ES MANCHA ────────────────────────────────── */}
+        <section className="tsr-que">
+          <div className="wrap tsr-que-inner">
+            <p className="eyebrow" style={{ textAlign: 'center', color: 'var(--ink-soft)' }}>Qué es MANCHA</p>
+            <h2 className="tsr-que-title">Una galería con criterio.<br /><em>No con algoritmos.</em></h2>
+            <div className="tsr-pillars">
+              <div className="tsr-pillar">
+                <span className="tsr-pillar-icon">✦</span>
+                <h3>Selección a mano</h3>
+                <p>Elegimos cada artista persona a persona. Sin métricas, sin popularidad. Solo la obra.</p>
+              </div>
+              <div className="tsr-pillar">
+                <span className="tsr-pillar-icon">◆</span>
+                <h3>Tiempo limitado</h3>
+                <p>Cada temporada dura lo que dura. Cuando cierra, cierra para siempre. No hay reposición.</p>
+              </div>
+              <div className="tsr-pillar">
+                <span className="tsr-pillar-icon">●</span>
+                <h3>Sin intermediarios</h3>
+                <p>Sin galerías que se quedan con la mitad. El 75% de cada venta va directo al artista.</p>
+              </div>
+              <div className="tsr-pillar">
+                <span className="tsr-pillar-icon">▲</span>
+                <h3>El registro permanente</h3>
+                <p>Lo que pasa por MANCHA no se quita. Cada artista queda en el registro para siempre.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── BLOG ─────────────────────────────────────────── */}
+        <section className="tsr-blog">
+          <Splat width="150px" height="132px" top="-42px" right="-38px" color="red" rotate={-10} radius="r2" />
+          <Splat width="95px" height="84px" bottom="-30px" left="-28px" color="yellow" rotate={14} radius="r3" />
+          <div className="wrap">
+            <div className="tsr-blog-head">
+              <div>
+                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>Mientras tanto</p>
+                <h2 className="tsr-blog-title">El catálogo todavía no abre.<br /><em>Pero hay mucho por leer.</em></h2>
+              </div>
+              <a href="/notas" className="tsr-blog-all">Ver todas las notas →</a>
+            </div>
+            <div className="tsr-blog-grid">
+              {articles.slice(0, 3).map((article) => (
+                <a href={`/notas/${article.slug}`} className="tsr-blog-card" key={article.slug}>
+                  <div className="tsr-blog-img">
+                    {article.image
+                      ? <img src={article.image} alt={article.imageAlt || article.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <div style={{ position: 'absolute', inset: 0, background: 'var(--ink-soft)' }} />}
+                  </div>
+                  <div className="tsr-blog-info">
+                    <p className="tsr-blog-date">{article.date}</p>
+                    <h3 className="tsr-blog-card-title">{article.title}</h3>
+                    <p className="tsr-blog-excerpt">{article.excerpt}</p>
+                    <span className="tsr-blog-cta">Leer →</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── AVÍSAME (compradores) ─────────────────────────── */}
+        <section className="tsr-aviso" id="compradores">
+          <Splat width="320px" height="285px" top="-85px" right="-75px" color="red" rotate={-14} radius="r1" />
+          <Splat width="240px" height="212px" bottom="-65px" left="-55px" color="yellow" rotate={18} radius="r2" />
+          <Splat width="170px" height="150px" top="-48px" left="15%" color="red" rotate={10} radius="r3" />
+          <Splat width="150px" height="132px" bottom="-38px" right="20%" color="lilac" rotate={-8} radius="r4" />
+          <Splat width="120px" height="106px" top="28%" left="-42px" color="yellow" rotate={-20} radius="r1" />
+          <Splat width="110px" height="97px" top="12%" right="35%" color="red" rotate={12} radius="r2" />
+          <Splat width="100px" height="88px" bottom="8%" left="32%" color="yellow" rotate={-6} radius="r3" />
+          <Splat width="75px" height="66px" top="52%" right="6%" color="red" rotate={22} radius="r4" />
+          <Splat width="70px" height="62px" top="8%" left="46%" color="yellow" rotate={-16} radius="r1" />
+          <Splat width="65px" height="58px" bottom="28%" right="13%" color="red" rotate={8} radius="r2" />
+          <Splat width="60px" height="54px" top="66%" left="10%" color="lilac" rotate={-12} radius="r3" />
+          <Splat width="55px" height="50px" top="40%" right="40%" color="yellow" rotate={18} radius="r4" />
+          <Splat width="48px" height="44px" bottom="4%" left="58%" color="red" rotate={-4} radius="r1" />
+          <div className="wrap tsr-aviso-inner">
+            <div className="tsr-aviso-text">
+              <p className="eyebrow" style={{ color: 'var(--paper)' }}>Para coleccionistas</p>
+              <h2 className="tsr-aviso-title">
+                Sé el primero<br />
+                <em>en ver la Temporada 01.</em>
+              </h2>
+              <p className="tsr-aviso-sub">
+                La galería abre el 31 de julio. Deja tu correo y te avisamos en el momento en que el catálogo esté listo — antes que nadie.
+              </p>
+            </div>
+            <div className="tsr-aviso-form">
+              <WaitlistForm redirectTo="/" label="Avísame cuando abra →" />
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

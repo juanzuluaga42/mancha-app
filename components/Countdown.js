@@ -11,7 +11,7 @@ function diff(target) {
   return { days, hours, mins, secs, ended: ms === 0 };
 }
 
-export default function Countdown({ endsAt }) {
+export default function Countdown({ endsAt, label = 'Cierra en' }) {
   const [t, setT] = useState(null);
 
   useEffect(() => {
@@ -23,12 +23,12 @@ export default function Countdown({ endsAt }) {
   if (!t) return null;
 
   if (t.ended) {
-    return <div className="countdown"><span className="countdown-label">La temporada cerró</span></div>;
+    return null;
   }
 
   return (
-    <div className="countdown" role="timer" aria-label="Tiempo restante de la temporada">
-      <span className="countdown-label">Cierra en</span>
+    <div className="countdown" role="timer" aria-label={label}>
+      <span className="countdown-label">{label}</span>
       <div className="countdown-units">
         <span className="cd-unit"><b>{t.days}</b>días</span>
         <span className="cd-sep">·</span>

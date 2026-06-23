@@ -4,7 +4,8 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import { cap } from '@/lib/utils';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'MANCHA — Los elegidos',
@@ -20,6 +21,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function SeleccionadosPage() {
+  if (isPreLaunch()) redirect('/');
   const convocatoria = isConvocatoria();
   const supabase = await createClient();
 

@@ -7,7 +7,8 @@ import SubmitButton from '@/components/SubmitButton';
 import { createClient } from '@/utils/supabase/server';
 import { submitApplication } from './actions';
 import Countdown from '@/components/Countdown';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'MANCHA — No publicamos arte. Elegimos artistas.',
@@ -15,6 +16,7 @@ export const metadata = {
 };
 
 export default async function PostularPage({ searchParams }) {
+  if (isPreLaunch()) redirect('/');
   const params = await searchParams;
   const convocatoria = isConvocatoria();
   const supabase = await createClient();

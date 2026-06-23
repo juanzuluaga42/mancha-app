@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — No somos una galería. Somos el filtro.',
@@ -18,7 +18,8 @@ const REGLAS = [
 ];
 
 export default function SobreManchaPage() {
-  const convocatoria = isConvocatoria();
+  const prelaunch = isPreLaunch();
+  const convocatoria = isConvocatoria() || prelaunch;
   return (
     <>
       <Nav />
@@ -175,7 +176,20 @@ export default function SobreManchaPage() {
         <Splat width="110px" height="95px" bottom="-35px" right="-25px" color="yellow" rotate={-12} radius="r3" />
         <Splat width="70px" height="62px" top="35%" right="12%" color="red" rotate={8} radius="r2" />
         <div className="wrap sobre-closing-inner">
-          {convocatoria ? (
+          {prelaunch ? (
+            <>
+              <p className="sobre-closing-line">La convocatoria abre el 1 de julio.</p>
+              <p className="sobre-closing-line sobre-closing-accent">La Temporada 01 arranca el 31 de julio.</p>
+              <div className="sobre-closing-ctas">
+                <Link href="/registro" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+                  Crear cuenta →
+                </Link>
+                <Link href="/notas" className="sobre-closing-ghost">
+                  Leer el blog →
+                </Link>
+              </div>
+            </>
+          ) : convocatoria ? (
             <>
               <p className="sobre-closing-line">La convocatoria abre el 1 de julio.</p>
               <p className="sobre-closing-line sobre-closing-accent">La Temporada 01 arranca el 31 de julio.</p>

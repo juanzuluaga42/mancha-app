@@ -2,11 +2,12 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/cuenta/actions';
 import NavMenu from './NavMenu';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default async function Nav() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
 
   let isArtist = false;
@@ -15,7 +16,13 @@ export default async function Nav() {
     isArtist = profile?.role === 'artist';
   }
 
-  const links = convocatoria
+  const links = prelaunch
+    ? [
+        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
+        { href: '/notas', label: 'Blog de arte' },
+        { href: '/#compradores', label: 'Avísame →' },
+      ]
+    : convocatoria
     ? [
         { href: '/sobre-mancha', label: 'Sobre MANCHA' },
         { href: '/postular', label: 'Postular →' },

@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Splat from './Splat';
-import { isConvocatoria } from '@/lib/fase';
+import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default function Footer() {
+  const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
 
   return (
@@ -18,7 +19,9 @@ export default function Footer() {
           <div className="footer-brand">
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
             <p>
-              {convocatoria
+              {prelaunch
+                ? 'Convocatoria abre el 1 de julio. Temporada 01 arranca el 31 de julio.'
+                : convocatoria
                 ? 'Convocatoria abre el 1 de julio. Temporada 01 arranca el 31 de julio.'
                 : 'Una galería con criterio propio. Pocos artistas, cada temporada elegidos a mano.'}
             </p>
@@ -27,7 +30,12 @@ export default function Footer() {
             <div className="footer-col">
               <h5>MANCHA</h5>
               <Link href="/sobre-mancha">Sobre MANCHA</Link>
-              {convocatoria ? (
+              {prelaunch ? (
+                <>
+                  <Link href="/notas">Blog de arte</Link>
+                  <Link href="/registro">Crear cuenta</Link>
+                </>
+              ) : convocatoria ? (
                 <>
                   <Link href="/postular">Postular →</Link>
                   <Link href="/notas">Blog de arte</Link>
@@ -51,7 +59,7 @@ export default function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© 2026 MANCHA. Galería independiente.</span>
-          {convocatoria
+          {prelaunch || convocatoria
             ? <span>Convocatoria 1–31 jul · Temporada 01 abre 31 jul 2026</span>
             : <span>Temporada en curso</span>}
         </div>
