@@ -2230,3 +2230,37 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 .nf-ctas{display:flex; gap:16px; flex-wrap:wrap; align-items:center;}
 .nf-ghost{font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.07em; color:rgba(250,243,230,0.5); border-bottom:1.5px solid rgba(250,243,230,0.22); padding-bottom:2px; transition:color .18s, border-color .18s;}
 .nf-ghost:hover{color:var(--paper); border-color:var(--paper);}
+
+/* ── CONVOCATORIA: artistas ───────────────────────── */
+.hp-conv-artistas{background:var(--ink); color:var(--paper); padding:100px 0; position:relative; overflow:hidden;}
+.hp-conv-artistas .splat-blob{mix-blend-mode:screen;}
+.hp-conv-artistas-inner{display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; position:relative; z-index:1;}
+.hp-conv-title{font-family:var(--font-display); font-size:clamp(2.4rem,5.5vw,4.5rem); font-weight:800; line-height:0.95; letter-spacing:-0.025em; margin:18px 0 28px; color:var(--paper);}
+.hp-conv-title em{font-style:italic; color:var(--yellow);}
+.hp-conv-body{font-size:clamp(1rem,1.6vw,1.18rem); color:rgba(250,243,230,0.6); line-height:1.7; margin-bottom:36px; max-width:48ch;}
+.hp-conv-ctas{display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
+.hp-conv-ghost{font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase; letter-spacing:0.07em; color:rgba(250,243,230,0.5); border-bottom:1.5px solid rgba(250,243,230,0.22); padding-bottom:2px; transition:color .18s, border-color .18s;}
+.hp-conv-ghost:hover{color:var(--paper); border-color:var(--paper);}
+.hp-conv-right{display:flex; flex-direction:column; gap:28px;}
+.hp-conv-right .hp-pillar{border-top:1px solid rgba(250,243,230,0.12); padding-top:20px;}
+.hp-conv-right .hp-pillar-n{color:var(--yellow);}
+.hp-conv-right .hp-pillar-title{color:var(--paper);}
+.hp-conv-right .hp-pillar-desc{color:rgba(250,243,230,0.5);}
+@media(max-width:800px){
+  .hp-conv-artistas-inner{grid-template-columns:1fr;}
+}
+
+/* ── CONVOCATORIA: compradores ────────────────────── */
+.hp-compradores{background:var(--lilac-deep); color:var(--paper); padding:100px 0; position:relative; overflow:hidden;}
+.hp-compradores .splat-blob{mix-blend-mode:screen;}
+.hp-compradores-inner{display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; position:relative; z-index:1;}
+.hp-compradores-title{font-family:var(--font-display); font-size:clamp(2.2rem,5vw,4rem); font-weight:800; line-height:0.95; letter-spacing:-0.025em; margin:14px 0 24px; color:var(--paper);}
+.hp-compradores-title em{font-style:italic; color:var(--yellow);}
+.hp-compradores-sub{font-size:clamp(1rem,1.5vw,1.12rem); color:rgba(250,243,230,0.65); line-height:1.7; max-width:44ch;}
+.hp-compradores-form{background:rgba(250,243,230,0.08); border:1px solid rgba(250,243,230,0.18); border-radius:16px; padding:36px 32px;}
+.hp-compradores-form .waitlist-form-inner{flex-direction:column; align-items:stretch;}
+.hp-compradores-form input[type="email"]{background:rgba(250,243,230,0.1); border-color:rgba(250,243,230,0.25); color:var(--paper);}
+.hp-compradores-form input[type="email"]::placeholder{color:rgba(250,243,230,0.4);}
+@media(max-width:800px){
+  .hp-compradores-inner{grid-template-columns:1fr; gap:40px;}
+}

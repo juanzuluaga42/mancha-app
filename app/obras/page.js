@@ -1,8 +1,10 @@
+import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import ObrasCatalog from '@/components/ObrasCatalog';
+import { isTemporadaActiva } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — Catálogo de la temporada',
@@ -13,6 +15,9 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ObrasPage() {
+  if (!isTemporadaActiva()) {
+    redirect('/?from=obras');
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 

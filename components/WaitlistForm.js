@@ -1,6 +1,7 @@
 import { joinWaitlist } from '@/app/leads/actions';
 
-export default function WaitlistForm({ pieceId, redirectTo = '/' }) {
+export default function WaitlistForm({ pieceId, redirectTo = '/', label }) {
+  const defaultLabel = label ?? (pieceId ? 'Avísame' : 'Unirme');
   return (
     <form action={joinWaitlist} className="waitlist-form">
       <input type="hidden" name="pieceId" value={pieceId || ''} />
@@ -13,7 +14,7 @@ export default function WaitlistForm({ pieceId, redirectTo = '/' }) {
         className="waitlist-input"
         aria-label="Correo electrónico"
       />
-      <button type="submit" className="waitlist-btn">{pieceId ? 'Avísame' : 'Unirme'}</button>
+      <button type="submit" className="waitlist-btn">{defaultLabel}</button>
     </form>
   );
 }

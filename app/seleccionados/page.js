@@ -4,6 +4,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 import { cap } from '@/lib/utils';
+import { isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — Los elegidos',
@@ -19,6 +20,7 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function SeleccionadosPage() {
+  const convocatoria = isConvocatoria();
   const supabase = await createClient();
 
   const { data: seasons } = await supabase
@@ -86,15 +88,17 @@ export default async function SeleccionadosPage() {
           <div className="wrap">
             <div className="sel-current-head">
               <div>
-                <span className="sel-live-badge">● En curso</span>
+                <span className="sel-live-badge">{convocatoria ? '◆ Selección en curso' : '● En curso'}</span>
                 <h2 className="sel-current-title">{currentSeason.name}</h2>
-                <p className="sel-current-dates">
-                  {new Date(currentSeason.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                  {' — '}
-                  {new Date(currentSeason.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                </p>
+                {!convocatoria && (
+                  <p className="sel-current-dates">
+                    {new Date(currentSeason.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    {' — '}
+                    {new Date(currentSeason.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  </p>
+                )}
               </div>
-              <Link href="/obras" className="sel-current-catalog">Ver catálogo completo →</Link>
+              {!convocatoria && <Link href="/obras" className="sel-current-catalog">Ver catálogo completo →</Link>}
             </div>
 
             {currentArtists.length === 0 ? (
@@ -132,19 +136,21 @@ export default async function SeleccionadosPage() {
                         <p className="sel-artist-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
                         {artist.bio && <p className="sel-artist-bio">{artist.bio}</p>}
                         <div className="sel-artist-footer">
-                          <div className="sel-artist-price">
-                            {topBid ? (
-                              <>
-                                <span className="sel-price-label">Puja líder</span>
-                                <span className="sel-price-num">${topBid.toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
-                              </>
-                            ) : minEntry ? (
-                              <>
-                                <span className="sel-price-label">Desde</span>
-                                <span className="sel-price-num">${Number(minEntry).toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
-                              </>
-                            ) : null}
-                          </div>
+                          {!convocatoria && (
+                            <div className="sel-artist-price">
+                              {topBid ? (
+                                <>
+                                  <span className="sel-price-label">Puja líder</span>
+                                  <span className="sel-price-num">${topBid.toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
+                                </>
+                              ) : minEntry ? (
+                                <>
+                                  <span className="sel-price-label">Desde</span>
+                                  <span className="sel-price-num">${Number(minEntry).toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
+                                </>
+                              ) : null}
+                            </div>
+                          )}
                           <span className="sel-artist-cta">Ver →</span>
                         </div>
                       </div>

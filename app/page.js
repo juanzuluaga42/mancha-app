@@ -8,6 +8,7 @@ import Countdown from '@/components/Countdown';
 import Toast from '@/components/Toast';
 import WaitlistForm from '@/components/WaitlistForm';
 import WelcomeModal from '@/components/WelcomeModal';
+import { isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — Primero tú. Después el mundo.',
@@ -20,58 +21,73 @@ export const metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
+const LAUNCH_DATE = '2025-07-31T00:00:00-05:00';
+
+const tickerItems = [
+  'Arte emergente seleccionado a mano',
+  'Primero tú, después el mundo',
+  'Pocos artistas por temporada',
+  'Cuando cierra, cierra para siempre',
+  'Sin algoritmos. Solo criterio',
+  'Lo que pasa por MANCHA no se quita',
+  'El próximo nombre grande aún no es obvio',
+  'Tres piezas por artista',
+  'Colecciona antes que el resto',
+];
+
 export default async function Home({ searchParams }) {
   const params = await searchParams;
-  const supabase = await createClient();
+  const convocatoria = isConvocatoria();
+  const temporadaActiva = isTemporadaActiva();
 
-  const { data: season } = await supabase
-    .from('seasons')
-    .select('*')
-    .eq('is_current', true)
-    .maybeSingle();
+  let season = null;
+  let allArtists = [];
+  let cheapestPiece = null;
+  let topFavorites = [];
 
-  const { data: artists } = await supabase
-    .from('artists')
-    .select('*, pieces(*, bids(amount), favorites(buyer_id))')
-    .eq('season_id', season?.id ?? '00000000-0000-0000-0000-000000000000')
-    .eq('status', 'approved')
-    .order('created_at', { ascending: true });
+  if (temporadaActiva) {
+    const supabase = await createClient();
 
-  const allArtists = artists ?? [];
+    const { data: s } = await supabase
+      .from('seasons')
+      .select('*')
+      .eq('is_current', true)
+      .maybeSingle();
+    season = s;
 
-  const allPieces = allArtists.flatMap((a) =>
-    (a.pieces ?? []).map((p) => ({ ...p, artistName: a.display_name }))
-  );
+    const { data: artists } = await supabase
+      .from('artists')
+      .select('*, pieces(*, bids(amount), favorites(buyer_id))')
+      .eq('season_id', season?.id ?? '00000000-0000-0000-0000-000000000000')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: true });
 
-  const topFavorites = [...allPieces]
-    .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
-    .slice(0, 4)
-    .filter((p) => (p.favorites?.length ?? 0) > 0);
+    allArtists = artists ?? [];
 
-  const piecesWithPrice = allPieces.map((p) => {
-    const bidAmounts = (p.bids ?? []).map((b) => Number(b.amount));
-    const currentPrice = bidAmounts.length > 0 ? Math.max(...bidAmounts) : Number(p.min_bid);
-    return { ...p, currentPrice, hasBids: bidAmounts.length > 0 };
-  });
-  const cheapestPiece = piecesWithPrice.length > 0
-    ? [...piecesWithPrice].sort((a, b) => a.currentPrice - b.currentPrice)[0]
-    : null;
+    const allPieces = allArtists.flatMap((a) =>
+      (a.pieces ?? []).map((p) => ({ ...p, artistName: a.display_name }))
+    );
+
+    topFavorites = [...allPieces]
+      .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
+      .slice(0, 4)
+      .filter((p) => (p.favorites?.length ?? 0) > 0);
+
+    const piecesWithPrice = allPieces.map((p) => {
+      const bidAmounts = (p.bids ?? []).map((b) => Number(b.amount));
+      const currentPrice = bidAmounts.length > 0 ? Math.max(...bidAmounts) : Number(p.min_bid);
+      return { ...p, currentPrice, hasBids: bidAmounts.length > 0 };
+    });
+    cheapestPiece = piecesWithPrice.length > 0
+      ? [...piecesWithPrice].sort((a, b) => a.currentPrice - b.currentPrice)[0]
+      : null;
+  }
 
   const seasonLabel = season
     ? `${season.name} — ${new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} / ${new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}`
-    : 'Temporada actual';
-
-  const tickerItems = [
-    'Arte emergente seleccionado a mano',
-    'Primero tú, después el mundo',
-    'Pocos artistas por temporada',
-    'Cuando cierra, cierra para siempre',
-    'Sin algoritmos. Solo criterio',
-    'Lo que pasa por MANCHA no se quita',
-    'El próximo nombre grande aún no es obvio',
-    'Tres piezas por artista',
-    'Colecciona antes que el resto',
-  ];
+    : convocatoria
+      ? 'Convocatoria abierta — Temporada 01'
+      : 'Temporada actual';
 
   return (
     <>
@@ -90,19 +106,39 @@ export default async function Home({ searchParams }) {
         <div className="hero-content hp-hero-content">
           <div className="hp-hero-left">
             <p className="eyebrow hero-eyebrow">{seasonLabel}</p>
-            {season?.ends_at && <Countdown endsAt={season.ends_at} />}
+
+            {convocatoria ? (
+              <Countdown endsAt={LAUNCH_DATE} label="Apertura de la Temporada 01" />
+            ) : (
+              season?.ends_at && <Countdown endsAt={season.ends_at} />
+            )}
+
             <h1 className="hero-title">
-              Primero tú.<br />
-              <em>Después el mundo.</em>
+              {convocatoria ? (
+                <>La Temporada 01<br /><em>está por abrir.</em></>
+              ) : (
+                <>Primero tú.<br /><em>Después el mundo.</em></>
+              )}
             </h1>
+
             <p className="hero-sub">
-              Arte emergente seleccionado a mano.
-              Pocos artistas por temporada, tres piezas cada uno.
-              Cuando cierra la temporada, cierra para siempre.
+              {convocatoria
+                ? 'MANCHA abre su primera temporada el 31 de julio. Artistas emergentes seleccionados a mano — tres piezas cada uno, tiempo limitado. La convocatoria para artistas está abierta ahora.'
+                : 'Arte emergente seleccionado a mano. Pocos artistas por temporada, tres piezas cada uno. Cuando cierra la temporada, cierra para siempre.'}
             </p>
+
             <div className="hero-ctas">
-              <a href="/seleccionados" className="btn-primary hero-btn">Ver los elegidos</a>
-              <a href="/sobre-mancha" className="hp-hero-ghost">¿Qué es MANCHA? →</a>
+              {convocatoria ? (
+                <>
+                  <a href="/postular" className="btn-primary hero-btn">Postular como artista →</a>
+                  <a href="#compradores" className="hp-hero-ghost">¿Quieres coleccionar? →</a>
+                </>
+              ) : (
+                <>
+                  <a href="/seleccionados" className="btn-primary hero-btn">Ver los elegidos</a>
+                  <a href="/sobre-mancha" className="hp-hero-ghost">¿Qué es MANCHA? →</a>
+                </>
+              )}
             </div>
           </div>
           <div className="hp-hero-right" aria-hidden="true">
@@ -114,7 +150,7 @@ export default async function Home({ searchParams }) {
 
       <Toast success={params?.success} error={params?.error} />
 
-      {/* ── TICKER ARTISTAS ──────────────────────────────── */}
+      {/* ── TICKER ───────────────────────────────────────── */}
       <div className="hp-ticker" aria-hidden="true">
         <div className="hp-ticker-track">
           {[...tickerItems, ...tickerItems, ...tickerItems].map((name, i) => (
@@ -125,51 +161,101 @@ export default async function Home({ searchParams }) {
         </div>
       </div>
 
-      {/* ── ESTO ES MANCHA ───────────────────────────────── */}
-      <section className="hp-statement">
-        <Splat width="220px" height="195px" top="-60px" right="-50px" color="red" rotate={-10} radius="r2" />
-        <Splat width="130px" height="115px" bottom="-40px" left="-35px" color="yellow" rotate={14} radius="r4" />
-        <div className="wrap hp-statement-inner">
-          <div className="hp-statement-left">
-            <p className="hp-statement-kicker">El criterio</p>
-            <blockquote className="hp-statement-quote">
-              "No exponemos arte.<br />
-              Elegimos artistas."
-            </blockquote>
-            <p className="hp-statement-body">
-              Cada temporada, un comité selecciona a mano un número reducido de artistas emergentes.
-              No hay algoritmos, no hay popularidad, no hay seguidores.
-              Solo obra, criterio, y la convicción de que algo aquí importará.
-            </p>
-            <Link href="/sobre-mancha" className="hp-statement-link">Conocer el criterio →</Link>
+      {/* ── CONVOCATORIA: ARTISTAS ───────────────────────── */}
+      {convocatoria && (
+        <section className="hp-conv-artistas">
+          <Splat width="220px" height="195px" top="-60px" right="-50px" color="red" rotate={-10} radius="r2" />
+          <Splat width="130px" height="115px" bottom="-40px" left="-35px" color="yellow" rotate={14} radius="r4" />
+          <div className="wrap hp-conv-artistas-inner">
+            <div className="hp-conv-left">
+              <p className="hp-statement-kicker">La convocatoria</p>
+              <h2 className="hp-conv-title">
+                ¿Tu trabajo<br />
+                <em>debería estar aquí?</em>
+              </h2>
+              <p className="hp-conv-body">
+                Estamos seleccionando los artistas de la Temporada 01. Un comité elige a mano —
+                sin algoritmos, sin popularidad. Solo obra. Si crees que tu trabajo tiene algo
+                que decir, postúlate ahora. Las postulaciones cierran antes del 31 de julio.
+              </p>
+              <div className="hp-conv-ctas">
+                <Link href="/postular" className="btn-primary">Postular ahora →</Link>
+                <Link href="/sobre-mancha" className="hp-conv-ghost">¿Qué es MANCHA? →</Link>
+              </div>
+            </div>
+            <div className="hp-conv-right">
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">01</span>
+                <h3 className="hp-pillar-title">Selección a mano</h3>
+                <p className="hp-pillar-desc">Un comité elige cada artista. Sin convocatorias abiertas al azar. Sin votos.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">02</span>
+                <h3 className="hp-pillar-title">Tres piezas por artista</h3>
+                <p className="hp-pillar-desc">Solo presentas tres piezas. Nada más, nada menos. La edición es parte del criterio.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">03</span>
+                <h3 className="hp-pillar-title">Sin costo de participación</h3>
+                <p className="hp-pillar-desc">Postular es gratis. MANCHA opera con comisión sobre venta, no con cuotas de entrada.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">04</span>
+                <h3 className="hp-pillar-title">Permanente en el registro</h3>
+                <p className="hp-pillar-desc">Una vez que entras a MANCHA, quedas en el registro. Para siempre.</p>
+              </div>
+            </div>
           </div>
-          <div className="hp-statement-right">
-            <div className="hp-pillar">
-              <span className="hp-pillar-n">01</span>
-              <h3 className="hp-pillar-title">Sin costos ocultos</h3>
-              <p className="hp-pillar-desc">Pagas exactamente lo que pujaste. Sin cargos extra del lado comprador.</p>
-            </div>
-            <div className="hp-pillar">
-              <span className="hp-pillar-n">02</span>
-              <h3 className="hp-pillar-title">Historia real</h3>
-              <p className="hp-pillar-desc">Cada pieza llega con el contexto del artista: quién es, dónde trabaja, qué la inspiró.</p>
-            </div>
-            <div className="hp-pillar">
-              <span className="hp-pillar-n">03</span>
-              <h3 className="hp-pillar-title">Temporada cerrada</h3>
-              <p className="hp-pillar-desc">Máximo tres piezas por artista. Cuando cierra, cierra para siempre.</p>
-            </div>
-            <div className="hp-pillar">
-              <span className="hp-pillar-n">04</span>
-              <h3 className="hp-pillar-title">Tu primera vez</h3>
-              <p className="hp-pillar-desc">No hace falta ser coleccionista para empezar. Hay piezas para quien puja por primera vez.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* ── TEMPORADA ACTUAL ─────────────────────────────── */}
-      {allArtists.length > 0 && (
+      {/* ── ESTO ES MANCHA (solo en temporada activa) ────── */}
+      {!convocatoria && (
+        <section className="hp-statement">
+          <Splat width="220px" height="195px" top="-60px" right="-50px" color="red" rotate={-10} radius="r2" />
+          <Splat width="130px" height="115px" bottom="-40px" left="-35px" color="yellow" rotate={14} radius="r4" />
+          <div className="wrap hp-statement-inner">
+            <div className="hp-statement-left">
+              <p className="hp-statement-kicker">El criterio</p>
+              <blockquote className="hp-statement-quote">
+                "No exponemos arte.<br />
+                Elegimos artistas."
+              </blockquote>
+              <p className="hp-statement-body">
+                Cada temporada, un comité selecciona a mano un número reducido de artistas emergentes.
+                No hay algoritmos, no hay popularidad, no hay seguidores.
+                Solo obra, criterio, y la convicción de que algo aquí importará.
+              </p>
+              <Link href="/sobre-mancha" className="hp-statement-link">Conocer el criterio →</Link>
+            </div>
+            <div className="hp-statement-right">
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">01</span>
+                <h3 className="hp-pillar-title">Sin costos ocultos</h3>
+                <p className="hp-pillar-desc">Pagas exactamente lo que pujaste. Sin cargos extra del lado comprador.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">02</span>
+                <h3 className="hp-pillar-title">Historia real</h3>
+                <p className="hp-pillar-desc">Cada pieza llega con el contexto del artista: quién es, dónde trabaja, qué la inspiró.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">03</span>
+                <h3 className="hp-pillar-title">Temporada cerrada</h3>
+                <p className="hp-pillar-desc">Máximo tres piezas por artista. Cuando cierra, cierra para siempre.</p>
+              </div>
+              <div className="hp-pillar">
+                <span className="hp-pillar-n">04</span>
+                <h3 className="hp-pillar-title">Tu primera vez</h3>
+                <p className="hp-pillar-desc">No hace falta ser coleccionista para empezar. Hay piezas para quien puja por primera vez.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── TEMPORADA ACTUAL (solo si hay artistas) ──────── */}
+      {temporadaActiva && allArtists.length > 0 && (
         <section className="hp-season">
           <div className="wrap">
             <div className="hp-season-head">
@@ -210,8 +296,8 @@ export default async function Home({ searchParams }) {
         </section>
       )}
 
-      {/* ── PIEZA DESTACADA ──────────────────────────────── */}
-      {cheapestPiece && (
+      {/* ── PIEZA DESTACADA (solo en temporada activa) ───── */}
+      {temporadaActiva && cheapestPiece && (
         <section className="hp-entry">
           <div className="wrap hp-entry-inner">
             <div className="hp-entry-art">
@@ -242,8 +328,8 @@ export default async function Home({ searchParams }) {
         </section>
       )}
 
-      {/* ── FAVORITOS ────────────────────────────────────── */}
-      {topFavorites.length > 0 && (
+      {/* ── FAVORITOS (solo en temporada activa) ─────────── */}
+      {temporadaActiva && topFavorites.length > 0 && (
         <section className="hp-favs" id="favoritos">
           <Splat width="130px" height="110px" top="-50px" right="8%" color="yellow" rotate={-10} radius="r2" />
           <Splat width="90px" height="80px" bottom="-45px" left="6%" color="lilac" rotate={14} radius="r3" />
@@ -285,23 +371,69 @@ export default async function Home({ searchParams }) {
       <section className="hp-steps">
         <div className="wrap">
           <p className="eyebrow" style={{ textAlign: 'center', color: 'var(--ink-soft)' }}>Cómo funciona</p>
-          <h2 className="hp-steps-title">Cuatro pasos,<br /><em>cero vueltas.</em></h2>
-          <div className="hp-steps-row">
-            {[
-              { n: '01', title: 'Explorar', body: 'Pocos artistas, piezas únicas, sin scroll infinito — un catálogo hecho para que algo te detenga.' },
-              { n: '02', title: 'Pujar', body: 'Eliges una pieza y pujas el monto que quieres ofrecer, por encima de la puja mínima.' },
-              { n: '03', title: 'Seguir', body: 'Sigues de cerca — si alguien te supera, puedes volver a pujar en cualquier momento.' },
-              { n: '04', title: 'Ganar', body: 'Si tu puja cierra primera, coordinamos el pago y el envío directamente contigo por correo.' },
-            ].map(({ n, title, body }) => (
-              <div className="hp-step" key={n}>
-                <span className="hp-step-n">{n}</span>
-                <h3 className="hp-step-title">{title}</h3>
-                <p className="hp-step-body">{body}</p>
+          {convocatoria ? (
+            <>
+              <h2 className="hp-steps-title">El proceso,<br /><em>sin misterios.</em></h2>
+              <div className="hp-steps-row">
+                {[
+                  { n: '01', title: 'Postulas', body: 'Completas el formulario con tu trabajo, tu medio y un poco de contexto. Sin cuotas, sin trámites.' },
+                  { n: '02', title: 'Revisamos', body: 'Un comité revisa cada postulación. El criterio es la obra, no el follower count.' },
+                  { n: '03', title: 'Te avisamos', body: 'Si eres seleccionado, recibes un correo para configurar tu perfil y subir tus tres piezas.' },
+                  { n: '04', title: 'Abres la Temporada 01', body: 'El 31 de julio todo se abre. Coleccionistas de todo el mundo pueden pujar por tu obra.' },
+                ].map(({ n, title, body }) => (
+                  <div className="hp-step" key={n}>
+                    <span className="hp-step-n">{n}</span>
+                    <h3 className="hp-step-title">{title}</h3>
+                    <p className="hp-step-body">{body}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          ) : (
+            <>
+              <h2 className="hp-steps-title">Cuatro pasos,<br /><em>cero vueltas.</em></h2>
+              <div className="hp-steps-row">
+                {[
+                  { n: '01', title: 'Explorar', body: 'Pocos artistas, piezas únicas, sin scroll infinito — un catálogo hecho para que algo te detenga.' },
+                  { n: '02', title: 'Pujar', body: 'Eliges una pieza y pujas el monto que quieres ofrecer, por encima de la puja mínima.' },
+                  { n: '03', title: 'Seguir', body: 'Sigues de cerca — si alguien te supera, puedes volver a pujar en cualquier momento.' },
+                  { n: '04', title: 'Ganar', body: 'Si tu puja cierra primera, coordinamos el pago y el envío directamente contigo por correo.' },
+                ].map(({ n, title, body }) => (
+                  <div className="hp-step" key={n}>
+                    <span className="hp-step-n">{n}</span>
+                    <h3 className="hp-step-title">{title}</h3>
+                    <p className="hp-step-body">{body}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
+
+      {/* ── COMPRADORES: AVÍSAME (solo en convocatoria) ──── */}
+      {convocatoria && (
+        <section className="hp-compradores" id="compradores">
+          <Splat width="200px" height="175px" top="-55px" right="-45px" color="lilac" rotate={-8} radius="r2" />
+          <Splat width="120px" height="105px" bottom="-40px" left="-30px" color="yellow" rotate={14} radius="r4" />
+          <div className="wrap hp-compradores-inner">
+            <div className="hp-compradores-text">
+              <p className="eyebrow" style={{ color: 'var(--paper)' }}>Para coleccionistas</p>
+              <h2 className="hp-compradores-title">
+                ¿Quieres ser<br />
+                <em>el primero en ver?</em>
+              </h2>
+              <p className="hp-compradores-sub">
+                La Temporada 01 abre el 31 de julio. Te avisamos cuando el catálogo esté listo
+                para que puedas explorar y pujar antes que nadie.
+              </p>
+            </div>
+            <div className="hp-compradores-form">
+              <WaitlistForm redirectTo="/" label="Avísame cuando abra →" />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── PERMANENCIA ──────────────────────────────────── */}
       <section className="hp-permanencia">
@@ -321,27 +453,40 @@ export default async function Home({ searchParams }) {
             que no se borra. Eso es lo que coleccionas: el criterio de haber llegado primero.
           </p>
           <div className="hp-perm-ctas">
-            <Link href="/seleccionados" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-              Ver los elegidos
-            </Link>
-            <Link href="/manifiesto" className="hp-perm-ghost">Leer el manifiesto →</Link>
+            {convocatoria ? (
+              <>
+                <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+                  Postular ahora →
+                </Link>
+                <Link href="/sobre-mancha" className="hp-perm-ghost">¿Qué es MANCHA? →</Link>
+              </>
+            ) : (
+              <>
+                <Link href="/seleccionados" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+                  Ver los elegidos
+                </Link>
+                <Link href="/manifiesto" className="hp-perm-ghost">Leer el manifiesto →</Link>
+              </>
+            )}
           </div>
         </div>
       </section>
 
-      {/* ── LISTA DE ESPERA ──────────────────────────────── */}
-      <section className="waitlist-section">
-        <Splat width="100px" height="88px" top="-40px" right="12%" color="red" rotate={-8} radius="r3" />
-        <Splat width="75px" height="66px" bottom="-32px" left="9%" color="lilac" rotate={12} radius="r2" />
-        <div className="wrap waitlist-inner">
-          <p className="eyebrow">Antes de que cierre</p>
-          <h2 className="home-section-h2">El próximo nombre grande<br />todavía no es obvio.</h2>
-          <p className="section-note" style={{ maxWidth: 480, margin: '14px auto 0' }}>
-            Te avisamos cuando sumemos artistas nuevos o abramos la próxima temporada.
-          </p>
-          <WaitlistForm redirectTo="/" />
-        </div>
-      </section>
+      {/* ── LISTA DE ESPERA (solo en temporada activa) ───── */}
+      {!convocatoria && (
+        <section className="waitlist-section">
+          <Splat width="100px" height="88px" top="-40px" right="12%" color="red" rotate={-8} radius="r3" />
+          <Splat width="75px" height="66px" bottom="-32px" left="9%" color="lilac" rotate={12} radius="r2" />
+          <div className="wrap waitlist-inner">
+            <p className="eyebrow">Antes de que cierre</p>
+            <h2 className="home-section-h2">El próximo nombre grande<br />todavía no es obvio.</h2>
+            <p className="section-note" style={{ maxWidth: 480, margin: '14px auto 0' }}>
+              Te avisamos cuando sumemos artistas nuevos o abramos la próxima temporada.
+            </p>
+            <WaitlistForm redirectTo="/" />
+          </div>
+        </section>
+      )}
 
       <Footer />
     </>

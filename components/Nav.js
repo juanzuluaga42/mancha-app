@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/cuenta/actions';
 import NavMenu from './NavMenu';
+import { isConvocatoria } from '@/lib/fase';
 
 export default async function Nav() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const convocatoria = isConvocatoria();
 
   let isArtist = false;
   if (user) {
@@ -13,17 +15,24 @@ export default async function Nav() {
     isArtist = profile?.role === 'artist';
   }
 
-  const links = [
-    { href: '/sobre-mancha', label: 'Sobre MANCHA' },
-    { href: '/seleccionados', label: 'Los elegidos' },
-    { href: '/obras', label: 'Catálogo completo' },
-    { href: '/#favoritos', label: 'Favoritos' },
-    { href: '/postular', label: '¿Eres artista?' },
-    ...(isArtist ? [
-      { href: '/criterio', label: 'El criterio' },
-      { href: '/manifiesto', label: 'Manifiesto' },
-    ] : []),
-  ];
+  const links = convocatoria
+    ? [
+        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
+        { href: '/postular', label: 'Postular →' },
+        { href: '/#compradores', label: 'Quiero coleccionar' },
+        ...(isArtist ? [{ href: '/manifiesto', label: 'Manifiesto' }] : []),
+      ]
+    : [
+        { href: '/sobre-mancha', label: 'Sobre MANCHA' },
+        { href: '/seleccionados', label: 'Los elegidos' },
+        { href: '/obras', label: 'Catálogo completo' },
+        { href: '/#favoritos', label: 'Favoritos' },
+        { href: '/postular', label: '¿Eres artista?' },
+        ...(isArtist ? [
+          { href: '/criterio', label: 'El criterio' },
+          { href: '/manifiesto', label: 'Manifiesto' },
+        ] : []),
+      ];
 
   const authSlot = user ? (
     <>
