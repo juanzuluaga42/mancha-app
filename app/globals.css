@@ -2970,3 +2970,288 @@ input, textarea, select {
 
 /* ── seleccionados closing splat section ── */
 .sel-closing { background: #0D0C0A !important; overflow: hidden; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ROLE PICKER  (/  — first entry split screen)
+   ─────────────────────────────────────────────────────────────── */
+.rp-loading { position:fixed; inset:0; background:#0D0C0A; }
+
+.rp-root {
+  min-height: 100svh;
+  background: #0D0C0A;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.rp-logo {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper);
+  z-index: 10;
+  white-space: nowrap;
+}
+.rp-logo span { color: var(--red); }
+.rp-sub {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(250,239,225,0.22);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.rp-split {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.rp-option {
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  transition: flex 0.55s cubic-bezier(0.16,1,0.3,1), background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.rp-option--collector {
+  border-right: 1px solid rgba(250,239,225,0.07);
+}
+.rp-option:hover { flex: 1.28; background: rgba(250,239,225,0.025); }
+
+.rp-option-inner {
+  padding: 0 72px;
+  text-align: left;
+  max-width: 480px;
+}
+.rp-option-tag {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(250,239,225,0.35);
+  margin: 0 0 28px;
+}
+.rp-option-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem,6.5vw,5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  color: var(--paper);
+  margin: 0 0 28px;
+}
+.rp-option-title em { font-style: italic; }
+.rp-option--collector .rp-option-title em { color: var(--red); }
+.rp-option--artist .rp-option-title em { color: var(--yellow); }
+
+.rp-option-desc {
+  font-size: 0.93rem;
+  line-height: 1.62;
+  color: rgba(250,239,225,0.48);
+  max-width: 300px;
+  margin: 0 0 36px;
+}
+.rp-option-cta {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(250,239,225,0.55);
+  border-bottom: 1px solid rgba(250,239,225,0.2);
+  padding-bottom: 3px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.rp-option:hover .rp-option-cta {
+  color: var(--paper);
+  border-bottom-color: rgba(250,239,225,0.55);
+}
+.rp-foot {
+  padding: 20px 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(250,239,225,0.15);
+  border-top: 1px solid rgba(250,239,225,0.05);
+}
+
+/* ── ROLE SWITCH BAR ── */
+.role-switch-bar {
+  background: var(--paper);
+  border-top: 1px solid rgba(22,17,13,0.07);
+  padding: 20px 0;
+  text-align: center;
+}
+.role-switch-btn {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(22,17,13,0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.role-switch-btn:hover { color: var(--ink); }
+
+/* ── COLLECTOR HERO accent ── */
+.col-hero .tsr-tl--em.col-em { color: var(--yellow); }
+
+/* ── STEPS SECTION (artistas + coleccionistas) ── */
+.tsr-steps-artistas {
+  background: var(--paper);
+  padding: 120px 0;
+  border-bottom: 1px solid rgba(22,17,13,0.08);
+}
+.tsr-steps-head { margin-bottom: 72px; }
+.tsr-steps-title {
+  font-size: clamp(2rem,4.5vw,3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 12px 0 0;
+}
+.tsr-steps-title em { font-style: italic; color: var(--red); }
+.tsr-steps-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 0;
+}
+.tsr-step {
+  padding: 0 44px 0 0;
+  border-right: 1px solid rgba(22,17,13,0.08);
+  margin-right: 44px;
+}
+.tsr-step:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+.tsr-step-n {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(22,17,13,0.3);
+  margin-bottom: 20px;
+}
+.tsr-step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.tsr-step-body { font-size: 0.92rem; line-height: 1.65; color: rgba(22,17,13,0.62); margin: 0; }
+.tsr-steps-cta { margin-top: 64px; }
+
+/* ── MOBILE: role picker ── */
+@media(max-width:768px) {
+  .rp-sub { display: none; }
+  .rp-split { flex-direction: column; }
+  .rp-option--collector { border-right: none; border-bottom: 1px solid rgba(250,239,225,0.07); }
+  .rp-option { justify-content: flex-start; }
+  .rp-option:hover { flex: 1.18; }
+  .rp-option-inner { padding: 48px 28px; }
+  .rp-option-title { font-size: clamp(2.8rem,10vw,4.5rem); }
+  .rp-option-desc { max-width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE FIXES — Global
+   ─────────────────────────────────────────────────────────────── */
+
+/* ── Countdown: no overflow on mobile ── */
+@media(max-width:640px) {
+  .countdown { flex-wrap: wrap; gap:8px; padding:10px 14px; border-radius:2px; }
+  .countdown-units { flex-wrap: wrap; gap:6px 12px; }
+  .cd-sep { display: none; }
+  .cd-unit { flex-direction: column; align-items: center; gap:2px; padding-right: 0 !important; }
+  .cd-unit b { font-size: 1.6rem !important; }
+
+  /* tsr-hero countdown specifically */
+  .tsr-hero .countdown-units { flex-wrap: wrap; gap: 0 24px; }
+  .tsr-hero .cd-sep { display: none; }
+  .tsr-hero .cd-unit b { font-size: clamp(2rem, 11vw, 3rem) !important; }
+  .tsr-hero .cd-unit { padding-right: 0 !important; }
+
+  /* tsr-hero layout */
+  .tsr-hero-content { padding-top: 80px !important; padding-bottom: 52px !important; }
+  .tsr-tl { font-size: clamp(3.2rem, 14vw, 6rem) !important; }
+
+  /* numbers */
+  .tsr-numbers { padding: 80px 0 !important; }
+  .tsr-numbers-inner { grid-template-columns: 1fr !important; }
+  .tsr-num-divider { width: 100% !important; height: 1px !important; margin: 44px 0 !important; align-self: auto !important; }
+
+  /* manifesto */
+  .tsr-manifesto { padding: 88px 0 !important; }
+  .tsr-manifesto-inner { grid-template-columns: 1fr !important; gap: 48px !important; }
+
+  /* statement */
+  .tsr-statement { padding: 88px 0 !important; }
+  .tsr-statement-line { font-size: clamp(2rem, 8vw, 3rem) !important; }
+
+  /* blog */
+  .tsr-blog { padding: 88px 0 !important; }
+  .tsr-blog-grid { grid-template-columns: 1fr !important; }
+  .tsr-blog-head { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+
+  /* aviso */
+  .tsr-aviso { padding: 88px 0 !important; }
+  .tsr-aviso-inner { grid-template-columns: 1fr !important; gap: 52px !important; }
+
+  /* hero foot */
+  .tsr-hero-foot-inner { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
+  .tsr-ctas { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+
+  /* steps */
+  .tsr-steps-artistas { padding: 88px 0 !important; }
+  .tsr-steps-row { grid-template-columns: 1fr !important; gap: 44px !important; }
+  .tsr-step { border-right: none !important; padding-right: 0 !important; margin-right: 0 !important;
+    border-bottom: 1px solid rgba(22,17,13,0.07); padding-bottom: 44px !important; }
+  .tsr-step:last-child { border-bottom: none !important; padding-bottom: 0 !important; }
+
+  /* sobre-mancha mobile */
+  .sobre-hero { padding: 88px 0 72px !important; }
+  .sobre-hero-title { font-size: clamp(2.8rem, 12vw, 5rem) !important; }
+  .sobre-manifiesto-big { font-size: clamp(1.5rem, 6vw, 2.4rem) !important; }
+  .sobre-regla-text { font-size: clamp(1.2rem, 5vw, 1.8rem) !important; }
+  .sobre-number-item { flex-direction: column; }
+
+  /* postular mobile */
+  .postular-card { padding: 28px 20px !important; }
+  .form-row-2 { grid-template-columns: 1fr !important; }
+  .upload-grid { grid-template-columns: 1fr !important; }
+  .postular-trust { flex-direction: column; gap: 10px; }
+
+  /* atlas/notas mobile */
+  .atlas-hero-title { font-size: clamp(2.2rem, 9vw, 4rem) !important; }
+  .atlas-hero-jump { flex-wrap: wrap !important; gap: 8px !important; }
+  .atlas-artista { flex-direction: column !important; gap: 16px !important; }
+  .atlas-caros-list .atlas-caro { flex-direction: column !important; gap: 10px !important; }
+  .atlas-museos-grid { grid-template-columns: 1fr !important; }
+}
+
+@media(max-width:480px) {
+  .rp-option-title { font-size: clamp(2.4rem, 12vw, 3.6rem) !important; }
+  .rp-option-inner { padding: 36px 24px !important; }
+}
