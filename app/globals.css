@@ -92,8 +92,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 /* ---------- HERO ---------- */
 .hero{
   position:relative; overflow:hidden;
-  padding:88px 0 72px;
-  min-height:min(86vh, 760px);
+  padding:72px 0 60px;
+  min-height:min(80vh, 700px);
   display:flex; align-items:center;
 }
 .hero-dark{
