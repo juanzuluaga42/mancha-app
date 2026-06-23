@@ -21,7 +21,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
-const LAUNCH_DATE = '2025-07-31T00:00:00-05:00';
+const LAUNCH_DATE = '2026-07-31T00:00:00-05:00';
 
 const tickerItems = [
   'Arte emergente seleccionado a mano',

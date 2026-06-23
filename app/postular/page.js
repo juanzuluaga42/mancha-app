@@ -7,6 +7,7 @@ import SubmitButton from '@/components/SubmitButton';
 import { createClient } from '@/utils/supabase/server';
 import { submitApplication } from './actions';
 import Countdown from '@/components/Countdown';
+import { isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
   title: 'MANCHA — No publicamos arte. Elegimos artistas.',
@@ -15,12 +16,15 @@ export const metadata = {
 
 export default async function PostularPage({ searchParams }) {
   const params = await searchParams;
+  const convocatoria = isConvocatoria();
   const supabase = await createClient();
   const { count: artistCount } = await supabase
     .from('artists')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'approved');
-  const { data: season } = await supabase.from('seasons').select('ends_at').eq('is_current', true).maybeSingle();
+  const { data: season } = convocatoria
+    ? { data: null }
+    : await supabase.from('seasons').select('ends_at').eq('is_current', true).maybeSingle();
 
   return (
     <>
@@ -40,14 +44,18 @@ export default async function PostularPage({ searchParams }) {
             {artistCount ? ` Hoy mismo, solo ${artistCount} ${artistCount === 1 ? 'artista tiene' : 'artistas tienen'} un lugar.` : ''}
             {' '}Si tu trabajo entra, tienes tu propio espacio — solo, durante tres meses completos.
           </p>
-          {season?.ends_at && (
+          {convocatoria ? (
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(250,247,240,0.5)', marginTop: 20 }}>
+              La Temporada 01 abre el 31 de julio de 2026 — postula antes de esa fecha.
+            </p>
+          ) : season?.ends_at ? (
             <div style={{ marginTop: 24 }}>
               <Countdown endsAt={season.ends_at} />
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, textTransform: 'uppercase', color: 'rgba(250,247,240,0.45)', marginTop: 8 }}>
                 Tiempo restante esta temporada — si no llegas, tu postulación queda para la siguiente.
               </p>
             </div>
-          )}
+          ) : null}
           <ul className="postular-trust">
             <li>Sin costo por postular</li>
             <li>Sin costo por exponer</li>
