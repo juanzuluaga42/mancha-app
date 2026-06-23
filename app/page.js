@@ -415,8 +415,22 @@ export default async function Home({ searchParams }) {
       {/* ── COMPRADORES: AVÍSAME (solo en convocatoria) ──── */}
       {convocatoria && (
         <section className="hp-compradores" id="compradores">
-          <Splat width="200px" height="175px" top="-55px" right="-45px" color="lilac" rotate={-8} radius="r2" />
-          <Splat width="120px" height="105px" bottom="-40px" left="-30px" color="yellow" rotate={14} radius="r4" />
+          {/* manchas grandes de esquina */}
+          <Splat width="340px" height="300px" top="-90px" right="-80px" color="red" rotate={-14} radius="r1" />
+          <Splat width="260px" height="230px" bottom="-70px" left="-60px" color="yellow" rotate={18} radius="r2" />
+          {/* manchas medianas dispersas */}
+          <Splat width="180px" height="158px" top="-50px" left="18%" color="red" rotate={10} radius="r3" />
+          <Splat width="160px" height="140px" bottom="-40px" right="22%" color="lilac" rotate={-8} radius="r4" />
+          <Splat width="140px" height="122px" top="30%" left="-45px" color="yellow" rotate={-20} radius="r1" />
+          <Splat width="130px" height="115px" top="15%" right="38%" color="red" rotate={12} radius="r2" />
+          <Splat width="120px" height="105px" bottom="10%" left="35%" color="yellow" rotate={-6} radius="r3" />
+          {/* manchas pequeñas de textura */}
+          <Splat width="80px" height="70px" top="55%" right="8%" color="red" rotate={22} radius="r4" />
+          <Splat width="75px" height="66px" top="10%" left="48%" color="yellow" rotate={-16} radius="r1" />
+          <Splat width="70px" height="62px" bottom="30%" right="15%" color="red" rotate={8} radius="r2" />
+          <Splat width="65px" height="58px" top="68%" left="12%" color="lilac" rotate={-12} radius="r3" />
+          <Splat width="55px" height="50px" top="42%" right="42%" color="yellow" rotate={18} radius="r4" />
+          <Splat width="50px" height="44px" bottom="5%" left="60%" color="red" rotate={-4} radius="r1" />
           <div className="wrap hp-compradores-inner">
             <div className="hp-compradores-text">
               <p className="eyebrow" style={{ color: 'var(--paper)' }}>Para coleccionistas</p>
