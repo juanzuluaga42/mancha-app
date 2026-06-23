@@ -120,7 +120,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 .hero-content{position:relative; z-index:3; max-width:var(--maxw); margin:0 auto; padding:0 28px;}
 .hero-eyebrow{margin-bottom:24px;}
-.hero-title{font-size:clamp(2.8rem, 6vw, 5.2rem); font-weight:800; line-height:0.98; max-width:11ch; letter-spacing:-0.025em;}
+.hero-title{font-size:clamp(2.2rem, 4.5vw, 4rem); font-weight:800; line-height:0.98; max-width:11ch; letter-spacing:-0.025em;}
 .hero-title em{font-style:normal; color:var(--red);}
 .hero-sub{font-family:var(--font-body); font-style:italic; font-size:clamp(1.05rem, 1.65vw, 1.32rem); color:var(--ink-soft); max-width:48ch; margin-top:30px; line-height:1.62;}
 .hero-ctas{display:flex; flex-wrap:wrap; gap:14px; margin-top:42px; align-items:center;}
