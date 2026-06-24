@@ -2,6 +2,7 @@
 
 export default function RolePicker() {
   function choose(role) {
+    localStorage.setItem('mancha_role', role);
     window.location.href = `/para-${role}`;
   }
 

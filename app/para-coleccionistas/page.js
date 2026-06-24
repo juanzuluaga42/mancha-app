@@ -122,7 +122,6 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           <div className="tsr-manifesto-body">
             <p>La diferencia entre un coleccionista y alguien que compra arte decorativo es el criterio. En MANCHA, el criterio ya está hecho. Revisamos a mano, elegimos pocos, y protegemos la atención del que colecciona.</p>
             <p>Sin algoritmos, sin popularidad, sin número de seguidores. La obra habla primero. Lo que encontrás aquí ya pasó un filtro que la mayoría de los artistas no pasa.</p>
-            <a href="/sobre-mancha" className="tsr-manifesto-link">La institución →</a>
           </div>
         </div>
       </section>

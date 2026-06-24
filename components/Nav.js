@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/cuenta/actions';
 import NavMenu from './NavMenu';
+import NavLogoLink from './NavLogoLink';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default async function Nav() {
@@ -57,7 +58,7 @@ export default async function Nav() {
   return (
     <nav className="nav">
       <div className="nav-inner">
-        <Link href="/" className="brand">MANCHA<span>.</span></Link>
+        <NavLogoLink />
         <NavMenu links={links} authSlot={authSlot} />
       </div>
     </nav>
