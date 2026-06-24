@@ -1,27 +1,25 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 const STORAGE_KEY = 'mancha_role';
 
 export default function RolePicker() {
-  const router = useRouter();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'coleccionista') {
-      router.replace('/para-coleccionistas');
+      window.location.replace('/para-coleccionistas');
     } else if (saved === 'artista') {
-      router.replace('/para-artistas');
+      window.location.replace('/para-artistas');
     } else {
       setReady(true);
     }
-  }, [router]);
+  }, []);
 
   function choose(role) {
     localStorage.setItem(STORAGE_KEY, role);
-    router.push(`/para-${role}`);
+    window.location.href = `/para-${role}`;
   }
 
   if (!ready) {
