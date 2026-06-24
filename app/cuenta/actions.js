@@ -79,7 +79,7 @@ export async function addPiece(formData) {
 
   if (file && typeof file === 'object' && file.size > 0) {
     if (file.size > 8 * 1024 * 1024) {
-      redirect(`/cuenta?error=${encodeURIComponent('La foto pesa demasiado — el máximo son 8 MB. Probá con una versión más liviana.')}`);
+      redirect(`/cuenta?error=${encodeURIComponent('La foto pesa demasiado — el máximo son 8 MB. Prueba con una versión más liviana.')}`);
     }
 
     let uploadErrorMessage = null;

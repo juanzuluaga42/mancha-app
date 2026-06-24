@@ -121,7 +121,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           </blockquote>
           <div className="tsr-manifesto-body">
             <p>La diferencia entre un coleccionista y alguien que compra arte decorativo es el criterio. En MANCHA, el criterio ya está hecho. Revisamos a mano, elegimos pocos, y protegemos la atención del que colecciona.</p>
-            <p>Sin algoritmos, sin popularidad, sin número de seguidores. La obra habla primero. Lo que encontrás aquí ya pasó un filtro que la mayoría de los artistas no pasa.</p>
+            <p>Sin algoritmos, sin popularidad, sin número de seguidores. La obra habla primero. Lo que encuentras aquí ya pasó un filtro que la mayoría de los artistas no pasa.</p>
           </div>
         </div>
       </section>
@@ -135,10 +135,10 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           </div>
           <div className="tsr-steps-row">
             {[
-              { n: '01', title: 'Explorás.', body: 'Un catálogo pequeño y curado. Pocos artistas, pocas piezas. Lo suficiente para que algo te detenga.' },
-              { n: '02', title: 'Pujás.', body: 'Elegís una pieza y ponés tu oferta por encima de la puja mínima. Sin costos extra del lado comprador.' },
-              { n: '03', title: 'Seguís.', body: 'Si alguien te supera, podés volver a pujar cuando querés. La temporada dura tres meses.' },
-              { n: '04', title: 'Ganás.', body: 'Si tu puja cierra primera, coordinamos el pago y el envío directamente con vos por correo.' },
+              { n: '01', title: 'Exploras.', body: 'Un catálogo pequeño y curado. Pocos artistas, pocas piezas. Lo suficiente para que algo te detenga.' },
+              { n: '02', title: 'Pujas.', body: 'Eliges una pieza y pones tu oferta por encima de la puja mínima. Sin costos extra del lado comprador.' },
+              { n: '03', title: 'Sigues.', body: 'Si alguien te supera, puedes volver a pujar cuando quieras. La temporada dura tres meses.' },
+              { n: '04', title: 'Ganas.', body: 'Si tu puja cierra primera, coordinamos el pago y el envío directamente contigo por correo.' },
             ].map((s, i) => (
               <div className="tsr-step" key={s.n} data-reveal data-delay={String(i)}>
                 <span className="tsr-step-n">{s.n}</span>

@@ -157,10 +157,10 @@ export default async function ParaArtistasPage({ searchParams }) {
           </div>
           <div className="tsr-steps-row">
             {[
-              { n: '01', title: 'Enviás tu trabajo.', body: 'Sin CV de galerías, sin portfolio perfectamente armado. Solo lo que has hecho, dicho en tus palabras.' },
+              { n: '01', title: 'Envías tu trabajo.', body: 'Sin CV de galerías, sin portfolio perfectamente armado. Solo lo que has hecho, dicho en tus palabras.' },
               { n: '02', title: 'Lo revisamos.', body: 'Una persona, no un algoritmo. Si tu trabajo entra, te escribimos directamente con los próximos pasos.' },
-              { n: '03', title: 'Exponés tres piezas.', body: 'Tu propio espacio durante toda la temporada. Los coleccionistas pujan en vivo, sin intermediarios.' },
-              { n: '04', title: 'Cobrás el 75%.', body: 'De cada venta, directo a ti. MANCHA coordina el resto: envío, comunicación, logística.' },
+              { n: '03', title: 'Expones tres piezas.', body: 'Tu propio espacio durante toda la temporada. Los coleccionistas pujan en vivo, sin intermediarios.' },
+              { n: '04', title: 'Cobras el 75%.', body: 'De cada venta, directo a ti. MANCHA coordina el resto: envío, comunicación, logística.' },
             ].map((s, i) => (
               <div className="tsr-step" key={s.n} data-reveal data-delay={String(i)}>
                 <span className="tsr-step-n">{s.n}</span>
