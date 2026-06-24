@@ -2475,7 +2475,9 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 }
 @media(max-width:640px){
   .tsr-hero-content{padding-top:72px; padding-bottom:48px;}
-  .tsr-tl{font-size:clamp(3.5rem,13vw,6rem);}
+  .tsr-tl{font-size:clamp(2rem, 9vw, 3.2rem);}
+  .tsr-hero-tag{font-size:8px; letter-spacing:.12em; margin-bottom:40px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .tsr-title{margin-bottom:44px;}
   .tsr-numbers{padding:88px 0;}
   .tsr-manifesto{padding:100px 0;}
   .tsr-statement{padding:100px 0;}
@@ -2484,8 +2486,8 @@ a:focus-visible, button:focus-visible, input:focus-visible{
   .tsr-blog-grid{grid-template-columns:1fr;}
   .tsr-blog-head{flex-direction:column; align-items:flex-start;}
   .tsr-ctas{flex-direction:column; align-items:flex-start; gap:20px;}
-  .tsr-hero .cd-unit b{font-size:2.2rem;}
-  .tsr-hero .cd-unit{padding-right:12px;}
+  .tsr-hero .cd-unit b{font-size:2rem;}
+  .tsr-hero .cd-unit{padding-right:10px;}
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3197,7 +3199,7 @@ input, textarea, select {
 
   /* tsr-hero layout */
   .tsr-hero-content { padding-top: 80px !important; padding-bottom: 52px !important; }
-  .tsr-tl { font-size: clamp(3.2rem, 14vw, 6rem) !important; }
+  .tsr-tl { font-size: clamp(2rem, 9vw, 3.2rem) !important; }
 
   /* numbers */
   .tsr-numbers { padding: 80px 0 !important; }
