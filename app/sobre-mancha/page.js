@@ -112,7 +112,6 @@ export default function SobreManchaPage() {
               Cada artista que aceptamos lleva el nombre de MANCHA con él.
             </p>
           </div>
-          <Link href="/criterio" className="el-filtro-link">Leer el criterio →</Link>
         </div>
       </section>
 
@@ -171,8 +170,8 @@ export default function SobreManchaPage() {
                 <Link href="/registro" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
                   Solicitar acceso →
                 </Link>
-                <Link href="/notas" className="sobre-closing-ghost">
-                  Leer las notas →
+                <Link href="/criterio" className="sobre-closing-ghost">
+                  Leer el criterio →
                 </Link>
               </div>
             </>
@@ -184,8 +183,8 @@ export default function SobreManchaPage() {
                 <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
                   Solicitar acceso →
                 </Link>
-                <Link href="/notas" className="sobre-closing-ghost">
-                  Leer las notas →
+                <Link href="/criterio" className="sobre-closing-ghost">
+                  Leer el criterio →
                 </Link>
               </div>
             </>

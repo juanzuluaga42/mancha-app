@@ -71,7 +71,6 @@ export default async function ParaArtistasPage({ searchParams }) {
             {prelaunch ? (
               <>
                 <a href="/registro" className="tsr-cta-primary">Avisarme cuando abra</a>
-                <a href="/notas" className="tsr-cta-ghost">Leer las notas →</a>
               </>
             ) : convocatoria ? (
               <>
@@ -132,7 +131,6 @@ export default async function ParaArtistasPage({ searchParams }) {
           <div className="tsr-manifesto-body">
             <p>En ferias donde cientos de obras compiten por una mirada de tres segundos. En perfiles que se pierden en el scroll. En portafolios que nadie abre.</p>
             <p>MANCHA es la respuesta institucional a ese problema. Pocos artistas por temporada — los que elegimos, no los que alcanzaron a anotarse. Cada uno expone exactamente tres piezas. Esa restricción obliga a mostrar lo mejor.</p>
-            <a href="/sobre-mancha" className="tsr-manifesto-link">La institución →</a>
           </div>
         </div>
       </section>
@@ -174,6 +172,7 @@ export default async function ParaArtistasPage({ searchParams }) {
               ? <a href="/registro" className="tsr-cta-primary" style={{ display: 'inline-block' }}>Avisarme cuando abra la convocatoria →</a>
               : <a href="/postular" className="tsr-cta-primary" style={{ display: 'inline-block' }}>Solicitar acceso →</a>
             }
+            <a href="/sobre-mancha" className="tsr-manifesto-link" style={{ display: 'inline-block', marginTop: 20 }}>La institución →</a>
           </div>
         </div>
       </section>
