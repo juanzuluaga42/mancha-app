@@ -30,9 +30,14 @@ export default function RolePicker() {
 
   return (
     <div className="rp-root">
-      <div className="rp-logo">MANCHA<span>.</span></div>
-      <p className="rp-sub">Institución de descubrimiento artístico · Est. 2026</p>
 
+      {/* Header: logo centrado encima del split */}
+      <header className="rp-header">
+        <div className="rp-logo">MANCHA<span>.</span></div>
+        <p className="rp-tagline">Institución de descubrimiento artístico · Est. 2026</p>
+      </header>
+
+      {/* Split: dos mitades */}
       <div className="rp-split">
 
         <button className="rp-option rp-option--collector" onClick={() => choose('coleccionista')}>
