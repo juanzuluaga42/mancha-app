@@ -22,7 +22,7 @@ export default function ElegidosPage() {
     <div className="elegidos-page">
       <CursorTrail />
       <div className="elegidos-nav">
-        <Link href="/" className="elegidos-logo">MANCHA.</Link>
+        <Link href="/para-artistas" className="elegidos-logo">MANCHA.</Link>
       </div>
 
       <section className="elegidos-hero">
@@ -50,8 +50,8 @@ export default function ElegidosPage() {
 
       <section className="elegidos-cta">
         <p className="elegidos-cta-line">Muéstranos tu trabajo.</p>
-        <Link href="/postular" className="elegidos-btn">Postular ahora →</Link>
-        <Link href="/" className="elegidos-back">o conoce MANCHA primero</Link>
+        <Link href="/para-artistas" className="elegidos-btn">Postular ahora →</Link>
+        <Link href="/para-artistas" className="elegidos-back">o conoce MANCHA primero</Link>
       </section>
     </div>
   );
