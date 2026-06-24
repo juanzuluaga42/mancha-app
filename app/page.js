@@ -17,7 +17,7 @@ export default function RolePicker() {
       {/* Split: dos mitades */}
       <div className="rp-split">
 
-        <button className="rp-option rp-option--collector" onClick={() => choose('coleccionista')}>
+        <button className="rp-option rp-option--collector" onClick={() => choose('coleccionistas')}>
           <div className="rp-option-inner">
             <p className="rp-option-tag">Para coleccionistas</p>
             <h2 className="rp-option-title">
@@ -31,7 +31,7 @@ export default function RolePicker() {
           </div>
         </button>
 
-        <button className="rp-option rp-option--artist" onClick={() => choose('artista')}>
+        <button className="rp-option rp-option--artist" onClick={() => choose('artistas')}>
           <div className="rp-option-inner">
             <p className="rp-option-tag">Para artistas</p>
             <h2 className="rp-option-title">
