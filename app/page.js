@@ -1,29 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
-
-const STORAGE_KEY = 'mancha_role';
 
 export default function RolePicker() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'coleccionista') {
-      window.location.replace('/para-coleccionistas');
-    } else if (saved === 'artista') {
-      window.location.replace('/para-artistas');
-    } else {
-      setReady(true);
-    }
-  }, []);
-
   function choose(role) {
-    localStorage.setItem(STORAGE_KEY, role);
     window.location.href = `/para-${role}`;
-  }
-
-  if (!ready) {
-    return <div className="rp-loading" aria-hidden="true" />;
   }
 
   return (
