@@ -31,13 +31,11 @@ export default function Footer() {
               <OcultarColeccionista><Link href="/criterio">El criterio</Link></OcultarColeccionista>
               {prelaunch ? (
                 <>
-                  <Link href="/notas">Notas editoriales</Link>
                   <Link href="/registro">Crear cuenta</Link>
                 </>
               ) : convocatoria ? (
                 <>
                   <Link href="/postular">Solicitar acceso →</Link>
-                  <Link href="/notas">Notas editoriales</Link>
                 </>
               ) : (
                 <>
@@ -50,7 +48,7 @@ export default function Footer() {
             </div>
             <div className="footer-col">
               <h5>Editorial</h5>
-              <Link href="/notas">Notas →</Link>
+              <Link href="/notas">Editorial MANCHA →</Link>
               <h5 style={{ marginTop: 24 }}>Contacto</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
