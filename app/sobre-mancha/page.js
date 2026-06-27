@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
+import SoloArtista from '@/components/SoloArtista';
+import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export const metadata = {
@@ -17,9 +19,18 @@ const REGLAS = [
   'Lo que ves hoy puede no estar mañana.',
 ];
 
-export default function SobreManchaPage() {
+export default async function SobreManchaPage() {
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria() || prelaunch;
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  let isArtist = false;
+  if (user) {
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+    isArtist = profile?.role === 'artist';
+  }
+
   return (
     <>
       <Nav />
@@ -83,39 +94,44 @@ export default function SobreManchaPage() {
         </div>
       </section>
 
-      {/* ── REGLAS ───────────────────────────────────────── */}
-      <section className="sobre-reglas">
-        <div className="wrap">
-          <p className="eyebrow">Las reglas de MANCHA</p>
-          <div className="sobre-reglas-list">
-            {REGLAS.map((regla, i) => (
-              <div className="sobre-regla" key={i}>
-                <span className="sobre-regla-n">{String(i + 1).padStart(2, '0')}</span>
-                <p className="sobre-regla-text">{regla}</p>
-              </div>
-            ))}
+      {/* ── REGLAS (solo artista) ────────────────────────── */}
+      <SoloArtista isArtist={isArtist}>
+        <section className="sobre-reglas">
+          <div className="wrap">
+            <p className="eyebrow">Las reglas de MANCHA</p>
+            <div className="sobre-reglas-list">
+              {REGLAS.map((regla, i) => (
+                <div className="sobre-regla" key={i}>
+                  <span className="sobre-regla-n">{String(i + 1).padStart(2, '0')}</span>
+                  <p className="sobre-regla-text">{regla}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </SoloArtista>
 
-      {/* ── EL FILTRO ────────────────────────────────────── */}
-      <section className="el-filtro">
-        <div className="wrap el-filtro-wrap">
-          <h2 className="el-filtro-title">No miramos tus seguidores.<br />Miramos tu obra.</h2>
-          <div className="el-filtro-body">
-            <p>
-              Cada solicitud la revisa una persona, no un algoritmo. No nos importa si tienes mil seguidores o ninguno,
-              si vienes de una academia o aprendiste solo. Nos importa una sola cosa: que la obra tenga algo que el resto todavía no vio.
-            </p>
-            <p>
-              La mayoría de las solicitudes no entran. No por castigo — por estándar.
-              Cada artista que aceptamos lleva el nombre de MANCHA con él.
-            </p>
+      {/* ── EL FILTRO (solo artista) ─────────────────────── */}
+      <SoloArtista isArtist={isArtist}>
+        <section className="el-filtro">
+          <div className="wrap el-filtro-wrap">
+            <h2 className="el-filtro-title">No miramos tus seguidores.<br />Miramos tu obra.</h2>
+            <div className="el-filtro-body">
+              <p>
+                Cada solicitud la revisa una persona, no un algoritmo. No nos importa si tienes mil seguidores o ninguno,
+                si vienes de una academia o aprendiste solo. Nos importa una sola cosa: que la obra tenga algo que el resto todavía no vio.
+              </p>
+              <p>
+                La mayoría de las solicitudes no entran. No por castigo — por estándar.
+                Cada artista que aceptamos lleva el nombre de MANCHA con él.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </SoloArtista>
 
-      {/* ── CÓMO FUNCIONA: varía según fase ─────────────── */}
+      {/* ── CÓMO FUNCIONA / SIN CUOTAS (solo artista) ───── */}
+      <SoloArtista isArtist={isArtist}>
       {convocatoria ? (
         <section className="sobre-puja">
           <div className="wrap sobre-puja-inner sobre-puja-single">
@@ -145,6 +161,7 @@ export default function SobreManchaPage() {
           </div>
         </section>
       )}
+      </SoloArtista>
 
       {/* ── POR QUÉ "MANCHA" ─────────────────────────────── */}
       <section className="sobre-etymology">
@@ -159,7 +176,8 @@ export default function SobreManchaPage() {
         </div>
       </section>
 
-      {/* ── CIERRE ───────────────────────────────────────── */}
+      {/* ── CIERRE / CONVOCATORIA (solo artista) ─────────── */}
+      <SoloArtista isArtist={isArtist}>
       <section className="sobre-closing">
         <div className="wrap sobre-closing-inner">
           {prelaunch ? (
@@ -204,6 +222,7 @@ export default function SobreManchaPage() {
           )}
         </div>
       </section>
+      </SoloArtista>
 
       <Footer />
     </>

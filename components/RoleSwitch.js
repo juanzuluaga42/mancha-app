@@ -5,8 +5,10 @@ const STORAGE_KEY = 'mancha_role';
 
 export default function RoleSwitch({ currentRole }) {
   const router = useRouter();
-  const other = currentRole === 'coleccionista' ? 'artista' : 'coleccionista';
-  const label = currentRole === 'coleccionista'
+  // Normalizamos a plural para que coincida con el selector y NavLogoLink.
+  const isCollector = (currentRole || '').startsWith('colec');
+  const other = isCollector ? 'artistas' : 'coleccionistas';
+  const label = isCollector
     ? '¿Eres artista? Cambiar perfil →'
     : '¿Eres coleccionista? Cambiar perfil →';
 

@@ -27,7 +27,6 @@ export default function Footer() {
           <div className="footer-links">
             <div className="footer-col">
               <h5>La institución</h5>
-              <Link href="/sobre-mancha">Sobre MANCHA</Link>
               <Link href="/criterio">El criterio</Link>
               {prelaunch ? (
                 <>
