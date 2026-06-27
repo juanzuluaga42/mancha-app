@@ -59,7 +59,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <span>© 2026 MANCHA. Institución de descubrimiento artístico.</span>
           {prelaunch || convocatoria
-            ? <span>Convocatoria 1–31 jul · Temporada 01 abre 31 jul 2026</span>
+            ? <span>Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026</span>
             : <span>Temporada en curso</span>}
         </div>
       </div>
