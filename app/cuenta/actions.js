@@ -3,7 +3,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { sendEmail } from '@/lib/email';
 
 export async function signOut() {
   const supabase = await createClient();
@@ -20,17 +19,6 @@ export async function createArtistProfile(formData) {
 
   const display_name = formData.get('display_name');
 
-  let initialStatus = 'pending';
-  if (user.email) {
-    const { data: matchingApp } = await supabase
-      .from('artist_applications')
-      .select('id')
-      .eq('email', user.email)
-      .eq('status', 'approved')
-      .maybeSingle();
-    if (matchingApp) initialStatus = 'approved';
-  }
-
   const { error } = await supabase.from('artists').insert({
     profile_id: user.id,
     season_id: season?.id ?? null,
@@ -38,27 +26,11 @@ export async function createArtistProfile(formData) {
     bio: formData.get('bio'),
     location: formData.get('location'),
     medium: formData.get('medium'),
-    status: initialStatus,
+    status: 'pending',
   });
 
   if (error) {
-    redirect(`/cuenta?error=${encodeURIComponent('No se pudo enviar tu postulación. ' + error.message)}`);
-  }
-
-  if (user.email) {
-    await sendEmail({
-      to: user.email,
-      subject: initialStatus === 'approved' ? '¡Tu cuenta de artista en MANCHA está lista!' : 'Recibimos tu postulación a MANCHA',
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">${initialStatus === 'approved' ? `¡Bienvenido/a, ${display_name}!` : `¡Recibimos tu postulación, ${display_name}!`}</h2>
-          <p>${initialStatus === 'approved'
-            ? 'Ya puedes entrar a tu cuenta y subir hasta 3 piezas para esta temporada.'
-            : 'La estamos revisando. Te avisamos por correo apenas tengamos una respuesta — normalmente en pocos días.'}</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
-    });
+    redirect(`/cuenta?error=${encodeURIComponent('No se pudo guardar tu perfil. ' + error.message)}`);
   }
 
   revalidatePath('/cuenta');
@@ -71,8 +43,10 @@ export async function addPiece(formData) {
   if (!user) redirect('/login');
 
   const { data: artist } = await supabase.from('artists').select('id, status').eq('profile_id', user.id).maybeSingle();
-  if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu postulación de artista.')}`);
-  if (artist.status !== 'approved') redirect(`/cuenta?error=${encodeURIComponent('Tu postulación todavía está en revisión — vas a poder cargar piezas apenas la aprobemos.')}`);
+  if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu perfil de artista.')}`);
+  // Subir obra ya NO requiere aprobación previa: solo activa la revisión.
+  // No se permite cargar nuevas obras si la postulación ya fue rechazada esta temporada.
+  if (artist.status === 'rejected') redirect(`/cuenta?error=${encodeURIComponent('Esta temporada no avanzamos con tu postulación. Puedes volver a postular en la próxima.')}`);
 
   let image_url = null;
   const file = formData.get('image_file');

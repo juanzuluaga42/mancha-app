@@ -22,11 +22,11 @@ export async function approveArtist(formData) {
   if (artist?.profiles?.email) {
     await sendEmail({
       to: artist.profiles.email,
-      subject: '¡Tu postulación a MANCHA fue aceptada!',
+      subject: '¡Fuiste seleccionado para MANCHA!',
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
           <h2 style="margin-bottom: 4px;">¡Bienvenido/a a MANCHA, ${artist.display_name}!</h2>
-          <p>Tu postulación quedó aprobada. Ya puedes entrar a tu cuenta y subir hasta 3 piezas para esta temporada.</p>
+          <p>Fuiste seleccionado para esta temporada. Tus obras ya son visibles en el catálogo. Si quieres, puedes completar hasta 3 piezas desde tu cuenta.</p>
           <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
         </div>
       `,

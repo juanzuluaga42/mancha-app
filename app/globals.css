@@ -3264,3 +3264,30 @@ input, textarea, select {
   .tsr-hero .cd-unit b { font-size: clamp(1.5rem, 7vw, 2rem) !important; }
   .tsr-hero .countdown-label { font-size: 8.5px !important; margin-bottom: 10px !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FLUJO DE POSTULACIÓN UNIFICADO — registro con obras + estados
+   ─────────────────────────────────────────────────────────────── */
+
+/* Obras opcionales en el registro */
+.registro-works{margin-top:8px; padding-top:24px; border-top:1px solid var(--rule);}
+.registro-works-head{font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink); margin:0 0 6px;}
+.registro-works-head span{text-transform:none; letter-spacing:0; color:var(--ink-soft); font-size:11px;}
+.registro-works-note{font-size:13px; line-height:1.55; color:var(--ink-soft); margin:0 0 18px;}
+.registro-work-row{display:grid; grid-template-columns:1fr 1fr 130px; gap:10px; margin-bottom:10px; align-items:center;}
+.registro-work-file{display:flex; flex-direction:column; gap:4px; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);}
+.registro-work-file input[type=file]{font-size:12px;}
+.registro-work-title, .registro-work-bid{padding:10px 12px; border:1.5px solid var(--rule); border-radius:2px; font-family:inherit; font-size:14px; background:var(--paper);}
+@media(max-width:600px){
+  .registro-work-row{grid-template-columns:1fr; gap:6px; padding-bottom:14px; border-bottom:1px solid var(--rule);}
+}
+
+/* Banner de estado en la cuenta del artista */
+.cuenta-status-banner{display:flex; flex-direction:column; gap:4px; padding:18px 22px; border-radius:2px; margin-bottom:28px; border:1px solid var(--rule);}
+.cuenta-status-banner b{font-family:var(--font-display); font-size:1.05rem; font-weight:700;}
+.cuenta-status-banner span{font-size:14px; line-height:1.5; color:var(--ink-soft);}
+.cuenta-status-banner-approved{background:rgba(60,140,90,0.08); border-color:rgba(60,140,90,0.3);}
+.cuenta-status-banner-approved b{color:#2f7d4f;}
+.cuenta-status-banner-warn{background:rgba(210,150,30,0.09); border-color:rgba(210,150,30,0.32);}
+.cuenta-status-banner-warn b{color:var(--yellow-deep);}
+.cuenta-status-banner-review{background:rgba(22,17,13,0.04); border-color:var(--rule);}

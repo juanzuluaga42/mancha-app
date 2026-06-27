@@ -67,9 +67,9 @@ async function ArtistDashboard({ supabase, userId }) {
     return (
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Postulación</p>
+          <p className="cuenta-section-label">Tu perfil</p>
           <h2 className="cuenta-section-title">Completa tu perfil de artista</h2>
-          <p className="cuenta-section-sub">Esto es lo que va a ver la gente en el catálogo si tu postulación es aceptada.</p>
+          <p className="cuenta-section-sub">Con esto activas tu cuenta de artista. Después podrás subir tus obras cuando quieras.</p>
         </div>
         <div className="cuenta-card">
           <form action={createArtistProfile} className="cuenta-form">
@@ -91,42 +91,8 @@ async function ArtistDashboard({ supabase, userId }) {
               <label htmlFor="bio">Bio corta</label>
               <textarea id="bio" name="bio" rows={4} placeholder="Dos o tres frases sobre tu trabajo y qué te mueve a hacerlo." required />
             </div>
-            <SubmitButton pendingText="Enviando postulación...">Enviar postulación</SubmitButton>
+            <SubmitButton pendingText="Guardando perfil...">Guardar perfil</SubmitButton>
           </form>
-        </div>
-      </div>
-    );
-  }
-
-  if (artist.status === 'pending') {
-    return (
-      <div className="cuenta-section">
-        <div className="cuenta-status-card cuenta-status-pending">
-          <div className="cuenta-status-icon">⏳</div>
-          <div>
-            <p className="cuenta-status-label">Postulación en revisión</p>
-            <h2 className="cuenta-status-name">{artist.display_name}</h2>
-            <p className="cuenta-status-text">
-              Recibimos tu postulación y la estamos revisando. Te avisamos por correo apenas tengamos una respuesta — normalmente en pocos días.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (artist.status === 'rejected') {
-    return (
-      <div className="cuenta-section">
-        <div className="cuenta-status-card cuenta-status-rejected">
-          <div className="cuenta-status-icon">—</div>
-          <div>
-            <p className="cuenta-status-label">Esta vez no avanzamos</p>
-            <h2 className="cuenta-status-name">{artist.display_name}</h2>
-            <p className="cuenta-status-text">
-              No avanzamos con esta postulación. Si quieres más detalle, escríbenos. Nada impide volver a postular más adelante con un perfil distinto.
-            </p>
-          </div>
         </div>
       </div>
     );
@@ -139,11 +105,49 @@ async function ArtistDashboard({ supabase, userId }) {
     .order('created_at', { ascending: true });
 
   const myPieces = pieces ?? [];
+
+  // Postulación rechazada: estado final de la temporada, sin subida de obra.
+  if (artist.status === 'rejected') {
+    return (
+      <div className="cuenta-section">
+        <div className="cuenta-status-card cuenta-status-rejected">
+          <div className="cuenta-status-icon">—</div>
+          <div>
+            <p className="cuenta-status-label">Esta vez no avanzamos</p>
+            <h2 className="cuenta-status-name">{artist.display_name}</h2>
+            <p className="cuenta-status-text">
+              No avanzamos con tu postulación esta temporada. Si quieres más detalle, escríbenos. Nada impide volver a postular en la próxima.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Banner de estado según selección + obras cargadas.
+  const statusBanner = artist.status === 'approved' ? (
+    <div className="cuenta-status-banner cuenta-status-banner-approved">
+      <b>Seleccionado ✓</b>
+      <span>Tu trabajo está en la temporada. Tus piezas son visibles en el catálogo.</span>
+    </div>
+  ) : myPieces.length === 0 ? (
+    <div className="cuenta-status-banner cuenta-status-banner-warn">
+      <b>Completa tu postulación</b>
+      <span>Sube al menos una obra antes de que cierre la temporada. Sin obras, MANCHA no puede revisar tu trabajo.</span>
+    </div>
+  ) : (
+    <div className="cuenta-status-banner cuenta-status-banner-review">
+      <b>En revisión</b>
+      <span>Tienes {myPieces.length} {myPieces.length === 1 ? 'obra cargada' : 'obras cargadas'}. MANCHA está revisando tu trabajo — te avisamos por correo.</span>
+    </div>
+  );
   const totalBids = myPieces.reduce((sum, p) => sum + (p.bids?.length ?? 0), 0);
   const totalFollowers = myPieces.reduce((sum, p) => sum + (p.favorites?.length ?? 0), 0);
 
   return (
     <>
+      {statusBanner}
+
       {/* Stats bar */}
       <div className="cuenta-stats-bar">
         <div className="cuenta-stat">

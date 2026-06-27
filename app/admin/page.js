@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import { approveArtist, rejectArtist, approveApplication, rejectApplication, markAsSold, sendPaymentReminder } from './actions';
+import { approveArtist, rejectArtist, markAsSold, sendPaymentReminder } from './actions';
 import { cap } from '@/lib/utils';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
@@ -14,16 +14,18 @@ export default async function AdminPage() {
   if (!user || user.email !== ADMIN_EMAIL) redirect('/');
 
   const [
-    { data: applications },
     { data: pendingArtists },
     { data: artists },
     { data: leads },
   ] = await Promise.all([
-    supabase.from('artist_applications').select('*').eq('status', 'pending').order('created_at', { ascending: true }),
-    supabase.from('artists').select('id, display_name, bio, medium, location, created_at, profiles(email)').eq('status', 'pending').order('created_at', { ascending: true }),
+    supabase.from('artists').select('id, display_name, bio, medium, location, created_at, profiles(email), pieces(id, title, min_bid, image_url)').eq('status', 'pending').order('created_at', { ascending: true }),
     supabase.from('artists').select('display_name, pieces(id, title, min_bid, image_url, sold, paid_at, bids(amount, created_at, buyer:profiles(full_name, email)))').eq('status', 'approved').order('created_at', { ascending: true }),
     supabase.from('leads').select('email, created_at, pieces(title)').order('created_at', { ascending: false }).limit(100),
   ]);
+
+  // Artistas en revisión = pending con al menos 1 obra. Registrados sin obra = pending con 0.
+  const inReview = (pendingArtists ?? []).filter((a) => (a.pieces ?? []).length >= 1);
+  const noWorks = (pendingArtists ?? []).filter((a) => (a.pieces ?? []).length === 0);
 
   const rows = (artists ?? []).flatMap((artist) =>
     (artist.pieces ?? []).map((piece) => {
@@ -58,12 +60,12 @@ export default async function AdminPage() {
           <h1 className="admin-header-title">Panel de control</h1>
           <div className="admin-stats-bar">
             <div className="admin-stat-pill">
-              <b>{(applications ?? []).length}</b>
-              <span>Postulaciones nuevas</span>
+              <b>{inReview.length}</b>
+              <span>En revisión</span>
             </div>
             <div className="admin-stat-pill">
-              <b>{(pendingArtists ?? []).length}</b>
-              <span>Cuentas pendientes</span>
+              <b>{noWorks.length}</b>
+              <span>Registrados sin obra</span>
             </div>
             <div className="admin-stat-pill">
               <b>{totalBids}</b>
@@ -81,8 +83,8 @@ export default async function AdminPage() {
 
           {/* Quick nav */}
           <nav className="admin-quick-nav">
-            <a href="#postulaciones">Postulaciones ({(applications ?? []).length})</a>
-            <a href="#cuentas">Cuentas pendientes ({(pendingArtists ?? []).length})</a>
+            <a href="#revision">En revisión ({inReview.length})</a>
+            <a href="#sin-obra">Registrados sin obra ({noWorks.length})</a>
             <a href="#pujas">Pujas activas ({rows.length} piezas)</a>
             <a href="#espera">Lista de espera ({(leads ?? []).length})</a>
           </nav>
@@ -92,81 +94,18 @@ export default async function AdminPage() {
       <div className="admin-body">
         <div className="wrap" style={{ maxWidth: 1080 }}>
 
-          {/* ── POSTULACIONES ────────────────────────────── */}
-          <section className="admin-section" id="postulaciones">
+          {/* ── EN REVISIÓN (pending con obras) ──────────── */}
+          <section className="admin-section" id="revision">
             <div className="admin-section-head">
-              <h2>Postulaciones nuevas</h2>
-              <span className="admin-count-badge">{(applications ?? []).length}</span>
+              <h2>En revisión</h2>
+              <span className="admin-count-badge">{inReview.length}</span>
             </div>
 
-            {(!applications || applications.length === 0) ? (
-              <div className="admin-empty">Ninguna postulación esperando revisión.</div>
+            {inReview.length === 0 ? (
+              <div className="admin-empty">Ningún artista con obras esperando decisión.</div>
             ) : (
               <div className="admin-cards">
-                {applications.map((a) => (
-                  <div className="admin-app-card" key={a.id}>
-                    <div className="admin-app-main">
-                      <div className="admin-app-info">
-                        <h3 className="admin-app-name">{a.full_name}</h3>
-                        <div className="admin-app-meta">
-                          {a.city && <span>{a.city}</span>}
-                          <a href={`mailto:${a.email}`}>{a.email}</a>
-                          {a.instagram && (
-                            <a href={`https://instagram.com/${a.instagram.replace('@', '')}`} target="_blank" rel="noreferrer">
-                              {a.instagram}
-                            </a>
-                          )}
-                          {a.portfolio_url && (
-                            <a href={a.portfolio_url} target="_blank" rel="noreferrer">Portfolio →</a>
-                          )}
-                        </div>
-                        <p className="admin-app-bio">{a.bio}</p>
-                      </div>
-
-                      <div className="admin-app-actions">
-                        <form action={approveApplication}>
-                          <input type="hidden" name="applicationId" value={a.id} />
-                          <button type="submit" className="admin-btn admin-btn-approve">Aprobar</button>
-                        </form>
-                        <form action={rejectApplication}>
-                          <input type="hidden" name="applicationId" value={a.id} />
-                          <button type="submit" className="admin-btn admin-btn-reject">Rechazar</button>
-                        </form>
-                      </div>
-                    </div>
-
-                    {(a.image_url_1 || a.image_url_2 || a.image_url_3) && (
-                      <div className="admin-app-images">
-                        {[a.image_url_1, a.image_url_2, a.image_url_3].filter(Boolean).map((url, i) => (
-                          <a href={url} target="_blank" rel="noreferrer" key={i} className="admin-app-img-link">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={url} alt={`Obra ${i + 1} de ${a.full_name}`} />
-                          </a>
-                        ))}
-                      </div>
-                    )}
-
-                    <p className="admin-app-date">
-                      Recibida el {new Date(a.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* ── CUENTAS PENDIENTES ───────────────────────── */}
-          <section className="admin-section" id="cuentas">
-            <div className="admin-section-head">
-              <h2>Cuentas de artista pendientes</h2>
-              <span className="admin-count-badge">{(pendingArtists ?? []).length}</span>
-            </div>
-
-            {(!pendingArtists || pendingArtists.length === 0) ? (
-              <div className="admin-empty">Ninguna cuenta esperando aprobación.</div>
-            ) : (
-              <div className="admin-cards">
-                {pendingArtists.map((a) => (
+                {inReview.map((a) => (
                   <div className="admin-app-card" key={a.id}>
                     <div className="admin-app-main">
                       <div className="admin-app-info">
@@ -175,20 +114,69 @@ export default async function AdminPage() {
                           {a.medium && <span>{a.medium}</span>}
                           {a.location && <span>{a.location}</span>}
                           {a.profiles?.email && <a href={`mailto:${a.profiles.email}`}>{a.profiles.email}</a>}
+                          <span>{(a.pieces ?? []).length} {(a.pieces ?? []).length === 1 ? 'obra' : 'obras'}</span>
                         </div>
                         <p className="admin-app-bio">{a.bio}</p>
                       </div>
                       <div className="admin-app-actions">
                         <form action={approveArtist}>
                           <input type="hidden" name="artistId" value={a.id} />
-                          <button type="submit" className="admin-btn admin-btn-approve">Aprobar</button>
+                          <button type="submit" className="admin-btn admin-btn-approve">Seleccionar</button>
                         </form>
                         <form action={rejectArtist}>
                           <input type="hidden" name="artistId" value={a.id} />
-                          <button type="submit" className="admin-btn admin-btn-reject">Rechazar</button>
+                          <button type="submit" className="admin-btn admin-btn-reject">No seleccionar</button>
                         </form>
                       </div>
                     </div>
+
+                    {(a.pieces ?? []).length > 0 && (
+                      <div className="admin-app-images">
+                        {(a.pieces ?? []).map((p) => (
+                          p.image_url ? (
+                            <a href={p.image_url} target="_blank" rel="noreferrer" key={p.id} className="admin-app-img-link">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={p.image_url} alt={`${p.title} de ${a.display_name}`} />
+                            </a>
+                          ) : (
+                            <div className="admin-app-img-link" key={p.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, padding: 8 }}>
+                              {p.title} (sin imagen)
+                            </div>
+                          )
+                        ))}
+                      </div>
+                    )}
+
+                    <p className="admin-app-date">
+                      Registrado el {new Date(a.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* ── REGISTRADOS SIN OBRA (pending sin obras) ─── */}
+          <section className="admin-section" id="sin-obra">
+            <div className="admin-section-head">
+              <h2>Registrados sin obra</h2>
+              <span className="admin-count-badge">{noWorks.length}</span>
+            </div>
+
+            {noWorks.length === 0 ? (
+              <div className="admin-empty">Todos los registrados tienen al menos una obra.</div>
+            ) : (
+              <div className="admin-leads-list">
+                {noWorks.map((a) => (
+                  <div className="admin-lead-row" key={a.id}>
+                    <span className="admin-lead-email">
+                      {cap(a.display_name)}
+                      {a.profiles?.email && <> · <a href={`mailto:${a.profiles.email}`}>{a.profiles.email}</a></>}
+                    </span>
+                    <span className="admin-lead-interest">{a.medium || 'Sin técnica'}{a.location ? ` · ${a.location}` : ''}</span>
+                    <span className="admin-lead-date">
+                      {new Date(a.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
                   </div>
                 ))}
               </div>
