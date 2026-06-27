@@ -4,11 +4,12 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { sendEmail } from '@/lib/email';
+import { safePath, escapeHtml } from '@/lib/utils';
 
 export async function toggleFavorite(formData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const redirectTo = formData.get('redirectTo') || '/';
+  const redirectTo = safePath(formData.get('redirectTo'), '/');
   if (!user) redirect(`/login?next=${encodeURIComponent(redirectTo)}`);
 
   const pieceId = formData.get('pieceId');
@@ -34,7 +35,7 @@ export async function toggleFavorite(formData) {
 export async function placeBid(formData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const redirectTo = formData.get('redirectTo') || '/';
+  const redirectTo = safePath(formData.get('redirectTo'), '/');
   if (!user) redirect(`/login?next=${encodeURIComponent(redirectTo)}`);
 
   const pieceId = formData.get('pieceId');
@@ -99,8 +100,8 @@ export async function placeBid(formData) {
       subject: `Alguien superó tu puja por "${pieceCheck.title}" — MANCHA`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">Te superaron, ${prevLeader.buyer.full_name || ''}.</h2>
-          <p>Alguien acaba de pujar más alto que tú por <strong>"${pieceCheck.title}"</strong> de ${pieceCheck.artists?.display_name ?? 'la temporada actual'}.</p>
+          <h2 style="margin-bottom: 4px;">Te superaron, ${escapeHtml(prevLeader.buyer.full_name || '')}.</h2>
+          <p>Alguien acaba de pujar más alto que tú por <strong>"${escapeHtml(pieceCheck.title)}"</strong> de ${escapeHtml(pieceCheck.artists?.display_name ?? 'la temporada actual')}.</p>
           <p>Puedes volver a pujar cuando quieras — la temporada sigue abierta.</p>
           <p style="margin: 24px 0;">
             <a href="${baseUrl}/obras/${pieceId}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">
@@ -127,7 +128,7 @@ export async function placeBid(formData) {
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
             <h2 style="margin-bottom: 4px;">¡Tu puja quedó registrada!</h2>
-            <p>Pujaste <strong>$${amount.toLocaleString('es-MX')} USD</strong> por <strong>"${piece.title}"</strong>, de ${piece.artists?.display_name ?? 'la temporada actual'}.</p>
+            <p>Pujaste <strong>$${amount.toLocaleString('es-MX')} USD</strong> por <strong>"${escapeHtml(piece.title)}"</strong>, de ${escapeHtml(piece.artists?.display_name ?? 'la temporada actual')}.</p>
             <p>Eres la oferta más alta en este momento. Si alguien puja más alto antes de que cierre la temporada, te avisaremos. Si ganas, te contactaremos por correo para coordinar el pago y el envío.</p>
             <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
           </div>

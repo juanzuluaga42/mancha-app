@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { safePath } from '@/lib/utils';
 
 export async function logIn(formData) {
   const supabase = await createClient();
@@ -15,6 +16,5 @@ export async function logIn(formData) {
     redirect(`/login?error=${encodeURIComponent('Correo o contraseña incorrectos.')}`);
   }
 
-  const next = formData.get('next') || '/cuenta';
-  redirect(next);
+  redirect(safePath(formData.get('next'), '/cuenta'));
 }

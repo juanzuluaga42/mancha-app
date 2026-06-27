@@ -19,7 +19,10 @@ export async function GET(request, { params }) {
 
   const bids = [...(piece.bids ?? [])].sort((a, b) => Number(b.amount) - Number(a.amount));
   const winner = bids[0];
-  const collectorName = winner?.buyer?.full_name || 'Un coleccionista de MANCHA';
+  // Privacidad: el certificado es público por ID de pieza, así que NO exponemos
+  // el nombre completo del comprador — solo el nombre de pila.
+  const fullName = (winner?.buyer?.full_name || '').trim();
+  const collectorName = fullName ? fullName.split(/\s+/)[0] : 'Un coleccionista de MANCHA';
   const artistName = piece.artists?.display_name ?? '';
   const seasonName = piece.artists?.season?.name ?? null;
   const meta = [piece.technique, piece.dimensions, piece.year].filter(Boolean).join(' · ');
