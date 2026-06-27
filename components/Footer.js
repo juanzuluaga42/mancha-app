@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Splat from './Splat';
+import OcultarColeccionista from './OcultarColeccionista';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default function Footer() {
@@ -27,7 +28,7 @@ export default function Footer() {
           <div className="footer-links">
             <div className="footer-col">
               <h5>La institución</h5>
-              <Link href="/criterio">El criterio</Link>
+              <OcultarColeccionista><Link href="/criterio">El criterio</Link></OcultarColeccionista>
               {prelaunch ? (
                 <>
                   <Link href="/notas">Notas editoriales</Link>
