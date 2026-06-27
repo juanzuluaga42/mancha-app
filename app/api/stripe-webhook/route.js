@@ -22,7 +22,7 @@ export async function POST(request) {
     return new Response('Firma inválida.', { status: 400 });
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;

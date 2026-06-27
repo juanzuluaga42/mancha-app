@@ -52,7 +52,7 @@ export default async function Image() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 56 }}>
           <span style={{ fontFamily: 'Unbounded', fontWeight: 800, fontSize: 28, color: '#FAF3E6', letterSpacing: 1 }}>MANCHA.</span>
           <div style={{ width: 1, height: 22, backgroundColor: 'rgba(250,243,230,0.25)', display: 'flex' }} />
-          <span style={{ fontSize: 16, color: 'rgba(250,243,230,0.4)', letterSpacing: 1 }}>mancha-app.vercel.app</span>
+          <span style={{ fontSize: 16, color: 'rgba(250,243,230,0.4)', letterSpacing: 1 }}>manchagallery.com</span>
         </div>
       </div>
     ),

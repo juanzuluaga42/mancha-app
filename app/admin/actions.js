@@ -83,7 +83,7 @@ export async function approveApplication(formData) {
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
           <h2 style="margin-bottom: 4px;">¡Bienvenido/a a MANCHA, ${application.full_name}!</h2>
-          <p>Tu postulación quedó aprobada. Para empezar a cargar tus piezas, crea tu cuenta de artista en mancha-app.vercel.app/registro usando este mismo correo (${application.email}) — va a quedar lista para subir piezas sin pasar por otra revisión.</p>
+          <p>Tu postulación quedó aprobada. Para empezar a cargar tus piezas, crea tu cuenta de artista en manchagallery.com/registro usando este mismo correo (${application.email}) — va a quedar lista para subir piezas sin pasar por otra revisión.</p>
           <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
         </div>
       `,

@@ -166,7 +166,7 @@ export async function GET(request, { params }) {
               {today}
             </span>
             <span style={{ fontSize: 10, color: 'rgba(250,243,230,0.2)', letterSpacing: 1 }}>
-              mancha-app.vercel.app
+              manchagallery.com
             </span>
           </div>
         </div>

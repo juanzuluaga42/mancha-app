@@ -119,7 +119,7 @@ export default async function Image({ params }) {
               </div>
             )}
             <div style={{ display: 'flex', fontSize: 16, color: 'rgba(250,243,230,0.4)', marginTop: 16, letterSpacing: 1 }}>
-              mancha-app.vercel.app
+              manchagallery.com
             </div>
           </div>
         </div>

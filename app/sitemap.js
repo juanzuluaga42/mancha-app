@@ -2,7 +2,7 @@ import { createAdminClient } from '@/utils/supabase/admin';
 import { articles } from '@/lib/news';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mancha-app.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
 
 export default async function sitemap() {
   const prelaunch = isPreLaunch();
