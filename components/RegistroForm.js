@@ -54,23 +54,10 @@ export default function RegistroForm({ defaultRole = 'buyer' }) {
             <textarea id="bio" name="bio" rows={4} placeholder="Dos o tres frases sobre tu trabajo y qué te mueve a hacerlo." required={isArtist} />
           </div>
 
-          <div className="registro-works">
-            <p className="registro-works-head">Tus obras <span>opcional — puedes subirlas ahora o más tarde</span></p>
-            <p className="registro-works-note">
-              Ideal 3, mínimo 1 para entrar a revisión. Imagen, título y precio de salida. Máximo 8 MB por imagen.
-              Si no las tienes a la mano, termina el registro y súbelas cuando quieras desde tu cuenta.
-            </p>
-            {[1, 2, 3].map((n) => (
-              <div className="registro-work-row" key={n}>
-                <label className="registro-work-file" htmlFor={`image_${n}`}>
-                  <span>Obra {n}{n === 1 ? '' : ' · opcional'}</span>
-                  <input id={`image_${n}`} name={`image_${n}`} type="file" accept="image/*" />
-                </label>
-                <input name={`title_${n}`} type="text" placeholder={`Título obra ${n}`} className="registro-work-title" />
-                <input name={`min_bid_${n}`} type="number" min="1" placeholder="Precio salida USD" className="registro-work-bid" />
-              </div>
-            ))}
-          </div>
+          <p className="registro-works-note">
+            Después de confirmar tu correo entras a tu cuenta y subes tus obras (hasta 3: imagen, título y precio de salida).
+            Puedes hacerlo de inmediato o más tarde — tu cuenta queda activa igual.
+          </p>
         </>
       )}
 
