@@ -17,8 +17,9 @@ export const metadata = {
   description: 'Elegimos artistas emergentes a mano. Sin métricas, sin seguidores. Solo la obra. Postula a la Temporada 01.',
 };
 
-const CONV_OPEN_DATE = '2026-07-01T00:00:00-05:00';
-const LAUNCH_DATE    = '2026-07-31T00:00:00-05:00';
+const CONV_OPEN_DATE  = '2026-08-01T00:00:00-05:00';
+const CONV_CLOSE_DATE = '2026-08-31T00:00:00-05:00';
+const LAUNCH_DATE     = '2026-09-01T00:00:00-05:00';
 
 export default async function ParaArtistasPage({ searchParams }) {
   const params = await searchParams;
@@ -64,7 +65,7 @@ export default async function ParaArtistasPage({ searchParams }) {
           </h1>
           <div className="tsr-hero-cd">
             {prelaunch && <Countdown endsAt={CONV_OPEN_DATE} label="La convocatoria abre en" />}
-            {convocatoria && <Countdown endsAt={LAUNCH_DATE} label="Cierra la convocatoria en" />}
+            {convocatoria && <Countdown endsAt={CONV_CLOSE_DATE} label="Cierra la convocatoria en" />}
             {temporadaActiva && season?.ends_at && <Countdown endsAt={season.ends_at} label="La temporada cierra en" />}
           </div>
           <div className="tsr-ctas">
@@ -90,9 +91,9 @@ export default async function ParaArtistasPage({ searchParams }) {
             <span>Institución de descubrimiento artístico · Est. 2026</span>
             <span>
               {prelaunch
-                ? 'La convocatoria abre el 1 de julio'
+                ? 'La convocatoria abre el 1 de agosto'
                 : convocatoria
-                  ? 'La Temporada 01 abre el 31 de julio'
+                  ? 'La Temporada 01 abre el 1 de septiembre'
                   : 'Temporada 01 en curso'}
             </span>
           </div>
@@ -213,9 +214,9 @@ export default async function ParaArtistasPage({ searchParams }) {
             </p>
             <h2 className="tsr-aviso-title">
               {prelaunch
-                ? <>La convocatoria<br />abre el 1 de julio.</>
+                ? <>La convocatoria<br />abre el 1 de agosto.</>
                 : convocatoria
-                  ? <>Solicitar acceso<br />antes del 31 de julio.</>
+                  ? <>Solicitar acceso<br />antes del 31 de agosto.</>
                   : <>Forma parte<br />del registro.</>
               }
             </h2>
@@ -223,7 +224,7 @@ export default async function ParaArtistasPage({ searchParams }) {
               {prelaunch
                 ? 'Deja tu correo y te avisamos en el momento exacto en que la convocatoria abra.'
                 : convocatoria
-                  ? 'La convocatoria cierra el 31 de julio. La Temporada 01 abre ese mismo día.'
+                  ? 'La convocatoria cierra el 31 de agosto. La Temporada 01 abre el 1 de septiembre.'
                   : 'Una vez que entras a MANCHA, quedas en el registro para siempre.'}
             </p>
           </div>

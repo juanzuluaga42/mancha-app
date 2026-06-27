@@ -16,7 +16,7 @@ export const metadata = {
   description: 'Colecciona artistas emergentes seleccionados a mano antes de que el mundo los descubra. Pocos por temporada. Cuando cierra, cierra para siempre.',
 };
 
-const LAUNCH_DATE = '2026-07-31T00:00:00-05:00';
+const LAUNCH_DATE = '2026-09-01T00:00:00-05:00';
 
 export default async function ParaColeccionistasPage({ searchParams }) {
   const params = await searchParams;
@@ -83,7 +83,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
             <span>Arte emergente seleccionado a mano · Sin algoritmos</span>
             <span>
               {prelaunch || convocatoria
-                ? 'La galería abre el 31 de julio'
+                ? 'La galería abre el 1 de septiembre'
                 : `Temporada en curso — ${season?.name ?? 'Temporada 01'}`}
             </span>
           </div>
@@ -228,7 +228,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
                 Sé el primero en ver<br />la Temporada 01.
               </h2>
               <p className="tsr-aviso-sub">
-                La galería abre el 31 de julio. Deja tu correo y te avisamos en el momento en que el catálogo esté listo — antes que nadie.
+                La galería abre el 1 de septiembre. Deja tu correo y te avisamos en el momento en que el catálogo esté listo — antes que nadie.
               </p>
             </div>
             <div className="tsr-aviso-form" data-reveal data-delay="1">
