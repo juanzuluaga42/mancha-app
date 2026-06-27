@@ -3291,3 +3291,12 @@ input, textarea, select {
 .cuenta-status-banner-warn{background:rgba(210,150,30,0.09); border-color:rgba(210,150,30,0.32);}
 .cuenta-status-banner-warn b{color:var(--yellow-deep);}
 .cuenta-status-banner-review{background:rgba(22,17,13,0.04); border-color:var(--rule);}
+
+/* ── OAuth: divisor + botón Google (login) ── */
+.auth-divider{display:flex; align-items:center; text-align:center; margin:20px 0; color:var(--ink-soft);}
+.auth-divider::before, .auth-divider::after{content:''; flex:1; height:1px; background:var(--rule);}
+.auth-divider span{padding:0 14px; font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft);}
+.auth-google{width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:13px 14px; background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); border-radius:2px; font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:.06em; cursor:pointer; transition:background .16s ease, color .16s ease;}
+.auth-google:hover{background:var(--ink); color:var(--paper);}
+.auth-google:disabled{opacity:.6; cursor:not-allowed;}
+.auth-google-icon{flex-shrink:0; background:#fff; border-radius:2px; padding:1px; box-sizing:content-box;}

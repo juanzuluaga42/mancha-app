@@ -2,8 +2,10 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
+import GoogleButton from '@/components/GoogleButton';
 
 import { logIn } from './actions';
+import { safePath } from '@/lib/utils';
 
 export const metadata = { title: 'MANCHA — Iniciar sesión' };
 
@@ -40,6 +42,10 @@ export default async function LoginPage({ searchParams }) {
               </div>
               <button type="submit" className="auth-submit">Entrar</button>
             </form>
+
+            <div className="auth-divider"><span>o</span></div>
+
+            <GoogleButton next={safePath(params?.next, '/cuenta')} />
 
             <p className="auth-foot">¿No tienes cuenta? <Link href="/registro">Crear cuenta</Link></p>
           </div>
