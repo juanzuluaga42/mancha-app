@@ -3,6 +3,7 @@ import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 import RegistroForm from '@/components/RegistroForm';
+import GoogleButton from '@/components/GoogleButton';
 
 export const metadata = { title: 'MANCHA — Crear cuenta' };
 
@@ -30,6 +31,10 @@ export default async function RegistroPage({ searchParams }) {
             {params?.error && <p className="auth-error">{params.error}</p>}
 
             <RegistroForm defaultRole={defaultRole} />
+
+            <div className="auth-divider"><span>o</span></div>
+
+            <GoogleButton next="/cuenta" />
 
             <p className="auth-foot">¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link></p>
           </div>
