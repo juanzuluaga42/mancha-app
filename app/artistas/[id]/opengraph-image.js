@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { createClient } from '@/utils/supabase/server';
+import { manchaFonts } from '@/lib/og';
 
 export const alt = 'MANCHA';
 export const size = { width: 1200, height: 630 };
@@ -15,6 +16,8 @@ export default async function Image({ params }) {
     .maybeSingle();
 
   const photo = (artist?.pieces ?? []).find((p) => p.image_url)?.image_url ?? null;
+  const name = artist?.display_name ?? 'Un artista de MANCHA';
+  const fonts = await manchaFonts(`${name} ${artist?.location ?? ''}`);
 
   return new ImageResponse(
     (
@@ -39,18 +42,18 @@ export default async function Image({ params }) {
             background: photo ? 'linear-gradient(transparent, rgba(22,17,13,0.88))' : 'transparent',
           }}
         >
-          <div style={{ display: 'flex', fontSize: 26, color: '#E5402B', letterSpacing: 4, textTransform: 'uppercase' }}>MANCHA</div>
-          <div style={{ display: 'flex', fontSize: 58, fontWeight: 700, color: photo ? '#FAF3E6' : '#16110D', marginTop: 14, lineHeight: 1.1 }}>
-            {artist?.display_name ?? 'Un artista de MANCHA'}
+          <div style={{ display: 'flex', fontFamily: 'Unbounded', fontWeight: 800, fontSize: 24, color: '#E5402B', letterSpacing: 3 }}>MANCHA.</div>
+          <div style={{ display: 'flex', fontFamily: 'Unbounded', fontSize: 60, fontWeight: 800, color: photo ? '#FAF3E6' : '#16110D', marginTop: 14, lineHeight: 1.05, letterSpacing: -1 }}>
+            {name}
           </div>
           {artist?.location && (
-            <div style={{ display: 'flex', fontSize: 30, color: photo ? 'rgba(250,247,240,0.82)' : '#6B6359', marginTop: 10 }}>
+            <div style={{ display: 'flex', fontFamily: 'Newsreader', fontStyle: 'italic', fontSize: 32, color: photo ? 'rgba(250,247,240,0.85)' : '#6B6359', marginTop: 10 }}>
               {artist.location}
             </div>
           )}
         </div>
       </div>
     ),
-    { ...size }
+    { ...size, ...(fonts.length ? { fonts } : {}) }
   );
 }

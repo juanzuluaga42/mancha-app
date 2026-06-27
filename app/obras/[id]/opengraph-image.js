@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { createClient } from '@/utils/supabase/server';
+import { manchaFonts } from '@/lib/og';
 
 export const alt = 'MANCHA';
 export const size = { width: 1200, height: 630 };
@@ -17,6 +18,7 @@ export default async function Image({ params }) {
   const hasPhoto = !!piece?.image_url;
   const title = piece?.title ?? 'Una pieza de MANCHA';
   const artist = piece?.artists?.display_name ?? '';
+  const fonts = await manchaFonts(`${title} ${artist} Subasta en curso`);
 
   return new ImageResponse(
     (
@@ -85,7 +87,7 @@ export default async function Image({ params }) {
         >
           {/* Top: marca */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#FAF3E6', letterSpacing: 4, textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'Unbounded', fontSize: 18, fontWeight: 800, color: '#FAF3E6', letterSpacing: 2 }}>
               MANCHA.
             </span>
             <div style={{ width: 1, height: 16, backgroundColor: 'rgba(250,243,230,0.2)', display: 'flex' }} />
@@ -100,17 +102,19 @@ export default async function Image({ params }) {
             <div
               style={{
                 display: 'flex',
+                fontFamily: 'Unbounded',
                 fontSize: title.length > 32 ? 52 : 64,
-                fontWeight: 700,
+                fontWeight: 800,
                 color: '#FAF3E6',
                 lineHeight: 1.05,
+                letterSpacing: -1,
                 maxWidth: 900,
               }}
             >
               {title}
             </div>
             {artist && (
-              <div style={{ display: 'flex', fontSize: 28, color: '#E5402B', marginTop: 16, fontStyle: 'italic' }}>
+              <div style={{ display: 'flex', fontFamily: 'Newsreader', fontSize: 30, color: '#E5402B', marginTop: 16, fontStyle: 'italic' }}>
                 {artist}
               </div>
             )}
@@ -121,6 +125,6 @@ export default async function Image({ params }) {
         </div>
       </div>
     ),
-    { ...size }
+    { ...size, ...(fonts.length ? { fonts } : {}) }
   );
 }

@@ -1,10 +1,13 @@
 import { ImageResponse } from 'next/og';
+import { manchaFonts } from '@/lib/og';
 
 export const alt = 'MANCHA — Arte emergente seleccionado a mano.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 export default async function Image() {
+  const fonts = await manchaFonts('Primero tú. Después el mundo. Arte emergente seleccionado a mano. Pocos por temporada. Galería de arte online.');
+
   return new ImageResponse(
     (
       <div
@@ -12,104 +15,47 @@ export default async function Image() {
           width: '100%',
           height: '100%',
           display: 'flex',
-          backgroundColor: '#16110D',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          backgroundColor: '#0D0C0A',
+          padding: '88px 96px',
           position: 'relative',
-          overflow: 'hidden',
         }}
       >
-        {/* Manchas de color decorativas */}
-        <div
-          style={{
-            position: 'absolute',
-            top: -80,
-            right: -60,
-            width: 340,
-            height: 300,
-            borderRadius: '60% 40% 55% 45% / 50% 45% 55% 50%',
-            background: 'radial-gradient(ellipse, rgba(242,183,5,0.18) 0%, transparent 70%)',
-            display: 'flex',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: -60,
-            left: -40,
-            width: 280,
-            height: 240,
-            borderRadius: '45% 55% 40% 60% / 55% 40% 60% 45%',
-            background: 'radial-gradient(ellipse, rgba(142,111,209,0.2) 0%, transparent 70%)',
-            display: 'flex',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '40%',
-            right: '18%',
-            width: 160,
-            height: 140,
-            borderRadius: '50% 50% 45% 55% / 45% 55% 50% 50%',
-            background: 'radial-gradient(ellipse, rgba(229,64,43,0.22) 0%, transparent 70%)',
-            display: 'flex',
-          }}
-        />
+        {/* Acento rojo vertical fino */}
+        <div style={{ position: 'absolute', left: 0, top: 120, bottom: 120, width: 5, backgroundColor: '#E5402B', display: 'flex' }} />
 
-        {/* Línea roja vertical izquierda */}
-        <div
-          style={{
-            position: 'absolute',
-            left: 70,
-            top: 0,
-            bottom: 0,
-            width: 3,
-            background: 'linear-gradient(to bottom, transparent, #E5402B 30%, #E5402B 70%, transparent)',
-            display: 'flex',
-          }}
-        />
+        {/* Eyebrow */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 34 }}>
+          <div style={{ width: 28, height: 28, backgroundColor: '#E5402B', display: 'flex' }} />
+          <span style={{ fontSize: 17, color: 'rgba(250,243,230,0.5)', letterSpacing: 5, textTransform: 'uppercase' }}>
+            Galería de arte online
+          </span>
+        </div>
 
-        {/* Contenido */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            padding: '70px 110px',
-            gap: 0,
-          }}
-        >
-          {/* Eyebrow */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 32 }}>
-            <div style={{ width: 32, height: 2, backgroundColor: '#E5402B', display: 'flex' }} />
-            <span style={{ fontSize: 14, color: 'rgba(250,243,230,0.5)', letterSpacing: 4, textTransform: 'uppercase' }}>
-              Galería de arte online
-            </span>
-          </div>
-
-          {/* Headline */}
-          <div style={{ display: 'flex', fontSize: 80, fontWeight: 800, color: '#FAF3E6', lineHeight: 1.0, letterSpacing: -1 }}>
+        {/* Headline */}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', fontFamily: 'Unbounded', fontWeight: 800, fontSize: 88, color: '#FAF3E6', lineHeight: 1.0, letterSpacing: -2 }}>
             Primero tú.
           </div>
-          <div style={{ display: 'flex', fontSize: 80, fontWeight: 800, color: '#E5402B', fontStyle: 'italic', lineHeight: 1.0, letterSpacing: -1, marginTop: 4 }}>
+          <div style={{ display: 'flex', fontFamily: 'Unbounded', fontWeight: 800, fontSize: 88, color: '#E5402B', lineHeight: 1.0, letterSpacing: -2, marginTop: 8 }}>
             Después el mundo.
           </div>
+        </div>
 
-          {/* Sub */}
-          <div style={{ display: 'flex', fontSize: 24, color: 'rgba(250,243,230,0.55)', marginTop: 32, lineHeight: 1.5, maxWidth: 680 }}>
-            Arte emergente seleccionado a mano. Pocos artistas por temporada, tres piezas cada uno.
-          </div>
+        {/* Sub editorial */}
+        <div style={{ display: 'flex', fontFamily: 'Newsreader', fontStyle: 'italic', fontSize: 32, color: 'rgba(250,243,230,0.6)', marginTop: 36, lineHeight: 1.4, maxWidth: 760 }}>
+          Arte emergente seleccionado a mano. Pocos por temporada, tres piezas cada uno.
+        </div>
 
-          {/* Footer */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 48 }}>
-            <span style={{ fontSize: 32, fontWeight: 800, color: '#FAF3E6', letterSpacing: 4 }}>MANCHA.</span>
-            <div style={{ width: 1, height: 22, backgroundColor: 'rgba(250,243,230,0.2)', display: 'flex' }} />
-            <span style={{ fontSize: 14, color: 'rgba(250,243,230,0.35)', letterSpacing: 1 }}>mancha-app.vercel.app</span>
-          </div>
+        {/* Footer marca */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 56 }}>
+          <span style={{ fontFamily: 'Unbounded', fontWeight: 800, fontSize: 28, color: '#FAF3E6', letterSpacing: 1 }}>MANCHA.</span>
+          <div style={{ width: 1, height: 22, backgroundColor: 'rgba(250,243,230,0.25)', display: 'flex' }} />
+          <span style={{ fontSize: 16, color: 'rgba(250,243,230,0.4)', letterSpacing: 1 }}>mancha-app.vercel.app</span>
         </div>
       </div>
     ),
-    { ...size }
+    { ...size, ...(fonts.length ? { fonts } : {}) }
   );
 }
