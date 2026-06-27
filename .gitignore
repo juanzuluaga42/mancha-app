@@ -26,6 +26,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# lockfile (not tracked in this repo)
-package-lock.json
