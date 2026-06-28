@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
@@ -8,6 +9,7 @@ export const metadata = { title: 'MANCHA — Pago recibido' };
 export default async function PagoExitoPage({ searchParams }) {
   const params = await searchParams;
   const pieceId = params?.piece;
+  const t = await getTranslations('misc');
 
   return (
     <>
@@ -17,15 +19,14 @@ export default async function PagoExitoPage({ searchParams }) {
         <Splat width="180px" height="155px" top="-50px" right="-40px" color="yellow" rotate={-12} radius="r1" />
         <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="red" rotate={14} radius="r3" />
         <div className="wrap">
-          <p className="auth-header-eyebrow">Pago confirmado</p>
-          <h1 className="auth-header-title">Gracias — <em>ya es tuya.</em></h1>
+          <p className="auth-header-eyebrow">{t('pagoEyebrow')}</p>
+          <h1 className="auth-header-title">{t('pagoTitlePre')} <em>{t('pagoTitleEm')}</em></h1>
           <p className="auth-header-sub">
-            Te escribimos por correo en las próximas horas para coordinar el envío.
-            Cualquier duda: <a href="mailto:mancha.gallery@gmail.com" className="auth-header-mail">mancha.gallery@gmail.com</a>
+            {t('pagoSub')}<a href="mailto:mancha.gallery@gmail.com" className="auth-header-mail">mancha.gallery@gmail.com</a>
           </p>
           {pieceId && (
             <Link href={`/obras/${pieceId}/certificado`} className="auth-header-btn">
-              Ver tu certificado de colección →
+              {t('pagoCert')}
             </Link>
           )}
         </div>

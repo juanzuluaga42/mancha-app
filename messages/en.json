@@ -448,5 +448,32 @@
     "ctaLine": "Show us your work.",
     "applyNow": "Apply now →",
     "learnFirst": "or get to know MANCHA first"
+  },
+  "misc": {
+    "revisaEyebrow": "Almost there",
+    "revisaTitle": "Check your email",
+    "revisaSub": "We sent you a confirmation link. As soon as you open it, your account is active.",
+    "pagoEyebrow": "Payment confirmed",
+    "pagoTitlePre": "Thank you —",
+    "pagoTitleEm": "it's yours.",
+    "pagoSub": "We'll email you in the next few hours to coordinate shipping. Any questions: ",
+    "pagoCert": "View your collection certificate →",
+    "welcomeAria": "Welcome to MANCHA",
+    "welcomeEyebrow": "A different gallery",
+    "welcomeHeadline1": "Not all art deserves",
+    "welcomeHeadlineEm": "your attention.",
+    "welcomeBody1": "MANCHA was born from a simple conviction: genuine emerging art doesn't need noise, it needs judgement. That's why each season we hand-pick a small group of artists — before they're obvious — and put them in front of the right people.",
+    "welcomeBody2": "You are one of those people. Thank you for being here from the start. What we build together — collectors and artists — is something worth watching grow.",
+    "welcomeMission": "Few artists. Each season, hand-picked.",
+    "welcomeCta": "Enter the gallery →",
+    "tickerNow": "just now",
+    "tickerMin": "{n} min ago",
+    "tickerHour": "{n} h ago",
+    "tickerDay": "{n} d ago",
+    "tickerLine": "Someone bid on “{title}” {ago}",
+    "selloSelected": "Selected",
+    "selloBy": "by MANCHA",
+    "roleSwitchToArtist": "Are you an artist? Switch profile →",
+    "roleSwitchToCollector": "Are you a collector? Switch profile →"
   }
 }

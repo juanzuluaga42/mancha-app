@@ -448,5 +448,32 @@
     "ctaLine": "Muéstranos tu trabajo.",
     "applyNow": "Postular ahora →",
     "learnFirst": "o conoce MANCHA primero"
+  },
+  "misc": {
+    "revisaEyebrow": "Casi listo",
+    "revisaTitle": "Revisa tu correo",
+    "revisaSub": "Te enviamos un enlace de confirmación. Apenas lo abras, tu cuenta queda activa.",
+    "pagoEyebrow": "Pago confirmado",
+    "pagoTitlePre": "Gracias —",
+    "pagoTitleEm": "ya es tuya.",
+    "pagoSub": "Te escribimos por correo en las próximas horas para coordinar el envío. Cualquier duda: ",
+    "pagoCert": "Ver tu certificado de colección →",
+    "welcomeAria": "Bienvenida MANCHA",
+    "welcomeEyebrow": "Una galería diferente",
+    "welcomeHeadline1": "No todo el arte merece",
+    "welcomeHeadlineEm": "tu atención.",
+    "welcomeBody1": "MANCHA nació con una convicción simple: el arte emergente genuino no necesita ruido, necesita criterio. Por eso cada temporada elegimos a mano un grupo pequeño de artistas —antes de que sean evidentes— y los ponemos frente a las personas correctas.",
+    "welcomeBody2": "Tú eres una de esas personas. Gracias por estar aquí desde el principio. Lo que construimos juntos —coleccionistas y artistas— es algo que vale la pena ver crecer.",
+    "welcomeMission": "Pocos artistas. Cada temporada, elegidos a mano.",
+    "welcomeCta": "Entrar a la galería →",
+    "tickerNow": "recién",
+    "tickerMin": "hace {n} min",
+    "tickerHour": "hace {n} h",
+    "tickerDay": "hace {n} d",
+    "tickerLine": "Alguien pujó por «{title}» {ago}",
+    "selloSelected": "Seleccionado",
+    "selloBy": "por MANCHA",
+    "roleSwitchToArtist": "¿Eres artista? Cambiar perfil →",
+    "roleSwitchToCollector": "¿Eres coleccionista? Cambiar perfil →"
   }
 }

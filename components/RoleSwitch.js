@@ -1,16 +1,16 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 
 const STORAGE_KEY = 'mancha_role';
 
 export default function RoleSwitch({ currentRole }) {
   const router = useRouter();
+  const t = useTranslations('misc');
   // Normalizamos a plural para que coincida con el selector y NavLogoLink.
   const isCollector = (currentRole || '').startsWith('colec');
   const other = isCollector ? 'artistas' : 'coleccionistas';
-  const label = isCollector
-    ? '¿Eres artista? Cambiar perfil →'
-    : '¿Eres coleccionista? Cambiar perfil →';
+  const label = isCollector ? t('roleSwitchToArtist') : t('roleSwitchToCollector');
 
   function switchRole() {
     localStorage.setItem(STORAGE_KEY, other);

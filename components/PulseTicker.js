@@ -1,18 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-function timeAgo(dateStr) {
+function timeAgo(dateStr, t) {
   const diffMs = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diffMs / 60000);
-  if (mins < 1) return 'recién';
-  if (mins < 60) return `hace ${mins} min`;
+  if (mins < 1) return t('tickerNow');
+  if (mins < 60) return t('tickerMin', { n: mins });
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `hace ${hours} h`;
-  return `hace ${Math.floor(hours / 24)} d`;
+  if (hours < 24) return t('tickerHour', { n: hours });
+  return t('tickerDay', { n: Math.floor(hours / 24) });
 }
 
 export default function PulseTicker() {
+  const t = useTranslations('misc');
   const [activity, setActivity] = useState([]);
   const [index, setIndex] = useState(0);
   const [shown, setShown] = useState(false);
@@ -65,7 +67,7 @@ export default function PulseTicker() {
   return (
     <div className={`pulse-ticker${shown ? ' is-visible' : ''}`}>
       <span className="pulse-dot" />
-      <span>Alguien pujó por &quot;{current.title}&quot; {timeAgo(current.createdAt)}</span>
+      <span>{t('tickerLine', { title: current.title, ago: timeAgo(current.createdAt, t) })}</span>
     </div>
   );
 }
