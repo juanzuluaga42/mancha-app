@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import { approveArtist, rejectArtist, markAsSold, sendPaymentReminder } from './actions';
+import { approveArtist, rejectArtist, markAsSold, sendPaymentReminder, sealSeason, toggleCanon } from './actions';
 import { cap } from '@/lib/utils';
+import { isSealed } from '@/lib/provenance';
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -17,10 +18,12 @@ export default async function AdminPage() {
     { data: pendingArtists },
     { data: artists },
     { data: leads },
+    { data: seasons },
   ] = await Promise.all([
     supabase.from('artists').select('id, display_name, bio, medium, location, created_at, profiles(email), pieces(id, title, min_bid, image_url)').eq('status', 'pending').order('created_at', { ascending: true }),
-    supabase.from('artists').select('display_name, pieces(id, title, min_bid, image_url, sold, paid_at, bids(amount, created_at, buyer:profiles(full_name, email)))').eq('status', 'approved').order('created_at', { ascending: true }),
+    supabase.from('artists').select('display_name, pieces(id, title, min_bid, image_url, sold, paid_at, in_canon, accession, bids(amount, created_at, buyer:profiles(full_name, email)))').eq('status', 'approved').order('created_at', { ascending: true }),
     supabase.from('leads').select('email, created_at, pieces(title)').order('created_at', { ascending: false }).limit(100),
+    supabase.from('seasons').select('id, name, starts_at, ends_at, sealed_at, is_current').order('starts_at', { ascending: false }),
   ]);
 
   // Artistas en revisión = pending con al menos 1 obra. Registrados sin obra = pending con 0.
@@ -39,6 +42,8 @@ export default async function AdminPage() {
         bidCount: bids.length,
         sold: piece.sold,
         paidAt: piece.paid_at,
+        inCanon: piece.in_canon,
+        accession: piece.accession,
         imageUrl: piece.image_url,
         leader,
       };
@@ -219,6 +224,13 @@ export default async function AdminPage() {
                             )}
                           </p>
                         )}
+                        <form action={toggleCanon} style={{ marginTop: 6 }}>
+                          <input type="hidden" name="pieceId" value={r.id} />
+                          <input type="hidden" name="next" value={(!r.inCanon).toString()} />
+                          <button type="submit" className={`admin-canon-toggle${r.inCanon ? ' on' : ''}`}>
+                            {r.inCanon ? '★ En el Canon' : '☆ Añadir al Canon'}
+                          </button>
+                        </form>
                       </div>
 
                       <div className="admin-bid-amount">
@@ -249,6 +261,45 @@ export default async function AdminPage() {
                           <span className="admin-badge admin-badge-empty">Sin actividad</span>
                         )}
                       </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
+          {/* ── TEMPORADAS / SELLADO ─────────────────────── */}
+          <section className="admin-section" id="temporadas">
+            <div className="admin-section-head">
+              <h2>Temporadas</h2>
+              <span className="admin-count-badge">{(seasons ?? []).length}</span>
+            </div>
+            {(!seasons || seasons.length === 0) ? (
+              <div className="admin-empty">No hay temporadas.</div>
+            ) : (
+              <div className="admin-leads-list">
+                {seasons.map((s) => {
+                  const sealed = isSealed(s);
+                  return (
+                    <div className="admin-lead-row" key={s.id}>
+                      <span className="admin-lead-email">
+                        {s.name}{s.is_current ? ' · actual' : ''}
+                      </span>
+                      <span className="admin-lead-interest">
+                        {sealed
+                          ? `Sellada${s.sealed_at ? ' ' + new Date(s.sealed_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}`
+                          : 'Abierta'}
+                      </span>
+                      <span className="admin-lead-date">
+                        {sealed ? (
+                          <span className="admin-badge admin-badge-paid">En el Índice ✓</span>
+                        ) : (
+                          <form action={sealSeason}>
+                            <input type="hidden" name="seasonId" value={s.id} />
+                            <button type="submit" className="admin-btn admin-btn-sm">Sellar temporada →</button>
+                          </form>
+                        )}
+                      </span>
                     </div>
                   );
                 })}

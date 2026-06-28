@@ -10,6 +10,8 @@ import { formatCalendarDate } from '@/lib/dates';
 import {
   accessionNo,
   transactionStatus,
+  isCanon,
+  isSealed,
   seasonCode,
   seasonName,
 } from '@/lib/provenance';
@@ -40,16 +42,15 @@ export default async function IndexPage() {
   const allSeasons = seasonsRaw ?? [];
   const ordinalById = new Map(allSeasons.map((s, i) => [s.id, i + 1]));
 
-  // El Índice solo registra temporadas SELLADAS (ya cerradas en el tiempo).
-  const now = Date.now();
+  // El Índice solo registra temporadas SELLADAS (sealed_at o ya cerradas en el tiempo).
   const sealedSeasons = allSeasons
-    .filter((s) => new Date(s.ends_at).getTime() < now)
+    .filter((s) => isSealed(s))
     .sort((a, b) => new Date(b.starts_at) - new Date(a.starts_at)); // más reciente primero
 
   // Artistas aprobados con sus obras.
   const { data: artistsRaw } = await supabase
     .from('artists')
-    .select('id, display_name, medium, location, season_id, pieces(id, title, technique, year, image_url, sold, paid_at, min_bid, created_at, bids(amount))')
+    .select('id, display_name, medium, location, season_id, pieces(id, title, technique, year, image_url, sold, paid_at, in_canon, withdrawn, accession, min_bid, created_at, bids(amount))')
     .eq('status', 'approved')
     .order('created_at', { ascending: true });
   const allArtists = artistsRaw ?? [];
@@ -65,19 +66,25 @@ export default async function IndexPage() {
     for (const artist of seasonArtists) {
       for (const piece of (artist.pieces ?? [])) {
         n += 1;
+        // Número de acceso inmutable si ya fue asignado al sellar; si no, derivado.
+        const number = piece.accession ?? n;
         works.push({
           ...piece,
           artistName: artist.display_name,
           artistId: artist.id,
           medium: artist.medium,
           location: artist.location,
-          accession: accessionNo(ordinal, n),
+          accession: accessionNo(ordinal, number),
           status: transactionStatus(piece),
+          canon: isCanon(piece),
         });
       }
     }
+    // The Canon primero (honor curatorial), luego el resto.
+    works.sort((a, b) => (b.canon ? 1 : 0) - (a.canon ? 1 : 0));
     const collected = works.filter((w) => w.status === 'collected').length;
-    return { ...s, ordinal, works, collected };
+    const canon = works.filter((w) => w.canon).length;
+    return { ...s, ordinal, works, collected, canon };
   }).filter((e) => e.works.length > 0);
 
   const hasWorks = editions.length > 0;
@@ -129,6 +136,12 @@ export default async function IndexPage() {
                     <span>{t('works', { count: edition.works.length })}</span>
                     <span className="idx-stat-sep">·</span>
                     <span>{t('collectedCount', { count: edition.collected })}</span>
+                    {edition.canon > 0 && (
+                      <>
+                        <span className="idx-stat-sep">·</span>
+                        <span className="idx-stat-canon">{t('canonCount', { count: edition.canon })}</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -136,7 +149,7 @@ export default async function IndexPage() {
                   {edition.works.map((w, i) => {
                     const img = w.image_url;
                     const initials = w.artistName.split(' ').map((p) => p[0]).slice(0, 2).join('');
-                    const collected = w.status === 'collected';
+                    const statusLabel = { collected: t('statusCollected'), available_by_request: t('statusRequest'), withdrawn: t('statusWithdrawn') }[w.status];
                     const enquireHref = `mailto:${ENQUIRE_EMAIL}?subject=${encodeURIComponent(`MANCHA · ${w.accession} — ${w.title}`)}`;
                     return (
                       <article className="idx-work" key={w.id}>
@@ -145,9 +158,8 @@ export default async function IndexPage() {
                             // eslint-disable-next-line @next/next/no-img-element
                             ? <img src={img} alt={w.title} />
                             : <span className="idx-work-initials">{initials}</span>}
-                          <span className={`idx-status ${collected ? 'collected' : 'request'}`}>
-                            {collected ? t('statusCollected') : t('statusRequest')}
-                          </span>
+                          {w.canon && <span className="idx-canon" title={t('canonLabel')}>{t('canonLabel')}</span>}
+                          <span className={`idx-status ${w.status}`}>{statusLabel}</span>
                         </div>
                         <div className="idx-work-body">
                           <p className="idx-work-prov">MANCHA · {w.accession}</p>
@@ -160,9 +172,11 @@ export default async function IndexPage() {
                             {[w.technique, w.year].filter(Boolean).join(' · ')}
                           </p>
                           <div className="idx-work-foot">
-                            {collected
+                            {w.status === 'collected'
                               ? <Link href={`/obras/${w.id}/certificado`} className="idx-work-link">{t('viewCertificate')} →</Link>
-                              : <a href={enquireHref} className="idx-work-link idx-work-link--ghost">{t('enquire')} →</a>}
+                              : w.status === 'available_by_request'
+                                ? <a href={enquireHref} className="idx-work-link idx-work-link--ghost">{t('enquire')} →</a>
+                                : <span className="idx-work-reserve">{t('statusWithdrawn')}</span>}
                           </div>
                         </div>
                       </article>

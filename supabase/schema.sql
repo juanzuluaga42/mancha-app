@@ -48,7 +48,8 @@ create table public.seasons (
   name text not null,
   starts_at date not null,
   ends_at timestamptz not null,
-  is_current boolean not null default false
+  is_current boolean not null default false,
+  sealed_at timestamptz  -- sellada: entra al Índice como Edition permanente (ciclo de vida)
 );
 
 alter table public.seasons enable row level security;
@@ -106,6 +107,9 @@ create table public.pieces (
   image_url text,
   sold boolean not null default false,
   paid_at timestamptz,
+  in_canon boolean not null default false,  -- The Canon: honor curatorial de la temporada
+  withdrawn boolean not null default false, -- el artista la conservó (fuera de circulación)
+  accession integer,                        -- nº de acceso inmutable, asignado al sellar
   created_at timestamptz not null default now()
 );
 

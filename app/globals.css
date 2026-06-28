@@ -3340,7 +3340,11 @@ input, textarea, select {
 .idx-work-initials{font-family:var(--font-display); font-weight:800; font-size:2.4rem; color:rgba(250,243,230,.85);}
 .idx-status{position:absolute; top:12px; left:12px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:5px 9px; border-radius:2px;}
 .idx-status.collected{background:var(--ink); color:var(--paper);}
-.idx-status.request{background:rgba(250,243,230,.92); color:var(--ink); border:1px solid var(--ink);}
+.idx-status.available_by_request{background:rgba(250,243,230,.92); color:var(--ink); border:1px solid var(--ink);}
+.idx-status.withdrawn{background:rgba(22,17,13,.55); color:var(--paper);}
+.idx-canon{position:absolute; top:12px; right:12px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; padding:5px 9px; border-radius:2px; background:var(--yellow); color:var(--ink); font-weight:700;}
+.idx-stat-canon{color:var(--yellow-deep); font-weight:700;}
+.idx-work-reserve{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);}
 .idx-work-body{padding-top:14px;}
 .idx-work-prov{font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 8px;}
 .idx-work-title{font-family:var(--font-body); font-style:italic; font-size:1.15rem; font-weight:500; line-height:1.2; margin:0 0 6px;}
@@ -3361,3 +3365,20 @@ input, textarea, select {
   .idx-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:24px 16px;}
   .idx-header{padding:72px 0 44px;}
 }
+
+/* ── Procedencia y ciclo de vida en la ficha de obra ── */
+.piece-prov{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:6px 0 4px;}
+.piece-prov-line{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--red);}
+.piece-canon{font-family:var(--font-mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; background:var(--yellow); color:var(--ink); padding:3px 8px; border-radius:2px;}
+.piece-prov-cert{font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:1px;}
+.piece-prov-cert:hover{color:var(--red);}
+.piece-avail{border:1.5px solid var(--ink); border-radius:2px; padding:18px 18px;}
+.piece-avail-title{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); margin:0 0 8px;}
+.piece-avail-text{font-family:var(--font-body); font-size:14.5px; line-height:1.5; color:var(--ink-soft); margin:0 0 14px;}
+.piece-avail-cta{display:inline-block; font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--paper); background:var(--ink); padding:10px 16px; border-radius:2px; text-decoration:none;}
+.piece-avail-cta:hover{background:var(--red);}
+
+/* ── Toggle de Canon en el admin ── */
+.admin-canon-toggle{font-family:var(--font-mono); font-size:11px; letter-spacing:.04em; background:transparent; border:1px solid var(--ink-soft); color:var(--ink-soft); padding:4px 10px; border-radius:2px; cursor:pointer;}
+.admin-canon-toggle.on{background:var(--yellow); border-color:var(--yellow-deep); color:var(--ink); font-weight:700;}
+.admin-canon-toggle:hover{border-color:var(--ink); color:var(--ink);}

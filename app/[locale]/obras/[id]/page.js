@@ -9,6 +9,9 @@ import WaitlistForm from '@/components/WaitlistForm';
 import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { toggleFavorite, placeBid } from '@/app/actions';
 import { cap } from '@/lib/utils';
+import { isSealed, isCanon, transactionStatus, provenanceLine } from '@/lib/provenance';
+
+const ENQUIRE_EMAIL = 'mancha.gallery@gmail.com';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 const WHATSAPP_NUMBER = '529981163542';
@@ -44,14 +47,26 @@ export default async function PiecePage({ params, searchParams }) {
 
   if (!piece) notFound();
 
-  let seasonEndsAt = null;
   let seasonName = null;
+  let seasonObj = null;
+  let seasonOrdinal = 0;
   if (piece.artists?.season_id) {
-    const { data: season } = await supabase.from('seasons').select('ends_at, name').eq('id', piece.artists.season_id).maybeSingle();
-    seasonEndsAt = season?.ends_at ?? null;
-    seasonName = season?.name ?? null;
+    const { data: seasons } = await supabase
+      .from('seasons')
+      .select('id, name, ends_at, sealed_at, starts_at')
+      .order('starts_at', { ascending: true });
+    const list = seasons ?? [];
+    const idx = list.findIndex((s) => s.id === piece.artists.season_id);
+    seasonObj = idx >= 0 ? list[idx] : null;
+    seasonOrdinal = idx >= 0 ? idx + 1 : 0;
+    seasonName = seasonObj?.name ?? null;
   }
-  const seasonClosed = !!seasonEndsAt && new Date(seasonEndsAt).getTime() < Date.now();
+  // Una temporada sellada (o cerrada en el tiempo) saca la obra del piso abierto.
+  const seasonClosed = isSealed(seasonObj);
+  const collected = piece.sold === true || !!piece.paid_at;
+  const lifecycle = transactionStatus(piece);       // collected | available_by_request | withdrawn
+  const canon = isCanon(piece);
+  const accession = piece.accession ? provenanceLine(seasonOrdinal, piece.accession) : null;
 
   const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
   const hasBids = amounts.length > 0;
@@ -116,6 +131,17 @@ export default async function PiecePage({ params, searchParams }) {
                 )}
               </div>
               <SelloSeleccionado seasonName={seasonName} />
+
+              {/* Procedencia (temporada sellada) */}
+              {(accession || canon) && (
+                <div className="piece-prov">
+                  {accession && <span className="piece-prov-line">{accession}</span>}
+                  {canon && <span className="piece-canon">{t('canonLabel')}</span>}
+                  {collected && (
+                    <Link href={`/obras/${piece.id}/certificado`} className="piece-prov-cert">{t('viewCertificate')} →</Link>
+                  )}
+                </div>
+              )}
 
               {/* Título y datos */}
               <h1 className="piece-detail-title">{piece.title}</h1>
@@ -201,7 +227,20 @@ export default async function PiecePage({ params, searchParams }) {
                     </a>
                   </div>
                 ) : seasonClosed ? (
-                  <div className="piece-detail-status closed">{t('seasonClosedMsg')}</div>
+                  lifecycle === 'withdrawn' ? (
+                    <div className="piece-detail-status closed">{t('withdrawnText')}</div>
+                  ) : (
+                    <div className="piece-avail">
+                      <p className="piece-avail-title">{t('availableTitle')}</p>
+                      <p className="piece-avail-text">{t('availableText')}</p>
+                      <a
+                        href={`mailto:${ENQUIRE_EMAIL}?subject=${encodeURIComponent(`MANCHA${accession ? ` · ${accession}` : ''} — ${piece.title}`)}`}
+                        className="piece-avail-cta"
+                      >
+                        {t('enquire')} →
+                      </a>
+                    </div>
+                  )
                 ) : (
                   <>
                     <form action={placeBid} className="piece-detail-bid-form">

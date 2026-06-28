@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
+import { createAdminClient } from '@/utils/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sendEmail } from '@/lib/email';
@@ -167,6 +168,61 @@ export async function markAsSold(formData) {
   revalidatePath('/obras');
   revalidatePath(`/obras/${pieceId}`);
   revalidatePath('/artistas', 'layout');
+}
+
+// Sella una temporada: asigna números de acceso inmutables a sus obras (por
+// orden de creación) y la cierra (sealed_at + is_current=false). Tras esto, sus
+// obras entran al Índice como Edition permanente.
+export async function sealSeason(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const seasonId = formData.get('seasonId');
+  const admin = createAdminClient();
+
+  const { data: artists } = await admin.from('artists').select('id').eq('season_id', seasonId);
+  const artistIds = (artists ?? []).map((a) => a.id);
+
+  if (artistIds.length > 0) {
+    const { data: pieces } = await admin
+      .from('pieces')
+      .select('id, accession')
+      .in('artist_id', artistIds)
+      .order('created_at', { ascending: true });
+
+    let n = 0;
+    for (const p of (pieces ?? [])) {
+      n += 1;
+      // Número de acceso inmutable: solo se asigna si todavía no tiene uno.
+      if (p.accession == null) {
+        await admin.from('pieces').update({ accession: n }).eq('id', p.id);
+      }
+    }
+  }
+
+  await admin.from('seasons').update({ sealed_at: new Date().toISOString(), is_current: false }).eq('id', seasonId);
+
+  revalidatePath('/admin');
+  revalidatePath('/indice');
+  revalidatePath('/');
+}
+
+// Marca / desmarca una obra como parte de The Canon de su temporada.
+export async function toggleCanon(formData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
+
+  const pieceId = formData.get('pieceId');
+  const next = formData.get('next') === 'true';
+  const admin = createAdminClient();
+
+  await admin.from('pieces').update({ in_canon: next }).eq('id', pieceId);
+
+  revalidatePath('/admin');
+  revalidatePath('/indice');
+  revalidatePath(`/obras/${pieceId}`);
 }
 
 export async function sendPaymentReminder(formData) {
