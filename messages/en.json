@@ -248,5 +248,32 @@
     "closeLine": "If you believe your work has something the rest hasn't seen yet,",
     "closeAccent": "that's exactly what we need to read.",
     "closeBtn": "Send application →"
+  },
+  "selected": {
+    "eyebrow": "The permanent registry",
+    "title1": "Those who",
+    "titleEm": "passed the filter.",
+    "sub": "Every artist who entered MANCHA stays here forever. Season by season — the lineage builds from day one.",
+    "metaArtists": "{count, plural, one {# artist selected} other {# artists selected}}",
+    "metaSeasons": "{count, plural, one {# season} other {# seasons}}",
+    "jumpCurrent": "↓ Current season",
+    "jumpArchive": "↓ Archive",
+    "badgeConv": "◆ Selection in progress",
+    "badgeLive": "● In progress",
+    "catalogLink": "View full catalogue →",
+    "emptyText": "The artists for this season are being selected.",
+    "applyNow": "Apply now →",
+    "piecesCount": "{count, plural, one {# piece} other {# pieces}}",
+    "leadBid": "Leading bid",
+    "from": "From",
+    "view": "View →",
+    "archiveKicker": "The archive",
+    "archiveTitle": "Past seasons",
+    "archiveSub": "They stay here forever. The record of who came before.",
+    "viewSeason": "View season →",
+    "cierrePre": "Should your work be here?",
+    "cierreTitle1": "Every season",
+    "cierreTitleEm": "has room for one more.",
+    "readManifesto": "Read the manifesto →"
   }
 }

@@ -248,5 +248,32 @@
     "closeLine": "Si crees que tu trabajo tiene algo que el resto todavía no vio,",
     "closeAccent": "eso es exactamente lo que necesitamos leer.",
     "closeBtn": "Enviar postulación →"
+  },
+  "selected": {
+    "eyebrow": "El registro permanente",
+    "title1": "Los que",
+    "titleEm": "pasaron el filtro.",
+    "sub": "Cada artista que entró en MANCHA queda aquí para siempre. Temporada por temporada — el linaje se construye desde el primer día.",
+    "metaArtists": "{count, plural, one {# artista seleccionado} other {# artistas seleccionados}}",
+    "metaSeasons": "{count, plural, one {# temporada} other {# temporadas}}",
+    "jumpCurrent": "↓ Temporada en curso",
+    "jumpArchive": "↓ Archivo",
+    "badgeConv": "◆ Selección en curso",
+    "badgeLive": "● En curso",
+    "catalogLink": "Ver catálogo completo →",
+    "emptyText": "Los artistas de esta temporada están siendo seleccionados.",
+    "applyNow": "Postular ahora →",
+    "piecesCount": "{count, plural, one {# pieza} other {# piezas}}",
+    "leadBid": "Puja líder",
+    "from": "Desde",
+    "view": "Ver →",
+    "archiveKicker": "El archivo",
+    "archiveTitle": "Temporadas anteriores",
+    "archiveSub": "Permanecen aquí para siempre. El registro de quiénes estuvieron antes.",
+    "viewSeason": "Ver temporada →",
+    "cierrePre": "¿Tu trabajo debería estar aquí?",
+    "cierreTitle1": "Cada temporada",
+    "cierreTitleEm": "hay lugar para uno más.",
+    "readManifesto": "Leer el manifiesto →"
   }
 }

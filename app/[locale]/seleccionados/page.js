@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
@@ -24,6 +25,9 @@ export const dynamic = 'force-dynamic';
 export default async function SeleccionadosPage() {
   if (isPreLaunch()) redirect('/');
   const convocatoria = isConvocatoria();
+  const t = await getTranslations('selected');
+  const locale = await getLocale();
+  const dateLocale = locale === 'en' ? 'en-US' : 'es-AR';
   const supabase = await createClient();
 
   const { data: seasons } = await supabase
@@ -62,25 +66,22 @@ export default async function SeleccionadosPage() {
         <Splat width="130px" height="115px" bottom="-40px" left="-35px" color="red" rotate={16} radius="r4" />
         <Splat width="75px" height="66px" top="44%" left="7%" color="lilac" rotate={9} radius="r1" />
         <div className="wrap">
-          <p className="eyebrow sel-eyebrow">El registro permanente</p>
+          <p className="eyebrow sel-eyebrow">{t('eyebrow')}</p>
           <h1 className="sel-title">
-            Los que<br />
-            <em>pasaron el filtro.</em>
+            {t('title1')}<br />
+            <em>{t('titleEm')}</em>
           </h1>
-          <p className="sel-sub">
-            Cada artista que entró en MANCHA queda aquí para siempre.
-            Temporada por temporada — el linaje se construye desde el primer día.
-          </p>
+          <p className="sel-sub">{t('sub')}</p>
           {totalArtists > 0 && (
             <div className="sel-meta">
-              <span><b>{totalArtists}</b> artista{totalArtists !== 1 ? 's' : ''} seleccionado{totalArtists !== 1 ? 's' : ''}</span>
+              <span>{t('metaArtists', { count: totalArtists })}</span>
               <span className="sel-meta-sep">·</span>
-              <span><b>{allSeasons.length}</b> temporada{allSeasons.length !== 1 ? 's' : ''}</span>
+              <span>{t('metaSeasons', { count: allSeasons.length })}</span>
             </div>
           )}
           <div className="sel-jumps">
-            {currentSeason && <a href="#en-curso" className="sel-jump">↓ Temporada en curso</a>}
-            {pastByseason.length > 0 && <a href="#archivo" className="sel-jump sel-jump-ghost">↓ Archivo</a>}
+            {currentSeason && <a href="#en-curso" className="sel-jump">{t('jumpCurrent')}</a>}
+            {pastByseason.length > 0 && <a href="#archivo" className="sel-jump sel-jump-ghost">{t('jumpArchive')}</a>}
           </div>
         </div>
       </header>
@@ -91,23 +92,23 @@ export default async function SeleccionadosPage() {
           <div className="wrap">
             <div className="sel-current-head">
               <div>
-                <span className="sel-live-badge">{convocatoria ? '◆ Selección en curso' : '● En curso'}</span>
+                <span className="sel-live-badge">{convocatoria ? t('badgeConv') : t('badgeLive')}</span>
                 <h2 className="sel-current-title">{currentSeason.name}</h2>
                 {!convocatoria && (
                   <p className="sel-current-dates">
-                    {new Date(currentSeason.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    {new Date(currentSeason.starts_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric' })}
                     {' — '}
-                    {new Date(currentSeason.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    {new Date(currentSeason.ends_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric' })}
                   </p>
                 )}
               </div>
-              {!convocatoria && <Link href="/obras" className="sel-current-catalog">Ver catálogo completo →</Link>}
+              {!convocatoria && <Link href="/obras" className="sel-current-catalog">{t('catalogLink')}</Link>}
             </div>
 
             {currentArtists.length === 0 ? (
               <div className="sel-empty">
-                <p>Los artistas de esta temporada están siendo seleccionados.</p>
-                <Link href="/postular" className="btn-primary" style={{ marginTop: 18, display: 'inline-block' }}>Postular ahora →</Link>
+                <p>{t('emptyText')}</p>
+                <Link href="/postular" className="btn-primary" style={{ marginTop: 18, display: 'inline-block' }}>{t('applyNow')}</Link>
               </div>
             ) : (
               <div className="sel-current-grid">
@@ -133,7 +134,7 @@ export default async function SeleccionadosPage() {
                         )}
                         <div className="sel-artist-media-overlay">
                           <span className="sel-artist-n">{String(i + 1).padStart(2, '0')}</span>
-                          <span className="sel-artist-pieces-count">{pieces.length} {pieces.length === 1 ? 'pieza' : 'piezas'}</span>
+                          <span className="sel-artist-pieces-count">{t('piecesCount', { count: pieces.length })}</span>
                         </div>
                       </div>
                       <div className="sel-artist-body">
@@ -145,18 +146,18 @@ export default async function SeleccionadosPage() {
                             <div className="sel-artist-price">
                               {topBid ? (
                                 <>
-                                  <span className="sel-price-label">Puja líder</span>
-                                  <span className="sel-price-num">${topBid.toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
+                                  <span className="sel-price-label">{t('leadBid')}</span>
+                                  <span className="sel-price-num">${topBid.toLocaleString(dateLocale)} <span className="sel-price-cur">USD</span></span>
                                 </>
                               ) : minEntry ? (
                                 <>
-                                  <span className="sel-price-label">Desde</span>
-                                  <span className="sel-price-num">${Number(minEntry).toLocaleString('es-AR')} <span className="sel-price-cur">USD</span></span>
+                                  <span className="sel-price-label">{t('from')}</span>
+                                  <span className="sel-price-num">${Number(minEntry).toLocaleString(dateLocale)} <span className="sel-price-cur">USD</span></span>
                                 </>
                               ) : null}
                             </div>
                           )}
-                          <span className="sel-artist-cta">Ver →</span>
+                          <span className="sel-artist-cta">{t('view')}</span>
                         </div>
                       </div>
                     </CardEl>
@@ -173,9 +174,9 @@ export default async function SeleccionadosPage() {
         <section className="sel-archive" id="archivo">
           <div className="wrap">
             <div className="sel-archive-head">
-              <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>El archivo</p>
-              <h2 className="sel-archive-title">Temporadas anteriores</h2>
-              <p className="sel-archive-sub">Permanecen aquí para siempre. El registro de quiénes estuvieron antes.</p>
+              <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>{t('archiveKicker')}</p>
+              <h2 className="sel-archive-title">{t('archiveTitle')}</h2>
+              <p className="sel-archive-sub">{t('archiveSub')}</p>
             </div>
             {pastByseason.map((season) => (
               <div className="sel-past-season" key={season.id}>
@@ -183,12 +184,12 @@ export default async function SeleccionadosPage() {
                   <div>
                     <h3 className="sel-past-season-name">{season.name}</h3>
                     <p className="sel-past-season-dates">
-                      {new Date(season.starts_at).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
+                      {new Date(season.starts_at).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })}
                       {' — '}
-                      {new Date(season.ends_at).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
+                      {new Date(season.ends_at).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })}
                     </p>
                   </div>
-                  {!convocatoria && <Link href={`/temporadas/${season.id}`} className="sel-past-link">Ver temporada →</Link>}
+                  {!convocatoria && <Link href={`/temporadas/${season.id}`} className="sel-past-link">{t('viewSeason')}</Link>}
                 </div>
                 <div className="sel-past-grid">
                   {season.artists.map((artist, ai) => {
@@ -220,11 +221,11 @@ export default async function SeleccionadosPage() {
         <Splat width="160px" height="140px" top="-45px" left="-40px" color="lilac" rotate={10} radius="r1" />
         <Splat width="100px" height="88px" bottom="-30px" right="-25px" color="red" rotate={-12} radius="r3" />
         <div className="wrap sel-cierre-inner">
-          <p className="sel-cierre-pre">¿Tu trabajo debería estar aquí?</p>
-          <h2 className="sel-cierre-title">Cada temporada<br /><em>hay lugar para uno más.</em></h2>
+          <p className="sel-cierre-pre">{t('cierrePre')}</p>
+          <h2 className="sel-cierre-title">{t('cierreTitle1')}<br /><em>{t('cierreTitleEm')}</em></h2>
           <div className="sel-cierre-ctas">
-            <Link href="/postular" className="btn-primary">Postular ahora →</Link>
-            <Link href="/manifiesto" className="sel-cierre-ghost">Leer el manifiesto →</Link>
+            <Link href="/postular" className="btn-primary">{t('applyNow')}</Link>
+            <Link href="/manifiesto" className="sel-cierre-ghost">{t('readManifesto')}</Link>
           </div>
         </div>
       </section>
