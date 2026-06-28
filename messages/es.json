@@ -309,5 +309,31 @@
     "ctaViewSold": "Ver pieza",
     "ctaView": "Ver y pujar",
     "favAria": "Marcar como favorito"
+  },
+  "piece": {
+    "breadcrumbCatalogue": "← Catálogo",
+    "sold": "Vendida",
+    "followCount": "{count, plural, one {# persona sigue esta obra} other {# personas siguen esta obra}}",
+    "bidsCount": "{count, plural, one {# puja registrada} other {# pujas registradas}}",
+    "discovery": "Una pieza única de este artista esta temporada. Cuando cierra, no vuelve.",
+    "priceFinal": "Precio final",
+    "priceClosed": "Temporada cerrada",
+    "priceCurrent": "Puja actual",
+    "priceMin": "Puja mínima",
+    "favAria": "Marcar como favorito",
+    "soldLabel": "Vendida",
+    "soldText1": "Esta pieza ya encontró a su coleccionista. Es única — no hay otra igual.",
+    "soldText2": "¿Te enamoraste igual? Escríbenos. Si hay verdadero interés, vemos con el artista si existe algo más por mostrar o alguna forma de llegar a un acuerdo.",
+    "soldWaMsg": "Hola, vi que \"{title}\" de {artist} en MANCHA ya se vendió, pero me interesa muchísimo. ¿Hay alguna posibilidad?",
+    "soldWaBtn": "Escríbenos por la pieza",
+    "seasonClosedMsg": "Esta temporada ya cerró.",
+    "bidPlaceholder": "Mínimo ${min} USD",
+    "bidBtn": "Registrar puja →",
+    "bidAria": "Monto de tu puja en USD",
+    "bidTrust": "Al pujar te comprometes a pagar si eres quien más ofrece al cierre de la temporada. Te contactamos por correo para coordinar — sin costos extra.",
+    "waMsg": "Hola, me interesa la pieza \"{title}\" de {artist} en MANCHA. ¿Está disponible?",
+    "waBtn": "¿La quieres ya? Escríbenos por WhatsApp",
+    "waitlistLabel": "¿Sin cuenta todavía?",
+    "waitlistSub": "Déjanos tu correo y te avisamos si hay novedades sobre esta pieza."
   }
 }

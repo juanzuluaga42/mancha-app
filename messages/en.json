@@ -309,5 +309,31 @@
     "ctaViewSold": "View piece",
     "ctaView": "View & bid",
     "favAria": "Add to favorites"
+  },
+  "piece": {
+    "breadcrumbCatalogue": "← Catalogue",
+    "sold": "Sold",
+    "followCount": "{count, plural, one {# person is following this work} other {# people are following this work}}",
+    "bidsCount": "{count, plural, one {# bid placed} other {# bids placed}}",
+    "discovery": "A unique piece by this artist this season. When it closes, it doesn't return.",
+    "priceFinal": "Final price",
+    "priceClosed": "Season closed",
+    "priceCurrent": "Current bid",
+    "priceMin": "Minimum bid",
+    "favAria": "Add to favorites",
+    "soldLabel": "Sold",
+    "soldText1": "This piece has found its collector. It's unique — there's no other like it.",
+    "soldText2": "Fell for it anyway? Write to us. If there's real interest, we'll check with the artist whether there's something more to show or a way to reach an agreement.",
+    "soldWaMsg": "Hi, I saw that \"{title}\" by {artist} on MANCHA has already sold, but I'm really interested. Is there any possibility?",
+    "soldWaBtn": "Write to us about the piece",
+    "seasonClosedMsg": "This season has closed.",
+    "bidPlaceholder": "Minimum ${min} USD",
+    "bidBtn": "Place bid →",
+    "bidAria": "Your bid amount in USD",
+    "bidTrust": "By bidding you commit to pay if you're the highest offer when the season closes. We contact you by email to coordinate — no extra costs.",
+    "waMsg": "Hi, I'm interested in the piece \"{title}\" by {artist} on MANCHA. Is it available?",
+    "waBtn": "Want it now? Message us on WhatsApp",
+    "waitlistLabel": "No account yet?",
+    "waitlistSub": "Leave your email and we'll let you know if there's news about this piece."
   }
 }

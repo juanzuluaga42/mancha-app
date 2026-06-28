@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -29,6 +30,9 @@ export async function generateMetadata({ params }) {
 export default async function PiecePage({ params, searchParams }) {
   const { id } = await params;
   const sp = await searchParams;
+  const t = await getTranslations('piece');
+  const locale = await getLocale();
+  const numLocale = locale === 'en' ? 'en-US' : 'es-AR';
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -70,7 +74,7 @@ export default async function PiecePage({ params, searchParams }) {
         {/* ── Breadcrumb ───────────────────────────────────── */}
         <div className="piece-breadcrumb">
           <div className="wrap">
-            <Link href="/obras" className="piece-breadcrumb-link">← Catálogo</Link>
+            <Link href="/obras" className="piece-breadcrumb-link">{t('breadcrumbCatalogue')}</Link>
             <span className="piece-breadcrumb-sep">/</span>
             <Link href={`/artistas/${piece.artists.id}`} className="piece-breadcrumb-link">{artistName}</Link>
             <span className="piece-breadcrumb-sep">/</span>
@@ -92,7 +96,7 @@ export default async function PiecePage({ params, searchParams }) {
               )}
               {piece.sold && (
                 <div className="piece-sold-overlay">
-                  <span>Vendida</span>
+                  <span>{t('sold')}</span>
                 </div>
               )}
             </div>
@@ -130,21 +134,18 @@ export default async function PiecePage({ params, searchParams }) {
               {(favoriteCount > 0 || hasBids) && (
                 <div className="piece-detail-proof">
                   {favoriteCount > 0 && (
-                    <span>{favoriteCount} {favoriteCount === 1 ? 'persona sigue' : 'personas siguen'} esta obra</span>
+                    <span>{t('followCount', { count: favoriteCount })}</span>
                   )}
                   {favoriteCount > 0 && hasBids && <span className="piece-detail-proof-sep">·</span>}
                   {hasBids && (
-                    <span>{bidCount} {bidCount === 1 ? 'puja registrada' : 'pujas registradas'}</span>
+                    <span>{t('bidsCount', { count: bidCount })}</span>
                   )}
                 </div>
               )}
 
               {/* Discovery line */}
               {!piece.sold && !seasonClosed && (
-                <p className="piece-detail-discovery">
-                  Una pieza única de este artista esta temporada.
-                  Cuando cierra, no vuelve.
-                </p>
+                <p className="piece-detail-discovery">{t('discovery')}</p>
               )}
 
               {/* Precio + acciones */}
@@ -152,10 +153,10 @@ export default async function PiecePage({ params, searchParams }) {
                 <div className="piece-detail-price-row">
                   <div>
                     <p className="piece-detail-price-label">
-                      {piece.sold ? 'Precio final' : seasonClosed ? 'Temporada cerrada' : hasBids ? 'Puja actual' : 'Puja mínima'}
+                      {piece.sold ? t('priceFinal') : seasonClosed ? t('priceClosed') : hasBids ? t('priceCurrent') : t('priceMin')}
                     </p>
                     <p className="piece-detail-price">
-                      ${Number(currentBid).toLocaleString('es-AR')}
+                      ${Number(currentBid).toLocaleString(numLocale)}
                       <span className="piece-detail-currency"> USD</span>
                     </p>
                   </div>
@@ -168,7 +169,7 @@ export default async function PiecePage({ params, searchParams }) {
                       className={`heart-btn piece-detail-fav${isFavorited ? ' active' : ''}`}
                       type="submit"
                       aria-pressed={isFavorited}
-                      aria-label="Marcar como favorito"
+                      aria-label={t('favAria')}
                     >
                       <svg viewBox="0 0 24 24" width="18" height="18">
                         <path d="M12 21s-7.2-4.35-9.3-8.7C1 9 2.4 5.4 6 5.4c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5 3.6 3.3 6.9C19.2 16.65 12 21 12 21z" />
@@ -183,17 +184,12 @@ export default async function PiecePage({ params, searchParams }) {
                   <div className="piece-sold-block">
                     <div className="piece-sold-block-head">
                       <span className="piece-sold-block-dot">●</span>
-                      <span className="piece-sold-block-label">Vendida</span>
+                      <span className="piece-sold-block-label">{t('soldLabel')}</span>
                     </div>
-                    <p className="piece-sold-block-text">
-                      Esta pieza ya encontró a su coleccionista. Es única — no hay otra igual.
-                    </p>
-                    <p className="piece-sold-block-text piece-sold-block-soft">
-                      ¿Te enamoraste igual? Escríbenos. Si hay verdadero interés, vemos con el artista
-                      si existe algo más por mostrar o alguna forma de llegar a un acuerdo.
-                    </p>
+                    <p className="piece-sold-block-text">{t('soldText1')}</p>
+                    <p className="piece-sold-block-text piece-sold-block-soft">{t('soldText2')}</p>
                     <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, vi que "${piece.title}" de ${artistName} en MANCHA ya se vendió, pero me interesa muchísimo. ¿Hay alguna posibilidad?`)}`}
+                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t('soldWaMsg', { title: piece.title, artist: artistName }))}`}
                       target="_blank"
                       rel="noreferrer"
                       className="piece-sold-block-wa"
@@ -201,11 +197,11 @@ export default async function PiecePage({ params, searchParams }) {
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                       </svg>
-                      Escríbenos por la pieza
+                      {t('soldWaBtn')}
                     </a>
                   </div>
                 ) : seasonClosed ? (
-                  <div className="piece-detail-status closed">Esta temporada ya cerró.</div>
+                  <div className="piece-detail-status closed">{t('seasonClosedMsg')}</div>
                 ) : (
                   <>
                     <form action={placeBid} className="piece-detail-bid-form">
@@ -218,18 +214,15 @@ export default async function PiecePage({ params, searchParams }) {
                         step="5"
                         required
                         className="piece-detail-bid-input"
-                        placeholder={`Mínimo $${(Number(currentBid) + 5).toLocaleString('es-AR')} USD`}
-                        aria-label="Monto de tu puja en USD"
+                        placeholder={t('bidPlaceholder', { min: (Number(currentBid) + 5).toLocaleString(numLocale) })}
+                        aria-label={t('bidAria')}
                       />
                       <button className="btn-primary piece-detail-bid-btn" type="submit">
-                        Registrar puja →
+                        {t('bidBtn')}
                       </button>
                     </form>
 
-                    <p className="piece-detail-trust">
-                      Al pujar te comprometes a pagar si eres quien más ofrece al cierre de la temporada.
-                      Te contactamos por correo para coordinar — sin costos extra.
-                    </p>
+                    <p className="piece-detail-trust">{t('bidTrust')}</p>
                   </>
                 )}
               </div>
@@ -237,7 +230,7 @@ export default async function PiecePage({ params, searchParams }) {
               {/* WhatsApp */}
               {!piece.sold && !seasonClosed && (
                 <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, me interesa la pieza "${piece.title}" de ${artistName} en MANCHA. ¿Está disponible?`)}`}
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(t('waMsg', { title: piece.title, artist: artistName }))}`}
                   target="_blank"
                   rel="noreferrer"
                   className="piece-detail-whatsapp"
@@ -245,15 +238,15 @@ export default async function PiecePage({ params, searchParams }) {
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
-                  ¿La quieres ya? Escríbenos por WhatsApp
+                  {t('waBtn')}
                 </a>
               )}
 
               {/* Waitlist */}
               {!piece.sold && !seasonClosed && !user && (
                 <div className="piece-detail-waitlist">
-                  <p className="piece-detail-waitlist-label">¿Sin cuenta todavía?</p>
-                  <p className="piece-detail-waitlist-sub">Déjanos tu correo y te avisamos si hay novedades sobre esta pieza.</p>
+                  <p className="piece-detail-waitlist-label">{t('waitlistLabel')}</p>
+                  <p className="piece-detail-waitlist-sub">{t('waitlistSub')}</p>
                   <WaitlistForm pieceId={piece.id} redirectTo={redirectTo} />
                 </div>
               )}
