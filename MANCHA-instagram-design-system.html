@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MANCHA — Instagram Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF3E6; --paper-dark:#F0E3CC; --ink:#16110D; --ink-soft:#6B6359;
+    --dark:#0D0C0A; --red:#E5402B; --red-deep:#A82A1C; --yellow:#F2B705;
+    --yellow-deep:#C68F00; --lilac:#8E6FD1;
+    --display:'Unbounded',system-ui,sans-serif;
+    --serif:'Newsreader',Georgia,serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+  }
+  /* THEME — dark default */
+  html[data-theme="dark"]{
+    --bg:#0D0C0A; --surface:#141009; --surface-2:#1c1710; --line:rgba(250,243,230,.12);
+    --tx:#FAF3E6; --tx-soft:rgba(250,243,230,.62); --tx-faint:rgba(250,243,230,.38);
+    --accent:var(--red);
+  }
+  html[data-theme="light"]{
+    --bg:#FAF3E6; --surface:#fff; --surface-2:#F0E3CC; --line:rgba(22,17,13,.14);
+    --tx:#16110D; --tx-soft:#6B6359; --tx-faint:rgba(22,17,13,.45);
+    --accent:var(--red-deep);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--tx); font-family:var(--serif); font-size:17px; line-height:1.65; transition:background .4s ease,color .4s ease;}
+  a{color:inherit;}
+
+  /* ── LAYOUT ───────────────────────────── */
+  .shell{display:flex; min-height:100vh;}
+  .side{width:286px; flex:none; position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; border-right:1px solid var(--line); padding:30px 22px 40px; background:var(--surface);}
+  .main{flex:1; min-width:0;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 40px;}
+
+  /* ── SIDEBAR ──────────────────────────── */
+  .brand{font-family:var(--display); font-weight:800; font-size:24px; letter-spacing:-.03em; display:block; margin-bottom:4px;}
+  .brand .dot{color:var(--red);}
+  .side-tag{font-family:var(--mono); font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--tx-faint); margin-bottom:24px;}
+  .nav a{display:block; font-family:var(--mono); font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--tx-soft); text-decoration:none; padding:7px 10px; border-radius:3px; transition:.15s; border-left:2px solid transparent;}
+  .nav a:hover{color:var(--tx); background:var(--surface-2);}
+  .nav a.active{color:var(--tx); border-left-color:var(--red); background:var(--surface-2);}
+  .nav a b{color:var(--red); font-weight:700; margin-right:9px;}
+  .side-foot{margin-top:26px; padding-top:20px; border-top:1px solid var(--line);}
+  .toggle{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-soft); background:var(--surface-2); border:1px solid var(--line); border-radius:100px; padding:7px 13px; cursor:pointer;}
+  .toggle:hover{color:var(--tx);}
+
+  /* mobile topbar */
+  .topbar{display:none; position:sticky; top:0; z-index:40; align-items:center; justify-content:space-between; padding:14px 20px; background:var(--surface); border-bottom:1px solid var(--line);}
+  .burger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:6px;}
+  .burger span{width:22px;height:2px;background:var(--tx);display:block;border-radius:2px;}
+
+  /* ── HERO ─────────────────────────────── */
+  .hero{padding:96px 0 60px; border-bottom:1px solid var(--line);}
+  .hero .eyebrow{color:var(--red);}
+  .hero h1{font-family:var(--display); font-weight:800; font-size:clamp(2.4rem,5.5vw,4rem); line-height:1.02; letter-spacing:-.035em; margin:18px 0 22px;}
+  .hero h1 em{font-family:var(--serif); font-style:italic; font-weight:400; color:var(--yellow);}
+  .hero .lede{font-size:21px; color:var(--tx-soft); max-width:60ch;}
+  .hero .credits{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-faint); margin-top:34px; line-height:2;}
+
+  /* ── SECTIONS ─────────────────────────── */
+  section.doc{padding:74px 0; border-bottom:1px solid var(--line); scroll-margin-top:20px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--tx-faint); margin:0 0 8px;}
+  .sec-num{font-family:var(--display); font-weight:800; font-size:13px; color:var(--red); letter-spacing:.04em;}
+  h2{font-family:var(--display); font-weight:700; font-size:clamp(1.6rem,3.4vw,2.3rem); letter-spacing:-.02em; line-height:1.1; margin:6px 0 18px;}
+  h3{font-family:var(--display); font-weight:600; font-size:1.16rem; letter-spacing:-.01em; margin:34px 0 10px;}
+  h4{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--red); margin:24px 0 8px;}
+  p{margin:0 0 15px;} strong{font-weight:600;} em{font-style:italic;}
+  .lede{font-size:19px; color:var(--tx); margin-bottom:22px;}
+  ul,ol{margin:0 0 16px; padding-left:1.2em;} li{margin:0 0 7px;}
+  li::marker{color:var(--red);}
+  code{font-family:var(--mono); font-size:.84em; background:var(--surface-2); padding:1px 6px; border-radius:3px; color:var(--tx);}
+  hr{border:0;border-top:1px solid var(--line); margin:30px 0;}
+
+  blockquote{margin:22px 0; padding:16px 22px; border-left:3px solid var(--red); background:var(--surface); font-style:italic; font-size:19px;}
+  blockquote p:last-child{margin:0;}
+
+  /* cards / grids */
+  .cards{display:grid; gap:16px; margin:20px 0;}
+  .cols-2{grid-template-columns:1fr 1fr;} .cols-3{grid-template-columns:repeat(3,1fr);}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:20px 22px;}
+  .card h3{margin-top:0;}
+  .card .lbl{font-family:var(--mono); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--red); display:block; margin-bottom:8px;}
+
+  /* key-value spec list (post types, reels) */
+  .kv{margin:10px 0 0; border-top:1px solid var(--line);}
+  .kv div{display:grid; grid-template-columns:130px 1fr; gap:12px; padding:7px 0; border-bottom:1px solid var(--line); font-size:14.5px;}
+  .kv dt{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-faint); padding-top:3px;}
+  .kv dd{margin:0;}
+  .kv .en{font-style:italic; color:var(--tx);}
+
+  /* tables */
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14px;}
+  th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--red);}
+  td .mono{font-family:var(--mono); font-size:12px;}
+
+  /* do / dont */
+  .dd{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;}
+  .dd .col{border:1px solid var(--line); border-radius:4px; padding:16px 18px; background:var(--surface);}
+  .dd h4{margin:0 0 10px;}
+  .dd .yes h4{color:#7bbf6a;} .dd .no h4{color:var(--red);}
+  .dd ul{padding-left:1.1em; margin:0;} .dd li{font-size:14px;}
+
+  /* swatches */
+  .swatches{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0;}
+  .sw{font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; padding:12px 14px; border-radius:4px; min-width:120px; color:#fff;}
+  .sw small{display:block; opacity:.85; font-size:9px; margin-top:3px;}
+
+  /* placeholder image mock */
+  .ph{position:relative; border:1px solid var(--line); border-radius:4px; aspect-ratio:1/1; display:flex; align-items:flex-end; padding:14px; overflow:hidden;
+      background:
+        repeating-linear-gradient(135deg, transparent 0 11px, rgba(250,243,230,.03) 11px 12px),
+        radial-gradient(120% 120% at 70% 20%, rgba(142,111,209,.16), transparent 55%),
+        var(--surface-2);}
+  .ph.r{background:repeating-linear-gradient(135deg, transparent 0 11px, rgba(250,243,230,.03) 11px 12px), radial-gradient(120% 120% at 30% 30%, rgba(229,64,43,.2), transparent 55%), var(--surface-2);}
+  .ph.y{background:repeating-linear-gradient(135deg, transparent 0 11px, rgba(0,0,0,.03) 11px 12px), radial-gradient(120% 120% at 60% 30%, rgba(242,183,5,.22), transparent 55%), var(--surface-2);}
+  .ph .tag{font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--tx-soft);}
+  .ph .corner{position:absolute; top:10px; left:12px; font-family:var(--mono); font-size:8.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--tx-faint);}
+
+  /* feed grid mock (3x3) */
+  .feed{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:22px 0; max-width:430px;}
+  .feed .cell{aspect-ratio:1/1; border-radius:2px; display:flex; align-items:center; justify-content:center; text-align:center; font-family:var(--mono); font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; padding:8px;}
+  .cell.dark{background:var(--dark); color:var(--paper); border:1px solid var(--line);}
+  .cell.paper{background:var(--paper); color:var(--ink);}
+  .cell.red{background:var(--red); color:var(--paper);}
+  .cell.work{background:repeating-linear-gradient(135deg,#1c1710 0 12px,#221b12 12px 13px); color:var(--tx-faint);}
+
+  /* highlight chips */
+  .hls{display:flex; flex-wrap:wrap; gap:14px; margin:20px 0;}
+  .hl{text-align:center; width:78px;}
+  .hl .ring{width:74px; height:74px; border-radius:50%; background:var(--dark); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:8px; letter-spacing:.1em; color:var(--paper); text-transform:uppercase; padding:6px;}
+  .hl span{display:block; font-family:var(--mono); font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--tx-soft); margin-top:7px;}
+
+  .example{background:var(--dark); color:var(--paper); border:1px solid var(--line); border-radius:4px; padding:20px 22px; margin:16px 0; font-style:normal; font-size:16px; line-height:1.55;}
+  .example .tag{font-family:var(--mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--yellow); display:block; margin-bottom:11px;}
+  .example b{color:#fff;}
+  .example .meta{font-family:var(--mono); font-size:11px; color:rgba(250,243,230,.45); margin-top:12px; letter-spacing:.04em;}
+  pre.prompt{background:var(--ink); color:var(--paper); border-radius:4px; padding:14px 16px; margin:12px 0; font-family:var(--mono); font-size:12px; line-height:1.6; white-space:pre-wrap; border:1px solid var(--line);}
+
+  .callout{border:1px solid var(--red); border-radius:4px; padding:16px 20px; margin:22px 0; background:linear-gradient(var(--surface),var(--surface));}
+  .callout .lbl{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--red); display:block; margin-bottom:6px;}
+
+  .pill{display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:100px; border:1px solid var(--line); color:var(--tx-soft); margin:0 4px 4px 0;}
+
+  /* reveal animation */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  footer.doc-foot{padding:54px 0 80px; text-align:center; color:var(--tx-faint); font-style:italic;}
+  footer.doc-foot .brand{font-style:normal; margin-bottom:12px;}
+
+  @media (max-width:880px){
+    .side{display:none; position:fixed; z-index:50; width:280px; box-shadow:0 0 60px rgba(0,0,0,.5);}
+    .side.open{display:block;}
+    .topbar{display:flex;}
+    .wrap{padding:0 22px;}
+    .cols-2,.cols-3{grid-template-columns:1fr;}
+    .dd{grid-template-columns:1fr;}
+    .kv div{grid-template-columns:108px 1fr;}
+  }
+  @media print{ .side,.topbar{display:none;} .reveal{opacity:1;transform:none;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">MANCHA<span class="dot">.</span></span>
+  <button class="burger" onclick="document.querySelector('.side').classList.toggle('open')"><span></span><span></span><span></span></button>
+</div>
+
+<div class="shell">
+  <!-- ───────────── SIDEBAR ───────────── -->
+  <aside class="side">
+    <a href="#top" class="brand">MANCHA<span class="dot">.</span></a>
+    <p class="side-tag">Instagram Design System</p>
+    <nav class="nav" id="nav">
+      <a href="#s0"><b>00</b>Apertura</a>
+      <a href="#s1"><b>01</b>Filosofía editorial</a>
+      <a href="#s2"><b>02</b>Objetivos</a>
+      <a href="#s3"><b>03</b>Público</a>
+      <a href="#s4"><b>04</b>Dirección de arte</a>
+      <a href="#s5"><b>05</b>Sistema del feed</a>
+      <a href="#s6"><b>06</b>30+ publicaciones</a>
+      <a href="#s7"><b>07</b>Reels</a>
+      <a href="#s8"><b>08</b>Carruseles</a>
+      <a href="#s9"><b>09</b>Stories</a>
+      <a href="#s10"><b>10</b>Highlights</a>
+      <a href="#s11"><b>11</b>Sistema de imágenes</a>
+      <a href="#s12"><b>12</b>Adquisición de imágenes</a>
+      <a href="#s13"><b>13</b>Herramientas</a>
+      <a href="#s14"><b>14</b>Producción</a>
+      <a href="#s15"><b>15</b>Calendario 90 días</a>
+      <a href="#s16"><b>16</b>Primer lanzamiento</a>
+      <a href="#s17"><b>17</b>Guía de escritura</a>
+      <a href="#s18"><b>18</b>Consistencia</a>
+    </nav>
+    <div class="side-foot">
+      <button class="toggle" id="themeBtn">◐ <span>Modo</span></button>
+    </div>
+  </aside>
+
+  <!-- ───────────── MAIN ───────────── -->
+  <main class="main" id="top">
+    <header class="hero">
+      <div class="wrap">
+        <p class="eyebrow">MANCHA · Instagram Design System · v1.0</p>
+        <h1>El manual para construir<br>uno de los mejores Instagrams<br>de <em>arte contemporáneo</em> del mundo.</h1>
+        <p class="lede">No es un calendario de posts. Es el sistema operativo visual y editorial de la cuenta — para producir, durante años, contenido reconocible como MANCHA incluso sin el logo.</p>
+        <p class="credits">
+          Dirigido como lo dirigirían: Creative Director (Pentagram) · Editorial Designer (Kinfolk / MUBI / A24)<br>
+          Brand Strategist · Art Director · Motion Designer · UX Designer<br>
+          Social Director (lujo) · Curador de arte contemporáneo · Editor en Jefe (revista internacional de arte)
+        </p>
+      </div>
+    </header>
+
+    <!-- 00 — APERTURA -->
+    <section class="doc" id="s0">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">00</span> · Apertura</p>
+        <h2>Una sola marca. Un solo estándar.</h2>
+        <p class="lede">Este documento extiende —no reemplaza— el <strong>Brand System de MANCHA</strong> y el <strong>Instagram Brand Language &amp; Visual System</strong>. Toda decisión aquí es coherente con lo ya definido: la paleta, las tipografías, la voz, los dos manifiestos (<em>Leave a mark</em> para artistas, <em>Before the World</em> para coleccionistas) y el sistema de ciclo de vida de la obra (On View → The Index → The Canon).</p>
+        <blockquote>La prueba de oro de toda pieza: <em>tápale el logo. ¿Sigue siendo reconociblemente MANCHA?</em> Si no, no se publica.</blockquote>
+        <p>Tres palabras gobiernan todo: <strong>Curaduría. Restricción. Calma.</strong> MANCHA en Instagram no es un feed: es la <strong>portada de una institución cultural</strong> publicada en cuadrícula. Construimos para el archivo, no para el algoritmo.</p>
+
+        <h4>Cánones de identidad (heredados, no negociables)</h4>
+        <div class="swatches">
+          <span class="sw" style="background:#0D0C0A">Dark<small>#0D0C0A</small></span>
+          <span class="sw" style="background:#16110D">Ink<small>#16110D</small></span>
+          <span class="sw" style="background:#FAF3E6;color:#16110D">Paper<small>#FAF3E6</small></span>
+          <span class="sw" style="background:#E5402B">Red · acción<small>#E5402B</small></span>
+          <span class="sw" style="background:#F2B705;color:#16110D">Yellow · descubrimiento<small>#F2B705</small></span>
+          <span class="sw" style="background:#8E6FD1">Lilac · profundidad<small>#8E6FD1</small></span>
+        </div>
+        <div class="kv">
+          <div><dt>Display</dt><dd>Unbounded 800 — titulares, cifras, logo. Monumental, geométrica.</dd></div>
+          <div><dt>Editorial</dt><dd>Newsreader italic — citas, manifiesto, lo humano.</dd></div>
+          <div><dt>Mono</dt><dd>Space Mono — eyebrows, cartelas, datos técnicos.</dd></div>
+          <div><dt>Idioma</dt><dd>Inglés editorial, <strong>adaptado, no traducido</strong>. Punto rojo: una vez por cuadro.</dd></div>
+          <div><dt>Detalle</dt><dd><code>border-radius: 2px</code> · márgenes generosos · un foco por cuadro.</dd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 — FILOSOFÍA -->
+    <section class="doc" id="s1">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">01</span> · Filosofía editorial</p>
+        <h2>Cómo debe sentirse MANCHA.</h2>
+        <p class="lede">MANCHA se siente como entrar a una sala en penumbra donde una sola obra está iluminada. Hay silencio, hay aire, hay autoridad. No te persigue: te espera.</p>
+
+        <h4>Las emociones que transmite</h4>
+        <p><strong>Descubrimiento</strong> (ver algo antes que el mundo) · <strong>Reverencia</strong> (la obra merece tiempo) · <strong>Pertenencia</strong> (estás del lado correcto del filtro) · <strong>Calma con tensión</strong> (urgencia tranquila, no ansiedad) · <strong>Permanencia</strong> (esto queda en el registro).</p>
+
+        <div class="dd">
+          <div class="col yes"><h4>✓ MANCHA siempre</h4><ul>
+            <li>Declara con la calma de quien ya sabe lo que tiene.</li>
+            <li>Pone la obra y al artista en el centro — nunca el precio ni la plataforma.</li>
+            <li>Deja respirar: una idea, un foco, mucho aire.</li>
+            <li>Trata cada post como una página de revista que va a imprenta.</li>
+            <li>Usa el silencio como recurso: a veces tres palabras, a veces ninguna.</li>
+          </ul></div>
+          <div class="col no"><h4>✗ MANCHA nunca</h4><ul>
+            <li>Grita, ruega, liquida ni persigue tendencias.</li>
+            <li>Mide su valor en seguidores ni publica por publicar.</li>
+            <li>Usa stock barato, IA evidente, baja resolución o flash duro.</li>
+            <li>Llena el cuadro de texto o de emojis.</li>
+            <li>Promete que las obras "desaparecen para siempre" (la temporada es lo irrepetible).</li>
+          </ul></div>
+        </div>
+
+        <h3>Tres personalidades, una voz</h3>
+        <div class="cards cols-3">
+          <div class="card"><span class="lbl">Visual</span><p>Cinematográfica y sobria. Tinta y papel; el color como acento. Composición de cartela de museo. El vacío es lujo.</p></div>
+          <div class="card"><span class="lbl">Escrita</span><p>Editorial, presente, primera persona del plural. Frases cortas. Punto final como gesto de marca. Inglés nativo, nunca calcado.</p></div>
+          <div class="card"><span class="lbl">Narrativa</span><p>Cada temporada es un número de revista. Cada obra, una entrada en el registro. Contamos descubrimiento, procedencia y permanencia.</p></div>
+        </div>
+        <blockquote>Regla mnemónica: si sonara bien en un tráiler de MUBI leído por una voz tranquila, es MANCHA. Si suena a notificación de descuento, no lo es.</blockquote>
+      </div>
+    </section>
+
+    <!-- 02 — OBJETIVOS -->
+    <section class="doc" id="s2">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">02</span> · Objetivos</p>
+        <h2>Qué busca conseguir el Instagram.</h2>
+        <p class="lede">El Instagram no vende: <strong>posiciona</strong>. Es el escaparate de autoridad cultural que hace que un artista quiera ser elegido y que un coleccionista quiera llegar primero.</p>
+        <div class="kv">
+          <div><dt>Autoridad</dt><dd>Se construye con <strong>criterio visible y consistencia</strong>: curaduría impecable, lenguaje de institución, cero ruido. La autoridad no se anuncia — se da por hecha.</dd></div>
+          <div><dt>Confianza</dt><dd>Procedencia y transparencia: cada obra con su ficha, cada artista con su voz, el 75% al creador dicho sin estridencia. Mostramos el proceso humano detrás del filtro.</dd></div>
+          <div><dt>Atraer artistas</dt><dd>El feed demuestra el estándar y el cuidado con que se trata la obra. El mensaje implícito: <em>"aquí tu trabajo se ve como merece"</em>. CTA suave hacia <em>Leave a mark</em> / postular.</dd></div>
+          <div><dt>Atraer coleccionistas</dt><dd>Vendemos el <strong>momento</strong>, no el objeto: descubrir antes que el mundo. CTA hacia <em>Before the World</em> / la temporada.</dd></div>
+          <div><dt>Tráfico al sitio</dt><dd>El perfil es una portada; el sitio es la revista completa. "in our bio" sobrio, ligado a manchagallery.com o a la temporada vigente. El Editorial (notas) y el Índice son los anzuelos de profundidad.</dd></div>
+          <div><dt>Comunidad</dt><dd>Convertimos seguidores en <strong>Founding Collectors / artistas del registro</strong>: rituales recurrentes (apertura, cierre, Canon reveal), nombrar a quienes llegan temprano, responder con la misma voz cálida y breve.</dd></div>
+        </div>
+        <div class="callout"><span class="lbl">Métrica que importa</span>No el número de seguidores. La <strong>calidad de la audiencia</strong> (coleccionistas reales, artistas que aspiran al estándar, prensa cultural) y la <strong>profundidad</strong> (guardados, compartidos, clics a bio, postulaciones).</div>
+      </div>
+    </section>
+
+    <!-- 03 — PÚBLICO -->
+    <section class="doc" id="s3">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">03</span> · Público</p>
+        <h2>Para quién hablamos.</h2>
+        <p class="lede">Una sola voz, varias lecturas. Cada pieza debe poder ser leída por dos audiencias primarias (artistas y coleccionistas) sin traicionar a ninguna.</p>
+        <table>
+          <tr><th>Audiencia</th><th>Qué busca</th><th>Qué le mostramos</th></tr>
+          <tr><td><strong>Artistas emergentes</strong></td><td>Ser vistos, validados, tratados con seriedad.</td><td>El estándar, el cuidado de la obra, voces de artistas, el proceso. <span class="mono">→ Leave a mark</span></td></tr>
+          <tr><td><strong>Coleccionistas</strong></td><td>Descubrir temprano; estatus del ojo culto.</td><td>Procedencia, escasez, el momento, la primera fila. <span class="mono">→ Before the World</span></td></tr>
+          <tr><td><strong>Curadores</strong></td><td>Criterio, coherencia, relevancia cultural.</td><td>Ensayos visuales, el Canon, contexto histórico.</td></tr>
+          <tr><td><strong>Diseñadores</strong></td><td>Dirección de arte, tipografía, sistema.</td><td>Composición impecable, detalle, macro, el sistema visual mismo.</td></tr>
+          <tr><td><strong>Arquitectos</strong></td><td>Obra para espacios; materia y escala.</td><td>La obra en contexto, escala, textura, luz.</td></tr>
+          <tr><td><strong>Interesados en cultura</strong></td><td>Aprender, sentir, pertenecer.</td><td>MANCHA Editorial: historia del arte, museos, récords, datos.</td></tr>
+          <tr><td><strong>Compradores internacionales</strong></td><td>Acceso, confianza, procedencia verificable.</td><td>Inglés editorial, el Índice, certificados, transacción discreta.</td></tr>
+        </table>
+        <p style="color:var(--tx-soft)">Tono de marca por audiencia: para todos, <strong>par culto</strong>, nunca comprador impulsivo ni "creador de contenido". No bajamos el registro para "explicar"; elevamos al lector.</p>
+      </div>
+    </section>
+
+    <!-- 04 — DIRECCIÓN DE ARTE -->
+    <section class="doc" id="s4">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">04</span> · Dirección de arte</p>
+        <h2>El lenguaje visual, completo.</h2>
+
+        <h3>Espacio, márgenes y respiración</h3>
+        <p>El espacio vacío es <strong>autoridad</strong>. Define un margen seguro de <strong>≈8–10% del lado</strong> y no lo invadas nunca. La consistencia del margen —repetida cuadro a cuadro— es lo que hace "institución". Una pieza, mucho muro. Una frase, mucho silencio.</p>
+
+        <h3>Composición y jerarquías</h3>
+        <ul>
+          <li><strong>Un foco por cuadro.</strong> El ojo entra por un solo punto.</li>
+          <li><strong>Andamiaje fijo:</strong> eyebrow mono arriba-izquierda (<code>SEASON 01</code>), firma/logo discreto abajo. Ese esqueleto repetido es la huella reconocible sin logo.</li>
+          <li><strong>Monumentalidad central</strong> para posters-declaración; <strong>regla de tercios</strong> para obra en contexto.</li>
+          <li><strong>Peso visual:</strong> una sola voz tipográfica domina; el resto sirve. Máx. dos familias por cuadro.</li>
+          <li><strong>El punto rojo</strong> es la única nota de tensión: una vez, donde quieras que repose el ojo.</li>
+        </ul>
+
+        <h3>Fotografía</h3>
+        <div class="dd">
+          <div class="col yes"><h4>✓ Sí</h4><ul>
+            <li>Luz natural, cálida, suave. Sombra larga de estudio.</li>
+            <li>La obra fiel (color real) o en contexto: pared, suelo del estudio, entre manos.</li>
+            <li>Materia: pinceles, grano del lienzo, el primer gesto — la <em>mancha</em>. Macros de textura.</li>
+            <li>Encuadre de galería: mucho muro, mucho margen. Grano de película sutil.</li>
+          </ul></div>
+          <div class="col no"><h4>✗ No</h4><ul>
+            <li>Flash directo, HDR, sobresaturación, filtros de moda.</li>
+            <li>Fondos ruidosos, props de stock, retratos corporativos posados.</li>
+            <li>Obra recortada sin aire o con color infiel.</li>
+            <li>Marcas de agua grandes sobre la obra.</li>
+          </ul></div>
+        </div>
+
+        <h3>Color y texturas</h3>
+        <p>Estructura: tinta/papel. Acento <strong>uno por cuadro</strong>: rojo (acción/urgencia tranquila), amarillo (descubrimiento, artista nuevo), lila (misterio, profundidad). Texturas permitidas: grano de película, papel, lienzo, el trazo. Prohibidas: gradientes "tech", brillos, glassmorphism, sombras dramáticas de e-commerce.</p>
+
+        <h3>Lenguaje cinematográfico y moodboard</h3>
+        <p>Referencias de <em>principio</em> (no de copia): la penumbra de A24, los stills de MUBI, la luz y el silencio de Kinfolk, el rigor editorial de Wallpaper* y NYT Style, la institución de Fondation Louis Vuitton. La identidad final es 100% MANCHA: <strong>tinta, papel, el punto rojo, Unbounded monumental, Newsreader humano, la mancha como gesto.</strong></p>
+        <div class="cards cols-3">
+          <div class="ph"><span class="corner">Mood 01</span><span class="tag">Penumbra · obra iluminada</span></div>
+          <div class="ph r"><span class="corner">Mood 02</span><span class="tag">Macro · textura · trazo</span></div>
+          <div class="ph y"><span class="corner">Mood 03</span><span class="tag">Estudio · luz natural · manos</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — SISTEMA DEL FEED -->
+    <section class="doc" id="s5">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">05</span> · Sistema visual del feed</p>
+        <h2>El perfil como portada de revista.</h2>
+        <p class="lede">El feed se diseña por <strong>filas de tres y pantallas de nueve</strong>, como las dobles páginas de una revista. No se piensa post a post: se piensa la composición.</p>
+
+        <h4>El sistema modular (alternancia y respiración)</h4>
+        <ul>
+          <li><strong>Alterná tinta y papel</strong> para dar ritmo a la cuadrícula. Evitá tres cuadros oscuros seguidos salvo serie deliberada.</li>
+          <li><strong>Ritmo de tipos:</strong> obra → declaración → artista/proceso → obra. Que ninguna fila sea monótona.</li>
+          <li><strong>Series de tres:</strong> una obra o idea puede ocupar una fila completa (díptico/tríptico visual). Planeado, no improvisado.</li>
+          <li><strong>Un solo acento de color por pantalla de nueve</strong> domina; los demás son notas.</li>
+        </ul>
+
+        <p style="color:var(--tx-soft)">Maqueta de referencia de una pantalla de nueve (no usar literal — es ritmo, no plantilla):</p>
+        <div class="feed">
+          <div class="cell dark">Statement<br>“We choose first”</div>
+          <div class="cell work">Obra · plate</div>
+          <div class="cell paper">Dato<br>3 · 3 · 75%</div>
+          <div class="cell work">Macro · detalle</div>
+          <div class="cell red">Apertura<br>Season 01</div>
+          <div class="cell dark">Artista · cita</div>
+          <div class="cell work">Obra en contexto</div>
+          <div class="cell paper">Editorial<br>nota</div>
+          <div class="cell work">Estudio · proceso</div>
+        </div>
+
+        <h4>Cómo combinar formatos</h4>
+        <p>Fotografía (obra, macro, estudio, contexto), tipografía (statement, dato, cita), video/Reel (tráiler de proceso), carrusel (ensayo visual, entrevista), arte (la pieza protagonista), detalle/macro (la materia), behind the scenes (con sobriedad), entrevistas (Q&amp;A editorial), ensayos visuales (curaduría), notas editoriales (atlas/historia). <strong>Regla:</strong> cada formato sirve a una intención; ninguno se publica "porque toca".</p>
+      </div>
+    </section>
+
+    <!-- 06 — PUBLICACIONES -->
+    <section class="doc" id="s6">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">06</span> · Sistema de publicaciones</p>
+        <h2>30+ tipos de publicación.</h2>
+        <p class="lede">El catálogo de piezas reutilizables. Cada tipo trae objetivo, formato, dirección de arte, tipografía, recursos, prompt de IA (si aplica), producción, CTA, caption modelo, hashtags y frecuencia. La dirección de arte detallada vive en §04; aquí se especifica por tipo.</p>
+
+        <div class="callout"><span class="lbl">Cómo leer este catálogo</span>Los captions están en <strong>inglés editorial</strong> (la cuenta es EN-primary). Hashtags: bloque mínimo al final, nunca dentro del texto. Frecuencia orientativa sobre un ritmo de <strong>2–4 posts/semana</strong>.</div>
+
+        <!-- 1 -->
+        <div class="card"><span class="lbl">01 · The Work — la obra</span>
+          <p>Una pieza, sola, tratada como cartela de museo. El corazón del feed.</p>
+          <dl class="kv">
+            <div><dt>Objetivo</dt><dd>Mostrar la obra; deseo de compra; estándar visual.</dd></div>
+            <div><dt>Formato</dt><dd>Foto 4:5, fondo tinta o muro neutro.</dd></div>
+            <div><dt>Dir. arte</dt><dd>Obra centrada, mucho aire, color fiel. Eyebrow mono + procedencia abajo.</dd></div>
+            <div><dt>Tipografía</dt><dd>Space Mono (cartela) + Newsreader (título de obra en itálica).</dd></div>
+            <div><dt>Recursos</dt><dd>Foto del artista o producción propia (ver §12).</dd></div>
+            <div><dt>Producción</dt><dd>Lightroom (color fiel) → Figma (cartela) → export.</dd></div>
+            <div><dt>CTA</dt><dd><em>The work is in our bio.</em></dd></div>
+            <div><dt>Caption</dt><dd class="en">[Title]. / [Artist] — [city]. / [medium, year]. / On view, Season 01.</dd></div>
+            <div><dt>Hashtags</dt><dd>#mancha #emergingart #contemporaryart</dd></div>
+            <div><dt>Frecuencia</dt><dd>1–2 / semana (el ancla del feed).</dd></div>
+          </dl>
+        </div>
+
+        <!-- compact list for the rest -->
+        <h3>Catálogo completo</h3>
+        <div class="cards cols-2">
+          <div class="card"><span class="lbl">02 · Macro / Detail</span><p>Macro de la materia: trazo, grano, la <em>mancha</em>. <strong>Obj:</strong> sensorialidad. <strong>Form:</strong> foto 4:5/1:1. <strong>CTA:</strong> ninguno. <strong>Cap (EN):</strong> “Closer. The first gesture.” <strong>Frec:</strong> semanal.</p></div>
+          <div class="card"><span class="lbl">03 · Artist Reveal</span><p>Presentación de un seleccionado. <strong>Obj:</strong> atraer artistas + humanizar. <strong>Form:</strong> retrato/obra. <strong>Acento:</strong> amarillo. <strong>Cap:</strong> “Selected for Season 01: [Name].” <strong>Frec:</strong> por artista.</p></div>
+          <div class="card"><span class="lbl">04 · Artist Quote</span><p>Una frase del artista, en su voz. <strong>Form:</strong> tipográfico sobre tinta o sobre su obra. <strong>Tip:</strong> Newsreader italic. <strong>Cap:</strong> contexto breve. <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">05 · The Studio</span><p>El entorno del taller. <strong>Obj:</strong> intimidad/autenticidad. <strong>Form:</strong> foto natural. <strong>Cap:</strong> “Where it begins.” <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">06 · Process / Making-of</span><p>Manos, pincel, la obra revelándose. <strong>Form:</strong> Reel o carrusel. <strong>Audio:</strong> ambiente. <strong>Cap:</strong> “In progress.” <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">07 · Manifesto Statement</span><p>Declaración de marca. <strong>Form:</strong> tipográfico, fondo tinta. <strong>Tip:</strong> Unbounded monumental + punto rojo. <strong>Cap:</strong> “We choose first.” <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">08 · The Number</span><p>Dato editorial: 3 obras · 3 meses · 75%. <strong>Form:</strong> tipográfico, papel. <strong>Obj:</strong> claridad del modelo. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">09 · Season Opening</span><p>Apertura de temporada (umbral). <strong>Form:</strong> poster + countdown story. <strong>Acento:</strong> rojo. <strong>Cap:</strong> “Season 01 opens.” <strong>Frec:</strong> 1/temporada.</p></div>
+          <div class="card"><span class="lbl">10 · The Closing</span><p>Cierre/finissage, sereno. <strong>Cap:</strong> “A season closes. It does not reopen.” <strong>Frec:</strong> 1/temporada.</p></div>
+          <div class="card"><span class="lbl">11 · The Canon Reveal</span><p>Las obras que dejaron marca. <strong>Form:</strong> carrusel editorial. <strong>Obj:</strong> ritual de prestigio recurrente. <strong>Cap:</strong> “The Canon of Season 01.” <strong>Frec:</strong> 1/temporada.</p></div>
+          <div class="card"><span class="lbl">12 · Provenance / Index</span><p>Ficha de procedencia (MANCHA · S01 · 014). <strong>Obj:</strong> confianza/registro. <strong>Form:</strong> tipográfico + obra. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">13 · Collected</span><p>Una obra encontró coleccionista. <strong>Tono:</strong> celebración digna, sin “SOLD”. <strong>Cap:</strong> “Collected — Season 01.” <strong>Frec:</strong> según ventas.</p></div>
+          <div class="card"><span class="lbl">14 · Editorial Note</span><p>Teaser de MANCHA Editorial. <strong>Form:</strong> imagen + título. <strong>CTA:</strong> “Read in our bio.” <strong>Frec:</strong> semanal.</p></div>
+          <div class="card"><span class="lbl">15 · Art History</span><p>Atlas: un maestro, un movimiento. <strong>Obj:</strong> autoridad cultural. <strong>Form:</strong> carrusel. <strong>Frec:</strong> semanal.</p></div>
+          <div class="card"><span class="lbl">16 · The Record</span><p>Dato de mercado/récord (atlas). <strong>Form:</strong> dato editorial. <strong>Obj:</strong> alcance + contexto. <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">17 · Museum Spotlight</span><p>Una institución que admiramos. <strong>Form:</strong> foto licenciada + nota. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">18 · Before the World</span><p>Pieza para coleccionistas: el momento de llegar primero. <strong>Cap:</strong> “You saw it here, before the world did.” <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">19 · Diptych / Triptych</span><p>Serie que ocupa una fila del grid. <strong>Obj:</strong> coreografía del feed. <strong>Frec:</strong> 1/temporada.</p></div>
+          <div class="card"><span class="lbl">20 · Manifesto Quote</span><p>Cita del manifiesto, Newsreader italic. <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">21 · Behind the Selection</span><p>POV curatorial: por qué entró. <strong>Form:</strong> carrusel/texto. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">22 · Studio Visit</span><p>Mini-documental del taller. <strong>Form:</strong> Reel 30–40s. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">23 · Interview</span><p>Q&amp;A editorial con el artista. <strong>Form:</strong> carrusel. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">24 · New This Season</span><p>Novedad de catálogo (sin “drop”). <strong>Cap:</strong> “New this season.” <strong>Frec:</strong> según catálogo.</p></div>
+          <div class="card"><span class="lbl">25 · Countdown</span><p>El cierre se acerca. <strong>Form:</strong> story + post. <strong>Tono:</strong> urgencia tranquila. <strong>Frec:</strong> fin de temporada.</p></div>
+          <div class="card"><span class="lbl">26 · The Eye</span><p>Crop cerrado, la mirada/el gesto. <strong>Obj:</strong> intriga. <strong>Frec:</strong> quincenal.</p></div>
+          <div class="card"><span class="lbl">27 · Color Study</span><p>Paleta extraída de una obra. <strong>Form:</strong> obra + swatches mono. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">28 · Two Ways to Belong</span><p>Artista vs coleccionista — los dos manifiestos. <strong>Form:</strong> carrusel díptico. <strong>Frec:</strong> 1/temporada.</p></div>
+          <div class="card"><span class="lbl">29 · Collector's Voice</span><p>Testimonio de coleccionista (con permiso). <strong>Tono:</strong> sobrio. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">30 · The Archive</span><p>Revisitar una temporada sellada. <strong>Obj:</strong> permanencia/Índice. <strong>Frec:</strong> mensual.</p></div>
+          <div class="card"><span class="lbl">31 · How It Works / FAQ</span><p>El modelo en 1 idea clara. <strong>Form:</strong> carrusel mínimo. <strong>Frec:</strong> bimestral.</p></div>
+          <div class="card"><span class="lbl">32 · Press / Recognition</span><p>Prensa o hito, con understatement. <strong>Cap:</strong> sin alardear. <strong>Frec:</strong> según ocurra.</p></div>
+        </div>
+
+        <h4>Prompt de IA modelo (para statements / fondos, nunca para “obra”)</h4>
+        <pre class="prompt">Editorial poster background, deep warm black (#0D0C0A), subtle film grain,
+faint single soft red brushstroke off-center, museum-grade, generous negative
+space, no text, no objects, cinematic low light, 4:5 — ar 4:5 --style raw</pre>
+        <p style="color:var(--tx-soft);font-size:14px">La IA produce <strong>fondos, texturas y posters tipográficos</strong>, jamás "obras de arte" que se hagan pasar por piezas reales. La obra de los artistas se fotografía, no se genera. (Ver §11–§13.)</p>
+      </div>
+    </section>
+
+    <!-- 07 — REELS -->
+    <section class="doc" id="s7">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">07</span> · Sistema de Reels</p>
+        <h2>Cine, no clip.</h2>
+        <p class="lede">Referencia: un tráiler de MUBI, un mini-documental de Monocle Films. Observacional, lento, con sonido real. El silencio es una opción elegante.</p>
+        <div class="kv">
+          <div><dt>Tipos</dt><dd>Studio Visit · Process (pincel/lienzo) · The Work revealed (paneo lento) · Season trailer · Canon reveal · The Closing.</dd></div>
+          <div><dt>Inicio</dt><dd>Abre con <strong>imagen</strong>, nunca con texto. Primer plano que detenga el scroll en 1s.</dd></div>
+          <div><dt>Duración</dt><dd>15–40 s. Menos es más.</dd></div>
+          <div><dt>Música</dt><dd>Ambiente real (pincel, estudio) o score minimalista/cinemático con licencia. <strong>Nunca</strong> audio de tendencia.</dd></div>
+          <div><dt>Narrativa</dt><dd>Apertura (sin texto) → cartela con nombre → 2–3 planos de proceso/obra → cierre con label de temporada. Termina en calma.</dd></div>
+          <div><dt>Subtítulos</dt><dd>Solo si hay voz. Tipografía de marca (Unbounded/Space Mono), no el auto-caption de Instagram.</dd></div>
+          <div><dt>Edición</dt><dd>Cortes mínimos. Cámara casi quieta. Un sujeto.</dd></div>
+          <div><dt>Movimiento</dt><dd>Paneos y dollies lentos; nada de zooms bruscos ni transiciones de efecto.</dd></div>
+          <div><dt>Velocidad</dt><dd>Tiempo real o ligero slow-motion. Nunca acelerado al beat.</dd></div>
+          <div><dt>Color grading</dt><dd>Cálido, coherente con el feed: negros densos, piel natural, grano de película. LUT propio MANCHA.</dd></div>
+          <div><dt>Transiciones</dt><dd>Cortes secos o fundidos suaves. Cartelas Unbounded sobre negro pleno.</dd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 — CARRUSELES -->
+    <section class="doc" id="s8">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">08</span> · Sistema de carruseles</p>
+        <h2>El ensayo fotográfico.</h2>
+        <p class="lede">El carrusel es el formato editorial de MANCHA: un ensayo de Kinfolk en cuadrícula. Arco narrativo, una idea por lámina, mucho aire.</p>
+        <div class="cards cols-3">
+          <div class="card"><span class="lbl">Portada (lámina 1)</span><p>Funciona sola. Afirmación + label mono. Debe detener el scroll y prometer profundidad. Sin “desliza →” obvio.</p></div>
+          <div class="card"><span class="lbl">Láminas internas</span><p>Una idea por lámina. Alterná imagen y tipografía. Aire constante = ritmo de revista. Numeración mono opcional (№).</p></div>
+          <div class="card"><span class="lbl">Última lámina</span><p>Cierre tranquilo o índice: “Season 01 · in our bio”. Nunca un grito ni “sígueme”.</p></div>
+        </div>
+        <div class="kv">
+          <div><dt>Cantidad ideal</dt><dd><strong>5–8 láminas.</strong> Suficiente para un arco; nunca relleno.</dd></div>
+          <div><dt>Jerarquías</dt><dd>Una voz tipográfica domina la portada; las internas bajan el volumen para que la imagen hable.</dd></div>
+          <div><dt>Tipos</dt><dd>Ensayo visual · Entrevista (Q&amp;A) · Artist reveal · The Canon · Behind the Selection · Art History · How it works.</dd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 — STORIES -->
+    <section class="doc" id="s9">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">09</span> · Sistema de Stories</p>
+        <h2>Una idea por pantalla.</h2>
+        <p class="lede">Fondo papel o tinta, tipografía de marca, mucho margen. Los stickers nativos siempre con tipografía/color MANCHA encima — nunca el sticker crudo de Instagram.</p>
+        <div class="cards cols-2">
+          <div class="card"><span class="lbl">Obra del día</span><p>Una pieza, ficha mínima, link. <em>“Today’s work →”</em></p></div>
+          <div class="card"><span class="lbl">Artista del día</span><p>Retrato + nombre + ciudad. Link al perfil.</p></div>
+          <div class="card"><span class="lbl">Proceso creativo</span><p>Clip vertical del taller, sonido ambiente.</p></div>
+          <div class="card"><span class="lbl">Behind the scenes</span><p>El montaje de una foto, con sobriedad.</p></div>
+          <div class="card"><span class="lbl">Making of</span><p>El detrás de un Reel o de la selección.</p></div>
+          <div class="card"><span class="lbl">Estudio</span><p>Recorrido por un taller. Inmersivo.</p></div>
+          <div class="card"><span class="lbl">Inspiración</span><p>Una referencia (museo, maestro) + por qué.</p></div>
+          <div class="card"><span class="lbl">Recomendaciones</span><p>Una lectura/exhibición. Curaduría generosa.</p></div>
+          <div class="card"><span class="lbl">Colección</span><p>Una obra del Índice y su procedencia.</p></div>
+          <div class="card"><span class="lbl">Noticias / Agenda</span><p>Apertura, cierre, evento. Urgencia tranquila.</p></div>
+          <div class="card"><span class="lbl">Lanzamientos / Eventos</span><p>Hito de temporada con countdown estilizado.</p></div>
+          <div class="card"><span class="lbl">Links</span><p>“in our bio” o link directo a la temporada / nota.</p></div>
+        </div>
+        <h4>Interacciones (con cuentagotas, siempre con capa de marca)</h4>
+        <ul>
+          <li><strong>Encuestas:</strong> “Which leaves a stronger mark?” entre dos obras (curaduría, no trivia).</li>
+          <li><strong>Preguntas:</strong> caja de preguntas para artistas (“Ask us about the open call”).</li>
+          <li><strong>Countdown:</strong> al cierre de temporada — estilizado, nunca el sticker crudo.</li>
+          <li><strong>Quiz/Slider:</strong> solo en MANCHA Editorial (datos de historia del arte).</li>
+        </ul>
+        <h4>Plantilla base (story)</h4>
+        <div class="cards cols-3">
+          <div class="ph" style="aspect-ratio:9/16"><span class="corner">9:16 · tinta</span><span class="tag">Eyebrow mono ↑<br>Una idea · centro<br>Logo discreto ↓</span></div>
+          <div class="ph y" style="aspect-ratio:9/16"><span class="corner">9:16 · papel</span><span class="tag">Obra · ficha mínima<br>“in our bio”</span></div>
+          <div class="ph r" style="aspect-ratio:9/16"><span class="corner">9:16 · acento</span><span class="tag">Countdown · cierre<br>urgencia tranquila</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 — HIGHLIGHTS -->
+    <section class="doc" id="s10">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">10</span> · Historias destacadas</p>
+        <h2>Las secciones de la revista.</h2>
+        <p class="lede">Las Highlights son el índice del perfil. Portadas <strong>idénticas</strong>: label mono en papel/tinta sobre fondo de marca — nunca fotos crudas. Iconografía mínima (un device mono o el punto rojo).</p>
+        <div class="hls">
+          <div class="hl"><div class="ring">Manifesto</div><span>01</span></div>
+          <div class="hl"><div class="ring">Season 01</div><span>02</span></div>
+          <div class="hl"><div class="ring">The Selected</div><span>03</span></div>
+          <div class="hl"><div class="ring">The Work</div><span>04</span></div>
+          <div class="hl"><div class="ring">The Studio</div><span>05</span></div>
+          <div class="hl"><div class="ring">The Canon</div><span>06</span></div>
+          <div class="hl"><div class="ring">Editorial</div><span>07</span></div>
+          <div class="hl"><div class="ring">Collect</div><span>08</span></div>
+          <div class="hl"><div class="ring">The Index</div><span>09</span></div>
+          <div class="hl"><div class="ring">Contact</div><span>10</span></div>
+        </div>
+        <table>
+          <tr><th>#</th><th>Nombre</th><th>Objetivo</th><th>Color</th><th>Contenido</th><th>Actualización</th></tr>
+          <tr><td>01</td><td>Manifesto</td><td>Quiénes somos / el porqué</td><td>Tinta</td><td>Los dos manifiestos, la etimología, el criterio</td><td>Fija</td></tr>
+          <tr><td>02</td><td>Season 01</td><td>La temporada vigente</td><td>Rojo</td><td>Apertura, fechas, countdown, cierre</td><td>Por temporada</td></tr>
+          <tr><td>03</td><td>The Selected</td><td>Artistas elegidos</td><td>Amarillo</td><td>Reveal de cada artista + link</td><td>Cada temporada</td></tr>
+          <tr><td>04</td><td>The Work</td><td>Obra destacada</td><td>Papel</td><td>Obra del día, fichas, macro</td><td>Semanal</td></tr>
+          <tr><td>05</td><td>The Studio</td><td>Proceso / taller</td><td>Tinta</td><td>Studio visits, making of, manos</td><td>Quincenal</td></tr>
+          <tr><td>06</td><td>The Canon</td><td>Lo mejor de cada temporada</td><td>Amarillo</td><td>Canon reveal, cápsulas históricas</td><td>Por temporada</td></tr>
+          <tr><td>07</td><td>Editorial</td><td>MANCHA Editorial</td><td>Lila</td><td>Notas, atlas, historia, museos</td><td>Semanal</td></tr>
+          <tr><td>08</td><td>Collect</td><td>Para coleccionistas</td><td>Rojo</td><td>Cómo coleccionar, Before the World, certificados</td><td>Fija</td></tr>
+          <tr><td>09</td><td>The Index</td><td>Registro / procedencia</td><td>Tinta</td><td>Obras selladas, Collected, archivo</td><td>Por temporada</td></tr>
+          <tr><td>10</td><td>Contact</td><td>Acceso / prensa</td><td>Papel</td><td>Postular, consultas, press</td><td>Fija</td></tr>
+        </table>
+        <p style="color:var(--tx-soft);font-size:14px">Orden = jerarquía de lectura: primero la identidad (Manifesto), luego lo vivo (Season/Selected/Work), luego la profundidad (Studio/Canon/Editorial), luego la acción (Collect/Index/Contact). Mantené 8–12 highlights — más, satura.</p>
+      </div>
+    </section>
+
+    <!-- 11 — IMÁGENES -->
+    <section class="doc" id="s11">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">11</span> · Sistema de imágenes</p>
+        <h2>Nunca una imagen mediocre.</h2>
+        <p class="lede">Toda imagen debe sentirse <strong>de museo</strong>. Si no llega a ese estándar, no se publica — preferimos el silencio.</p>
+        <div class="dd">
+          <div class="col yes"><h4>✓ Estándar mínimo</h4><ul>
+            <li>Calidad editorial / luxury / museum-grade.</li>
+            <li>Alta resolución (4K–8K cuando aplique), sin compresión visible.</li>
+            <li>Luz natural, color profesional (grading consistente), textura rica.</li>
+            <li>Fidelidad de museo en la reproducción de la obra (color real).</li>
+            <li>Film look sutil; coherente con la paleta tinta/papel.</li>
+          </ul></div>
+          <div class="col no"><h4>✗ Rechazo inmediato</h4><ul>
+            <li>Stock barato o genérico.</li>
+            <li>IA evidente (manos raras, texturas plásticas, “arte” sintético como obra).</li>
+            <li>Baja resolución, pixelado, sobrecompresión.</li>
+            <li>Flash duro, HDR, sobresaturación, watermark de terceros.</li>
+            <li>Capturas de pantalla, collages cargados.</li>
+          </ul></div>
+        </div>
+        <div class="callout"><span class="lbl">Regla de fidelidad</span>La reproducción de la <strong>obra</strong> es sagrada: color y encuadre fieles al original. Estilizamos el <em>entorno</em>, nunca la <em>pieza</em>. El coleccionista confía en lo que ve.</div>
+      </div>
+    </section>
+
+    <!-- 12 — ADQUISICIÓN -->
+    <section class="doc" id="s12">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">12</span> · Adquisición de imágenes</p>
+        <h2>De dónde sale cada imagen.</h2>
+        <p class="lede">Cada tipo de publicación tiene una fuente correcta — y un estándar de licencia. Nunca usar una imagen sin derecho de uso claro.</p>
+        <table>
+          <tr><th>Tipo de contenido</th><th>Fuente</th><th>Licencia / nota</th></tr>
+          <tr><td>Obra de un artista MANCHA</td><td>Producción propia o archivo del artista (alta res)</td><td>Acuerdo de uso al firmar; crédito al artista</td></tr>
+          <tr><td>Estudio / proceso / retrato</td><td>Fotografía propia (sesión) o del artista</td><td>Propia preferida; consentimiento</td></tr>
+          <tr><td>Statements / fondos / posters</td><td>Producción propia + IA (solo fondos/textura)</td><td>Generada o propia; nunca “obra” IA</td></tr>
+          <tr><td>Museos / instituciones</td><td>Prensa oficial / open access (Met, Rijksmuseum, Getty, NGA…)</td><td>Verificar dominio público / CC0</td></tr>
+          <tr><td>Historia del arte (atlas)</td><td>Open access de museos · Wikimedia (alta res verificada)</td><td>Dominio público; citar fuente</td></tr>
+          <tr><td>Galerías / fundaciones / ferias</td><td>Kits de prensa oficiales</td><td>Solo con permiso/crédito</td></tr>
+          <tr><td>Récords / mercado</td><td>Casas de subasta (prensa) + dato propio</td><td>Imagen con crédito; dato verificado</td></tr>
+          <tr><td>Eventos / press</td><td>Fotografía propia o del organizador</td><td>Crédito acordado</td></tr>
+        </table>
+        <p style="color:var(--tx-soft);font-size:14px"><strong>Jerarquía de preferencia:</strong> producción propia &gt; archivo del artista &gt; open access de museos &gt; prensa licenciada &gt; IA (solo fondos). Si la procedencia de una imagen no es clara, no se publica.</p>
+      </div>
+    </section>
+
+    <!-- 13 — HERRAMIENTAS -->
+    <section class="doc" id="s13">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">13</span> · Herramientas</p>
+        <h2>Qué usar y para qué.</h2>
+        <table>
+          <tr><th>Herramienta</th><th>Para qué</th><th>Cuándo</th></tr>
+          <tr><td><strong>Midjourney</strong></td><td>Fondos, texturas, posters-mood cinematográficos</td><td>Statements, fondos abstractos — <em>nunca</em> “obra”</td></tr>
+          <tr><td><strong>Flux</strong></td><td>Generación realista, control fino, texturas</td><td>Alternativa a MJ para fondos/escenas de marca</td></tr>
+          <tr><td><strong>Ideogram</strong></td><td>Composiciones con tipografía integrada</td><td>Bocetos de posters tipográficos (luego limpiar en Figma)</td></tr>
+          <tr><td><strong>GPT Image</strong></td><td>Iteración rápida, variaciones, mockups</td><td>Exploración temprana de concepto</td></tr>
+          <tr><td><strong>Higgsfield</strong></td><td>Cámara cinematográfica / movimiento dirigido</td><td>Reels de marca, planos imposibles de producir</td></tr>
+          <tr><td><strong>Runway</strong></td><td>Video IA, image-to-video, limpieza</td><td>Teasers, transiciones, cierres de Reel</td></tr>
+          <tr><td><strong>Firefly</strong></td><td>Relleno generativo, expansión, limpieza</td><td>Retoque seguro dentro de Photoshop</td></tr>
+          <tr><td><strong>Photoshop</strong></td><td>Composición, retoque, limpieza final</td><td>Toda imagen antes de publicar</td></tr>
+          <tr><td><strong>Lightroom</strong></td><td>Color grading, fidelidad, LUT MANCHA</td><td>Toda fotografía (obra y entorno)</td></tr>
+          <tr><td><strong>Premiere</strong></td><td>Edición de Reels</td><td>Montaje principal de video</td></tr>
+          <tr><td><strong>DaVinci Resolve</strong></td><td>Color grading de video (look de cine)</td><td>Grading final de Reels importantes</td></tr>
+          <tr><td><strong>Figma</strong></td><td>Plantillas, cartelas, tipografía, sistema</td><td>Layout de todo post/carrusel/story; biblioteca de componentes</td></tr>
+        </table>
+        <div class="callout"><span class="lbl">Regla de oro IA</span>La IA produce <strong>fondos, texturas y posters</strong>. La <strong>obra de los artistas y los retratos se fotografían</strong>. Nada de IA evidente, nada que se haga pasar por pieza real. La última palabra siempre es de Photoshop/Lightroom + el ojo humano.</div>
+      </div>
+    </section>
+
+    <!-- 14 — PRODUCCIÓN -->
+    <section class="doc" id="s14">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">14</span> · Producción</p>
+        <h2>El workflow, de la idea al archivo.</h2>
+        <div class="kv">
+          <div><dt>1 · Idea</dt><dd>¿Qué intención? ¿A qué audiencia sirve? ¿Tiene razón de existir? Si no, no avanza.</dd></div>
+          <div><dt>2 · Investigación</dt><dd>Referencias, datos verificados, derechos de imagen, contexto curatorial.</dd></div>
+          <div><dt>3 · Guion</dt><dd>Gancho, cuerpo, cierre. Caption en inglés editorial. Definir formato (post/carrusel/Reel/story).</dd></div>
+          <div><dt>4 · Diseño</dt><dd>Layout en Figma sobre plantilla; cartela mono, márgenes seguros, un acento.</dd></div>
+          <div><dt>5 · Producción</dt><dd>Foto/video propios o assets licenciados; IA solo para fondos. Color en Lightroom/DaVinci.</dd></div>
+          <div><dt>6 · Edición</dt><dd>Retoque (Photoshop), montaje (Premiere), grading (DaVinci). LUT/preset MANCHA.</dd></div>
+          <div><dt>7 · Revisión</dt><dd>Checklist de consistencia (§18) + prueba del logo tapado. Dos pares de ojos.</dd></div>
+          <div><dt>8 · Publicación</dt><dd>Programar en el ritmo del feed (pantalla de nueve). Caption + hashtags + alt-text.</dd></div>
+          <div><dt>9 · Archivado</dt><dd>Guardar master (sin compresión), prompt/recursos y créditos en la biblioteca por temporada.</dd></div>
+        </div>
+        <p style="color:var(--tx-soft);font-size:14px">Roles mínimos: <strong>Editor en jefe</strong> (qué y por qué) · <strong>Art director</strong> (cómo se ve) · <strong>Productor/editor</strong> (cómo se hace) · <strong>Copy</strong> (cómo se dice). Una persona puede llevar varios sombreros, pero el checklist no se salta.</p>
+      </div>
+    </section>
+
+    <!-- 15 — CALENDARIO -->
+    <section class="doc" id="s15">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">15</span> · Calendario editorial</p>
+        <h2>Los primeros 90 días.</h2>
+        <p class="lede">Ritmo: <strong>2–3 posts/semana + stories casi diarias</strong>. Mejor pocas piezas extraordinarias que muchas mediocres. Alterná tinta/papel y rotá formatos.</p>
+        <table>
+          <tr><th>Fase</th><th>Semanas</th><th>Foco</th><th>Mezcla de formatos</th></tr>
+          <tr><td><strong>1 · Fundación</strong></td><td>1–3</td><td>Identidad: quiénes somos, el porqué, el estándar</td><td>Statements, manifiesto, etimología, primer atlas. (Las 9 de lanzamiento, §16.)</td></tr>
+          <tr><td><strong>2 · Autoridad</strong></td><td>4–6</td><td>Cultura: historia del arte, museos, récords</td><td>Editorial notes, art history, the number, museum spotlight.</td></tr>
+          <tr><td><strong>3 · Convocatoria</strong></td><td>7–9</td><td>Atraer artistas: el filtro, el proceso, dejar marca</td><td>Behind the selection, process, artist-facing statements, open-call countdown.</td></tr>
+          <tr><td><strong>4 · Anticipación</strong></td><td>10–13</td><td>Atraer coleccionistas: descubrir primero</td><td>Before the world, the eye, teasers de temporada, waitlist, Season opening.</td></tr>
+        </table>
+        <p style="color:var(--tx-soft);font-size:14px">Cadencia semanal tipo: <span class="pill">Lun · Statement/Editorial</span> <span class="pill">Mié · Obra/Artista</span> <span class="pill">Vie · Proceso/Atlas o Reel</span> + stories: obra del día, inspiración, agenda. El domingo: <strong>nada</strong> (el vacío es parte del diseño).</p>
+      </div>
+    </section>
+
+    <!-- 16 — LANZAMIENTO -->
+    <section class="doc" id="s16">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">16</span> · Primer lanzamiento</p>
+        <h2>Las primeras 9 publicaciones.</h2>
+        <p class="lede">Una pantalla de nueve que, al abrir el perfil por primera vez, se lea como la portada de una revista. Se publican <strong>de la 1 a la 9 en orden</strong> (3 por día durante 3 días, o 3 por semana), para que la cuadrícula se componga de arriba hacia abajo.</p>
+
+        <div class="feed">
+          <div class="cell dark">1 · Statement<br>We choose first.</div>
+          <div class="cell work">2 · The Work</div>
+          <div class="cell paper">3 · The Number<br>3 · 3 · 75%</div>
+          <div class="cell work">4 · Macro</div>
+          <div class="cell red">5 · Manifesto<br>Leave a mark</div>
+          <div class="cell dark">6 · Before the World</div>
+          <div class="cell work">7 · The Studio</div>
+          <div class="cell paper">8 · Editorial<br>Atlas</div>
+          <div class="cell work">9 · The Eye</div>
+        </div>
+
+        <h4>Las 9, con caption y prompt</h4>
+
+        <div class="example"><span class="tag">Post 1 · Statement (tinta)</span>
+          <b>We choose first.</b><br>
+          MANCHA is an institution for emerging art. A few artists each season — hand-picked, before they're obvious. Three works each. Three months. Then the season closes.<br>
+          This is where it begins.<br>
+          <span class="meta">— MANCHA · in our bio · #mancha #emergingart #contemporaryart</span>
+          <pre class="prompt">Deep warm black canvas #0D0C0A, faint single red brushstroke lower-right,
+heavy film grain, museum negative space, no text — ar 4:5 --style raw</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 2 · The Work (obra real, fotografiada)</span>
+          <b>[Title].</b><br>
+          [Artist] — [city]. [Medium, year].<br>
+          One of three. On view, Season 01.<br>
+          <span class="meta">in our bio · #mancha #[artistname] #contemporarypainting</span>
+          <pre class="prompt">— No IA — Fotografía propia: obra centrada sobre muro neutro cálido,
+luz natural lateral, color fiel (Lightroom), grano sutil, margen amplio. 4:5</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 3 · The Number (papel)</span>
+          <b>Three works. Three months. 75% to the artist.</b><br>
+          No endless catalogue. No algorithm. A selection made by people, season by season.<br>
+          <span class="meta">in our bio · #mancha #artmarket #collecting</span>
+          <pre class="prompt">Cream paper #FAF3E6, large Unbounded numerals in ink, one red dot accent,
+generous margins, editorial layout, no photo — ar 4:5 --style raw</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 4 · Macro (detalle)</span>
+          <b>Closer.</b><br>
+          The first gesture on the blank canvas. Before control, before technique — pure intention.<br>
+          <span class="meta">#mancha #brushstroke #texture #contemporaryart</span>
+          <pre class="prompt">— Fotografía macro propia — extreme close-up of oil brushstroke, raking
+natural light, visible canvas grain, warm tones, shallow depth. 4:5</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 5 · Manifesto / Artists (acento rojo)</span>
+          <b>Leave a mark.</b><br>
+          We don't look at your followers. We look at your work. A person reads every application — not an algorithm.<br>
+          The open call opens August 1.<br>
+          <span class="meta">in our bio · #mancha #opencall #emergingartists #artistsoninstagram</span>
+          <pre class="prompt">Red field #E5402B, "Leave a mark" implied space (text added in Figma),
+subtle paper texture, one ink dot, bold negative space — ar 4:5 --style raw</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 6 · Before the World (coleccionistas, tinta)</span>
+          <b>You saw it here, before the world did.</b><br>
+          Collecting at MANCHA isn't buying an object — it's arriving first. Discover an artist before the world does.<br>
+          <span class="meta">in our bio · #mancha #artcollector #collectart #emergingart</span>
+          <pre class="prompt">Dark cinematic field, single artwork softly lit in the distance, deep
+shadow foreground, film grain, lots of black — ar 4:5 --style raw</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 7 · The Studio</span>
+          <b>Where it begins.</b><br>
+          Brushes, silence, the surface. The room where the work happens, before anyone is watching.<br>
+          <span class="meta">#mancha #artiststudio #studiovisit #process</span>
+          <pre class="prompt">— Fotografía propia — natural-light studio corner, brushes and canvas,
+warm morning light, lived-in, editorial Kinfolk mood, film grain. 4:5</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 8 · Editorial / Atlas (papel)</span>
+          <b>The first emerging artist was once unknown too.</b><br>
+          A note from MANCHA Editorial: how the names we now call masters began exactly where these artists begin.<br>
+          <span class="meta">Read in our bio · #mancha #arthistory #editorial</span>
+          <pre class="prompt">Cream editorial layout, one open-access museum masterwork (public domain),
+ink serif title space, mono caption, magazine margins — ar 4:5</pre>
+        </div>
+
+        <div class="example"><span class="tag">Post 9 · The Eye (intriga)</span>
+          <b>Before it's obvious.</b><br>
+          The whole point of MANCHA, in one look. Season 01 opens September 1.<br>
+          <span class="meta">in our bio · #mancha #contemporaryart #emergingart</span>
+          <pre class="prompt">Extreme crop of a painting's most charged detail, cinematic low light,
+red accent within the work, mysterious, museum-grade — ar 4:5 --style raw</pre>
+        </div>
+
+        <div class="kv">
+          <div><dt>Recursos</dt><dd>2–3 obras reales fotografiadas (posts 2,4,7,9), 1 open-access (8), 4 posters de marca (1,3,5,6) en Figma + fondos IA.</dd></div>
+          <div><dt>Hashtags base</dt><dd>Siempre: <code>#mancha</code>. Categoría (2–3): #emergingart #contemporaryart #artcollector #opencall. Discretos, al final.</dd></div>
+          <div><dt>CTAs</dt><dd>“in our bio” (sobrio). Artistas → Leave a mark / open call. Coleccionistas → Before the World / la temporada.</dd></div>
+          <div><dt>Orden</dt><dd>Estricto 1→9 para componer el grid de arriba hacia abajo. Stories de apoyo desde el día 1.</dd></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 17 — ESCRITURA -->
+    <section class="doc" id="s17">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">17</span> · Guía de escritura</p>
+        <h2>Cómo suena MANCHA.</h2>
+        <p class="lede">Inglés editorial, <strong>adaptado, no traducido</strong>. Declara con la calma de quien ya sabe lo que tiene. No grita, no ruega, no vende.</p>
+        <div class="kv">
+          <div><dt>Tono</dt><dd>Sobrio, presente, primera persona del plural. Cartela de museo, no anuncio.</dd></div>
+          <div><dt>Longitud</dt><dd>Gancho (1 línea) → cuerpo (2–4) → cierre (1 que reposa). Sin relleno.</dd></div>
+          <div><dt>Narrativa</dt><dd>Descubrimiento, procedencia, permanencia. El artista/obra al centro, nunca el precio.</dd></div>
+          <div><dt>Mayúsculas</dt><dd>Sentence case. Mayúsculas solo en labels mono (SEASON 01), jamás para gritar.</dd></div>
+          <div><dt>Emojis</dt><dd>Por defecto ninguno. Máximo uno y estructural (→).</dd></div>
+          <div><dt>Puntuación</dt><dd>El punto final, el guion largo (—), la itálica para énfasis. Nunca “!!!”.</dd></div>
+          <div><dt>Hooks</dt><dd>Una afirmación, no una pregunta-cebo. “We choose first.” “You saw it here, before the world did.”</dd></div>
+          <div><dt>CTAs</dt><dd>“in our bio”, “Read in our bio”, “The open call opens August 1.” Informar, no empujar.</dd></div>
+          <div><dt>Hashtags</dt><dd>Bloque mínimo al final, separado. #mancha + 2–3 de categoría. Nunca de tendencia ni dentro del texto.</dd></div>
+        </div>
+        <h4>Léxico</h4>
+        <p><strong>Usamos:</strong> season, hand-picked, the work, the artist, emerging, discover, first, before the world, collect, a moment, the close, the archive, the Index, the Canon, provenance, considered, leave a mark.</p>
+        <p><strong>Nunca:</strong> drop · exclusive (afirmarlo) · buy now · sale / % off · last chance · hurry · limited spots · viral · influencer · content (por “la obra”) · tag a friend · double tap · link in bio!!! · follow us · amazing/incredible/epic.</p>
+      </div>
+    </section>
+
+    <!-- 18 — CONSISTENCIA -->
+    <section class="doc" id="s18">
+      <div class="wrap reveal">
+        <p class="eyebrow"><span class="sec-num">18</span> · Manual de consistencia</p>
+        <h2>Que dentro de 5 años siga siendo MANCHA.</h2>
+        <p class="lede">Antes de publicar, toda pieza pasa por este checklist. Si falla uno, no se publica.</p>
+        <ul>
+          <li><strong>Prueba del logo tapado:</strong> ¿se reconoce como MANCHA sin el logotipo?</li>
+          <li><strong>Un foco, una idea, un acento</strong> (el punto rojo, una vez).</li>
+          <li><strong>Voz:</strong> inglés editorial, presente, sin urgencia ni emojis de relleno; ningún término de la lista prohibida.</li>
+          <li><strong>Tipografía:</strong> máx. dos familias; márgenes seguros respetados.</li>
+          <li><strong>Imagen:</strong> museum-grade, color fiel, sin IA evidente ni stock.</li>
+          <li><strong>Lugar en la cuadrícula:</strong> ¿la pantalla de nueve sigue pareciendo una portada?</li>
+          <li><strong>Razón de existir:</strong> este post añade algo. Si no, no se publica.</li>
+          <li><strong>Atemporalidad:</strong> ¿se vería bien dentro de cinco años?</li>
+        </ul>
+        <div class="dd">
+          <div class="col yes"><h4>✓ Sí se ve así</h4><ul>
+            <li>“A season closes. It does not reopen.” sobre tinta, un punto rojo.</li>
+            <li>Una obra, mucho muro, cartela mono, color fiel.</li>
+            <li>2–3 posts/semana, domingo en silencio.</li>
+          </ul></div>
+          <div class="col no"><h4>✗ Nunca así</h4><ul>
+            <li>“🔥🔥 ÚLTIMAS HORAS — no te quedes sin tu pieza!!!”</li>
+            <li>Collage de 5 obras con stickers y emojis.</li>
+            <li>Reel con audio de tendencia y cortes al beat.</li>
+          </ul></div>
+        </div>
+        <blockquote>MANCHA nunca grita, nunca ruega, nunca liquida, nunca persigue una tendencia, nunca mide su valor en seguidores, nunca antepone el precio al artista, nunca rompe la calma. El prestigio no se anuncia: se da por hecho.</blockquote>
+      </div>
+    </section>
+
+    <footer class="doc-foot">
+      <div class="wrap">
+        <div class="brand">MANCHA<span class="dot" style="color:var(--red)">.</span></div>
+        Documento vivo. Evoluciona con las temporadas; sus principios —curaduría, restricción, calma— no cambian.<br>Construimos para el archivo, no para el algoritmo.
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Theme toggle
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('themeBtn');
+    var saved=localStorage.getItem('mancha-ds-theme'); if(saved) root.setAttribute('data-theme',saved);
+    btn.addEventListener('click',function(){
+      var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next); localStorage.setItem('mancha-ds-theme',next);
+    });
+  })();
+  // Scroll-spy
+  (function(){
+    var links=[].slice.call(document.querySelectorAll('#nav a'));
+    var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+    var obs=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ links.forEach(function(l){l.classList.remove('active');}); var a=map[e.target.id]; if(a)a.classList.add('active'); }});
+    },{rootMargin:'-30% 0px -65% 0px'});
+    document.querySelectorAll('section.doc, header.hero').forEach(function(s){ if(s.id) obs.observe(s); });
+    // close mobile drawer on click
+    links.forEach(function(a){a.addEventListener('click',function(){document.querySelector('.side').classList.remove('open');});});
+  })();
+  // Reveal
+  (function(){
+    var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{rootMargin:'0px 0px -10% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+  })();
+</script>
+</body>
+</html>

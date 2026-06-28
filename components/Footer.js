@@ -50,6 +50,7 @@ export default async function Footer() {
               <Link href="/indice">{t('indexLink')}</Link>
               <h5 style={{ marginTop: 24 }}>{t('colContact')}</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
+              <a href="https://instagram.com/mancha.gallery" target="_blank" rel="noreferrer">Instagram → @mancha.gallery</a>
             </div>
           </div>
         </div>

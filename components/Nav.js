@@ -34,6 +34,7 @@ export default async function Nav() {
     ? [
         { href: '/sobre-mancha', label: t('institution') },
         ...manifestos,
+        { href: '/notas', label: t('notes') },
         // 'Solicitar acceso' solo para visitantes sin sesión.
         ...(!user ? [{ href: '/postular', label: `${t('apply')} →` }] : []),
         { href: '/#compradores', label: t('collect') },
@@ -41,6 +42,7 @@ export default async function Nav() {
     : [
         { href: '/sobre-mancha', label: t('institution') },
         ...manifestos,
+        { href: '/notas', label: t('notes') },
         { href: '/seleccionados', label: t('selected') },
         { href: '/obras', label: t('catalogue') },
         ...(!user ? [{ href: '/postular', label: t('apply') }] : []),
