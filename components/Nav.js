@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/[locale]/cuenta/actions';
 import NavMenu from './NavMenu';
 import NavLogoLink from './NavLogoLink';
+import LocaleSwitch from './LocaleSwitch';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default async function Nav() {
@@ -59,7 +60,10 @@ export default async function Nav() {
     <nav className="nav">
       <div className="nav-inner">
         <NavLogoLink />
-        <NavMenu links={links} authSlot={authSlot} />
+        <div className="nav-right">
+          <LocaleSwitch />
+          <NavMenu links={links} authSlot={authSlot} />
+        </div>
       </div>
     </nav>
   );

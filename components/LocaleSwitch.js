@@ -2,8 +2,13 @@
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
 
-// Selector ES / EN. Cambia el idioma conservando la ruta actual y guarda la
-// elección en la cookie NEXT_LOCALE (lo hace next-intl al cambiar de locale).
+// Selector de idioma con banderitas. Cambia el idioma conservando la ruta
+// actual y guarda la elección en la cookie NEXT_LOCALE (lo hace next-intl).
+const LOCALES = [
+  { code: 'es', flag: '🇪🇸', label: 'Español' },
+  { code: 'en', flag: '🇺🇸', label: 'English' },
+];
+
 export default function LocaleSwitch() {
   const locale = useLocale();
   const pathname = usePathname();
@@ -15,23 +20,19 @@ export default function LocaleSwitch() {
 
   return (
     <div className="locale-switch" role="group" aria-label="Idioma / Language">
-      <button
-        type="button"
-        onClick={() => change('es')}
-        className={`locale-switch-btn${locale === 'es' ? ' active' : ''}`}
-        aria-pressed={locale === 'es'}
-      >
-        ES
-      </button>
-      <span className="locale-switch-sep">/</span>
-      <button
-        type="button"
-        onClick={() => change('en')}
-        className={`locale-switch-btn${locale === 'en' ? ' active' : ''}`}
-        aria-pressed={locale === 'en'}
-      >
-        EN
-      </button>
+      {LOCALES.map((l) => (
+        <button
+          key={l.code}
+          type="button"
+          onClick={() => change(l.code)}
+          className={`locale-flag${locale === l.code ? ' active' : ''}`}
+          aria-pressed={locale === l.code}
+          aria-label={l.label}
+          title={l.label}
+        >
+          {l.flag}
+        </button>
+      ))}
     </div>
   );
 }
