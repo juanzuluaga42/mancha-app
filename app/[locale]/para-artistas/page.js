@@ -12,15 +12,12 @@ import RoleSwitch from '@/components/RoleSwitch';
 import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { getArticles } from '@/lib/news';
+import { CONV_OPEN, CONV_CLOSE } from '@/lib/dates';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
   return { title: t('artistsTitle'), description: t('artistsDesc') };
 }
-
-const CONV_OPEN_DATE  = '2026-08-01T00:00:00-05:00';
-const CONV_CLOSE_DATE = '2026-08-31T00:00:00-05:00';
-const LAUNCH_DATE     = '2026-09-01T00:00:00-05:00';
 
 export default async function ParaArtistasPage({ searchParams }) {
   const params = await searchParams;
@@ -68,8 +65,8 @@ export default async function ParaArtistasPage({ searchParams }) {
             )}
           </h1>
           <div className="tsr-hero-cd">
-            {prelaunch && <Countdown endsAt={CONV_OPEN_DATE} label={t('convOpensIn')} />}
-            {convocatoria && <Countdown endsAt={CONV_CLOSE_DATE} label={t('convClosesIn')} />}
+            {prelaunch && <Countdown endsAt={CONV_OPEN} label={t('convOpensIn')} />}
+            {convocatoria && <Countdown endsAt={CONV_CLOSE} label={t('convClosesIn')} />}
             {temporadaActiva && season?.ends_at && <Countdown endsAt={season.ends_at} label={t('seasonClosesIn')} />}
           </div>
           <div className="tsr-ctas">

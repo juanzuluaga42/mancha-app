@@ -11,13 +11,12 @@ import RoleSwitch from '@/components/RoleSwitch';
 import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { getArticles } from '@/lib/news';
+import { LAUNCH } from '@/lib/dates';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
   return { title: t('collectorsTitle'), description: t('collectorsDesc') };
 }
-
-const LAUNCH_DATE = '2026-09-01T00:00:00-05:00';
 
 export default async function ParaColeccionistasPage({ searchParams }) {
   const params = await searchParams;
@@ -62,7 +61,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           </h1>
           <div className="tsr-hero-cd">
             {(prelaunch || convocatoria) && (
-              <Countdown endsAt={LAUNCH_DATE} label={t('galleryOpensIn')} />
+              <Countdown endsAt={LAUNCH} label={t('galleryOpensIn')} />
             )}
             {temporadaActiva && season?.ends_at && (
               <Countdown endsAt={season.ends_at} label={t('seasonClosesIn')} />

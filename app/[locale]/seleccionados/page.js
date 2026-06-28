@@ -4,8 +4,10 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
+import LocalDate from '@/components/LocalDate';
 
 import { cap } from '@/lib/utils';
+import { formatCalendarDate } from '@/lib/dates';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 import { redirect } from 'next/navigation';
 
@@ -94,9 +96,9 @@ export default async function SeleccionadosPage() {
                 <h2 className="sel-current-title">{currentSeason.name}</h2>
                 {!convocatoria && (
                   <p className="sel-current-dates">
-                    {new Date(currentSeason.starts_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric' })}
+                    {formatCalendarDate(currentSeason.starts_at, locale, { day: '2-digit', month: 'long', year: 'numeric' })}
                     {' — '}
-                    {new Date(currentSeason.ends_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric' })}
+                    <LocalDate iso={currentSeason.ends_at} options={{ day: '2-digit', month: 'long', year: 'numeric' }} />
                   </p>
                 )}
               </div>
@@ -182,9 +184,9 @@ export default async function SeleccionadosPage() {
                   <div>
                     <h3 className="sel-past-season-name">{season.name}</h3>
                     <p className="sel-past-season-dates">
-                      {new Date(season.starts_at).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })}
+                      {formatCalendarDate(season.starts_at, locale, { month: 'long', year: 'numeric' })}
                       {' — '}
-                      {new Date(season.ends_at).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })}
+                      <LocalDate iso={season.ends_at} options={{ month: 'long', year: 'numeric' }} />
                     </p>
                   </div>
                   {!convocatoria && <Link href={`/temporadas/${season.id}`} className="sel-past-link">{t('viewSeason')}</Link>}

@@ -5,7 +5,9 @@ import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
+import LocalDate from '@/components/LocalDate';
 import { cap } from '@/lib/utils';
+import { formatCalendarDate } from '@/lib/dates';
 import { isCatalogHidden } from '@/lib/fase';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
@@ -22,7 +24,6 @@ export default async function TemporadaPage({ params }) {
   if (isCatalogHidden()) redirect({ href: '/', locale });
   const { id } = await params;
   const t = await getTranslations('season');
-  const dateLocale = locale === 'en' ? 'en-US' : 'es-AR';
   const supabase = await createClient();
 
   const { data: season } = await supabase.from('seasons').select('*').eq('id', id).maybeSingle();
@@ -56,9 +57,9 @@ export default async function TemporadaPage({ params }) {
               {season.is_current ? t('live') : t('closed')}
             </span>
             <span className="temporada-dates">
-              {new Date(season.starts_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}
+              {formatCalendarDate(season.starts_at, locale, { day: '2-digit', month: 'short', year: 'numeric' })}
               {' — '}
-              {new Date(season.ends_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}
+              <LocalDate iso={season.ends_at} options={{ day: '2-digit', month: 'short', year: 'numeric' }} />
             </span>
           </div>
 
