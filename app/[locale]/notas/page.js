@@ -1,13 +1,11 @@
-import Link from 'next/link';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import BlogImg from '@/components/BlogImg';
-import { articles } from '@/lib/news';
-import {
-  datosTicker, datosCuriosos, artistas, cuadrosCaros,
-  museos, premios, movimientos,
-} from '@/lib/atlas';
+import { getArticles } from '@/lib/news';
+import { getAtlas } from '@/lib/atlas';
 
 export const metadata = {
   title: 'MANCHA — Lo que pensamos sobre el arte.',
@@ -19,7 +17,11 @@ export const metadata = {
   },
 };
 
-export default function NotasPage() {
+export default async function NotasPage() {
+  const t = await getTranslations('notasPage');
+  const locale = await getLocale();
+  const articles = getArticles(locale);
+  const { datosTicker, datosCuriosos, artistas, cuadrosCaros, museos, premios, movimientos } = getAtlas(locale);
   const [lead, ...rest] = articles;
 
   return (
@@ -30,21 +32,18 @@ export default function NotasPage() {
       {/* ── HERO ─────────────────────────────────────────── */}
       <header className="atlas-hero">
         <div className="wrap atlas-hero-inner">
-          <p className="eyebrow atlas-hero-eyebrow">MANCHA Editorial</p>
+          <p className="eyebrow atlas-hero-eyebrow">{t('heroKicker')}</p>
           <h1 className="atlas-hero-title">
-            Lo que pensamos<br />
-            <em>sobre el arte.</em>
+            {t('heroTitle1')}<br />
+            <em>{t('heroTitleEm')}</em>
           </h1>
-          <p className="atlas-hero-sub">
-            Arte, historia, criterio. Cinco siglos de genios, récords imposibles,
-            museos y datos que nadie te contó. Sin algoritmos editoriales.
-          </p>
+          <p className="atlas-hero-sub">{t('heroSub')}</p>
           <div className="atlas-hero-jump">
-            <a href="#lecturas">Lecturas</a>
-            <a href="#artistas">Los 20 artistas</a>
-            <a href="#caros">Cuadros más caros</a>
-            <a href="#museos">Museos</a>
-            <a href="#premios">Premios</a>
+            <a href="#lecturas">{t('jumpLecturas')}</a>
+            <a href="#artistas">{t('jumpArtistas')}</a>
+            <a href="#caros">{t('jumpCaros')}</a>
+            <a href="#museos">{t('jumpMuseos')}</a>
+            <a href="#premios">{t('jumpPremios')}</a>
           </div>
         </div>
       </header>
@@ -63,7 +62,7 @@ export default function NotasPage() {
       {/* ── LÍNEA DE TIEMPO ──────────────────────────────── */}
       <section className="atlas-timeline">
         <div className="wrap">
-          <p className="atlas-section-kicker">600 años en una línea</p>
+          <p className="atlas-section-kicker">{t('timelineKicker')}</p>
           <div className="atlas-timeline-track">
             {movimientos.map((m, i) => (
               <div className="atlas-tl-node" key={i}>
@@ -80,8 +79,8 @@ export default function NotasPage() {
       <section className="atlas-lecturas" id="lecturas">
         <div className="wrap">
           <div className="atlas-section-head">
-            <h2 className="atlas-section-title">Lecturas</h2>
-            <p className="atlas-section-desc">Historias largas para leer con calma.</p>
+            <h2 className="atlas-section-title">{t('lecturasTitle')}</h2>
+            <p className="atlas-section-desc">{t('lecturasDesc')}</p>
           </div>
 
           {/* Artículo destacado */}
@@ -90,10 +89,10 @@ export default function NotasPage() {
               <BlogImg src={lead.image} alt={lead.imageAlt} color="var(--ink)" />
             </div>
             <div className="atlas-lead-body">
-              <p className="atlas-lead-date">{lead.date} · Destacado</p>
+              <p className="atlas-lead-date">{lead.date} · {t('featured')}</p>
               <h3 className="atlas-lead-title">{lead.title}</h3>
               <p className="atlas-lead-excerpt">{lead.excerpt}</p>
-              <span className="atlas-lead-cta">Leer nota completa →</span>
+              <span className="atlas-lead-cta">{t('readFull')}</span>
             </div>
           </Link>
 
@@ -107,7 +106,7 @@ export default function NotasPage() {
                 <p className="atlas-art-date">{a.date}</p>
                 <h3 className="atlas-art-title">{a.title}</h3>
                 <p className="atlas-art-excerpt">{a.excerpt}</p>
-                <span className="atlas-art-cta">Leer →</span>
+                <span className="atlas-art-cta">{t('readShort')}</span>
               </Link>
             ))}
           </div>
@@ -118,11 +117,8 @@ export default function NotasPage() {
       <section className="atlas-artistas" id="artistas">
         <div className="wrap">
           <div className="atlas-section-head atlas-section-head-dark">
-            <h2 className="atlas-section-title">Los 20 más influyentes</h2>
-            <p className="atlas-section-desc">
-              No es un ranking de gusto — es un mapa de quiénes cambiaron las reglas
-              del juego. Pasa el cursor sobre cada uno.
-            </p>
+            <h2 className="atlas-section-title">{t('artistasTitle')}</h2>
+            <p className="atlas-section-desc">{t('artistasDesc')}</p>
           </div>
           <div className="atlas-artistas-list">
             {artistas.map((a) => (
@@ -151,8 +147,8 @@ export default function NotasPage() {
       <section className="atlas-caros" id="caros">
         <div className="wrap">
           <div className="atlas-section-head">
-            <h2 className="atlas-section-title">Los cuadros más caros del mundo</h2>
-            <p className="atlas-section-desc">Cifras en millones de dólares. El mercado cotiza el relato tanto como la obra.</p>
+            <h2 className="atlas-section-title">{t('carosTitle')}</h2>
+            <p className="atlas-section-desc">{t('carosDesc')}</p>
           </div>
           <div className="atlas-caros-list">
             {cuadrosCaros.map((c) => (
@@ -165,7 +161,7 @@ export default function NotasPage() {
                 </div>
                 <div className="atlas-caro-precio">
                   <span className="atlas-caro-num">${c.precio}</span>
-                  <span className="atlas-caro-m">millones</span>
+                  <span className="atlas-caro-m">{t('carosMillions')}</span>
                   <span className="atlas-caro-donde">{c.donde}</span>
                 </div>
               </div>
@@ -178,8 +174,8 @@ export default function NotasPage() {
       <section className="atlas-datos">
         <div className="wrap">
           <div className="atlas-section-head">
-            <h2 className="atlas-section-title">Datos que no sabías</h2>
-            <p className="atlas-section-desc">Pequeñas historias que vuelven el arte más humano.</p>
+            <h2 className="atlas-section-title">{t('datosTitle')}</h2>
+            <p className="atlas-section-desc">{t('datosDesc')}</p>
           </div>
           <div className="atlas-datos-grid">
             {datosCuriosos.map((d, i) => (
@@ -196,8 +192,8 @@ export default function NotasPage() {
       <section className="atlas-museos" id="museos">
         <div className="wrap">
           <div className="atlas-section-head atlas-section-head-dark">
-            <h2 className="atlas-section-title">Museos para ver una vez en la vida</h2>
-            <p className="atlas-section-desc">Dónde vive el arte que cambió la historia.</p>
+            <h2 className="atlas-section-title">{t('museosTitle')}</h2>
+            <p className="atlas-section-desc">{t('museosDesc')}</p>
           </div>
           <div className="atlas-museos-grid">
             {museos.map((m, i) => (
@@ -217,15 +213,15 @@ export default function NotasPage() {
       <section className="atlas-premios" id="premios">
         <div className="wrap">
           <div className="atlas-section-head">
-            <h2 className="atlas-section-title">Los grandes premios del arte</h2>
-            <p className="atlas-section-desc">El reconocimiento que marca una carrera.</p>
+            <h2 className="atlas-section-title">{t('premiosTitle')}</h2>
+            <p className="atlas-section-desc">{t('premiosDesc')}</p>
           </div>
           <div className="atlas-premios-list">
             {premios.map((p, i) => (
               <div className="atlas-premio" key={i}>
                 <div className="atlas-premio-top">
                   <h3 className="atlas-premio-nombre">{p.nombre}</h3>
-                  <span className="atlas-premio-desde">desde {p.desde}</span>
+                  <span className="atlas-premio-desde">{t('premiosSince', { year: p.desde })}</span>
                 </div>
                 <p className="atlas-premio-donde">{p.donde}</p>
                 <p className="atlas-premio-desc">{p.desc}</p>
@@ -238,20 +234,17 @@ export default function NotasPage() {
       {/* ── CIERRE ───────────────────────────────────────── */}
       <section className="atlas-cierre">
         <div className="wrap atlas-cierre-inner">
-          <p className="atlas-cierre-pre">Toda esta historia empezó igual</p>
+          <p className="atlas-cierre-pre">{t('cierrePre')}</p>
           <h2 className="atlas-cierre-title">
-            Con alguien que vio<br />
-            <em>algo primero.</em>
+            {t('cierreTitle1')}<br />
+            <em>{t('cierreTitleEm')}</em>
           </h2>
-          <p className="atlas-cierre-sub">
-            Los nombres de este atlas un día fueron artistas emergentes que nadie conocía.
-            La próxima página de esta historia se está escribiendo ahora.
-          </p>
+          <p className="atlas-cierre-sub">{t('cierreSub')}</p>
           <div className="atlas-cierre-ctas">
             <Link href="/artistas" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
-              Ver la temporada actual
+              {t('ctaSeason')}
             </Link>
-            <Link href="/sobre-mancha" className="atlas-cierre-ghost">La institución →</Link>
+            <Link href="/sobre-mancha" className="atlas-cierre-ghost">{t('ctaInstitution')}</Link>
           </div>
         </div>
       </section>

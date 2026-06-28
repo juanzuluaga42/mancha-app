@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -11,7 +11,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import RoleSwitch from '@/components/RoleSwitch';
 import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
-import { articles } from '@/lib/news';
+import { getArticles } from '@/lib/news';
 
 export const metadata = {
   title: 'MANCHA — Para artistas. Solicitar acceso.',
@@ -25,6 +25,8 @@ const LAUNCH_DATE     = '2026-09-01T00:00:00-05:00';
 export default async function ParaArtistasPage({ searchParams }) {
   const params = await searchParams;
   const t = await getTranslations('artists');
+  const locale = await getLocale();
+  const articles = getArticles(locale);
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
   const temporadaActiva = isTemporadaActiva();

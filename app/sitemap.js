@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/utils/supabase/admin';
-import { articles } from '@/lib/news';
+import { getArticles } from '@/lib/news';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
@@ -40,7 +40,7 @@ export default async function sitemap() {
     }
   }
 
-  const blogRoutes = articles.map((n) => ({ url: `${SITE_URL}/notas/${n.slug}`, priority: 0.4 }));
+  const blogRoutes = getArticles('es').map((n) => ({ url: `${SITE_URL}/notas/${n.slug}`, priority: 0.4 }));
 
   return [...staticRoutes, ...dynamicRoutes, ...blogRoutes];
 }
