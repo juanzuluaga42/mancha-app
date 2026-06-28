@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Countdown from '@/components/Countdown';
@@ -20,6 +21,7 @@ const LAUNCH_DATE = '2026-09-01T00:00:00-05:00';
 
 export default async function ParaColeccionistasPage({ searchParams }) {
   const params = await searchParams;
+  const t = await getTranslations('collectors');
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
   const temporadaActiva = isTemporadaActiva();
@@ -51,40 +53,40 @@ export default async function ParaColeccionistasPage({ searchParams }) {
       {/* ── HERO ─────────────────────────────────────────── */}
       <header className="tsr-hero col-hero">
         <div className="wrap tsr-hero-content">
-          <p className="tsr-hero-tag">MANCHA · Para coleccionistas · Temporada 01 · 2026</p>
+          <p className="tsr-hero-tag">{t('heroTag')}</p>
           <h1 className="tsr-title">
-            <span className="tsr-tl">Colecciona</span>
-            <span className="tsr-tl tsr-tl--em col-em">antes.</span>
+            <span className="tsr-tl">{t('heroTitle1')}</span>
+            <span className="tsr-tl tsr-tl--em col-em">{t('heroTitleEm')}</span>
           </h1>
           <div className="tsr-hero-cd">
             {(prelaunch || convocatoria) && (
-              <Countdown endsAt={LAUNCH_DATE} label="La galería abre en" />
+              <Countdown endsAt={LAUNCH_DATE} label={t('galleryOpensIn')} />
             )}
             {temporadaActiva && season?.ends_at && (
-              <Countdown endsAt={season.ends_at} label="La temporada cierra en" />
+              <Countdown endsAt={season.ends_at} label={t('seasonClosesIn')} />
             )}
           </div>
           <div className="tsr-ctas">
             {temporadaActiva ? (
               <>
-                <a href="/obras" className="tsr-cta-primary">Ver el catálogo →</a>
-                <a href="/seleccionados" className="tsr-cta-ghost">Los elegidos →</a>
+                <Link href="/obras" className="tsr-cta-primary">{t('viewCatalogue')}</Link>
+                <Link href="/seleccionados" className="tsr-cta-ghost">{t('theSelected')}</Link>
               </>
             ) : (
               <>
-                <a href="#aviso" className="tsr-cta-primary">Avisarme cuando abra →</a>
-                <a href="/notas" className="tsr-cta-ghost">Leer las notas →</a>
+                <a href="#aviso" className="tsr-cta-primary">{t('notifyMe')}</a>
+                <Link href="/notas" className="tsr-cta-ghost">{t('readNotes')}</Link>
               </>
             )}
           </div>
         </div>
         <div className="tsr-hero-foot">
           <div className="wrap tsr-hero-foot-inner">
-            <span>Arte emergente seleccionado a mano · Sin algoritmos</span>
+            <span>{t('footLeft')}</span>
             <span>
               {prelaunch || convocatoria
-                ? 'La galería abre el 1 de septiembre'
-                : `Temporada en curso — ${season?.name ?? 'Temporada 01'}`}
+                ? t('galleryOpensSep')
+                : t('seasonInProgress', { name: season?.name ?? 'Temporada 01' })}
             </span>
           </div>
         </div>
@@ -94,21 +96,21 @@ export default async function ParaColeccionistasPage({ searchParams }) {
       <section className="tsr-numbers">
         <div className="wrap tsr-numbers-inner">
           <div className="tsr-num-item" data-reveal>
-            <b className="tsr-num-dig tsr-num-word">Antes.</b>
-            <p className="tsr-num-label">Antes que el mundo</p>
-            <p className="tsr-num-note">Elegimos artistas antes de que sean evidentes. Cuando llegas a MANCHA, llegas primero.</p>
+            <b className="tsr-num-dig tsr-num-word">{t('num1Big')}</b>
+            <p className="tsr-num-label">{t('num1Label')}</p>
+            <p className="tsr-num-note">{t('num1Note')}</p>
           </div>
           <div className="tsr-num-divider" aria-hidden="true" />
           <div className="tsr-num-item" data-reveal data-delay="1">
             <b className="tsr-num-dig">3</b>
-            <p className="tsr-num-label">Piezas por artista</p>
-            <p className="tsr-num-note">Solo tres piezas por artista. Nada de catálogo infinito. Lo mejor de cada uno, con espacio para verse bien.</p>
+            <p className="tsr-num-label">{t('num2Label')}</p>
+            <p className="tsr-num-note">{t('num2Note')}</p>
           </div>
           <div className="tsr-num-divider" aria-hidden="true" />
           <div className="tsr-num-item" data-reveal data-delay="2">
-            <b className="tsr-num-dig tsr-num-word">Cierra.</b>
-            <p className="tsr-num-label">Cuando cierra, cierra</p>
-            <p className="tsr-num-note">No es un catálogo permanente. Cuando la temporada termina, lo que no se vendió, se fue. Para siempre.</p>
+            <b className="tsr-num-dig tsr-num-word">{t('num3Big')}</b>
+            <p className="tsr-num-label">{t('num3Label')}</p>
+            <p className="tsr-num-note">{t('num3Note')}</p>
           </div>
         </div>
       </section>
@@ -116,12 +118,10 @@ export default async function ParaColeccionistasPage({ searchParams }) {
       {/* ── CRITERIO PARA COLECCIONISTAS ─────────────────── */}
       <section className="tsr-manifesto">
         <div className="wrap tsr-manifesto-inner" data-reveal>
-          <blockquote className="tsr-manifesto-q">
-            "No vendemos arte. Presentamos artistas que alguien creyó primero."
-          </blockquote>
+          <blockquote className="tsr-manifesto-q">{t('quote')}</blockquote>
           <div className="tsr-manifesto-body">
-            <p>La diferencia entre un coleccionista y alguien que compra arte decorativo es el criterio. En MANCHA, el criterio ya está hecho. Revisamos a mano, elegimos pocos, y protegemos la atención del que colecciona.</p>
-            <p>Sin algoritmos, sin popularidad, sin número de seguidores. La obra habla primero. Lo que encuentras aquí ya pasó un filtro que la mayoría de los artistas no pasa.</p>
+            <p>{t('manifestoP1')}</p>
+            <p>{t('manifestoP2')}</p>
           </div>
         </div>
       </section>
@@ -130,15 +130,15 @@ export default async function ParaColeccionistasPage({ searchParams }) {
       <section className="tsr-steps-artistas">
         <div className="wrap">
           <div className="tsr-steps-head" data-reveal>
-            <p className="eyebrow">Cómo funciona</p>
-            <h2 className="tsr-steps-title">Cuatro pasos,<br /><em>cero vueltas.</em></h2>
+            <p className="eyebrow">{t('howKicker')}</p>
+            <h2 className="tsr-steps-title">{t('howTitle1')}<br /><em>{t('howTitleEm')}</em></h2>
           </div>
           <div className="tsr-steps-row">
             {[
-              { n: '01', title: 'Exploras.', body: 'Un catálogo pequeño y curado. Pocos artistas, pocas piezas. Lo suficiente para que algo te detenga.' },
-              { n: '02', title: 'Pujas.', body: 'Eliges una pieza y pones tu oferta por encima de la puja mínima. Sin costos extra del lado comprador.' },
-              { n: '03', title: 'Sigues.', body: 'Si alguien te supera, puedes volver a pujar cuando quieras. La temporada dura tres meses.' },
-              { n: '04', title: 'Ganas.', body: 'Si tu puja cierra primera, coordinamos el pago y el envío directamente contigo por correo.' },
+              { n: '01', title: t('step1Title'), body: t('step1Body') },
+              { n: '02', title: t('step2Title'), body: t('step2Body') },
+              { n: '03', title: t('step3Title'), body: t('step3Body') },
+              { n: '04', title: t('step4Title'), body: t('step4Body') },
             ].map((s, i) => (
               <div className="tsr-step" key={s.n} data-reveal data-delay={String(i)}>
                 <span className="tsr-step-n">{s.n}</span>
@@ -156,10 +156,10 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           <div className="wrap">
             <div className="hp-season-head">
               <div>
-                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>Temporada en curso</p>
-                <h2 className="hp-season-title">{season?.name ?? 'Artistas actuales'}</h2>
+                <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>{t('seasonCurrentKicker')}</p>
+                <h2 className="hp-season-title">{season?.name ?? t('currentArtistsFallback')}</h2>
               </div>
-              <Link href="/seleccionados" className="hp-season-all">Ver todos →</Link>
+              <Link href="/seleccionados" className="hp-season-all">{t('viewAll')}</Link>
             </div>
             <div className="hp-season-grid">
               {allArtists.slice(0, 6).map((artist, i) => {
@@ -181,7 +181,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
                     </div>
                     <div className="hp-artist-info">
                       <h3 className="hp-artist-name">{artist.display_name}</h3>
-                      <p className="hp-artist-meta">{(artist.pieces ?? []).length} {(artist.pieces ?? []).length === 1 ? 'pieza' : 'piezas'} disponibles</p>
+                      <p className="hp-artist-meta">{t('piecesAvailable', { count: (artist.pieces ?? []).length })}</p>
                     </div>
                   </Link>
                 );
@@ -196,14 +196,14 @@ export default async function ParaColeccionistasPage({ searchParams }) {
         <div className="wrap">
           <div className="tsr-blog-head" data-reveal>
             <div>
-              <p className="eyebrow">MANCHA Editorial</p>
-              <h2 className="tsr-blog-title">Arte, historia, criterio.</h2>
+              <p className="eyebrow">{t('editorialKicker')}</p>
+              <h2 className="tsr-blog-title">{t('blogTitle')}</h2>
             </div>
-            <a href="/notas" className="tsr-blog-all">Todas las notas →</a>
+            <Link href="/notas" className="tsr-blog-all">{t('allNotes')}</Link>
           </div>
           <div className="tsr-blog-grid">
             {articles.slice(0, 3).map((article, i) => (
-              <a href={`/notas/${article.slug}`} className="tsr-blog-card" key={article.slug} data-reveal data-delay={String(i)}>
+              <Link href={`/notas/${article.slug}`} className="tsr-blog-card" key={article.slug} data-reveal data-delay={String(i)}>
                 <div className="tsr-blog-img">
                   {article.image && <img src={article.image} alt={article.imageAlt || article.title} />}
                 </div>
@@ -212,7 +212,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
                   <h3 className="tsr-blog-card-title">{article.title}</h3>
                   <p className="tsr-blog-excerpt">{article.excerpt}</p>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -223,16 +223,14 @@ export default async function ParaColeccionistasPage({ searchParams }) {
         <section className="tsr-aviso" id="aviso">
           <div className="wrap tsr-aviso-inner">
             <div className="tsr-aviso-text" data-reveal>
-              <p className="eyebrow" style={{ color: 'rgba(250,239,225,0.4)' }}>Para coleccionistas</p>
+              <p className="eyebrow" style={{ color: 'rgba(250,239,225,0.4)' }}>{t('avisoKicker')}</p>
               <h2 className="tsr-aviso-title">
-                Sé el primero en ver<br />la Temporada 01.
+                {t('avisoTitle1')}<br />{t('avisoTitle2')}
               </h2>
-              <p className="tsr-aviso-sub">
-                La galería abre el 1 de septiembre. Deja tu correo y te avisamos en el momento en que el catálogo esté listo — antes que nadie.
-              </p>
+              <p className="tsr-aviso-sub">{t('avisoSub')}</p>
             </div>
             <div className="tsr-aviso-form" data-reveal data-delay="1">
-              <WaitlistForm redirectTo="/para-coleccionistas" label="Avísame cuando abra →" />
+              <WaitlistForm redirectTo="/para-coleccionistas" label={t('waitlistLabel')} />
             </div>
           </div>
         </section>
