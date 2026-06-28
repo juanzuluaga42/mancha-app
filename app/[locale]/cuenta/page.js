@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -12,6 +13,9 @@ export const metadata = { title: 'MANCHA — Mi cuenta' };
 
 export default async function CuentaPage({ searchParams }) {
   const params = await searchParams;
+  const t = await getTranslations('account');
+  const locale = await getLocale();
+  const numLocale = locale === 'en' ? 'en-US' : 'es-AR';
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -30,9 +34,9 @@ export default async function CuentaPage({ searchParams }) {
         <Splat width="180px" height="155px" top="-50px" right="-40px" color="yellow" rotate={-12} radius="r2" />
         <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="red" rotate={14} radius="r4" />
         <div className="wrap">
-          <p className="cuenta-eyebrow">{isArtist ? 'Cuenta de artista' : 'Cuenta de coleccionista'}</p>
+          <p className="cuenta-eyebrow">{isArtist ? t('eyebrowArtist') : t('eyebrowCollector')}</p>
           <h1 className="cuenta-title">
-            {firstName ? <>Hola, <em>{cap(firstName)}.</em></> : <>Hola, de <em>nuevo.</em></>}
+            {firstName ? <>{t('hello')} <em>{cap(firstName)}.</em></> : <>{t('helloAgainPre')} <em>{t('helloAgainEm')}</em></>}
           </h1>
           <p className="cuenta-email">{user.email}</p>
         </div>
@@ -48,9 +52,9 @@ export default async function CuentaPage({ searchParams }) {
           )}
 
           {isArtist ? (
-            <ArtistDashboard supabase={supabase} userId={user.id} />
+            <ArtistDashboard supabase={supabase} userId={user.id} t={t} numLocale={numLocale} />
           ) : (
-            <BuyerDashboard supabase={supabase} userId={user.id} />
+            <BuyerDashboard supabase={supabase} userId={user.id} t={t} numLocale={numLocale} />
           )}
         </div>
       </div>
@@ -60,38 +64,38 @@ export default async function CuentaPage({ searchParams }) {
   );
 }
 
-async function ArtistDashboard({ supabase, userId }) {
+async function ArtistDashboard({ supabase, userId, t, numLocale }) {
   const { data: artist } = await supabase.from('artists').select('*').eq('profile_id', userId).maybeSingle();
 
   if (!artist) {
     return (
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Tu perfil</p>
-          <h2 className="cuenta-section-title">Completa tu perfil de artista</h2>
-          <p className="cuenta-section-sub">Con esto activas tu cuenta de artista. Después podrás subir tus obras cuando quieras.</p>
+          <p className="cuenta-section-label">{t('completeProfileLabel')}</p>
+          <h2 className="cuenta-section-title">{t('completeProfileTitle')}</h2>
+          <p className="cuenta-section-sub">{t('completeProfileSub')}</p>
         </div>
         <div className="cuenta-card">
           <form action={createArtistProfile} className="cuenta-form">
             <div className="cuenta-field-row">
               <div className="field">
-                <label htmlFor="display_name">Nombre artístico</label>
+                <label htmlFor="display_name">{t('artistName')}</label>
                 <input id="display_name" name="display_name" type="text" required />
               </div>
               <div className="field">
-                <label htmlFor="medium">Técnica</label>
-                <input id="medium" name="medium" type="text" placeholder="Óleo sobre lienzo" required />
+                <label htmlFor="medium">{t('technique')}</label>
+                <input id="medium" name="medium" type="text" placeholder={t('techniquePh')} required />
               </div>
             </div>
             <div className="field">
-              <label htmlFor="location">Ubicación</label>
-              <input id="location" name="location" type="text" placeholder="Ciudad, país" />
+              <label htmlFor="location">{t('location')}</label>
+              <input id="location" name="location" type="text" placeholder={t('locationPh')} />
             </div>
             <div className="field">
-              <label htmlFor="bio">Bio corta</label>
-              <textarea id="bio" name="bio" rows={4} placeholder="Dos o tres frases sobre tu trabajo y qué te mueve a hacerlo." required />
+              <label htmlFor="bio">{t('bioShort')}</label>
+              <textarea id="bio" name="bio" rows={4} placeholder={t('bioPh')} required />
             </div>
-            <SubmitButton pendingText="Guardando perfil...">Guardar perfil</SubmitButton>
+            <SubmitButton pendingText={t('savingProfile')}>{t('saveProfile')}</SubmitButton>
           </form>
         </div>
       </div>
@@ -113,11 +117,9 @@ async function ArtistDashboard({ supabase, userId }) {
         <div className="cuenta-status-card cuenta-status-rejected">
           <div className="cuenta-status-icon">—</div>
           <div>
-            <p className="cuenta-status-label">Esta vez no avanzamos</p>
+            <p className="cuenta-status-label">{t('rejectedLabel')}</p>
             <h2 className="cuenta-status-name">{artist.display_name}</h2>
-            <p className="cuenta-status-text">
-              No avanzamos con tu postulación esta temporada. Si quieres más detalle, escríbenos. Nada impide volver a postular en la próxima.
-            </p>
+            <p className="cuenta-status-text">{t('rejectedText')}</p>
           </div>
         </div>
       </div>
@@ -127,18 +129,18 @@ async function ArtistDashboard({ supabase, userId }) {
   // Banner de estado según selección + obras cargadas.
   const statusBanner = artist.status === 'approved' ? (
     <div className="cuenta-status-banner cuenta-status-banner-approved">
-      <b>Seleccionado ✓</b>
-      <span>Tu trabajo está en la temporada. Tus piezas son visibles en el catálogo.</span>
+      <b>{t('bannerApprovedTitle')}</b>
+      <span>{t('bannerApprovedText')}</span>
     </div>
   ) : myPieces.length === 0 ? (
     <div className="cuenta-status-banner cuenta-status-banner-warn">
-      <b>Completa tu postulación</b>
-      <span>Sube al menos una obra antes de que cierre la temporada. Sin obras, MANCHA no puede revisar tu trabajo.</span>
+      <b>{t('bannerWarnTitle')}</b>
+      <span>{t('bannerWarnText')}</span>
     </div>
   ) : (
     <div className="cuenta-status-banner cuenta-status-banner-review">
-      <b>En revisión</b>
-      <span>Tienes {myPieces.length} {myPieces.length === 1 ? 'obra cargada' : 'obras cargadas'}. MANCHA está revisando tu trabajo — te avisamos por correo.</span>
+      <b>{t('bannerReviewTitle')}</b>
+      <span>{t('bannerReviewText', { count: myPieces.length })}</span>
     </div>
   );
   const totalBids = myPieces.reduce((sum, p) => sum + (p.bids?.length ?? 0), 0);
@@ -152,44 +154,44 @@ async function ArtistDashboard({ supabase, userId }) {
       <div className="cuenta-stats-bar">
         <div className="cuenta-stat">
           <b>{myPieces.length}<span>/3</span></b>
-          <span>{myPieces.length === 1 ? 'pieza activa' : 'piezas activas'}</span>
+          <span>{t('statPiecesActive', { count: myPieces.length })}</span>
         </div>
         <div className="cuenta-stat-sep" />
         <div className="cuenta-stat">
           <b>{totalBids}</b>
-          <span>{totalBids === 1 ? 'puja recibida' : 'pujas recibidas'}</span>
+          <span>{t('statBidsReceived', { count: totalBids })}</span>
         </div>
         <div className="cuenta-stat-sep" />
         <div className="cuenta-stat">
           <b>{totalFollowers}</b>
-          <span>{totalFollowers === 1 ? 'siguiendo tu trabajo' : 'siguiendo tu trabajo'}</span>
+          <span>{t('statFollowers')}</span>
         </div>
       </div>
 
       {/* Perfil */}
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Tu perfil</p>
+          <p className="cuenta-section-label">{t('completeProfileLabel')}</p>
           <h2 className="cuenta-section-title">{artist.display_name}</h2>
         </div>
         <div className="cuenta-card cuenta-profile-card">
           <div className="cuenta-profile-row">
-            <span className="cuenta-profile-key">Técnica</span>
+            <span className="cuenta-profile-key">{t('profileTechnique')}</span>
             <span className="cuenta-profile-val">{artist.medium || '—'}</span>
           </div>
           {artist.location && (
             <div className="cuenta-profile-row">
-              <span className="cuenta-profile-key">Ubicación</span>
+              <span className="cuenta-profile-key">{t('profileLocation')}</span>
               <span className="cuenta-profile-val">{artist.location}</span>
             </div>
           )}
           <div className="cuenta-profile-row cuenta-profile-bio">
-            <span className="cuenta-profile-key">Bio</span>
+            <span className="cuenta-profile-key">{t('profileBio')}</span>
             <span className="cuenta-profile-val cuenta-profile-bio-text">{artist.bio}</span>
           </div>
           <div className="cuenta-profile-row">
-            <span className="cuenta-profile-key">Tu página</span>
-            <Link href={`/artistas/${artist.id}`} className="cuenta-profile-link">Ver tu perfil público →</Link>
+            <span className="cuenta-profile-key">{t('profilePage')}</span>
+            <Link href={`/artistas/${artist.id}`} className="cuenta-profile-link">{t('viewPublic')}</Link>
           </div>
         </div>
       </div>
@@ -197,13 +199,13 @@ async function ArtistDashboard({ supabase, userId }) {
       {/* Piezas */}
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Esta temporada</p>
-          <h2 className="cuenta-section-title">Tus piezas ({myPieces.length} de 3)</h2>
+          <p className="cuenta-section-label">{t('seasonLabel')}</p>
+          <h2 className="cuenta-section-title">{t('yourPiecesTitle', { count: myPieces.length })}</h2>
         </div>
 
         {myPieces.length === 0 ? (
           <div className="cuenta-empty">
-            <p>Todavía no subiste ninguna pieza. Puedes subir hasta 3 por temporada.</p>
+            <p>{t('noPieces')}</p>
           </div>
         ) : (
           <div className="cuenta-pieces-list">
@@ -218,13 +220,13 @@ async function ArtistDashboard({ supabase, userId }) {
                   </div>
                   <div className="cuenta-piece-right">
                     <div className="cuenta-piece-bid">
-                      <p className="cuenta-piece-amount">${Number(currentBid).toLocaleString('es-AR')} <span>USD</span></p>
-                      <p className="cuenta-piece-meta">{amounts.length === 0 ? 'Sin pujas aún' : `${amounts.length} ${amounts.length === 1 ? 'puja' : 'pujas'}`}</p>
+                      <p className="cuenta-piece-amount">${Number(currentBid).toLocaleString(numLocale)} <span>USD</span></p>
+                      <p className="cuenta-piece-meta">{amounts.length === 0 ? t('noBidsYet') : t('bidsCount', { count: amounts.length })}</p>
                     </div>
                     {amounts.length === 0 && (
                       <form action={deletePiece}>
                         <input type="hidden" name="pieceId" value={p.id} />
-                        <button type="submit" className="cuenta-delete-btn">Borrar</button>
+                        <button type="submit" className="cuenta-delete-btn">{t('delete')}</button>
                       </form>
                     )}
                   </div>
@@ -239,55 +241,55 @@ async function ArtistDashboard({ supabase, userId }) {
       {myPieces.length < 3 && (
         <div className="cuenta-section">
           <div className="cuenta-section-head">
-            <p className="cuenta-section-label">Subir obra</p>
-            <h2 className="cuenta-section-title">Agregar pieza</h2>
-            <p className="cuenta-section-sub">Puedes subir hasta 3 piezas por temporada. Una vez que alguien puja, no se puede borrar.</p>
+            <p className="cuenta-section-label">{t('uploadLabel')}</p>
+            <h2 className="cuenta-section-title">{t('addPieceTitle')}</h2>
+            <p className="cuenta-section-sub">{t('addPieceSub')}</p>
           </div>
           <div className="cuenta-card">
             <form action={addPiece} className="cuenta-form">
               <div className="cuenta-field-row">
                 <div className="field">
-                  <label htmlFor="title">Título</label>
+                  <label htmlFor="title">{t('fieldTitle')}</label>
                   <input id="title" name="title" type="text" required />
                 </div>
                 <div className="field">
-                  <label htmlFor="year">Año</label>
+                  <label htmlFor="year">{t('fieldYear')}</label>
                   <input id="year" name="year" type="number" placeholder="2024" />
                 </div>
               </div>
               <div className="cuenta-field-row">
                 <div className="field">
-                  <label htmlFor="technique">Técnica</label>
-                  <input id="technique" name="technique" type="text" required placeholder="Óleo sobre lienzo" />
+                  <label htmlFor="technique">{t('technique')}</label>
+                  <input id="technique" name="technique" type="text" required placeholder={t('techniquePh')} />
                 </div>
                 <div className="field">
-                  <label htmlFor="dimensions">Dimensiones</label>
-                  <input id="dimensions" name="dimensions" type="text" placeholder="60 × 80 cm" />
+                  <label htmlFor="dimensions">{t('fieldDimensions')}</label>
+                  <input id="dimensions" name="dimensions" type="text" placeholder={t('dimensionsPh')} />
                 </div>
               </div>
               <div className="field">
-                <label htmlFor="description">Descripción breve</label>
-                <textarea id="description" name="description" rows="3" placeholder="Una o dos frases sobre la pieza: de qué se trata, qué la inspiró." />
+                <label htmlFor="description">{t('fieldDescription')}</label>
+                <textarea id="description" name="description" rows="3" placeholder={t('descriptionPh')} />
               </div>
               <div className="field">
-                <label htmlFor="min_bid">Puja mínima (USD)</label>
+                <label htmlFor="min_bid">{t('fieldMinBid')}</label>
                 <input id="min_bid" name="min_bid" type="number" min="1" required />
               </div>
               <div className="field">
-                <label htmlFor="image_file">Foto de la pieza</label>
+                <label htmlFor="image_file">{t('fieldPhoto')}</label>
                 <div className="cuenta-photo-tips">
-                  <p>Para que el catálogo se vea parejo:</p>
+                  <p>{t('tipsHead')}</p>
                   <ul>
-                    <li>Obra sola, sin marco ni mueble alrededor</li>
-                    <li>Luz natural y pareja — sin flash directo</li>
-                    <li>La pieza ocupando casi todo el encuadre</li>
-                    <li>Buena resolución, sin comprimir</li>
+                    <li>{t('tip1')}</li>
+                    <li>{t('tip2')}</li>
+                    <li>{t('tip3')}</li>
+                    <li>{t('tip4')}</li>
                   </ul>
                 </div>
                 <input id="image_file" name="image_file" type="file" accept="image/*" />
-                <p className="cuenta-field-hint">Máximo 8 MB.</p>
+                <p className="cuenta-field-hint">{t('maxSize')}</p>
               </div>
-              <SubmitButton pendingText="Subiendo pieza...">Subir pieza</SubmitButton>
+              <SubmitButton pendingText={t('uploadingPiece')}>{t('uploadBtn')}</SubmitButton>
             </form>
           </div>
         </div>
@@ -296,7 +298,7 @@ async function ArtistDashboard({ supabase, userId }) {
   );
 }
 
-async function BuyerDashboard({ supabase, userId }) {
+async function BuyerDashboard({ supabase, userId, t, numLocale }) {
   const { data: bids } = await supabase
     .from('bids')
     .select('*, pieces(id, title, min_bid, artists(display_name))')
@@ -318,25 +320,25 @@ async function BuyerDashboard({ supabase, userId }) {
       <div className="cuenta-stats-bar">
         <div className="cuenta-stat">
           <b>{myBids.length}</b>
-          <span>{myBids.length === 1 ? 'puja registrada' : 'pujas registradas'}</span>
+          <span>{t('statBidsRegistered', { count: myBids.length })}</span>
         </div>
         <div className="cuenta-stat-sep" />
         <div className="cuenta-stat">
           <b>{myFavs.length}</b>
-          <span>{myFavs.length === 1 ? 'pieza guardada' : 'piezas guardadas'}</span>
+          <span>{t('statSaved', { count: myFavs.length })}</span>
         </div>
       </div>
 
       {/* Pujas */}
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Tus pujas</p>
-          <h2 className="cuenta-section-title">Lo que pujaste</h2>
+          <p className="cuenta-section-label">{t('yourBidsLabel')}</p>
+          <h2 className="cuenta-section-title">{t('yourBidsTitle')}</h2>
         </div>
         {myBids.length === 0 ? (
           <div className="cuenta-empty">
-            <p>Todavía no pujaste por ninguna pieza.</p>
-            <Link href="/obras" className="cuenta-empty-cta">Ver catálogo →</Link>
+            <p>{t('noBids')}</p>
+            <Link href="/obras" className="cuenta-empty-cta">{t('viewCatalogue')}</Link>
           </div>
         ) : (
           <div className="cuenta-pieces-list">
@@ -348,8 +350,8 @@ async function BuyerDashboard({ supabase, userId }) {
                 </div>
                 <div className="cuenta-piece-right">
                   <div className="cuenta-piece-bid">
-                    <p className="cuenta-piece-amount">${Number(b.amount).toLocaleString('es-AR')} <span>USD</span></p>
-                    <p className="cuenta-piece-meta">Tu puja</p>
+                    <p className="cuenta-piece-amount">${Number(b.amount).toLocaleString(numLocale)} <span>USD</span></p>
+                    <p className="cuenta-piece-meta">{t('yourBid')}</p>
                   </div>
                   <span className="cuenta-piece-arrow">→</span>
                 </div>
@@ -362,13 +364,13 @@ async function BuyerDashboard({ supabase, userId }) {
       {/* Favoritos */}
       <div className="cuenta-section">
         <div className="cuenta-section-head">
-          <p className="cuenta-section-label">Guardadas</p>
-          <h2 className="cuenta-section-title">Tus favoritas</h2>
+          <p className="cuenta-section-label">{t('savedLabel')}</p>
+          <h2 className="cuenta-section-title">{t('savedTitle')}</h2>
         </div>
         {myFavs.length === 0 ? (
           <div className="cuenta-empty">
-            <p>Todavía no guardaste ninguna pieza. Toca el ♡ en cualquier obra para guardarla acá.</p>
-            <Link href="/obras" className="cuenta-empty-cta">Explorar catálogo →</Link>
+            <p>{t('noFavs')}</p>
+            <Link href="/obras" className="cuenta-empty-cta">{t('exploreCatalogue')}</Link>
           </div>
         ) : (
           <div className="cuenta-pieces-list">
@@ -380,8 +382,8 @@ async function BuyerDashboard({ supabase, userId }) {
                 </div>
                 <div className="cuenta-piece-right">
                   <div className="cuenta-piece-bid">
-                    <p className="cuenta-piece-amount">${Number(f.pieces?.min_bid).toLocaleString('es-AR')} <span>USD</span></p>
-                    <p className="cuenta-piece-meta">Puja mínima</p>
+                    <p className="cuenta-piece-amount">${Number(f.pieces?.min_bid).toLocaleString(numLocale)} <span>USD</span></p>
+                    <p className="cuenta-piece-meta">{t('minBidLabel')}</p>
                   </div>
                   <span className="cuenta-piece-arrow">→</span>
                 </div>

@@ -1,7 +1,9 @@
+import { getTranslations } from 'next-intl/server';
 import { joinWaitlist } from '@/app/leads/actions';
 
-export default function WaitlistForm({ pieceId, redirectTo = '/', label }) {
-  const defaultLabel = label ?? (pieceId ? 'Avísame' : 'Unirme');
+export default async function WaitlistForm({ pieceId, redirectTo = '/', label }) {
+  const t = await getTranslations('waitlist');
+  const defaultLabel = label ?? (pieceId ? t('notify') : t('join'));
   return (
     <form action={joinWaitlist} className="waitlist-form">
       <input type="hidden" name="pieceId" value={pieceId || ''} />
@@ -10,9 +12,9 @@ export default function WaitlistForm({ pieceId, redirectTo = '/', label }) {
         type="email"
         name="email"
         required
-        placeholder="tu@correo.com"
+        placeholder={t('emailPh')}
         className="waitlist-input"
-        aria-label="Correo electrónico"
+        aria-label={t('emailAria')}
       />
       <button type="submit" className="waitlist-btn">{defaultLabel}</button>
     </form>

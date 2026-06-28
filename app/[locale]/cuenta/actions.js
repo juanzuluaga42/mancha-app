@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { getTranslations } from 'next-intl/server';
 
 export async function signOut() {
   const supabase = await createClient();
@@ -30,7 +31,8 @@ export async function createArtistProfile(formData) {
   });
 
   if (error) {
-    redirect(`/cuenta?error=${encodeURIComponent('No se pudo guardar tu perfil. ' + error.message)}`);
+    const t = await getTranslations('actions');
+    redirect(`/cuenta?error=${encodeURIComponent(t('profileSaveFail', { msg: error.message }))}`);
   }
 
   revalidatePath('/cuenta');
@@ -41,19 +43,20 @@ export async function addPiece(formData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
+  const t = await getTranslations('actions');
 
   const { data: artist } = await supabase.from('artists').select('id, status').eq('profile_id', user.id).maybeSingle();
-  if (!artist) redirect(`/cuenta?error=${encodeURIComponent('Primero completa tu perfil de artista.')}`);
+  if (!artist) redirect(`/cuenta?error=${encodeURIComponent(t('pieceNeedProfile'))}`);
   // Subir obra ya NO requiere aprobación previa: solo activa la revisión.
   // No se permite cargar nuevas obras si la postulación ya fue rechazada esta temporada.
-  if (artist.status === 'rejected') redirect(`/cuenta?error=${encodeURIComponent('Esta temporada no avanzamos con tu postulación. Puedes volver a postular en la próxima.')}`);
+  if (artist.status === 'rejected') redirect(`/cuenta?error=${encodeURIComponent(t('pieceRejected'))}`);
 
   let image_url = null;
   const file = formData.get('image_file');
 
   if (file && typeof file === 'object' && file.size > 0) {
     if (file.size > 8 * 1024 * 1024) {
-      redirect(`/cuenta?error=${encodeURIComponent('La foto pesa demasiado — el máximo son 8 MB. Prueba con una versión más liviana.')}`);
+      redirect(`/cuenta?error=${encodeURIComponent(t('pieceTooBig'))}`);
     }
 
     let uploadErrorMessage = null;
@@ -74,7 +77,7 @@ export async function addPiece(formData) {
     }
 
     if (uploadErrorMessage) {
-      redirect(`/cuenta?error=${encodeURIComponent('No se pudo subir la foto: ' + uploadErrorMessage)}`);
+      redirect(`/cuenta?error=${encodeURIComponent(t('pieceUploadFail', { msg: uploadErrorMessage }))}`);
     }
   }
 
@@ -90,7 +93,7 @@ export async function addPiece(formData) {
   });
 
   if (error) {
-    redirect(`/cuenta?error=${encodeURIComponent('No se pudo guardar la pieza — recuerda que el máximo son 3 por artista.')}`);
+    redirect(`/cuenta?error=${encodeURIComponent(t('pieceSaveFail'))}`);
   }
 
   revalidatePath('/cuenta');

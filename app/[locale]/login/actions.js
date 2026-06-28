@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { safePath } from '@/lib/utils';
 
 export async function logIn(formData) {
@@ -13,7 +14,8 @@ export async function logIn(formData) {
   });
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent('Correo o contraseña incorrectos.')}`);
+    const t = await getTranslations('actions');
+    redirect(`/login?error=${encodeURIComponent(t('loginError'))}`);
   }
 
   redirect(safePath(formData.get('next'), '/cuenta'));

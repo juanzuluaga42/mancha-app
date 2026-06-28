@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { getTranslations } from 'next-intl/server';
 import { sendEmail } from '@/lib/email';
 import { safePath, escapeHtml } from '@/lib/utils';
 
@@ -40,14 +41,15 @@ export async function placeBid(formData) {
 
   const pieceId = formData.get('pieceId');
   const amount = Number(formData.get('amount'));
+  const ta = await getTranslations('actions');
 
   if (!Number.isInteger(amount) || amount <= 0 || amount % 5 !== 0) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('El monto de la puja debe ser múltiplo de 5 USD.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(ta('bidMultiple'))}`);
   }
 
   const { data: pieceCheck } = await supabase.from('pieces').select('sold, artist_id, title, artists(season_id, display_name)').eq('id', pieceId).maybeSingle();
   if (pieceCheck?.sold) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('Esta pieza ya se vendió — ya no se puede pujar por ella.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(ta('bidSold'))}`);
   }
 
   const seasonId = pieceCheck?.artists?.season_id;
@@ -58,7 +60,7 @@ export async function placeBid(formData) {
   }
 
   if (endsAtBefore && new Date(endsAtBefore).getTime() < Date.now()) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('Esta temporada ya cerró — ya no se pueden registrar pujas nuevas.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(ta('bidClosed'))}`);
   }
 
   // Identificar al líder anterior para notificarle si lo superan
@@ -89,7 +91,7 @@ export async function placeBid(formData) {
   revalidatePath(redirectTo);
 
   if (error) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrar tu puja — prueba con un monto mayor, o revisa que tu cuenta sea de comprador.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(ta('bidError'))}`);
   }
 
   // Email al ex-líder: "te superaron"
@@ -137,9 +139,5 @@ export async function placeBid(formData) {
     }
   }
 
-  redirect(`${redirectTo}?success=${encodeURIComponent(
-    extended
-      ? '¡Pujaste justo a tiempo! Como faltaba poco para el cierre, extendimos la temporada 5 minutos más.'
-      : '¡Listo! Tu puja quedó registrada — por ahora eres la oferta más alta de esa pieza.'
-  )}`);
+  redirect(`${redirectTo}?success=${encodeURIComponent(extended ? ta('bidExtended') : ta('bidSuccess'))}`);
 }

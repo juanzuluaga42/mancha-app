@@ -2,22 +2,25 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { sendEmail } from '@/lib/email';
+import { safePath } from '@/lib/utils';
 
 export async function joinWaitlist(formData) {
   const supabase = await createClient();
   const email = formData.get('email');
   const pieceId = formData.get('pieceId') || null;
-  const redirectTo = formData.get('redirectTo') || '/';
+  const redirectTo = safePath(formData.get('redirectTo'), '/');
+  const t = await getTranslations('actions');
 
   if (!email || typeof email !== 'string' || !email.includes('@')) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('Escribe un correo válido.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(t('waitlistInvalidEmail'))}`);
   }
 
   const { error } = await supabase.from('leads').insert({ email, piece_id: pieceId || null });
 
   if (error) {
-    redirect(`${redirectTo}?error=${encodeURIComponent('No pudimos registrarte — prueba de nuevo en un momento.')}`);
+    redirect(`${redirectTo}?error=${encodeURIComponent(t('waitlistError'))}`);
   }
 
   let pieceTitle = null;
@@ -40,5 +43,5 @@ export async function joinWaitlist(formData) {
     `,
   });
 
-  redirect(`${redirectTo}?success=${encodeURIComponent(pieceTitle ? '¡Listo! Te avisamos por correo sobre esta pieza.' : '¡Listo! Te avisamos por correo cuando haya novedades.')}`);
+  redirect(`${redirectTo}?success=${encodeURIComponent(t('waitlistSuccess'))}`);
 }
