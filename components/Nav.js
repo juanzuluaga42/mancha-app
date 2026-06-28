@@ -34,7 +34,8 @@ export default async function Nav() {
     ? [
         { href: '/sobre-mancha', label: t('institution') },
         ...manifestos,
-        { href: '/postular', label: `${t('apply')} →` },
+        // 'Solicitar acceso' solo para visitantes sin sesión.
+        ...(!user ? [{ href: '/postular', label: `${t('apply')} →` }] : []),
         { href: '/#compradores', label: t('collect') },
       ]
     : [
@@ -42,7 +43,7 @@ export default async function Nav() {
         ...manifestos,
         { href: '/seleccionados', label: t('selected') },
         { href: '/obras', label: t('catalogue') },
-        { href: '/postular', label: t('apply') },
+        ...(!user ? [{ href: '/postular', label: t('apply') }] : []),
       ];
 
   const authSlot = user ? (
