@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/cuenta/actions';
+import { signOut } from '@/app/[locale]/cuenta/actions';
 import NavMenu from './NavMenu';
 import NavLogoLink from './NavLogoLink';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';

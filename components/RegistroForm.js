@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { signUp } from '@/app/registro/actions';
+import { signUp } from '@/app/[locale]/registro/actions';
 import SubmitButton from '@/components/SubmitButton';
 
 export default function RegistroForm({ defaultRole = 'buyer' }) {

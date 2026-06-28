@@ -3300,3 +3300,10 @@ input, textarea, select {
 .auth-google:hover{background:var(--ink); color:var(--paper);}
 .auth-google:disabled{opacity:.6; cursor:not-allowed;}
 .auth-google-icon{flex-shrink:0; background:#fff; border-radius:2px; padding:1px; box-sizing:content-box;}
+
+/* ── Selector de idioma ES/EN ── */
+.locale-switch{display:inline-flex; align-items:center; gap:6px;}
+.locale-switch-btn{background:none; border:none; cursor:pointer; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:rgba(250,239,225,.4); padding:2px 4px; transition:color .16s ease;}
+.locale-switch-btn:hover{color:var(--paper);}
+.locale-switch-btn.active{color:var(--paper); text-decoration:underline; text-underline-offset:3px;}
+.locale-switch-sep{color:rgba(250,239,225,.25); font-size:11px;}

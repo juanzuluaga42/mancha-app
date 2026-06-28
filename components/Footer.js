@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Splat from './Splat';
 import OcultarColeccionista from './OcultarColeccionista';
+import LocaleSwitch from './LocaleSwitch';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default function Footer() {
@@ -59,6 +60,7 @@ export default function Footer() {
           {prelaunch || convocatoria
             ? <span>Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026</span>
             : <span>Temporada en curso</span>}
+          <LocaleSwitch />
         </div>
       </div>
     </footer>
