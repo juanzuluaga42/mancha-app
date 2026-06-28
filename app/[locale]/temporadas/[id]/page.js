@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link, redirect } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -17,8 +18,11 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function TemporadaPage({ params }) {
-  if (isCatalogHidden()) redirect('/');
+  const locale = await getLocale();
+  if (isCatalogHidden()) redirect({ href: '/', locale });
   const { id } = await params;
+  const t = await getTranslations('season');
+  const dateLocale = locale === 'en' ? 'en-US' : 'es-AR';
   const supabase = await createClient();
 
   const { data: season } = await supabase.from('seasons').select('*').eq('id', id).maybeSingle();
@@ -45,16 +49,16 @@ export default async function TemporadaPage({ params }) {
         <Splat width="120px" height="105px" bottom="-40px" left="-30px" color="lilac" rotate={14} radius="r3" />
         <Splat width="68px" height="60px" top="50%" left="5%" color="red" rotate={8} radius="r4" />
         <div className="wrap">
-          <Link href="/temporadas" className="temporada-back">← Todas las temporadas</Link>
+          <Link href="/temporadas" className="temporada-back">{t('back')}</Link>
 
           <div className="temporada-status-row">
             <span className={`temporada-badge${season.is_current ? ' temporada-badge-live' : ''}`}>
-              {season.is_current ? '● En curso' : 'Cerrada para siempre'}
+              {season.is_current ? t('live') : t('closed')}
             </span>
             <span className="temporada-dates">
-              {new Date(season.starts_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {new Date(season.starts_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}
               {' — '}
-              {new Date(season.ends_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {new Date(season.ends_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}
             </span>
           </div>
 
@@ -63,17 +67,17 @@ export default async function TemporadaPage({ params }) {
           <div className="temporada-stats">
             <div className="temporada-stat">
               <b>{allArtists.length}</b>
-              <span>{allArtists.length === 1 ? 'artista' : 'artistas'}</span>
+              <span>{t('statArtists', { count: allArtists.length })}</span>
             </div>
             <div className="temporada-stat-sep" />
             <div className="temporada-stat">
               <b>{totalPieces}</b>
-              <span>{totalPieces === 1 ? 'pieza' : 'piezas'}</span>
+              <span>{t('statPieces', { count: totalPieces })}</span>
             </div>
             <div className="temporada-stat-sep" />
             <div className="temporada-stat">
               <b>{totalBids}</b>
-              <span>{totalBids === 1 ? 'puja' : 'pujas'}</span>
+              <span>{t('statBids', { count: totalBids })}</span>
             </div>
           </div>
         </div>
@@ -83,7 +87,7 @@ export default async function TemporadaPage({ params }) {
       <section className="temporada-body">
         <div className="wrap">
           {allArtists.length === 0 ? (
-            <div className="empty-state">Esta temporada no tiene artistas registrados todavía.</div>
+            <div className="empty-state">{t('empty')}</div>
           ) : (
             <div className="artist-card-grid">
               {allArtists.map((artist, ai) => {
@@ -107,8 +111,8 @@ export default async function TemporadaPage({ params }) {
                       <p className="artist-card-meta">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
                       <p className="artist-card-bio">{artist.bio}</p>
                       <span className="artist-card-cta">
-                        {pieceCount === 1 ? 'Su pieza' : `Sus ${pieceCount} piezas`}
-                        {bids > 0 ? ` · ${bids} ${bids === 1 ? 'puja' : 'pujas'}` : ''} →
+                        {t('cardPieces', { count: pieceCount })}
+                        {bids > 0 ? t('cardBidsSuffix', { count: bids }) : ''} →
                       </span>
                     </div>
                   </Link>

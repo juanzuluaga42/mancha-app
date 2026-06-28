@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { Link, redirect } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
@@ -27,9 +28,11 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArtistPage({ params, searchParams }) {
-  if (isCatalogHidden()) redirect('/');
+  const locale = await getLocale();
+  if (isCatalogHidden()) redirect({ href: '/', locale });
   const { id } = await params;
   const sp = await searchParams;
+  const t = await getTranslations('artistPage');
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -65,7 +68,7 @@ export default async function ArtistPage({ params, searchParams }) {
         <Splat width="100px" height="88px" bottom="-30px" left="-25px" color="yellow" rotate={15} radius="r4" />
         <Splat width="60px" height="53px" top="46%" left="5%" color="lilac" rotate={7} radius="r1" />
         <div className="wrap">
-          <Link href="/artistas" className="artist-header-back">← Temporada actual</Link>
+          <Link href="/artistas" className="artist-header-back">{t('back')}</Link>
           <div className="artist-header-meta">
             <p className="artist-header-technique">{artist.medium}{artist.location ? ` · ${artist.location}` : ''}</p>
           </div>
@@ -78,12 +81,10 @@ export default async function ArtistPage({ params, searchParams }) {
       {/* ── PIEZAS ───────────────────────────────────────── */}
       <section className="artist-pieces">
         <div className="wrap artist-pieces-wrap">
-          <p className="artist-pieces-label">
-            {(artist.pieces ?? []).length === 1 ? 'Su pieza esta temporada' : `Sus ${(artist.pieces ?? []).length} piezas esta temporada`}
-          </p>
+          <p className="artist-pieces-label">{t('piecesLabel', { count: (artist.pieces ?? []).length })}</p>
 
           {(artist.pieces ?? []).length === 0 ? (
-            <div className="empty-state">Este artista todavía no subió piezas.</div>
+            <div className="empty-state">{t('empty')}</div>
           ) : (
             <div className="obras-grid">
               {artist.pieces.map((piece, pi) => {

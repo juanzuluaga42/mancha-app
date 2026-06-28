@@ -544,5 +544,21 @@
     "s7p1": "Para cualquier duda sobre tus datos, una puja, o lo que sea — escríbenos a mancha.gallery@gmail.com. Respondemos a la brevedad.",
     "footerNote1": "Este documento es una explicación clara pensada para una etapa temprana de MANCHA. No reemplaza asesoramiento legal formal.",
     "footerNote2": "Última actualización: junio 2025."
+  },
+  "season": {
+    "back": "← Todas las temporadas",
+    "live": "● En curso",
+    "closed": "Cerrada para siempre",
+    "statArtists": "{count, plural, one {artista} other {artistas}}",
+    "statPieces": "{count, plural, one {pieza} other {piezas}}",
+    "statBids": "{count, plural, one {puja} other {pujas}}",
+    "empty": "Esta temporada no tiene artistas registrados todavía.",
+    "cardPieces": "{count, plural, one {Su pieza} other {Sus # piezas}}",
+    "cardBidsSuffix": "{count, plural, one { · # puja} other { · # pujas}}"
+  },
+  "artistPage": {
+    "back": "← Temporada actual",
+    "piecesLabel": "{count, plural, one {Su pieza esta temporada} other {Sus # piezas esta temporada}}",
+    "empty": "Este artista todavía no subió piezas."
   }
 }

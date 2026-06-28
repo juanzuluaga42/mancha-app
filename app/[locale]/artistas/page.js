@@ -1,5 +1,7 @@
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
+import { getLocale } from 'next-intl/server';
 
-export default function ArtistasPage() {
-  redirect('/seleccionados');
+export default async function ArtistasPage() {
+  const locale = await getLocale();
+  redirect({ href: '/seleccionados', locale });
 }

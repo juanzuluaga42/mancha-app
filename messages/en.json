@@ -544,5 +544,21 @@
     "s7p1": "For any question about your data, a bid, or anything — write to us at mancha.gallery@gmail.com. We reply promptly.",
     "footerNote1": "This document is a plain explanation intended for an early stage of MANCHA. It does not replace formal legal advice.",
     "footerNote2": "Last updated: June 2025."
+  },
+  "season": {
+    "back": "← All seasons",
+    "live": "● In progress",
+    "closed": "Closed forever",
+    "statArtists": "{count, plural, one {artist} other {artists}}",
+    "statPieces": "{count, plural, one {piece} other {pieces}}",
+    "statBids": "{count, plural, one {bid} other {bids}}",
+    "empty": "This season has no registered artists yet.",
+    "cardPieces": "{count, plural, one {Their piece} other {Their # pieces}}",
+    "cardBidsSuffix": "{count, plural, one { · # bid} other { · # bids}}"
+  },
+  "artistPage": {
+    "back": "← Current season",
+    "piecesLabel": "{count, plural, one {Their piece this season} other {Their # pieces this season}}",
+    "empty": "This artist hasn't uploaded pieces yet."
   }
 }
