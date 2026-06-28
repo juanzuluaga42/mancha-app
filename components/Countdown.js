@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 function diff(target) {
   const ms = Math.max(0, new Date(target).getTime() - Date.now());
@@ -12,6 +13,7 @@ function diff(target) {
 }
 
 export default function Countdown({ endsAt, label = 'Cierra en' }) {
+  const u = useTranslations('countdown');
   const [t, setT] = useState(null);
 
   useEffect(() => {
@@ -30,13 +32,13 @@ export default function Countdown({ endsAt, label = 'Cierra en' }) {
     <div className="countdown" role="timer" aria-label={label}>
       <span className="countdown-label">{label}</span>
       <div className="countdown-units">
-        <span className="cd-unit"><b>{t.days}</b>días</span>
+        <span className="cd-unit"><b>{t.days}</b>{u('days', { count: t.days })}</span>
         <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.hours).padStart(2, '0')}</b>hs</span>
+        <span className="cd-unit"><b>{String(t.hours).padStart(2, '0')}</b>{u('hours')}</span>
         <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.mins).padStart(2, '0')}</b>min</span>
+        <span className="cd-unit"><b>{String(t.mins).padStart(2, '0')}</b>{u('mins')}</span>
         <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.secs).padStart(2, '0')}</b>seg</span>
+        <span className="cd-unit"><b>{String(t.secs).padStart(2, '0')}</b>{u('secs')}</span>
       </div>
     </div>
   );

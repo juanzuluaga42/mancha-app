@@ -33,6 +33,12 @@
     "signOut": "Sign out",
     "close": "Close"
   },
+  "countdown": {
+    "days": "{count, plural, one {day} other {days}}",
+    "hours": "hrs",
+    "mins": "min",
+    "secs": "sec"
+  },
   "waitlist": {
     "notify": "Notify me",
     "join": "Join",
