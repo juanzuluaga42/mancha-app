@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
@@ -10,6 +11,7 @@ export const metadata = { title: 'MANCHA — Crear cuenta' };
 export default async function RegistroPage({ searchParams }) {
   const params = await searchParams;
   const defaultRole = params?.role === 'artist' ? 'artist' : 'buyer';
+  const t = await getTranslations('auth');
 
   return (
     <>
@@ -19,9 +21,9 @@ export default async function RegistroPage({ searchParams }) {
         <Splat width="160px" height="140px" top="-45px" right="-35px" color="lilac" rotate={-12} radius="r3" />
         <Splat width="90px" height="80px" bottom="-28px" left="-22px" color="red" rotate={11} radius="r1" />
         <div className="wrap">
-          <p className="auth-header-eyebrow">Nueva cuenta</p>
-          <h1 className="auth-header-title">Sumate a MANCHA</h1>
-          <p className="auth-header-sub">Para coleccionar y guardar favoritos, o para postular como artista — sube tus obras ahora o cuando quieras.</p>
+          <p className="auth-header-eyebrow">{t('newAccount')}</p>
+          <h1 className="auth-header-title">{t('joinTitle')}</h1>
+          <p className="auth-header-sub">{t('joinSubtitle')}</p>
         </div>
       </header>
 
@@ -32,11 +34,11 @@ export default async function RegistroPage({ searchParams }) {
 
             <RegistroForm defaultRole={defaultRole} />
 
-            <div className="auth-divider"><span>o</span></div>
+            <div className="auth-divider"><span>{t('or')}</span></div>
 
             <GoogleButton next="/cuenta" />
 
-            <p className="auth-foot">¿Ya tienes cuenta? <Link href="/login">Inicia sesión</Link></p>
+            <p className="auth-foot">{t('alreadyAccount')} <Link href="/login">{t('signInLink')}</Link></p>
           </div>
         </div>
       </section>

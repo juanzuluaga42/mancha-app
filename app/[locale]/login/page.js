@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
@@ -11,6 +12,7 @@ export const metadata = { title: 'MANCHA — Iniciar sesión' };
 
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
+  const t = await getTranslations('auth');
 
   return (
     <>
@@ -20,8 +22,8 @@ export default async function LoginPage({ searchParams }) {
         <Splat width="160px" height="140px" top="-45px" right="-35px" color="red" rotate={-10} radius="r2" />
         <Splat width="90px" height="80px" bottom="-28px" left="-22px" color="yellow" rotate={13} radius="r4" />
         <div className="wrap">
-          <p className="auth-header-eyebrow">Bienvenido de nuevo</p>
-          <h1 className="auth-header-title">Iniciar sesión</h1>
+          <p className="auth-header-eyebrow">{t('welcomeBack')}</p>
+          <h1 className="auth-header-title">{t('signInTitle')}</h1>
         </div>
       </header>
 
@@ -33,21 +35,21 @@ export default async function LoginPage({ searchParams }) {
             <form action={logIn}>
               <input type="hidden" name="next" value={params?.next || '/cuenta'} />
               <div className="field">
-                <label htmlFor="email">Correo electrónico</label>
+                <label htmlFor="email">{t('email')}</label>
                 <input id="email" name="email" type="email" required />
               </div>
               <div className="field">
-                <label htmlFor="password">Contraseña</label>
+                <label htmlFor="password">{t('password')}</label>
                 <input id="password" name="password" type="password" required />
               </div>
-              <button type="submit" className="auth-submit">Entrar</button>
+              <button type="submit" className="auth-submit">{t('enter')}</button>
             </form>
 
-            <div className="auth-divider"><span>o</span></div>
+            <div className="auth-divider"><span>{t('or')}</span></div>
 
             <GoogleButton next={safePath(params?.next, '/cuenta')} />
 
-            <p className="auth-foot">¿No tienes cuenta? <Link href="/registro">Crear cuenta</Link></p>
+            <p className="auth-foot">{t('noAccount')} <Link href="/registro">{t('createAccount')}</Link></p>
           </div>
         </div>
       </section>
