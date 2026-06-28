@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
@@ -19,6 +20,7 @@ export default async function ObrasPage() {
   if (!isTemporadaActiva()) {
     redirect('/?from=obras');
   }
+  const t = await getTranslations('catalog');
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -51,15 +53,15 @@ export default async function ObrasPage() {
         <Splat width="80px" height="70px" top="40%" left="6%" color="red" rotate={8} radius="r4" />
         <Splat width="60px" height="54px" top="-28px" left="42%" color="red" rotate={-12} radius="r2" />
         <div className="wrap">
-          <p className="eyebrow obras-header-eyebrow">{season?.name ?? 'Temporada actual'}</p>
+          <p className="eyebrow obras-header-eyebrow">{season?.name ?? t('headerEyebrowFallback')}</p>
           <h1 className="obras-header-title">
-            Piezas únicas.<br />
-            <em>Por tiempo limitado.</em>
+            {t('title1')}<br />
+            <em>{t('titleEm')}</em>
           </h1>
           <p className="obras-header-sub">
             {pieces.length > 0
-              ? `${pieces.length} ${pieces.length === 1 ? 'pieza en subasta' : 'piezas en subasta'} — cada una elegida a mano. Lo que ves hoy puede no estar mañana.`
-              : 'El catálogo se revela cuando los artistas son confirmados. La selección está en curso.'}
+              ? t('subCount', { count: pieces.length }) + t('subTail')
+              : t('subEmpty')}
           </p>
         </div>
       </header>

@@ -1,10 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import PieceCard from '@/components/PieceCard';
 
 export default function ObrasCatalog({ pieces }) {
+  const t = useTranslations('catalog');
   const [search, setSearch] = useState('');
   const [technique, setTechnique] = useState('');
   const [sort, setSort] = useState('recientes');
@@ -32,14 +34,12 @@ export default function ObrasCatalog({ pieces }) {
   if (pieces.length === 0) {
     return (
       <div className="catalog-empty">
-        <p className="eyebrow">Piezas próximamente</p>
-        <h2>El catálogo se revela cuando los artistas son confirmados.</h2>
-        <p className="section-note">
-          La selección está en curso. Cuando los artistas carguen sus obras, las encontrarás aquí con todos los detalles para pujar.
-        </p>
+        <p className="eyebrow">{t('emptyKicker')}</p>
+        <h2>{t('emptyTitle')}</h2>
+        <p className="section-note">{t('emptyNote')}</p>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 28 }}>
-          <Link href="/artistas" className="btn-primary">Ver artistas →</Link>
-          <Link href="/postular" className="btn-secondary">Postular tu trabajo →</Link>
+          <Link href="/artistas" className="btn-primary">{t('viewArtists')}</Link>
+          <Link href="/postular" className="btn-secondary">{t('applyWork')}</Link>
         </div>
       </div>
     );
@@ -58,7 +58,7 @@ export default function ObrasCatalog({ pieces }) {
           </svg>
           <input
             type="text"
-            placeholder="Busca por obra o artista…"
+            placeholder={t('searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="obras-search"
@@ -68,7 +68,7 @@ export default function ObrasCatalog({ pieces }) {
               type="button"
               className="obras-search-clear"
               onClick={() => setSearch('')}
-              aria-label="Limpiar búsqueda"
+              aria-label={t('clearSearch')}
             >
               <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                 <line x1="4" y1="4" x2="12" y2="12" />
@@ -80,19 +80,19 @@ export default function ObrasCatalog({ pieces }) {
 
         <div className="obras-select-group">
           <div className="obras-select-wrap">
-            <select value={technique} onChange={(e) => setTechnique(e.target.value)} className="obras-select" aria-label="Filtrar por técnica">
-              <option value="">Todas las técnicas</option>
-              {techniques.map((t) => <option key={t} value={t}>{t}</option>)}
+            <select value={technique} onChange={(e) => setTechnique(e.target.value)} className="obras-select" aria-label={t('filterTechnique')}>
+              <option value="">{t('allTechniques')}</option>
+              {techniques.map((tech) => <option key={tech} value={tech}>{tech}</option>)}
             </select>
             <svg className="obras-select-chevron" viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="2.5 4.5 6 8 9.5 4.5" />
             </svg>
           </div>
           <div className="obras-select-wrap">
-            <select value={sort} onChange={(e) => setSort(e.target.value)} className="obras-select" aria-label="Ordenar">
-              <option value="recientes">Más recientes</option>
-              <option value="precio-asc">Precio: menor a mayor</option>
-              <option value="precio-desc">Precio: mayor a menor</option>
+            <select value={sort} onChange={(e) => setSort(e.target.value)} className="obras-select" aria-label={t('sortLabel')}>
+              <option value="recientes">{t('sortRecent')}</option>
+              <option value="precio-asc">{t('sortPriceAsc')}</option>
+              <option value="precio-desc">{t('sortPriceDesc')}</option>
             </select>
             <svg className="obras-select-chevron" viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="2.5 4.5 6 8 9.5 4.5" />
@@ -105,8 +105,8 @@ export default function ObrasCatalog({ pieces }) {
       <div className="obras-count-row">
         <p className="obras-count">
           {filtered.length === pieces.length
-            ? `${filtered.length} ${filtered.length === 1 ? 'pieza' : 'piezas'}`
-            : `${filtered.length} de ${pieces.length} ${pieces.length === 1 ? 'pieza' : 'piezas'}`}
+            ? t('countAll', { count: filtered.length })
+            : t('countFiltered', { shown: filtered.length, total: pieces.length })}
         </p>
         {hasFilters && (
           <button
@@ -114,7 +114,7 @@ export default function ObrasCatalog({ pieces }) {
             className="obras-reset"
             onClick={() => { setSearch(''); setTechnique(''); setSort('recientes'); }}
           >
-            Limpiar filtros ×
+            {t('clearFilters')}
           </button>
         )}
       </div>
@@ -122,12 +122,12 @@ export default function ObrasCatalog({ pieces }) {
       {/* ── Resultados ── */}
       {filtered.length === 0 ? (
         <div className="obras-no-results">
-          <p>Ninguna pieza coincide con esa búsqueda.</p>
+          <p>{t('noResults')}</p>
           <button
             className="obras-clear-btn"
             onClick={() => { setSearch(''); setTechnique(''); setSort('recientes'); }}
           >
-            Limpiar filtros →
+            {t('clearFiltersArrow')}
           </button>
         </div>
       ) : (
