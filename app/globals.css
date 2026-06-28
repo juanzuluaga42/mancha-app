@@ -3307,3 +3307,10 @@ input, textarea, select {
 .locale-flag{background:none; border:none; cursor:pointer; padding:4px 5px; font-size:16px; line-height:1; border-radius:4px; opacity:.4; filter:grayscale(0.6); transition:opacity .16s ease, filter .16s ease, background .16s ease;}
 .locale-flag:hover{opacity:.85; filter:grayscale(0);}
 .locale-flag.active{opacity:1; filter:grayscale(0); background:rgba(22,17,13,0.06);}
+
+/* ── Banderas de idioma en picker y /elegidos (fondos oscuros) ── */
+.rp-header{position:relative;}
+.rp-locale{position:absolute; top:18px; right:20px;}
+.elegidos-nav{display:flex; align-items:center; justify-content:space-between;}
+.rp-locale .locale-flag, .elegidos-nav .locale-flag{font-size:15px;}
+.rp-locale .locale-flag.active, .elegidos-nav .locale-flag.active{background:rgba(250,239,225,0.12);}

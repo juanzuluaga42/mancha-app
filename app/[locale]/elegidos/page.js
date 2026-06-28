@@ -1,5 +1,7 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import CursorTrail from '@/components/CursorTrail';
+import LocaleSwitch from '@/components/LocaleSwitch';
 
 export const metadata = {
   title: 'MANCHA — Arte seleccionado a mano.',
@@ -17,41 +19,43 @@ export const metadata = {
   },
 };
 
-export default function ElegidosPage() {
+export default async function ElegidosPage() {
+  const t = await getTranslations('elegidos');
   return (
     <div className="elegidos-page">
       <CursorTrail />
       <div className="elegidos-nav">
         <Link href="/para-artistas" className="elegidos-logo">MANCHA.</Link>
+        <LocaleSwitch />
       </div>
 
       <section className="elegidos-hero">
-        <p className="elegidos-line">Si estás leyendo esto,</p>
-        <p className="elegidos-line">alguien pensó que merecías</p>
-        <p className="elegidos-line elegidos-accent">encontrarlo.</p>
+        <p className="elegidos-line">{t('line1')}</p>
+        <p className="elegidos-line">{t('line2')}</p>
+        <p className="elegidos-line elegidos-accent">{t('line3')}</p>
       </section>
 
       <section className="elegidos-beat">
-        <p>MANCHA no recluta artistas.</p>
-        <p className="elegidos-bold">Los encuentra.</p>
+        <p>{t('beat1a')}</p>
+        <p className="elegidos-bold">{t('beat1b')}</p>
       </section>
 
       <section className="elegidos-beat">
-        <p>Cada temporada, un grupo entra.</p>
-        <p>Tres piezas. Tres meses. Una página que es solo tuya —</p>
-        <p>no un perfil más perdido entre miles.</p>
+        <p>{t('beat2a')}</p>
+        <p>{t('beat2b')}</p>
+        <p>{t('beat2c')}</p>
       </section>
 
       <section className="elegidos-beat">
-        <p>La mayoría de quienes postulan, no entra esta temporada.</p>
-        <p className="elegidos-bold">El estándar es lo que hace</p>
-        <p>que entrar valga algo.</p>
+        <p>{t('beat3a')}</p>
+        <p className="elegidos-bold">{t('beat3b')}</p>
+        <p>{t('beat3c')}</p>
       </section>
 
       <section className="elegidos-cta">
-        <p className="elegidos-cta-line">Muéstranos tu trabajo.</p>
-        <Link href="/para-artistas" className="elegidos-btn">Postular ahora →</Link>
-        <Link href="/para-artistas" className="elegidos-back">o conoce MANCHA primero</Link>
+        <p className="elegidos-cta-line">{t('ctaLine')}</p>
+        <Link href="/para-artistas" className="elegidos-btn">{t('applyNow')}</Link>
+        <Link href="/para-artistas" className="elegidos-back">{t('learnFirst')}</Link>
       </section>
     </div>
   );

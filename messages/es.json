@@ -432,5 +432,21 @@
     "noFavs": "Todavía no guardaste ninguna pieza. Toca el ♡ en cualquier obra para guardarla acá.",
     "exploreCatalogue": "Explorar catálogo →",
     "minBidLabel": "Puja mínima"
+  },
+  "elegidos": {
+    "line1": "Si estás leyendo esto,",
+    "line2": "alguien pensó que merecías",
+    "line3": "encontrarlo.",
+    "beat1a": "MANCHA no recluta artistas.",
+    "beat1b": "Los encuentra.",
+    "beat2a": "Cada temporada, un grupo entra.",
+    "beat2b": "Tres piezas. Tres meses. Una página que es solo tuya —",
+    "beat2c": "no un perfil más perdido entre miles.",
+    "beat3a": "La mayoría de quienes postulan, no entra esta temporada.",
+    "beat3b": "El estándar es lo que hace",
+    "beat3c": "que entrar valga algo.",
+    "ctaLine": "Muéstranos tu trabajo.",
+    "applyNow": "Postular ahora →",
+    "learnFirst": "o conoce MANCHA primero"
   }
 }

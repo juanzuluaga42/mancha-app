@@ -432,5 +432,21 @@
     "noFavs": "You haven't saved any piece yet. Tap the ♡ on any work to save it here.",
     "exploreCatalogue": "Explore catalogue →",
     "minBidLabel": "Minimum bid"
+  },
+  "elegidos": {
+    "line1": "If you're reading this,",
+    "line2": "someone thought you deserved",
+    "line3": "to find it.",
+    "beat1a": "MANCHA doesn't recruit artists.",
+    "beat1b": "It finds them.",
+    "beat2a": "Each season, a group gets in.",
+    "beat2b": "Three pieces. Three months. A page that's yours alone —",
+    "beat2c": "not one more profile lost among thousands.",
+    "beat3a": "Most who apply don't get in this season.",
+    "beat3b": "The standard is what makes",
+    "beat3c": "getting in worth something.",
+    "ctaLine": "Show us your work.",
+    "applyNow": "Apply now →",
+    "learnFirst": "or get to know MANCHA first"
   }
 }

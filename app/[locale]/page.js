@@ -1,5 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
+import LocaleSwitch from '@/components/LocaleSwitch';
 
 export default function RolePicker() {
   const t = useTranslations('picker');
@@ -14,6 +15,7 @@ export default function RolePicker() {
 
       {/* Header: logo centrado encima del split */}
       <header className="rp-header">
+        <div className="rp-locale"><LocaleSwitch /></div>
         <div className="rp-logo">MANCHA<span>.</span></div>
         <p className="rp-tagline">{t('tagline')}</p>
       </header>
