@@ -77,7 +77,7 @@ export default async function ParaArtistasPage({ searchParams }) {
             ) : convocatoria ? (
               <>
                 <Link href="/postular" className="tsr-cta-primary">{t('ctaApply')}</Link>
-                <Link href="/criterio" className="tsr-cta-ghost">{t('ctaCriteria')}</Link>
+                <Link href="/manifiesto" className="tsr-cta-ghost">{t('ctaCriteria')}</Link>
               </>
             ) : (
               <>
@@ -141,7 +141,7 @@ export default async function ParaArtistasPage({ searchParams }) {
           <p className="tsr-statement-line">{t('stmt1')}</p>
           <p className="tsr-statement-line tsr-statement-line--muted">{t('stmt2')}</p>
           <p className="tsr-statement-sub">
-            <Link href="/criterio">{t('stmtLink')}</Link>
+            <Link href="/manifiesto">{t('stmtLink')}</Link>
           </p>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default async function ParaArtistasPage({ searchParams }) {
               ? <WaitlistForm redirectTo="/para-artistas" label={t('waitlistLabel')} />
               : <div className="tsr-aviso-cta-wrap">
                   <Link href="/postular" className="tsr-cta-primary">{t('ctaApply')}</Link>
-                  <Link href="/criterio" className="tsr-cta-ghost" style={{ marginTop: 16, display: 'block' }}>{t('ctaCriteria')}</Link>
+                  <Link href="/manifiesto" className="tsr-cta-ghost" style={{ marginTop: 16, display: 'block' }}>{t('ctaCriteria')}</Link>
                 </div>
             }
           </div>

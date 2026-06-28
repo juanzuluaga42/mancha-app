@@ -15,34 +15,34 @@ export default async function Nav() {
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
 
-  let isArtist = false;
-  if (user) {
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
-    isArtist = profile?.role === 'artist';
-  }
+  // Manifiestos visibles desde pre-launch. NavMenu los filtra por lado (cliente):
+  // 'Deja una marca' (artista) se oculta a coleccionistas; 'Antes que el mundo'
+  // (coleccionista) se oculta a artistas.
+  const manifestos = [
+    { href: '/manifiesto', label: t('manifesto') },
+    { href: '/antes-que-el-mundo', label: t('beforeWorld') },
+  ];
 
   const links = prelaunch
     ? [
         { href: '/sobre-mancha', label: t('institution') },
-        { href: '/criterio', label: t('criteria') },
+        ...manifestos,
         { href: '/notas', label: t('notes') },
         { href: '/#compradores', label: `${t('collect')} →` },
       ]
     : convocatoria
     ? [
         { href: '/sobre-mancha', label: t('institution') },
-        { href: '/criterio', label: t('criteria') },
+        ...manifestos,
         { href: '/postular', label: `${t('apply')} →` },
         { href: '/#compradores', label: t('collect') },
-        ...(isArtist ? [{ href: '/manifiesto', label: t('manifesto') }] : []),
       ]
     : [
         { href: '/sobre-mancha', label: t('institution') },
-        { href: '/criterio', label: t('criteria') },
+        ...manifestos,
         { href: '/seleccionados', label: t('selected') },
         { href: '/obras', label: t('catalogue') },
         { href: '/postular', label: t('apply') },
-        ...(isArtist ? [{ href: '/manifiesto', label: t('manifesto') }] : []),
       ];
 
   const authSlot = user ? (

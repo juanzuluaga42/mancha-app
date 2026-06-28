@@ -26,7 +26,7 @@ export default async function Footer() {
           <div className="footer-links">
             <div className="footer-col">
               <h5>{t('colInstitution')}</h5>
-              <OcultarColeccionista><Link href="/criterio">{t('criteria')}</Link></OcultarColeccionista>
+              <OcultarColeccionista><Link href="/manifiesto">{t('manifesto')}</Link></OcultarColeccionista>
               {prelaunch ? (
                 <>
                   <Link href="/registro">{t('createAccount')}</Link>

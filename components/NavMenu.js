@@ -3,17 +3,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
 
-// Links que se ocultan SOLO del lado coleccionista (lenguaje de institución/artista).
-const HIDE_FOR_COLLECTOR = ['/sobre-mancha', '/criterio'];
+// Links que se ocultan según el lado elegido (localStorage mancha_role).
+const HIDE_FOR_COLLECTOR = ['/sobre-mancha', '/manifiesto']; // institución / manifiesto de artista
+const HIDE_FOR_ARTIST = ['/antes-que-el-mundo'];             // manifiesto de coleccionista
 
 export default function NavMenu({ links, authSlot }) {
   const [open, setOpen] = useState(false);
-  const [isCollector, setIsCollector] = useState(false);
+  const [role, setRole] = useState('');
   const ref = useRef(null);
 
   useEffect(() => {
-    const r = (localStorage.getItem('mancha_role') || '').toLowerCase();
-    setIsCollector(r.startsWith('colec'));
+    setRole((localStorage.getItem('mancha_role') || '').toLowerCase());
   }, []);
 
   useEffect(() => {
@@ -24,9 +24,13 @@ export default function NavMenu({ links, authSlot }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const visibleLinks = isCollector
-    ? links.filter((item) => !HIDE_FOR_COLLECTOR.includes(item.href))
-    : links;
+  const isCollector = role.startsWith('colec');
+  const isArtist = role.startsWith('artist');
+  const visibleLinks = links.filter((item) => {
+    if (isCollector && HIDE_FOR_COLLECTOR.includes(item.href)) return false;
+    if (isArtist && HIDE_FOR_ARTIST.includes(item.href)) return false;
+    return true;
+  });
 
   return (
     <div className="nav-menu" ref={ref}>

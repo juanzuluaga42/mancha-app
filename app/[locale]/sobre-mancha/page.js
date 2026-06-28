@@ -16,7 +16,6 @@ export default async function SobreManchaPage() {
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria() || prelaunch;
   const t = await getTranslations('about');
-  const REGLAS = [t('rule1'), t('rule2'), t('rule3'), t('rule4'), t('rule5')];
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -81,23 +80,6 @@ export default async function SobreManchaPage() {
         </div>
       </section>
 
-      {/* ── REGLAS (solo artista) ────────────────────────── */}
-      <SoloArtista isArtist={isArtist}>
-        <section className="sobre-reglas">
-          <div className="wrap">
-            <p className="eyebrow">{t('rulesKicker')}</p>
-            <div className="sobre-reglas-list">
-              {REGLAS.map((regla, i) => (
-                <div className="sobre-regla" key={i}>
-                  <span className="sobre-regla-n">{String(i + 1).padStart(2, '0')}</span>
-                  <p className="sobre-regla-text">{regla}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </SoloArtista>
-
       {/* ── EL FILTRO (solo artista) ─────────────────────── */}
       <SoloArtista isArtist={isArtist}>
         <section className="el-filtro">
@@ -143,6 +125,18 @@ export default async function SobreManchaPage() {
         </div>
       </section>
 
+      {/* ── MANIFIESTO DE COLECCIONISTAS (público) ───────── */}
+      <section className="sobre-etymology">
+        <div className="wrap sobre-etymology-inner">
+          <p className="eyebrow">{t('collectorsKicker')}</p>
+          <blockquote className="sobre-etymology-quote">{t('collectorsQuote')}</blockquote>
+          <p className="sobre-etymology-body">{t('collectorsBody')}</p>
+          <Link href="/antes-que-el-mundo" className="sobre-closing-ghost" style={{ display: 'inline-block', marginTop: 18 }}>
+            {t('collectorsLink')} →
+          </Link>
+        </div>
+      </section>
+
       {/* ── CIERRE / CONVOCATORIA (solo artista) ─────────── */}
       <SoloArtista isArtist={isArtist}>
       <section className="sobre-closing">
@@ -155,7 +149,7 @@ export default async function SobreManchaPage() {
                 <Link href="/registro" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
                   {t('ctaApply')}
                 </Link>
-                <Link href="/criterio" className="sobre-closing-ghost">
+                <Link href="/manifiesto" className="sobre-closing-ghost">
                   {t('ctaCriteria')}
                 </Link>
               </div>
@@ -168,7 +162,7 @@ export default async function SobreManchaPage() {
                 <Link href="/postular" className="btn-primary" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
                   {t('ctaApply')}
                 </Link>
-                <Link href="/criterio" className="sobre-closing-ghost">
+                <Link href="/manifiesto" className="sobre-closing-ghost">
                   {t('ctaCriteria')}
                 </Link>
               </div>
