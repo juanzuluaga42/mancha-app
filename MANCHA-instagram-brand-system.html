@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MANCHA — Instagram Brand Language &amp; Visual System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF3E6; --paper-dark:#F0E3CC; --ink:#16110D; --ink-soft:#6B6359;
+    --dark:#0D0C0A; --red:#E5402B; --red-deep:#A82A1C; --yellow:#F2B705;
+    --lilac:#8E6FD1;
+    --display:'Unbounded',system-ui,sans-serif;
+    --serif:'Newsreader',Georgia,serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--serif); font-size:18px; line-height:1.65;
+    font-weight:400;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:0 28px;}
+
+  /* ── Hero ───────────────────────────── */
+  .hero{background:var(--dark); color:var(--paper); padding:84px 0 72px; border-bottom:2px solid var(--ink);}
+  .logo{font-family:var(--display); font-weight:800; font-size:34px; letter-spacing:-.03em; line-height:1;}
+  .logo .dot{color:var(--red);}
+  .hero h1{font-family:var(--display); font-weight:800; font-size:clamp(2.1rem,5.5vw,3.6rem); line-height:1.04; letter-spacing:-.03em; margin:30px 0 18px;}
+  .hero h1 em{font-family:var(--serif); font-style:italic; font-weight:400; color:var(--yellow);}
+  .hero .sub{font-family:var(--serif); font-size:19px; color:rgba(250,243,230,.72); max-width:60ch;}
+  .hero .meta{font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(250,243,230,.45); margin-top:34px;}
+
+  /* ── Sections ───────────────────────── */
+  main{padding:64px 0 90px;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--red); font-weight:700; margin:0 0 6px;}
+  .part{font-family:var(--mono); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--ink-soft); margin:72px 0 4px; padding-top:30px; border-top:1.5px solid var(--ink);}
+  h2{font-family:var(--display); font-weight:700; font-size:clamp(1.5rem,3.6vw,2.15rem); letter-spacing:-.02em; line-height:1.12; margin:8px 0 18px;}
+  h3{font-family:var(--display); font-weight:700; font-size:1.12rem; letter-spacing:-.01em; margin:34px 0 10px;}
+  p{margin:0 0 16px;}
+  a{color:var(--red-deep); text-decoration:underline; text-underline-offset:2px;}
+  strong{font-weight:600;}
+  em{font-style:italic;}
+  .lede{font-size:20px; color:var(--ink); margin-bottom:26px;}
+  hr{border:0; border-top:1.5px solid var(--ink); margin:0;}
+
+  ul,ol{margin:0 0 18px; padding-left:1.2em;}
+  li{margin:0 0 8px;}
+  li::marker{color:var(--red);}
+
+  blockquote{
+    margin:24px 0; padding:18px 24px; border-left:3px solid var(--red);
+    background:var(--paper-dark); font-style:italic; font-size:19px;
+  }
+  blockquote p:last-child{margin:0;}
+
+  code{font-family:var(--mono); font-size:.86em; background:var(--paper-dark); padding:1px 6px; border-radius:2px;}
+
+  /* English copy / template blocks */
+  .example{
+    background:var(--dark); color:var(--paper); border-radius:2px;
+    padding:22px 24px; margin:20px 0; font-family:var(--serif); font-size:17px; line-height:1.55;
+  }
+  .example .tag{font-family:var(--mono); font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--yellow); display:block; margin-bottom:12px;}
+  .example b{color:#fff;}
+  .example.en{font-style:normal;}
+  pre.template{
+    background:var(--ink); color:var(--paper); border-radius:2px; overflow:auto;
+    padding:20px 22px; margin:18px 0; font-family:var(--mono); font-size:13px; line-height:1.7;
+    white-space:pre-wrap;
+  }
+  pre.template .c{color:var(--yellow);}
+
+  /* Do / Don't */
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin:22px 0;}
+  .col{border:1.5px solid var(--ink); border-radius:2px; padding:18px 20px; background:#fff6;}
+  .col h4{margin:0 0 12px; font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase;}
+  .col.yes h4{color:var(--red-deep);}
+  .col.no h4{color:var(--ink-soft);}
+  .col ul{padding-left:1.1em; margin:0;}
+  .col li{font-size:15.5px;}
+  .lex{font-family:var(--mono); font-size:14px; line-height:2;}
+
+  /* Principles */
+  .principles{margin:22px 0; counter-reset:p;}
+  .principle{display:flex; gap:18px; padding:16px 0; border-top:1px solid var(--paper-dark);}
+  .principle .n{font-family:var(--display); font-weight:800; font-size:22px; color:var(--red); min-width:42px;}
+  .principle b{display:block; font-family:var(--display); font-weight:700; font-size:1rem;}
+  .principle span{color:var(--ink-soft);}
+
+  .check li{list-style:none;}
+  .check{padding-left:0;}
+  .check li{position:relative; padding-left:30px;}
+  .check li::before{content:"□"; position:absolute; left:0; color:var(--red); font-size:18px; top:-1px;}
+
+  .swatches{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0;}
+  .sw{font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:#fff; padding:10px 12px; border-radius:2px; min-width:104px;}
+  .sw small{display:block; opacity:.8; font-size:9px;}
+
+  footer{background:var(--dark); color:rgba(250,243,230,.6); font-family:var(--serif); font-style:italic; padding:48px 0; text-align:center;}
+  footer .logo{font-style:normal; font-size:20px; margin-bottom:14px; color:var(--paper);}
+
+  @media (max-width:640px){
+    body{font-size:17px;}
+    .cols{grid-template-columns:1fr;}
+  }
+  @media print{
+    .hero,footer{background:#fff; color:#000; border-color:#000;}
+    .hero .sub,.hero .meta{color:#333;}
+    .hero h1 em{color:var(--red-deep);}
+    .example,pre.template{background:#f3ece0; color:#000; border:1px solid #ccc;}
+    .example .tag{color:var(--red-deep);} .example b{color:#000;}
+    pre.template .c{color:var(--red-deep);}
+    .part,h2,h3{break-after:avoid;}
+    .principle,blockquote,.example,pre.template,.cols{break-inside:avoid;}
+    a{color:#000; text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="logo">MANCHA<span class="dot">.</span></div>
+    <h1>Instagram Brand Language<br>&amp; <em>Visual System</em></h1>
+    <p class="sub">Sistema operativo de la presencia de MANCHA en Instagram. Documento interno en español; todo el copy público va en inglés — inglés adaptado, editorial, internacional. Nunca traducido literalmente.</p>
+    <p class="meta">Dirigido como A24 · Monocle · MUBI — Curaduría · Restricción · Calma</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">00 — La premisa</p>
+  <h2>Una institución, no una startup</h2>
+  <p class="lede">MANCHA no es una startup, ni un marketplace, ni una galería tradicional. Es una <strong>institución cultural</strong> que selecciona artistas emergentes a mano, por temporadas. Instagram no es un canal de ventas: es la <strong>portada de la institución</strong> — una revista que se publica en cuadrícula.</p>
+  <blockquote>La prueba de oro de cada publicación: <em>tápale el logo. ¿Sigue siendo reconociblemente MANCHA?</em> Si la respuesta es no, no se publica.</blockquote>
+  <p>Tres palabras gobiernan todo lo que sigue: <strong>Curaduría. Restricción. Calma.</strong> No queremos tendencias ni tácticas de seguidores. Queremos que dentro de 5–10 años el perfil siga viéndose elegante, atemporal y reconocible. <strong>Construimos para el archivo, no para el algoritmo.</strong></p>
+  <p style="font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-soft)">Fuente de verdad: <code>MANCHA-brand-kit.html</code> + el sitio vivo <strong>manchagallery.com</strong>. Tipografías canónicas (las del sitio): Unbounded (display), Newsreader italic (editorial), Space Mono (labels). El kit antiguo cita Playfair/DM — mismo rol, distinta fuente; manda el sitio.</p>
+
+  <!-- ════════ PARTE I ════════ -->
+  <p class="part">Parte I — La voz</p>
+
+  <p class="eyebrow">01 — La voz</p>
+  <h2>La voz de MANCHA en Instagram</h2>
+  <p>MANCHA habla en <strong>inglés</strong>, porque se dirige al mundo. Pero es un inglés <strong>adaptado, no traducido</strong>: el inglés de las cuadrículas de MUBI, los pies de foto de Monocle, las cartelas de una casa de subastas. Sobrio, presente, seguro.</p>
+  <blockquote>La voz no grita, no ruega, no vende. <strong>Declara</strong> — con la calma de quien ya sabe lo que tiene.</blockquote>
+  <p>Cuatro reglas de oro del inglés MANCHA:</p>
+  <ol>
+    <li><strong>Presente indicativo, primera persona del plural.</strong> “We choose first.” “We show the work.” Nada de condicional ni futuro ansioso.</li>
+    <li><strong>Una idea por línea. Punto final.</strong> El punto es un gesto de marca, como el punto rojo del logo.</li>
+    <li><strong>Inglés nativo, no calcado.</strong> No traduzcas la frase española: reescríbela como la diría un editor angloparlante. (<em>“Cuando cierra, cierra”</em> → no <em>“When it closes, it closes”</em> a secas, sino <strong>“A season closes. It does not reopen.”</strong>)</li>
+    <li><strong>El understatement es el lujo.</strong> Nunca afirmamos ser exclusivos. Actuamos como si el estándar fuera obvio.</li>
+  </ol>
+
+  <p class="eyebrow">02 — El sonido</p>
+  <h2>Cómo debe sonar</h2>
+  <ul>
+    <li><strong>Cadencia:</strong> frases cortas, con aire. Si necesitas respirar a mitad de frase, córtala.</li>
+    <li><strong>Registro:</strong> editorial e institucional, nunca corporativo ni “millennial-brand”. Más cerca de una cartela de museo que de un anuncio.</li>
+    <li><strong>Temperatura:</strong> cálida pero contenida. Hay convicción, no entusiasmo.</li>
+    <li><strong>Puntuación como diseño:</strong> el punto final, el guion largo (—) y la itálica para énfasis. Nunca mayúsculas para gritar, nunca exclamaciones en serie.</li>
+    <li><strong>Silencio:</strong> una imagen fuerte puede ir con tres palabras. A veces con ninguna.</li>
+  </ul>
+  <blockquote>Regla mnemónica: <strong>si sonara bien leído por una voz tranquila en un tráiler de MUBI, es MANCHA. Si suena a notificación de descuento, no lo es.</strong></blockquote>
+
+  <p class="eyebrow">03 — El léxico</p>
+  <h2>Palabras que usamos / que nunca usamos</h2>
+  <div class="cols">
+    <div class="col yes">
+      <h4>✓ Usamos (EN)</h4>
+      <p class="lex">season · hand-picked · selected · the selected · the work · the artist · emerging · discover · first · before the world · collect · a moment · the close · the archive · edition · considered · the studio · the mark · institution · chosen · few</p>
+    </div>
+    <div class="col no">
+      <h4>✗ Nunca</h4>
+      <p class="lex">drop · exclusive (afirmarlo) · buy now / shop · sale / % off · last chance / hurry / don’t miss out · limited spots · deal · viral · influencer · content (por “la obra”) · guys · amazing / incredible / epic · tag a friend · double tap · link in bio!!! · follow us / comment below · emojis en exceso · hashtags de tendencia</p>
+    </div>
+  </div>
+  <p><strong>Palabra delicada:</strong> <em>exclusive</em>. No la decimos — la <strong>demostramos</strong> con la restricción. “Few are chosen” sí; “the most exclusive gallery” jamás.</p>
+
+  <p class="eyebrow">04 — Captions</p>
+  <h2>Tono de los captions</h2>
+  <p>Un caption MANCHA tiene <strong>anatomía</strong>, no relleno:</p>
+  <pre class="template"><span class="c">[GANCHO]</span>   una línea. una afirmación. presente.
+<span class="c">[CUERPO]</span>   2–4 líneas. el dato concreto o la historia del artista.
+<span class="c">[CIERRE]</span>   una línea que reposa. nunca un grito.
+<span class="c">[FIRMA]</span>    — MANCHA   (opcional, para posts-declaración)
+<span class="c">[META]</span>     in our bio · #mancha #season01   (mínimo, casi en silencio)</pre>
+  <div class="example en">
+    <span class="tag">Ejemplo · post-declaración</span>
+    <b>We choose first.</b><br>
+    A small group of artists enters each season. Three works each. Three months. Then the season closes.<br>
+    You are early. That is the whole point.<br>
+    — MANCHA
+  </div>
+  <ul>
+    <li>Sentence case por defecto. Mayúsculas solo como recurso tipográfico en labels mono (“SEASON 01”), nunca para gritar.</li>
+    <li>Máximo <strong>un</strong> emoji y solo si es estructural (→). Por defecto, ninguno.</li>
+    <li>Los hashtags viven al final, separados, discretos. Nunca dentro del texto.</li>
+    <li>El precio no se anuncia como gancho. Si aparece, va con contexto y sin urgencia.</li>
+  </ul>
+
+  <p class="eyebrow">05 — Formatos cortos</p>
+  <h2>Carruseles, Reels y stories</h2>
+  <h3>Carruseles — ensayo fotográfico</h3>
+  <ul>
+    <li>Lámina 1 = portada: una afirmación + un label mono. Debe funcionar sola.</li>
+    <li>Una idea por lámina. Texto mínimo, mucho aire.</li>
+    <li>Arco: <em>afirmación → desarrollo → obra/artista → cierre</em>. 5–8 láminas.</li>
+    <li>Última lámina: cierre tranquilo o índice (“Season 01 · in our bio”). Nunca una llamada agresiva.</li>
+  </ul>
+  <h3>Reels — un tráiler, no un tutorial</h3>
+  <ul>
+    <li>Texto en pantalla: 3–6 palabras por cartela, en Unbounded o Space Mono.</li>
+    <li>Nada de subtítulos automáticos, texto-a-voz ni audio de tendencia.</li>
+    <li>Abre con imagen, no con texto.</li>
+  </ul>
+  <h3>Stories — una idea por pantalla</h3>
+  <ul>
+    <li>Fondo papel o tinta, tipografía de marca, mucho margen.</li>
+    <li>“Urgencia tranquila”: <em>“Season 01 closes on [date].”</em> — informa, no presiona.</li>
+    <li>Útiles: el cierre se acerca, una obra nueva, una cita del artista, una textura del estudio, un repost de coleccionista (con permiso).</li>
+    <li>Stickers/encuestas/countdowns nativos: con cuentagotas y siempre con tipografía/color de marca encima. Nunca el sticker crudo de Instagram.</li>
+  </ul>
+
+  <p class="eyebrow">06 — Artistas</p>
+  <h2>Cómo presentar a un artista</h2>
+  <p>El artista es el centro de gravedad. Nunca el precio, nunca la plataforma.</p>
+  <pre class="template">Selected for Season 01:
+[Name].
+[City]. [Medium].
+“[A short line from the artist — their words, their process.]”
+[One sentence on the work: where it comes from, what it holds.]
+You arrived before this was obvious.
+in our bio · #mancha #season01</pre>
+  <ul>
+    <li><strong>Sus palabras primero.</strong> Citamos al artista en su voz. Curamos, no ventriloquizamos.</li>
+    <li>Nombre + ciudad + medio como cartela de museo (label mono).</li>
+    <li>Una sola obra protagonista por post; el resto, al carrusel o al perfil.</li>
+    <li>Cero lenguaje de “talento descubierto por nosotros”: el mérito es del artista; el ojo es nuestro. “We chose first” habla de nuestro timing, no de su deuda.</li>
+    <li>Foto: estudio, manos, superficie, la obra en contexto. Evita el retrato posado tipo LinkedIn.</li>
+  </ul>
+
+  <p class="eyebrow">07 — Coleccionistas</p>
+  <h2>Cómo hablar con coleccionistas</h2>
+  <p>Al coleccionista no le vendemos un objeto: le ofrecemos <strong>un momento — llegar antes que el mundo.</strong></p>
+  <ul>
+    <li>El verbo es <strong>discover</strong> y <strong>collect</strong>, nunca <strong>buy</strong>.</li>
+    <li>Hablamos de ser primero, de dejar una marca, de estar en la primera fila.</li>
+    <li>Nunca el miedo a perderse algo con táctica barata; sí el <strong>placer del ojo temprano</strong>: “Being early has a name. We call it collecting.”</li>
+    <li>La transacción es discreta: la obra se ve en el sitio; el caption no es una caja registradora.</li>
+    <li>Reconocemos al coleccionista como par culto, no como comprador impulsivo.</li>
+  </ul>
+  <div class="example en"><span class="tag">Ejemplo · story</span><b>Discover an artist before the world does.</b><br>Season 01 is open. The work is in our bio.</div>
+
+  <p class="eyebrow">08 — Temporadas</p>
+  <h2>Cómo anunciar temporadas</h2>
+  <p>La temporada es la unidad narrativa de MANCHA — un número de revista. Tres momentos, tres tonos:</p>
+  <div class="example en"><span class="tag">Apertura · de umbral</span><b>Season 01 opens.</b><br>A few artists. Three works each. Three months.<br>Then it closes.</div>
+  <p><strong>En curso (mid-season).</strong> Editorial: presentamos obra y artistas, sin recordatorios de venta. El feed <em>es</em> la temporada.</p>
+  <div class="example en"><span class="tag">Cierre · sereno, sin pánico</span><b>Season 01 closes on [date].</b><br>What was shown enters the archive. The moment does not repeat.</div>
+  <ul>
+    <li>Numeración siempre presente como recurso (№ 01) — cadencia de publicación periódica.</li>
+    <li>El cierre se comunica como hecho cultural, no como liquidación.</li>
+    <li>Coherente con dejar obra permanente: lo irrepetible es <strong>la temporada</strong> (el momento, la selección), no el objeto. Decimos “the season closes / enters the archive”, no “gone forever”.</li>
+  </ul>
+
+  <p class="eyebrow">09 — Comunidad</p>
+  <h2>Comentarios y mensajes directos</h2>
+  <p>La comunidad oye la misma voz que el feed: cálida, breve, segura. Primera persona del plural. Una casa, no un community manager improvisando.</p>
+  <ul>
+    <li><strong>Tono:</strong> atento, nunca efusivo. “Thank you — we’re glad it found you.”</li>
+    <li><strong>Precio/disponibilidad:</strong> con precisión, dirigiendo a la ficha. “The piece and its current bid live in our bio.”</li>
+    <li><strong>Artistas que quieren postular:</strong> “We read every submission — no gallery résumé needed, just the work. Open now in our bio.”</li>
+    <li><strong>Elogios:</strong> sobriedad y devolver el foco al artista. “All credit to [Name].”</li>
+    <li><strong>Nunca:</strong> discutir, ironizar, plantillas obvias, pedir follow/share, ni vender. El silencio es una respuesta válida.</li>
+    <li><strong>Firma ocasional:</strong> “— MANCHA” cierra con peso. Con cuentagotas.</li>
+  </ul>
+
+  <p class="eyebrow">10 — Curaduría de contenido</p>
+  <h2>Qué publicar / qué nunca publicar</h2>
+  <div class="cols">
+    <div class="col yes">
+      <h4>✓ El contenido de MANCHA</h4>
+      <ul>
+        <li>La obra: una pieza, bien fotografiada, con aire.</li>
+        <li>El artista: estudio, manos, proceso, su cita.</li>
+        <li>La marca-declaración: manifiesto sobre tinta o papel.</li>
+        <li>El dato curatorial: 3 obras · 3 meses · 75% — infografía editorial.</li>
+        <li>La temporada: apertura, retrato del conjunto, cierre.</li>
+        <li>El detalle: macro de la textura, la <em>mancha</em>.</li>
+        <li>El archivo: revisitar temporadas como un museo su colección.</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <h4>✗ Lo que no publica</h4>
+      <ul>
+        <li>Memes, tendencias, audios virales, retos.</li>
+        <li>Capturas de DMs, “tag a friend”, encuestas-cebo.</li>
+        <li>Descuentos, urgencias, “últimas horas”.</li>
+        <li>Métricas de seguidores/ventas como logro.</li>
+        <li>Calidad baja: flash duro, capturas pixeladas, collages cargados.</li>
+        <li>Citas motivacionales genéricas o frases de stock.</li>
+        <li>Cualquier cosa que se vería vieja o cursi en cinco años.</li>
+      </ul>
+    </div>
+  </div>
+  <blockquote><strong>Frecuencia:</strong> 2–4 veces por semana, no diario. El silencio es parte del diseño. Cada post debe tener una razón para existir.</blockquote>
+
+  <!-- ════════ PARTE II ════════ -->
+  <p class="part">Parte II — El sistema visual</p>
+
+  <p class="eyebrow">11 — Principios visuales</p>
+  <h2>Cinco principios, antes de cualquier herramienta</h2>
+  <div class="principles">
+    <div class="principle"><span class="n">01</span><div><b>Oscuro, deliberado, sin ruido.</b><span>El feed respira tinta (#0D0C0A / #16110D) y papel (#FAF3E6). El color es acento, no fondo.</span></div></div>
+    <div class="principle"><span class="n">02</span><div><b>Una obra, una idea, un foco por cuadro.</b><span>Nada de collages.</span></div></div>
+    <div class="principle"><span class="n">03</span><div><b>El espacio negativo es el lujo.</b><span>Si dudas, quita. Deja respirar.</span></div></div>
+    <div class="principle"><span class="n">04</span><div><b>La tipografía es la imagen.</b><span>Unbounded monumental + Newsreader italic + label mono. El tipo bien puesto ya es un post.</span></div></div>
+    <div class="principle"><span class="n">05</span><div><b>El punto rojo es sagrado.</b><span>El acento rojo (#E5402B) aparece una vez por cuadro, con intención. Nunca decorativo.</span></div></div>
+  </div>
+
+  <p class="eyebrow">12 — Tipografía y color</p>
+  <h2>Tipografía y color en el feed</h2>
+  <h3>Jerarquía tipográfica</h3>
+  <ul>
+    <li><strong>Unbounded 800</strong> — titulares, cifras grandes, logo. Monumental, geométrica.</li>
+    <li><strong>Newsreader italic</strong> — frases de manifiesto, citas, lo editorial/humano.</li>
+    <li><strong>Space Mono</strong> — eyebrows, datos técnicos, cartelas (“SEASON 01 · HAND-PICKED”).</li>
+  </ul>
+  <p>Regla: <strong>máximo dos familias por cuadro</strong>. Mezclar las tres apretadas rompe la calma.</p>
+  <h3>Paleta</h3>
+  <div class="swatches">
+    <span class="sw" style="background:#FAF3E6;color:#16110D;border:1px solid #16110D">Paper<small>#FAF3E6</small></span>
+    <span class="sw" style="background:#16110D">Ink<small>#16110D</small></span>
+    <span class="sw" style="background:#0D0C0A">Dark<small>#0D0C0A</small></span>
+    <span class="sw" style="background:#E5402B">Red · acción<small>#E5402B</small></span>
+    <span class="sw" style="background:#F2B705;color:#16110D">Yellow · descubrimiento<small>#F2B705</small></span>
+    <span class="sw" style="background:#8E6FD1">Lilac · profundidad<small>#8E6FD1</small></span>
+  </div>
+  <p><strong>Un acento por cuadro.</strong> Amarillo y lila no comparten cuadro con el rojo salvo en la propia obra. <code>border-radius: 2px</code> en todo elemento gráfico — nada redondeado/burbuja.</p>
+
+  <p class="eyebrow">13 — Fotografía</p>
+  <h2>Dirección de fotografía</h2>
+  <p>Referencia: la fotografía de Monocle y los stills de A24 — luz natural, materia, silencio.</p>
+  <div class="cols">
+    <div class="col yes"><h4>✓ Sí</h4><ul>
+      <li>Luz natural, cálida, suave. Sombra larga de estudio.</li>
+      <li>La obra como protagonista: plana y fiel, o en contexto (pared, suelo del estudio, entre manos).</li>
+      <li>Proceso y materia: pinceles, superficie, grano del lienzo, el primer gesto — la <em>mancha</em>. Macros de textura.</li>
+      <li>Encuadre de galería: mucha pared, mucho margen.</li>
+      <li>Paleta coherente con tinta/papel; calidez de película, grano sutil.</li>
+    </ul></div>
+    <div class="col no"><h4>✗ No</h4><ul>
+      <li>Flash directo, luz dura, sobresaturación, HDR, filtros de moda.</li>
+      <li>Fondos ruidosos, props de stock, retratos corporativos posados.</li>
+      <li>Obra recortada sin aire o con color infiel.</li>
+      <li>Marcas de agua grandes sobre la obra (firma discreta, esquina).</li>
+    </ul></div>
+  </div>
+  <blockquote><strong>Regla de fidelidad:</strong> la reproducción de la obra debe ser fiel al original. Estilizamos el <em>entorno</em>, nunca la <em>pieza</em>.</blockquote>
+
+  <p class="eyebrow">14 — Video</p>
+  <h2>Dirección de video / Reels</h2>
+  <p>Referencia: un tráiler de MUBI, un mini-documental de Monocle Films. <strong>Cine, no clip.</strong></p>
+  <div class="cols">
+    <div class="col yes"><h4>✓ Sí</h4><ul>
+      <li>Observacional y lento. Plano largo, cámara casi quieta, un sujeto.</li>
+      <li>Sonido ambiente real: el pincel sobre el lienzo, el silencio del estudio.</li>
+      <li>Cortes mínimos. 15–40 s.</li>
+      <li>Cartelas en Unbounded/Space Mono sobre negro pleno, entradas suaves.</li>
+      <li>Gradación cálida, coherente con el feed.</li>
+    </ul></div>
+    <div class="col no"><h4>✗ No</h4><ul>
+      <li>Audios de tendencia, pop genérico, voz robótica/TTS.</li>
+      <li>Cortes al ritmo del beat, transiciones de efecto, zooms bruscos.</li>
+      <li>Texto saturado, subtítulos automáticos, “POV:”, retos.</li>
+      <li>Vertical descuidado: cuida composición también en 9:16.</li>
+    </ul></div>
+  </div>
+  <p><strong>Estructura tipo (Reel de artista):</strong> imagen de apertura (sin texto) → cartela con nombre → 2–3 planos de proceso/obra → cierre con label de temporada. Termina en calma.</p>
+
+  <p class="eyebrow">15 — Composición</p>
+  <h2>Composición</h2>
+  <ul>
+    <li><strong>Un foco por cuadro.</strong> El ojo entra por un solo punto.</li>
+    <li><strong>Rejilla y márgenes constantes.</strong> Margen seguro (≈8–10% del lado), nunca invadido. La consistencia del margen es lo que hace “institución”.</li>
+    <li><strong>Eyebrow mono arriba</strong> (“SEASON 01”), <strong>firma/logo discreto abajo.</strong> Ese andamiaje repetido es la huella reconocible sin logo.</li>
+    <li><strong>Monumentalidad central</strong> para posters de declaración; <strong>regla de tercios</strong> para obra en contexto.</li>
+    <li><strong>El punto rojo</strong> como única nota de tensión: donde quieras que repose el ojo al final.</li>
+  </ul>
+
+  <p class="eyebrow">16 — Espacio</p>
+  <h2>Uso del espacio</h2>
+  <p>El espacio vacío no es desperdicio: es <strong>autoridad</strong>. Las marcas que llenan cada píxel parecen necesitar la atención; MANCHA la da por hecha.</p>
+  <ul>
+    <li>Deja que el fondo (tinta o papel) ocupe la mayoría del cuadro.</li>
+    <li>Texto confiado pero sin tocar los bordes. Aire arriba y abajo.</li>
+    <li>Una pieza, mucho muro. Una frase, mucho silencio.</li>
+    <li>En carruseles y stories, el aire constante crea ritmo de revista.</li>
+  </ul>
+
+  <p class="eyebrow">17 — Ritmo</p>
+  <h2>La coreografía de la cuadrícula</h2>
+  <p>El feed se diseña <strong>por filas de tres y pantallas de nueve</strong>, como las dobles páginas de una revista. No se piensa post a post: se piensa la <em>composición</em>.</p>
+  <ul>
+    <li><strong>Cadencia:</strong> 2–4 publicaciones por semana. Constante, sin saturar.</li>
+    <li><strong>Alternancia tinta/papel</strong> para que la cuadrícula respire; evita tres cuadros oscuros seguidos salvo serie deliberada.</li>
+    <li><strong>Agrupar por temporada:</strong> cada temporada lee como un capítulo; al cerrar, queda como sección de archivo.</li>
+    <li><strong>Series de tres:</strong> una obra puede ocupar una fila (díptico/tríptico). Planeado, no improvisado.</li>
+    <li><strong>Pausas:</strong> dejar pasar días es elegante. El vacío entre números es parte de ser periódico.</li>
+  </ul>
+  <blockquote>Planifica siempre en un <em>grid preview</em> de 9. Si la pantalla de nueve no se ve como la portada de una revista, reordena antes de publicar.</blockquote>
+
+  <p class="eyebrow">18 — El perfil</p>
+  <h2>El perfil como revista / institución internacional</h2>
+  <p>El perfil entero —no solo cada post— debe leerse como la portada y el índice de una publicación cultural.</p>
+  <ul>
+    <li><strong>Bio = masthead.</strong> Una declaración, no una lista de features. En inglés. Ej.: <em>“A cultural institution for emerging art. Hand-picked, by season. We choose first.”</em> + temporada/ubicación + manchagallery.com</li>
+    <li><strong>Foto de perfil:</strong> el logo <strong>MANCHA.</strong> (con punto rojo) sobre tinta. Inamovible.</li>
+    <li><strong>Story Highlights = secciones de la revista</strong>, con portadas idénticas (label mono sobre tinta): <code>SEASON 01</code> · <code>THE SELECTED</code> · <code>MANIFESTO</code> · <code>THE STUDIO</code> · <code>INDEX</code> (archivo) · <code>COLLECT</code>.</li>
+    <li><strong>Link:</strong> siempre a manchagallery.com (o la temporada vigente). Sin agregadores ruidosos.</li>
+    <li><strong>CTA:</strong> “in our bio”, sobrio. La institución informa dónde mirar; no empuja.</li>
+    <li><strong>Idioma:</strong> inglés en todo lo público, alineado con el sitio (cuyo idioma por defecto ya es inglés).</li>
+  </ul>
+
+  <!-- ════════ PARTE III ════════ -->
+  <p class="part">Parte III — Operativa</p>
+
+  <p class="eyebrow">19 — Checklist</p>
+  <h2>Definition of done</h2>
+  <p>Antes de publicar, todo cuadro pasa por:</p>
+  <ul class="check">
+    <li><strong>Prueba del logo tapado:</strong> ¿se reconoce como MANCHA sin el logotipo?</li>
+    <li><strong>Una idea, un foco, un acento</strong> (el punto rojo, una vez).</li>
+    <li><strong>Voz:</strong> inglés editorial, presente, primera persona plural; sin urgencia ni emojis de relleno.</li>
+    <li><strong>Léxico:</strong> ninguna palabra de la lista prohibida.</li>
+    <li><strong>Tipografía:</strong> máx. dos familias; márgenes seguros respetados.</li>
+    <li><strong>Obra fiel:</strong> color/encuadre fieles al original.</li>
+    <li><strong>Lugar en la cuadrícula:</strong> ¿la pantalla de nueve sigue pareciendo una portada?</li>
+    <li><strong>Razón de existir:</strong> este post añade algo. Si no, no se publica.</li>
+    <li><strong>Atemporalidad:</strong> ¿seguiría viéndose bien dentro de cinco años?</li>
+  </ul>
+
+  <p class="eyebrow">20 — El no</p>
+  <h2>Lo que MANCHA nunca hace</h2>
+  <blockquote>MANCHA nunca grita, nunca ruega, nunca liquida, nunca persigue una tendencia, nunca mide su valor en seguidores, nunca publica por publicar, nunca antepone el precio al artista, nunca rompe la calma. <strong>El prestigio no se anuncia: se da por hecho.</strong></blockquote>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="font-family:var(--display);font-weight:800">MANCHA<span style="color:var(--red)">.</span></div>
+    Documento vivo. Evoluciona con las temporadas, pero sus principios —curaduría, restricción, calma— no cambian.<br>Construimos para el archivo, no para el algoritmo.
+  </div>
+</footer>
+
+</body>
+</html>
