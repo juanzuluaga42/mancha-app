@@ -4,7 +4,10 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 
-export const metadata = { title: 'MANCHA — Pago recibido' };
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('pagoTitle') };
+}
 
 export default async function PagoExitoPage({ searchParams }) {
   const params = await searchParams;

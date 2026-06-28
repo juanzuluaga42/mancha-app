@@ -7,10 +7,10 @@ import SoloArtista from '@/components/SoloArtista';
 import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
-export const metadata = {
-  title: 'MANCHA — Institución de descubrimiento artístico.',
-  description: 'Por qué existe MANCHA: una institución que elige antes de que sea evidente, con criterio propio y sin catálogos abiertos.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('aboutTitle'), description: t('aboutDesc') };
+}
 
 export default async function SobreManchaPage() {
   const prelaunch = isPreLaunch();

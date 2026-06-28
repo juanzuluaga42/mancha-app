@@ -6,7 +6,10 @@ import Footer from '@/components/Footer';
 import RegistroForm from '@/components/RegistroForm';
 import GoogleButton from '@/components/GoogleButton';
 
-export const metadata = { title: 'MANCHA — Crear cuenta' };
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('registroTitle') };
+}
 
 export default async function RegistroPage({ searchParams }) {
   const params = await searchParams;

@@ -4,10 +4,10 @@ import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 
 
-export const metadata = {
-  title: 'MANCHA — Términos y privacidad',
-  description: 'Cómo funciona MANCHA, qué datos guardamos y cuáles son las reglas del juego. Sin letra chica.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('legalTitle'), description: t('legalDesc') };
+}
 
 export default async function LegalPage() {
   const t = await getTranslations('legal');

@@ -12,10 +12,10 @@ import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { getArticles } from '@/lib/news';
 
-export const metadata = {
-  title: 'MANCHA — Para coleccionistas. Arte emergente seleccionado.',
-  description: 'Colecciona artistas emergentes seleccionados a mano antes de que el mundo los descubra. Pocos por temporada. Cuando cierra, cierra para siempre.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('collectorsTitle'), description: t('collectorsDesc') };
+}
 
 const LAUNCH_DATE = '2026-09-01T00:00:00-05:00';
 

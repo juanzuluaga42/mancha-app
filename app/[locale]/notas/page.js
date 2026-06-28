@@ -7,15 +7,14 @@ import BlogImg from '@/components/BlogImg';
 import { getArticles } from '@/lib/news';
 import { getAtlas } from '@/lib/atlas';
 
-export const metadata = {
-  title: 'MANCHA — Lo que pensamos sobre el arte.',
-  description: 'MANCHA Editorial: los 20 artistas más influyentes, los cuadros más caros, los grandes museos y lo que el arte dice sobre el mundo.',
-  openGraph: {
-    title: 'MANCHA — Lo que pensamos sobre el arte.',
-    description: 'MANCHA Editorial: arte, historia, criterio. Sin algoritmos editoriales.',
-    type: 'website',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return {
+    title: t('notasTitle'),
+    description: t('notasDesc'),
+    openGraph: { title: t('notasTitle'), description: t('notasDesc'), type: 'website' },
+  };
+}
 
 export default async function NotasPage() {
   const t = await getTranslations('notasPage');

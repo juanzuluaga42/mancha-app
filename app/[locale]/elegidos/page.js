@@ -3,21 +3,18 @@ import { Link } from '@/i18n/navigation';
 import CursorTrail from '@/components/CursorTrail';
 import LocaleSwitch from '@/components/LocaleSwitch';
 
-export const metadata = {
-  title: 'MANCHA — Arte seleccionado a mano.',
-  description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
-  robots: { index: false, follow: false },
-  openGraph: {
-    title: 'MANCHA — Arte seleccionado a mano.',
-    description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'MANCHA — Arte seleccionado a mano.',
-    description: 'Si estás leyendo esto, alguien pensó que merecías encontrarlo.',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  const title = t('elegidosTitle');
+  const description = t('elegidosDesc');
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+    openGraph: { title, description, type: 'website' },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
 
 export default async function ElegidosPage() {
   const t = await getTranslations('elegidos');

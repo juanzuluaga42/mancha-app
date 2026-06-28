@@ -8,7 +8,10 @@ import GoogleButton from '@/components/GoogleButton';
 import { logIn } from './actions';
 import { safePath } from '@/lib/utils';
 
-export const metadata = { title: 'MANCHA — Iniciar sesión' };
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('loginTitle') };
+}
 
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;

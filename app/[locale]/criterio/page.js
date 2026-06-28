@@ -5,10 +5,10 @@ import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 
 
-export const metadata = {
-  title: 'MANCHA — El criterio',
-  description: 'Qué busca MANCHA en una obra. No es un algoritmo. Es un estándar.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('criteriaTitle'), description: t('criteriaDesc') };
+}
 
 export default async function CriterioPage() {
   const t = await getTranslations('criterioPage');

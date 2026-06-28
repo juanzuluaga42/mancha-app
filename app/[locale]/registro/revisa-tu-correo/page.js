@@ -3,7 +3,10 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Splat from '@/components/Splat';
 
-export const metadata = { title: 'MANCHA — Revisa tu correo' };
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('revisaTitle') };
+}
 
 export default async function RevisaTuCorreoPage() {
   const t = await getTranslations('misc');

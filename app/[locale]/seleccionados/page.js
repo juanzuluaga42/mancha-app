@@ -9,16 +9,14 @@ import { cap } from '@/lib/utils';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 import { redirect } from 'next/navigation';
 
-export const metadata = {
-  title: 'MANCHA — Los elegidos',
-  description: 'El registro permanente de cada artista que pasó el filtro. Temporada por temporada.',
-  openGraph: {
-    title: 'MANCHA — Los elegidos',
-    description: 'El registro permanente de cada artista que pasó el filtro.',
-    images: ['/og-default.jpg'],
-    type: 'website',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return {
+    title: t('selectedTitle'),
+    description: t('selectedDesc'),
+    openGraph: { title: t('selectedTitle'), description: t('selectedDesc'), images: ['/og-default.jpg'], type: 'website' },
+  };
+}
 
 export const dynamic = 'force-dynamic';
 

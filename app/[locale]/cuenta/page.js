@@ -9,7 +9,10 @@ import { createArtistProfile, addPiece, deletePiece } from './actions';
 import SubmitButton from '@/components/SubmitButton';
 import { cap } from '@/lib/utils';
 
-export const metadata = { title: 'MANCHA — Mi cuenta' };
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('cuentaTitle') };
+}
 
 export default async function CuentaPage({ searchParams }) {
   const params = await searchParams;

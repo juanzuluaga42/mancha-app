@@ -5,15 +5,14 @@ import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 
 
-export const metadata = {
-  title: 'MANCHA — Lo que pasa por aquí queda marcado para siempre.',
-  description: 'El manifiesto de MANCHA. Para los artistas que entienden que pertenecer a algo que vale la pena es un logro, no un trámite.',
-  openGraph: {
-    title: 'MANCHA — Lo que pasa por aquí queda marcado para siempre.',
-    description: 'El manifiesto de MANCHA. Para los artistas que entienden que pertenecer a algo que vale la pena es un logro, no un trámite.',
-    type: 'website',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return {
+    title: t('manifestoTitle'),
+    description: t('manifestoDesc'),
+    openGraph: { title: t('manifestoTitle'), description: t('manifestoDesc'), type: 'website' },
+  };
+}
 
 export default async function ManifiestoPage() {
   const t = await getTranslations('manifestoPage');

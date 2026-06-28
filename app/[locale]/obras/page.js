@@ -8,10 +8,10 @@ import Footer from '@/components/Footer';
 import ObrasCatalog from '@/components/ObrasCatalog';
 import { isTemporadaActiva } from '@/lib/fase';
 
-export const metadata = {
-  title: 'MANCHA — Catálogo de la temporada',
-  description: 'Todas las piezas en subasta esta temporada. Explora, sigue y puja por lo que te detenga.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('catalogTitle'), description: t('catalogDesc') };
+}
 
 // Página de subasta: los datos (pujas, vendidas) cambian en vivo, nunca cachear.
 export const dynamic = 'force-dynamic';

@@ -13,10 +13,10 @@ import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { getArticles } from '@/lib/news';
 
-export const metadata = {
-  title: 'MANCHA — Para artistas. Solicitar acceso.',
-  description: 'Elegimos artistas emergentes a mano. Sin métricas, sin seguidores. Solo la obra. Postula a la Temporada 01.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('meta');
+  return { title: t('artistsTitle'), description: t('artistsDesc') };
+}
 
 const CONV_OPEN_DATE  = '2026-08-01T00:00:00-05:00';
 const CONV_CLOSE_DATE = '2026-08-31T00:00:00-05:00';
