@@ -1,7 +1,35 @@
 {
   "common": {
-    "language": "Idioma",
-    "spanish": "ES",
-    "english": "EN"
+    "signIn": "Iniciar sesión",
+    "createAccount": "Crear cuenta",
+    "account": "Mi cuenta",
+    "signOut": "Salir"
+  },
+  "nav": {
+    "institution": "La institución",
+    "criteria": "El criterio",
+    "notes": "Notas",
+    "collect": "Coleccionar",
+    "apply": "Solicitar acceso",
+    "selected": "Los elegidos",
+    "catalogue": "Catálogo",
+    "manifesto": "Manifiesto"
+  },
+  "footer": {
+    "tagline": "Institución de descubrimiento artístico. Est. 2026.",
+    "colInstitution": "La institución",
+    "criteria": "El criterio",
+    "notesEditorial": "Notas editoriales",
+    "createAccount": "Crear cuenta",
+    "apply": "Solicitar acceso",
+    "selected": "Los elegidos",
+    "catalogue": "Catálogo",
+    "terms": "Términos y privacidad",
+    "colEditorial": "Editorial",
+    "editorialLink": "Editorial MANCHA →",
+    "colContact": "Contacto",
+    "rights": "© 2026 MANCHA. Institución de descubrimiento artístico.",
+    "seasonPre": "Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026",
+    "seasonActive": "Temporada en curso"
   }
 }

@@ -1,7 +1,35 @@
 {
   "common": {
-    "language": "Language",
-    "spanish": "ES",
-    "english": "EN"
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "account": "My account",
+    "signOut": "Sign out"
+  },
+  "nav": {
+    "institution": "The institution",
+    "criteria": "The criteria",
+    "notes": "Notes",
+    "collect": "Collect",
+    "apply": "Apply",
+    "selected": "The selected",
+    "catalogue": "Catalogue",
+    "manifesto": "Manifesto"
+  },
+  "footer": {
+    "tagline": "Institution for artistic discovery. Est. 2026.",
+    "colInstitution": "The institution",
+    "criteria": "The criteria",
+    "notesEditorial": "Editorial notes",
+    "createAccount": "Create account",
+    "apply": "Apply",
+    "selected": "The selected",
+    "catalogue": "Catalogue",
+    "terms": "Terms & privacy",
+    "colEditorial": "Editorial",
+    "editorialLink": "MANCHA Editorial →",
+    "colContact": "Contact",
+    "rights": "© 2026 MANCHA. Institution for artistic discovery.",
+    "seasonPre": "Open call Aug 1–31 · Season 01 opens Sep 1, 2026",
+    "seasonActive": "Season in progress"
   }
 }

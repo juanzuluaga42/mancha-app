@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/[locale]/cuenta/actions';
 import NavMenu from './NavMenu';
@@ -8,6 +9,8 @@ import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
 export default async function Nav() {
   const supabase = await createClient();
+  const t = await getTranslations('nav');
+  const tc = await getTranslations('common');
   const { data: { user } } = await supabase.auth.getUser();
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
@@ -20,39 +23,39 @@ export default async function Nav() {
 
   const links = prelaunch
     ? [
-        { href: '/sobre-mancha', label: 'La institución' },
-        { href: '/criterio', label: 'El criterio' },
-        { href: '/notas', label: 'Notas' },
-        { href: '/#compradores', label: 'Coleccionar →' },
+        { href: '/sobre-mancha', label: t('institution') },
+        { href: '/criterio', label: t('criteria') },
+        { href: '/notas', label: t('notes') },
+        { href: '/#compradores', label: `${t('collect')} →` },
       ]
     : convocatoria
     ? [
-        { href: '/sobre-mancha', label: 'La institución' },
-        { href: '/criterio', label: 'El criterio' },
-        { href: '/postular', label: 'Solicitar acceso →' },
-        { href: '/#compradores', label: 'Coleccionar' },
-        ...(isArtist ? [{ href: '/manifiesto', label: 'Manifiesto' }] : []),
+        { href: '/sobre-mancha', label: t('institution') },
+        { href: '/criterio', label: t('criteria') },
+        { href: '/postular', label: `${t('apply')} →` },
+        { href: '/#compradores', label: t('collect') },
+        ...(isArtist ? [{ href: '/manifiesto', label: t('manifesto') }] : []),
       ]
     : [
-        { href: '/sobre-mancha', label: 'La institución' },
-        { href: '/criterio', label: 'El criterio' },
-        { href: '/seleccionados', label: 'Los elegidos' },
-        { href: '/obras', label: 'Catálogo' },
-        { href: '/postular', label: 'Solicitar acceso' },
-        ...(isArtist ? [{ href: '/manifiesto', label: 'Manifiesto' }] : []),
+        { href: '/sobre-mancha', label: t('institution') },
+        { href: '/criterio', label: t('criteria') },
+        { href: '/seleccionados', label: t('selected') },
+        { href: '/obras', label: t('catalogue') },
+        { href: '/postular', label: t('apply') },
+        ...(isArtist ? [{ href: '/manifiesto', label: t('manifesto') }] : []),
       ];
 
   const authSlot = user ? (
     <>
-      <Link href="/cuenta">Mi cuenta</Link>
+      <Link href="/cuenta">{tc('account')}</Link>
       <form action={signOut}>
-        <button type="submit">Salir</button>
+        <button type="submit">{tc('signOut')}</button>
       </form>
     </>
   ) : (
     <>
-      <Link href="/login">Iniciar sesión</Link>
-      <Link href="/registro" className="nav-cta">Crear cuenta</Link>
+      <Link href="/login">{tc('signIn')}</Link>
+      <Link href="/registro" className="nav-cta">{tc('createAccount')}</Link>
     </>
   );
 

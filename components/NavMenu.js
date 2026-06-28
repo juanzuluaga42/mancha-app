@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 // Links que se ocultan SOLO del lado coleccionista (lenguaje de institución/artista).
 const HIDE_FOR_COLLECTOR = ['/sobre-mancha', '/criterio'];

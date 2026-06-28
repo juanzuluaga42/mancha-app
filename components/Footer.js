@@ -1,11 +1,13 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Splat from './Splat';
 import OcultarColeccionista from './OcultarColeccionista';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
 
-export default function Footer() {
+export default async function Footer() {
   const prelaunch = isPreLaunch();
   const convocatoria = isConvocatoria();
+  const t = await getTranslations('footer');
 
   return (
     <footer className="site-footer">
@@ -19,46 +21,42 @@ export default function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <Link href="/" className="brand">MANCHA<span>.</span></Link>
-            <p>
-              {prelaunch || convocatoria
-                ? 'Institución de descubrimiento artístico. Est. 2026.'
-                : 'Institución de descubrimiento artístico. Est. 2026.'}
-            </p>
+            <p>{t('tagline')}</p>
           </div>
           <div className="footer-links">
             <div className="footer-col">
-              <h5>La institución</h5>
-              <OcultarColeccionista><Link href="/criterio">El criterio</Link></OcultarColeccionista>
+              <h5>{t('colInstitution')}</h5>
+              <OcultarColeccionista><Link href="/criterio">{t('criteria')}</Link></OcultarColeccionista>
               {prelaunch ? (
                 <>
-                  <Link href="/registro">Crear cuenta</Link>
+                  <Link href="/registro">{t('createAccount')}</Link>
                 </>
               ) : convocatoria ? (
                 <>
-                  <Link href="/postular">Solicitar acceso →</Link>
+                  <Link href="/postular">{t('apply')} →</Link>
                 </>
               ) : (
                 <>
-                  <Link href="/seleccionados">Los elegidos</Link>
-                  <Link href="/obras">Catálogo</Link>
-                  <Link href="/postular">Solicitar acceso</Link>
+                  <Link href="/seleccionados">{t('selected')}</Link>
+                  <Link href="/obras">{t('catalogue')}</Link>
+                  <Link href="/postular">{t('apply')}</Link>
                 </>
               )}
-              <Link href="/legal">Términos y privacidad</Link>
+              <Link href="/legal">{t('terms')}</Link>
             </div>
             <div className="footer-col">
-              <h5>Editorial</h5>
-              <Link href="/notas">Editorial MANCHA →</Link>
-              <h5 style={{ marginTop: 24 }}>Contacto</h5>
+              <h5>{t('colEditorial')}</h5>
+              <Link href="/notas">{t('editorialLink')}</Link>
+              <h5 style={{ marginTop: 24 }}>{t('colContact')}</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 MANCHA. Institución de descubrimiento artístico.</span>
+          <span>{t('rights')}</span>
           {prelaunch || convocatoria
-            ? <span>Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026</span>
-            : <span>Temporada en curso</span>}
+            ? <span>{t('seasonPre')}</span>
+            : <span>{t('seasonActive')}</span>}
         </div>
       </div>
     </footer>
