@@ -24,7 +24,9 @@
     "notasTitle": "MANCHA — Lo que pensamos sobre el arte.",
     "notasDesc": "MANCHA Editorial: los 20 artistas más influyentes, los cuadros más caros, los grandes museos y lo que el arte dice sobre el mundo.",
     "elegidosTitle": "MANCHA — Arte seleccionado a mano.",
-    "elegidosDesc": "Si estás leyendo esto, alguien pensó que merecías encontrarlo."
+    "elegidosDesc": "Si estás leyendo esto, alguien pensó que merecías encontrarlo.",
+    "indexTitle": "MANCHA — El Índice",
+    "indexDesc": "El registro permanente de cada obra que MANCHA ha mostrado. Procedencia, estado y autoría, temporada por temporada."
   },
   "common": {
     "signIn": "Iniciar sesión",
@@ -38,6 +40,20 @@
     "hours": "hs",
     "mins": "min",
     "secs": "seg"
+  },
+  "index": {
+    "eyebrow": "El Índice",
+    "title1": "Todo lo que MANCHA",
+    "titleEm": "ha mostrado.",
+    "sub": "El registro permanente de cada obra presentada, temporada por temporada. Procedencia, estado y autoría — conservados para siempre.",
+    "emptyTitle": "El Índice abre con la primera temporada.",
+    "emptyText": "Cuando la Temporada 01 se selle, cada obra quedará registrada aquí para siempre.",
+    "works": "{count, plural, one {# obra} other {# obras}}",
+    "collectedCount": "{count, plural, =0 {sin adquisiciones} one {# en colección} other {# en colección}}",
+    "statusCollected": "En Colección",
+    "statusRequest": "Por encargo",
+    "viewCertificate": "Ver certificado",
+    "enquire": "Consultar"
   },
   "waitlist": {
     "notify": "Avísame",
@@ -85,6 +101,7 @@
     "terms": "Términos y privacidad",
     "colEditorial": "Editorial",
     "editorialLink": "Editorial MANCHA →",
+    "indexLink": "El Índice →",
     "colContact": "Contacto",
     "rights": "© 2026 MANCHA. Institución de descubrimiento artístico.",
     "seasonPre": "Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026",

@@ -24,7 +24,9 @@
     "notasTitle": "MANCHA — What we think about art.",
     "notasDesc": "MANCHA Editorial: the 20 most influential artists, the most expensive paintings, the great museums and what art says about the world.",
     "elegidosTitle": "MANCHA — Hand-picked art.",
-    "elegidosDesc": "If you're reading this, someone thought you deserved to find it."
+    "elegidosDesc": "If you're reading this, someone thought you deserved to find it.",
+    "indexTitle": "MANCHA — The Index",
+    "indexDesc": "The permanent record of every work MANCHA has shown. Provenance, status and authorship, season by season."
   },
   "common": {
     "signIn": "Sign in",
@@ -38,6 +40,20 @@
     "hours": "hrs",
     "mins": "min",
     "secs": "sec"
+  },
+  "index": {
+    "eyebrow": "The Index",
+    "title1": "Everything MANCHA",
+    "titleEm": "has shown.",
+    "sub": "The permanent record of every work presented, season by season. Provenance, status and authorship — kept for good.",
+    "emptyTitle": "The Index opens with the first season.",
+    "emptyText": "When Season 01 is sealed, every work will be recorded here for good.",
+    "works": "{count, plural, one {# work} other {# works}}",
+    "collectedCount": "{count, plural, =0 {no acquisitions yet} one {# collected} other {# collected}}",
+    "statusCollected": "Collected",
+    "statusRequest": "Available by request",
+    "viewCertificate": "View certificate",
+    "enquire": "Enquire"
   },
   "waitlist": {
     "notify": "Notify me",
@@ -85,6 +101,7 @@
     "terms": "Terms & privacy",
     "colEditorial": "Editorial",
     "editorialLink": "MANCHA Editorial →",
+    "indexLink": "The Index →",
     "colContact": "Contact",
     "rights": "© 2026 MANCHA. Institution for artistic discovery.",
     "seasonPre": "Open call Aug 1–31 · Season 01 opens Sep 1, 2026",

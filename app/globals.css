@@ -3314,3 +3314,50 @@ input, textarea, select {
 .elegidos-nav{display:flex; align-items:center; justify-content:space-between;}
 .rp-locale .locale-flag, .elegidos-nav .locale-flag{font-size:15px;}
 .rp-locale .locale-flag.active, .elegidos-nav .locale-flag.active{background:rgba(250,239,225,0.12);}
+
+/* ═══════════════════════════════════════════════════════════════
+   THE INDEX — registro permanente de obras (ciclo de vida MANCHA)
+   ─────────────────────────────────────────────────────────────── */
+.idx-header{position:relative; overflow:hidden; padding:96px 0 56px; border-bottom:var(--rule);}
+.idx-eyebrow{color:var(--red); margin-bottom:18px;}
+.idx-title{font-size:clamp(2.4rem,6vw,4.2rem); font-weight:800; line-height:1.02; letter-spacing:-.03em;}
+.idx-title em{font-family:var(--font-body); font-style:italic; font-weight:400;}
+.idx-sub{font-family:var(--font-body); font-size:clamp(1.05rem,2vw,1.3rem); color:var(--ink-soft); max-width:60ch; margin-top:22px; line-height:1.5;}
+
+.idx-main{padding:56px 0 90px;}
+.idx-edition{margin-bottom:72px;}
+.idx-edition-head{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; padding-bottom:20px; border-bottom:1.5px solid var(--ink); margin-bottom:34px;}
+.idx-edition-code{font-family:var(--font-mono); font-size:12px; letter-spacing:.18em; color:var(--red); display:block; margin-bottom:6px;}
+.idx-edition-name{font-size:clamp(1.5rem,3.5vw,2.2rem); font-weight:700; letter-spacing:-.02em;}
+.idx-edition-dates{font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin-top:8px;}
+.idx-edition-stats{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:center; gap:10px;}
+.idx-stat-sep{opacity:.4;}
+
+.idx-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:30px 26px;}
+.idx-work{display:flex; flex-direction:column;}
+.idx-work-media{position:relative; aspect-ratio:4/5; border-radius:2px; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+.idx-work-media img{width:100%; height:100%; object-fit:cover;}
+.idx-work-initials{font-family:var(--font-display); font-weight:800; font-size:2.4rem; color:rgba(250,243,230,.85);}
+.idx-status{position:absolute; top:12px; left:12px; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:5px 9px; border-radius:2px;}
+.idx-status.collected{background:var(--ink); color:var(--paper);}
+.idx-status.request{background:rgba(250,243,230,.92); color:var(--ink); border:1px solid var(--ink);}
+.idx-work-body{padding-top:14px;}
+.idx-work-prov{font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 8px;}
+.idx-work-title{font-family:var(--font-body); font-style:italic; font-size:1.15rem; font-weight:500; line-height:1.2; margin:0 0 6px;}
+.idx-work-artist{font-family:var(--font-display); font-weight:700; font-size:.92rem; margin:0 0 4px;}
+.idx-work-medium{font-family:var(--font-body); font-style:italic; font-weight:400; color:var(--ink-soft);}
+.idx-work-tech{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em; color:var(--ink-soft); margin:0 0 12px;}
+.idx-work-foot{margin-top:auto;}
+.idx-work-link{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--red); padding-bottom:2px;}
+.idx-work-link:hover{color:var(--red);}
+.idx-work-link--ghost{color:var(--ink-soft); border-bottom-color:var(--ink-soft);}
+
+.idx-empty{padding:80px 0 110px; text-align:center;}
+.idx-empty-mark{font-family:var(--font-display); font-weight:800; font-size:5rem; color:var(--paper-dark); margin:0 0 10px; line-height:1;}
+.idx-empty-title{font-size:clamp(1.6rem,4vw,2.4rem); font-weight:700; letter-spacing:-.02em; margin:0 0 14px;}
+.idx-empty-text{font-family:var(--font-body); font-size:1.1rem; color:var(--ink-soft); max-width:46ch; margin:0 auto; line-height:1.5;}
+
+@media(max-width:600px){
+  .idx-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:24px 16px;}
+  .idx-header{padding:72px 0 44px;}
+}

@@ -47,6 +47,7 @@ export default async function Footer() {
             <div className="footer-col">
               <h5>{t('colEditorial')}</h5>
               <Link href="/notas">{t('editorialLink')}</Link>
+              <Link href="/indice">{t('indexLink')}</Link>
               <h5 style={{ marginTop: 24 }}>{t('colContact')}</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
             </div>
