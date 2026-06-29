@@ -3392,29 +3392,29 @@ input, textarea, select {
   position:relative; overflow:hidden;
   background-color:#0D0C0A;
   background-image:
-    radial-gradient(72% 52% at 64% 24%, rgba(229,64,43,.10), transparent 60%),
-    radial-gradient(135% 105% at 50% 46%, transparent 50%, rgba(0,0,0,.62));
+    radial-gradient(64% 46% at 65% 20%, rgba(229,64,43,.20), transparent 56%),
+    radial-gradient(118% 96% at 50% 44%, transparent 36%, rgba(0,0,0,.85));
 }
 .tsr-hero::before{ /* grano de película */
   content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:.06; mix-blend-mode:overlay;
+  opacity:.08; mix-blend-mode:overlay;
 }
-.tsr-hero::after{ /* mancha de marca, tenue, detrás del titular */
+.tsr-hero::after{ /* mancha de marca detrás del titular */
   content:""; position:absolute; z-index:0; pointer-events:none;
-  width:78vw; max-width:1080px; aspect-ratio:1; right:-16vw; top:2%;
-  background:radial-gradient(closest-side, rgba(229,64,43,.13), transparent 66%);
-  filter:blur(46px); transform:rotate(-12deg);
+  width:84vw; max-width:1180px; aspect-ratio:1; right:-18vw; top:0;
+  background:radial-gradient(closest-side, rgba(229,64,43,.26), transparent 62%);
+  filter:blur(44px); transform:rotate(-12deg);
 }
 .tsr-hero-content, .tsr-hero-foot{ position:relative; z-index:1; }
 
 /* Portada coleccionista: luz/mancha cálida (amarillo descubrimiento) */
 .col-hero{
   background-image:
-    radial-gradient(72% 52% at 60% 22%, rgba(242,183,5,.085), transparent 60%),
-    radial-gradient(135% 105% at 50% 46%, transparent 50%, rgba(0,0,0,.62));
+    radial-gradient(64% 46% at 60% 18%, rgba(242,183,5,.16), transparent 56%),
+    radial-gradient(118% 96% at 50% 44%, transparent 36%, rgba(0,0,0,.85));
 }
-.col-hero::after{ background:radial-gradient(closest-side, rgba(242,183,5,.11), transparent 66%); }
+.col-hero::after{ background:radial-gradient(closest-side, rgba(242,183,5,.22), transparent 62%); }
 
 /* Estado "a la vista ahora" (reemplaza el countdown de cierre en temporada activa) */
 .tsr-hero-now{
