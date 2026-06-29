@@ -8,16 +8,16 @@ import {
   CRITERIA_KEYS, DECISIONS, BIAS_OPTIONS, OUTCOMES,
   computeCuratorialIndex, validateScores, confidenceProfile,
 } from '@/lib/curatorial';
+import { resolveCurator } from '@/lib/curatorAccess';
 
 // Solo el Founder. Devuelve { user } o redirige.
 async function requireFounder() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
-  const { data: c } = await supabase
-    .from('cur_curators').select('role').eq('user_id', user.id).eq('active', true).maybeSingle();
-  if (!c || c.role !== 'founder') redirect('/curaduria');
-  return { user };
+  const curator = await resolveCurator(supabase, user);
+  if (!curator || curator.role !== 'founder') redirect('/curaduria');
+  return { supabase, user };
 }
 
 // Devuelve { user, curator } o redirige si no es curador activo.
@@ -25,12 +25,7 @@ async function requireCurator() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
-  const { data: curator } = await supabase
-    .from('cur_curators')
-    .select('id, role, display_name')
-    .eq('user_id', user.id)
-    .eq('active', true)
-    .maybeSingle();
+  const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
   return { supabase, user, curator };
 }
@@ -182,4 +177,62 @@ export async function recordDecision(formData) {
   });
   revalidatePath('/curaduria/colegio');
   redirect('/curaduria/colegio?decided=1');
+}
+
+// ── Consejo — el Founder invita o descarta candidatos ──
+export async function inviteCandidate(formData) {
+  const { user } = await requireFounder();
+  const candidateId = String(formData.get('candidateId') || '');
+  const admin = createAdminClient();
+
+  const { data: cand } = await admin
+    .from('cur_candidates').select('id, name, email, status').eq('id', candidateId).maybeSingle();
+  if (!cand) redirect('/curaduria/candidatos?error=1');
+
+  // Crea la fila del curador con su email (user_id se vincula al primer login).
+  const { error: insErr } = await admin.from('cur_curators').insert({
+    user_id: null,
+    email: cand.email,
+    display_name: cand.name,
+    role: 'council',
+    active: true,
+  });
+  // Si ya existía (email único), seguimos igual marcando invitado.
+  await admin.from('cur_candidates').update({ status: 'invited' }).eq('id', candidateId);
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'curator_invited', entity: 'cur_candidate', entity_id: candidateId,
+    meta: { email: cand.email, duplicate: !!insErr },
+  });
+
+  // Aviso al invitado (mejor esfuerzo; no bloquea si falla el correo).
+  try {
+    const { sendEmail } = await import('@/lib/email');
+    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
+    await sendEmail({
+      to: cand.email,
+      subject: 'MANCHA · Invitación al Consejo Curatorial',
+      html: `<p>Hola ${cand.name},</p>
+        <p>Te invitamos a integrar el <strong>Consejo Curatorial Fundador de MANCHA</strong>.</p>
+        <p>Entra con este mismo correo (${cand.email}) en <a href="${site}/curaduria">${site}/curaduria</a>.
+        Si aún no tienes cuenta, créala con este correo: tu acceso al portal se activa automáticamente.</p>
+        <p>La obra habla primero.</p><p>— MANCHA</p>`,
+    });
+  } catch {}
+
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos?invited=1');
+}
+
+export async function setCandidateStatus(formData) {
+  const { user } = await requireFounder();
+  const candidateId = String(formData.get('candidateId') || '');
+  const status = String(formData.get('status') || '');
+  if (!['new', 'declined', 'archived'].includes(status)) redirect('/curaduria/candidatos?error=1');
+  const admin = createAdminClient();
+  await admin.from('cur_candidates').update({ status }).eq('id', candidateId);
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'candidate_status', entity: 'cur_candidate', entity_id: candidateId, meta: { status },
+  });
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos');
 }

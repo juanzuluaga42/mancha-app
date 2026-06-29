@@ -8,6 +8,7 @@ import {
   decisionLabel, outcomeLabel, manchaIndex, consensusLevel,
   aggregateCriteria, suggestedOutcome,
 } from '@/lib/curatorial';
+import { resolveCurator } from '@/lib/curatorAccess';
 
 export const metadata = { title: 'MANCHA — Sala del colegio' };
 
@@ -19,8 +20,7 @@ export default async function ColegioPage({ searchParams }) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { data: curator } = await supabase
-    .from('cur_curators').select('id, role').eq('user_id', user.id).eq('active', true).maybeSingle();
+  const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
   if (curator.role !== 'founder') redirect('/curaduria');
 

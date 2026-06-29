@@ -26,7 +26,9 @@
     "indexTitle": "MANCHA — El Índice",
     "indexDesc": "El registro permanente de cada obra que MANCHA ha mostrado. Procedencia, estado y autoría, temporada por temporada.",
     "beforeWorldTitle": "MANCHA — Antes que el mundo",
-    "beforeWorldDesc": "Coleccionar en MANCHA no es comprar un objeto: es llegar primero. El manifiesto para quienes ven antes que el mundo."
+    "beforeWorldDesc": "Coleccionar en MANCHA no es comprar un objeto: es llegar primero. El manifiesto para quienes ven antes que el mundo.",
+    "councilTitle": "MANCHA — Consejo Curatorial",
+    "councilDesc": "El Consejo Curatorial Fundador de MANCHA. La obra habla primero."
   },
   "common": {
     "signIn": "Iniciar sesión",
@@ -679,5 +681,32 @@
     "back": "← Todas las notas",
     "prevDir": "← Anterior",
     "nextDir": "Siguiente →"
+  },
+  "council": {
+    "line1": "Antes de que una obra sea historia,",
+    "line2": "alguien tuvo que verla.",
+    "line3": "Ese alguien eres tú.",
+    "beat1a": "MANCHA reúne un Consejo Curatorial Fundador.",
+    "beat1b": "Pocos. Elegidos a mano.",
+    "beat2a": "Cada obra se evalúa a ciegas: sin nombre, sin país, sin trayectoria.",
+    "beat2b": "Primero la obra. Después el artista.",
+    "beat2c": "Tu juicio construye el estándar.",
+    "beat3a": "No es un trabajo ni un favor.",
+    "beat3b": "Es una responsabilidad institucional —",
+    "beat3c": "y queda en el registro permanente de MANCHA.",
+    "formKicker": "Expresión de interés",
+    "formTitle": "Preséntate al Consejo",
+    "formSub": "No es una convocatoria abierta: leemos cada mirada con cuidado. Si encaja, te invitamos.",
+    "nameLabel": "Nombre",
+    "emailLabel": "Correo",
+    "focusLabel": "Tu especialidad",
+    "focusPlaceholder": "Curaduría, crítica, museo, mercado del arte…",
+    "portfolioLabel": "Portafolio o perfil (link)",
+    "statementLabel": "¿Por qué tu mirada?",
+    "statementPlaceholder": "Qué buscas en una obra y por qué importaría tu criterio.",
+    "submit": "Enviar candidatura →",
+    "sending": "Enviando…",
+    "success": "Recibimos tu candidatura. Si encaja, te escribiremos.",
+    "back": "o conoce MANCHA primero"
   }
 }

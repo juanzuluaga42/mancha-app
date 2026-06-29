@@ -26,7 +26,9 @@
     "indexTitle": "MANCHA — The Index",
     "indexDesc": "The permanent record of every work MANCHA has shown. Provenance, status and authorship, season by season.",
     "beforeWorldTitle": "MANCHA — Before the World",
-    "beforeWorldDesc": "Collecting at MANCHA isn't buying an object — it's arriving first. The manifesto for those who see before the world does."
+    "beforeWorldDesc": "Collecting at MANCHA isn't buying an object — it's arriving first. The manifesto for those who see before the world does.",
+    "councilTitle": "MANCHA — Curatorial Council",
+    "councilDesc": "MANCHA’s Founding Curatorial Council. The work speaks first."
   },
   "common": {
     "signIn": "Sign in",
@@ -679,5 +681,32 @@
     "back": "← All notes",
     "prevDir": "← Previous",
     "nextDir": "Next →"
+  },
+  "council": {
+    "line1": "Before a work becomes history,",
+    "line2": "someone had to see it.",
+    "line3": "That someone is you.",
+    "beat1a": "MANCHA is forming a Founding Curatorial Council.",
+    "beat1b": "Few. Chosen by hand.",
+    "beat2a": "Every work is judged blind: no name, no country, no résumé.",
+    "beat2b": "The work first. The artist after.",
+    "beat2c": "Your judgment sets the standard.",
+    "beat3a": "Not a job, not a favor.",
+    "beat3b": "An institutional responsibility —",
+    "beat3c": "and it stays in MANCHA's permanent record.",
+    "formKicker": "Expression of interest",
+    "formTitle": "Introduce yourself to the Council",
+    "formSub": "This isn't an open call: we read every voice closely. If it fits, we'll invite you.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "focusLabel": "Your field",
+    "focusPlaceholder": "Curation, criticism, museums, art market…",
+    "portfolioLabel": "Portfolio or profile (link)",
+    "statementLabel": "Why your eye?",
+    "statementPlaceholder": "What you look for in a work, and why your judgment matters.",
+    "submit": "Send application →",
+    "sending": "Sending…",
+    "success": "We've received your application. If it fits, we'll be in touch.",
+    "back": "or get to know MANCHA first"
   }
 }

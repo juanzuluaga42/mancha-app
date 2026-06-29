@@ -3645,3 +3645,37 @@ input, textarea, select {
 .cur-decform-note{width:100%; margin-top:12px; border:1px solid rgba(22,17,13,.18); border-radius:2px; padding:10px 12px; font-family:var(--font-body); font-size:.9rem; background:#fff; resize:vertical;}
 .cur-decform-btn{margin-top:12px; background:var(--ink); color:var(--paper); border:none; padding:11px 22px; border-radius:100px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em;}
 .cur-decform-btn:disabled{opacity:.35; cursor:not-allowed;}
+
+/* ── Consejo · landing de reclutamiento (form sobre fondo /elegidos) ── */
+.consejo-apply{max-width:560px; margin:0 auto; padding:90px 24px 130px; border-top:1px solid rgba(250,247,240,0.12); text-align:center;}
+.consejo-kicker{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--yellow);}
+.consejo-title{font-family:var(--font-display); font-weight:700; font-size:clamp(1.7rem,4vw,2.5rem); color:#FAF3E6; margin:14px 0 0;}
+.consejo-sub{font-family:var(--font-body); font-style:italic; font-size:1.05rem; line-height:1.55; color:rgba(250,247,240,0.7); margin:14px auto 0; max-width:46ch;}
+.consejo-form{margin-top:40px; text-align:left; display:flex; flex-direction:column; gap:20px;}
+.consejo-field{display:flex; flex-direction:column; gap:8px;}
+.consejo-field label{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:rgba(250,247,240,0.55);}
+.consejo-field input,.consejo-field textarea{background:rgba(255,255,255,0.05); border:1px solid rgba(250,247,240,0.18); border-radius:0; padding:13px 15px; font-family:var(--font-body); font-size:1rem; color:#FAF3E6; transition:border-color .15s ease;}
+.consejo-field input:focus,.consejo-field textarea:focus{outline:none; border-color:var(--yellow);}
+.consejo-field input::placeholder,.consejo-field textarea::placeholder{color:rgba(250,247,240,0.32);}
+.consejo-field textarea{resize:vertical; line-height:1.55;}
+.consejo-submit{margin-top:6px; align-self:flex-start; background:var(--red); color:#FAF3E6; border:none; padding:16px 34px; border-radius:0; font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer; transition:background .15s ease;}
+.consejo-submit:hover{background:var(--red-deep);}
+.consejo-submit:disabled{opacity:.5; cursor:not-allowed;}
+.consejo-success{margin-top:32px; border:1px solid var(--yellow); background:rgba(242,183,5,0.08); color:#FAF3E6; padding:22px; font-family:var(--font-body); font-style:italic; font-size:1.1rem; line-height:1.5;}
+
+/* ── Consejo · candidatos (Founder) ── */
+.cur-founder-links{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;}
+.cur-cand-council{display:flex; gap:10px; flex-wrap:wrap;}
+.cur-council-chip{display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(22,17,13,.14); border-radius:100px; padding:7px 14px; font-family:var(--font-body); font-size:.92rem;}
+.cur-council-chip i{font-family:var(--font-mono); font-size:9.5px; font-style:normal; text-transform:uppercase; letter-spacing:.05em; color:var(--lilac-deep); background:rgba(142,111,209,.14); padding:2px 7px; border-radius:100px;}
+.cur-council-pending{font-family:var(--font-mono); font-size:9px; font-style:normal; text-transform:uppercase; letter-spacing:.04em; color:var(--yellow-deep);}
+.cur-cand-list{display:flex; flex-direction:column; gap:14px;}
+.cur-cand-card{border:1px solid rgba(22,17,13,.12); border-radius:2px; background:#fff; padding:18px 20px;}
+.cur-cand-main{display:flex; justify-content:space-between; gap:18px; align-items:flex-start; flex-wrap:wrap;}
+.cur-cand-name{font-family:var(--font-display); font-size:1.12rem; display:flex; align-items:center; gap:10px;}
+.cur-cand-meta{display:flex; gap:14px; flex-wrap:wrap; margin-top:7px; font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+.cur-cand-meta a{color:var(--lilac-deep);}
+.cur-cand-statement{font-family:var(--font-body); line-height:1.6; margin-top:12px; max-width:60ch; color:var(--ink);}
+.cur-cand-actions{display:flex; flex-direction:column; gap:8px; align-items:flex-end; flex-shrink:0;}
+.cur-cand-decline{background:none; border:1px solid rgba(22,17,13,.2); color:var(--ink-soft); padding:9px 16px; border-radius:100px; font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer;}
+.cur-cand-decline:hover{border-color:var(--red); color:var(--red);}

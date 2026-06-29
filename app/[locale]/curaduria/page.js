@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import { decisionLabel } from '@/lib/curatorial';
+import { resolveCurator } from '@/lib/curatorAccess';
 
 export const metadata = { title: 'MANCHA — Curaduría' };
 
@@ -18,12 +19,7 @@ export default async function CuraduriaPage({ searchParams }) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { data: curator } = await supabase
-    .from('cur_curators')
-    .select('id, display_name, role')
-    .eq('user_id', user.id)
-    .eq('active', true)
-    .maybeSingle();
+  const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
 
   // Asignaciones del curador con la obra (cara ciega) y, si existe, su evaluación.
@@ -56,7 +52,10 @@ export default async function CuraduriaPage({ searchParams }) {
             <div className="cur-stat"><b>{done.length}</b><span>Completadas</span></div>
           </div>
           {curator.role === 'founder' && (
-            <Link href="/curaduria/colegio" className="cur-room-link">Sala del colegio · decisión colegiada →</Link>
+            <div className="cur-founder-links">
+              <Link href="/curaduria/colegio" className="cur-room-link">Sala del colegio · decisión colegiada →</Link>
+              <Link href="/curaduria/candidatos" className="cur-room-link">Candidatos al consejo →</Link>
+            </div>
           )}
         </div>
       </header>
