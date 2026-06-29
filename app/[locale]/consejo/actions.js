@@ -1,24 +1,20 @@
 'use server';
 
-import { redirect } from 'next/navigation';
-import { getLocale } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import { SPECIALTY_KEYS } from '@/lib/curatorial';
 
 // Expresión de interés para el Consejo Curatorial. No da de alta a nadie:
 // crea un candidato que el Founder revisa e invita.
-export async function applyToCouncil(formData) {
-  const locale = await getLocale();
-  // Mantiene al usuario en su idioma (es sin prefijo, en con /en).
-  const path = (q) => `${locale === 'en' ? '/en' : ''}/consejo?${q}`;
-
+// Devuelve estado (no redirige) → el cliente muestra éxito/error en el sitio,
+// sin navegación: imposible un 404 y mejor experiencia.
+export async function applyToCouncil(_prev, formData) {
   const s = (k, n) => String(formData.get(k) || '').trim().slice(0, n);
   const name = s('name', 200);
   const email = s('email', 200);
   const statement = s('statement', 4000);
 
   if (name.length < 1 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    redirect(path('error=1'));
+    return { error: true };
   }
 
   // Especialidades: solo claves válidas.
@@ -45,7 +41,7 @@ export async function applyToCouncil(formData) {
     specialties,
     status: 'new',
   });
-  if (error) redirect(path('error=1'));
+  if (error) return { error: true };
 
-  redirect(path('sent=1'));
+  return { ok: true };
 }

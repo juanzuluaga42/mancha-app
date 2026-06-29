@@ -17,11 +17,8 @@ export async function generateMetadata() {
   };
 }
 
-export default async function ConsejoPage({ searchParams }) {
-  const sp = await searchParams;
+export default async function ConsejoPage() {
   const t = await getTranslations('council');
-  const sent = sp?.sent;
-  const errored = sp?.error;
 
   return (
     <div className="elegidos-page">
@@ -73,14 +70,7 @@ export default async function ConsejoPage({ searchParams }) {
         <h2 className="consejo-title">{t('formTitle')}</h2>
         <p className="consejo-sub">{t('formSub')}</p>
 
-        {sent ? (
-          <div className="consejo-success">{t('success')}</div>
-        ) : (
-          <>
-            {errored && <div className="consejo-error">{t('errorMsg')}</div>}
-            <CouncilApplication />
-          </>
-        )}
+        <CouncilApplication />
 
         <Link href="/sobre-mancha" className="elegidos-back">{t('back')}</Link>
       </section>

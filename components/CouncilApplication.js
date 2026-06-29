@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useActionState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useFormStatus } from 'react-dom';
 import { applyToCouncil } from '@/app/[locale]/consejo/actions';
@@ -29,6 +29,7 @@ export default function CouncilApplication() {
   const [data, setData] = useState(EMPTY);
   const [saved, setSaved] = useState(false);
   const hydrated = useRef(false);
+  const [state, formAction] = useActionState(applyToCouncil, null);
 
   // Hidrata desde localStorage (autosave).
   useEffect(() => {
@@ -38,6 +39,16 @@ export default function CouncilApplication() {
     } catch {}
     hydrated.current = true;
   }, []);
+
+  // Al enviarse con éxito, limpia el borrador guardado.
+  useEffect(() => {
+    if (state?.ok) { try { localStorage.removeItem(LS_KEY); } catch {} }
+  }, [state]);
+
+  // Éxito: se muestra en el sitio, sin navegación.
+  if (state?.ok) {
+    return <div className="consejo-success">{t('success')}</div>;
+  }
 
   // Persiste cada cambio.
   useEffect(() => {
@@ -65,11 +76,9 @@ export default function CouncilApplication() {
   const go = (n) => setStep(Math.min(TOTAL, Math.max(1, n)));
 
   return (
-    <form
-      action={applyToCouncil}
-      className="consejo-wizard"
-      onSubmit={() => { try { localStorage.removeItem(LS_KEY); } catch {} }}
-    >
+    <form action={formAction} className="consejo-wizard">
+      {state?.error && <div className="consejo-error">{t('errorMsg')}</div>}
+
       {/* Progreso */}
       <div className="cw-progress">
         <div className="cw-progress-track"><i style={{ width: `${(step / TOTAL) * 100}%` }} /></div>
