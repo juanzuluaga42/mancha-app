@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';

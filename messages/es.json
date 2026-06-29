@@ -140,7 +140,8 @@
     "bioPh": "Dos o tres frases sobre tu trabajo y qué te mueve a hacerlo.",
     "worksNote": "Después de confirmar tu correo entras a tu cuenta y subes tus obras (hasta 3: imagen, título y precio de salida). Puedes hacerlo de inmediato o más tarde — tu cuenta queda activa igual.",
     "creating": "Creando cuenta…",
-    "creatingArtist": "Creando tu cuenta…"
+    "creatingArtist": "Creando tu cuenta…",
+    "techniqueHint": "Elige una categoría o escribe tu propia técnica."
   },
   "picker": {
     "tagline": "Institución de descubrimiento artístico · Est. 2026",

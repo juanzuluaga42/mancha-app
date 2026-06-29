@@ -1,13 +1,16 @@
 'use client';
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { signUp } from '@/app/[locale]/registro/actions';
 import SubmitButton from '@/components/SubmitButton';
+import { mediumOptions } from '@/lib/mediums';
 
 export default function RegistroForm({ defaultRole = 'buyer' }) {
   const [role, setRole] = useState(defaultRole);
   const isArtist = role === 'artist';
   const t = useTranslations('auth');
+  const locale = useLocale();
+  const mediums = mediumOptions(locale);
 
   return (
     <form action={signUp}>
@@ -45,7 +48,12 @@ export default function RegistroForm({ defaultRole = 'buyer' }) {
         <>
           <div className="field">
             <label htmlFor="medium">{t('technique')}</label>
-            <input id="medium" name="medium" type="text" placeholder={t('techniquePh')} required={isArtist} />
+            <input id="medium" name="medium" type="text" list="medium-options"
+              placeholder={t('techniquePh')} required={isArtist} autoComplete="off" />
+            <datalist id="medium-options">
+              {mediums.map((m) => <option key={m} value={m} />)}
+            </datalist>
+            <p className="field-hint">{t('techniqueHint')}</p>
           </div>
           <div className="field">
             <label htmlFor="location">{t('city')}</label>

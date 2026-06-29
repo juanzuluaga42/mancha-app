@@ -140,7 +140,8 @@
     "bioPh": "Two or three sentences about your work and what drives you to make it.",
     "worksNote": "After confirming your email you enter your account and upload your works (up to 3: image, title and starting price). You can do it right away or later — your account stays active either way.",
     "creating": "Creating account…",
-    "creatingArtist": "Creating your account…"
+    "creatingArtist": "Creating your account…",
+    "techniqueHint": "Pick a category or type your own medium."
   },
   "picker": {
     "tagline": "Institution for artistic discovery · Est. 2026",

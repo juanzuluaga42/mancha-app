@@ -8,6 +8,7 @@ import Splat from '@/components/Splat';
 import { createArtistProfile, addPiece, deletePiece } from './actions';
 import SubmitButton from '@/components/SubmitButton';
 import { cap } from '@/lib/utils';
+import { mediumOptions } from '@/lib/mediums';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -19,6 +20,7 @@ export default async function CuentaPage({ searchParams }) {
   const t = await getTranslations('account');
   const locale = await getLocale();
   const numLocale = locale === 'en' ? 'en-US' : 'es-AR';
+  const mediums = mediumOptions(locale);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -31,6 +33,10 @@ export default async function CuentaPage({ searchParams }) {
   return (
     <>
       <Nav />
+      {/* Sugerencias de técnica/categoría compartidas por los campos del perfil y de obra */}
+      <datalist id="medium-options">
+        {mediums.map((m) => <option key={m} value={m} />)}
+      </datalist>
 
       {/* ── HEADER ───────────────────────────────────────── */}
       <header className="cuenta-header">
@@ -87,7 +93,7 @@ async function ArtistDashboard({ supabase, userId, t, numLocale }) {
               </div>
               <div className="field">
                 <label htmlFor="medium">{t('technique')}</label>
-                <input id="medium" name="medium" type="text" placeholder={t('techniquePh')} required />
+                <input id="medium" name="medium" type="text" list="medium-options" autoComplete="off" placeholder={t('techniquePh')} required />
               </div>
             </div>
             <div className="field">
@@ -263,7 +269,7 @@ async function ArtistDashboard({ supabase, userId, t, numLocale }) {
               <div className="cuenta-field-row">
                 <div className="field">
                   <label htmlFor="technique">{t('technique')}</label>
-                  <input id="technique" name="technique" type="text" required placeholder={t('techniquePh')} />
+                  <input id="technique" name="technique" type="text" required list="medium-options" autoComplete="off" placeholder={t('techniquePh')} />
                 </div>
                 <div className="field">
                   <label htmlFor="dimensions">{t('fieldDimensions')}</label>
