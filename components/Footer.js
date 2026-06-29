@@ -51,6 +51,7 @@ export default async function Footer() {
               <h5 style={{ marginTop: 24 }}>{t('colContact')}</h5>
               <a href="mailto:mancha.gallery@gmail.com">mancha.gallery@gmail.com</a>
               <a href="https://instagram.com/mancha.gallery" target="_blank" rel="noreferrer">Instagram → @mancha.gallery</a>
+              <a href="https://wa.me/529981163542" target="_blank" rel="noreferrer">WhatsApp → +52 998 116 3542</a>
             </div>
           </div>
         </div>
