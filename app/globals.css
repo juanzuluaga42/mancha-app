@@ -3586,3 +3586,62 @@ input, textarea, select {
 .cur-bias-result-tag{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);}
 .cur-bias-result-val{font-family:var(--font-display); font-size:1.3rem; margin-top:6px;}
 .cur-bias-result-just{font-family:var(--font-body); font-style:italic; color:var(--ink-soft); margin-top:8px; line-height:1.6;}
+
+/* ── Curatorial Portal · F3 Sala del colegio (Council Room) ── */
+.cur-room-link{display:inline-block; margin-top:22px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--lilac-deep); border:1px solid rgba(142,111,209,.4); border-radius:100px; padding:9px 18px; transition:all .15s ease;}
+.cur-room-link:hover{background:var(--lilac); color:#fff; border-color:var(--lilac);}
+
+.cur-round{margin-bottom:54px;}
+.cur-round-head{display:flex; justify-content:space-between; align-items:flex-end; gap:18px; flex-wrap:wrap; border-bottom:1px solid rgba(22,17,13,.12); padding-bottom:16px; margin-bottom:26px;}
+.cur-round-head h2{font-family:var(--font-display); font-size:1.35rem;}
+.cur-round-status{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; margin-top:6px; display:inline-block;}
+.cur-round-status.is-open{color:var(--yellow-deep);}
+.cur-round-status.is-closed{color:var(--lilac-deep);}
+.cur-round-btn{background:var(--ink); color:var(--paper); border:none; padding:11px 20px; border-radius:100px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em;}
+
+.cur-colegio-list{display:flex; flex-direction:column; gap:22px;}
+.cur-coleg-card{display:grid; grid-template-columns:180px 1fr; gap:0; border:1px solid rgba(22,17,13,.12); border-radius:2px; overflow:hidden; background:#fff;}
+@media(max-width:680px){ .cur-coleg-card{grid-template-columns:1fr;} }
+.cur-coleg-art{position:relative; background:#15110d; min-height:180px;}
+.cur-coleg-art img{width:100%; height:100%; object-fit:cover;}
+.cur-coleg-body{padding:20px 22px;}
+.cur-coleg-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px;}
+.cur-coleg-top h3{font-family:var(--font-display); font-size:1.18rem;}
+.cur-coleg-mancha{text-align:right; flex-shrink:0;}
+.cur-coleg-mancha b{display:block; font-family:var(--font-display); font-size:2rem; line-height:1;}
+.cur-coleg-mancha span{font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);}
+.cur-consensus{display:inline-block; margin-top:7px; font-family:var(--font-mono); font-size:10px; font-style:normal; text-transform:uppercase; letter-spacing:.04em; padding:3px 9px; border-radius:100px;}
+.cur-consensus.is-high{background:rgba(52,140,80,.14); color:#2f7d49;}
+.cur-consensus.is-medium{background:rgba(242,183,5,.18); color:var(--yellow-deep);}
+.cur-consensus.is-divergent{background:rgba(229,64,43,.14); color:var(--red-deep);}
+.cur-consensus.is-insufficient{background:rgba(22,17,13,.08); color:var(--ink-soft);}
+
+.cur-coleg-curators{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
+.cur-mirror{flex:1; min-width:120px; border:1px solid rgba(22,17,13,.12); border-radius:2px; padding:11px 13px;}
+.cur-mirror.is-pending{opacity:.55; border-style:dashed;}
+.cur-mirror-name{display:block; font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft);}
+.cur-mirror-index{display:block; font-family:var(--font-display); font-size:1.5rem; line-height:1.1; margin-top:4px;}
+.cur-mirror-dec{font-family:var(--font-body); font-style:italic; font-size:.84rem; color:var(--ink-soft);}
+
+.cur-coleg-agg{margin-top:16px; display:flex; flex-direction:column; gap:6px;}
+.cur-coleg-agg p{font-family:var(--font-body); font-size:.88rem; color:var(--ink-soft); margin:0;}
+.cur-agg-lbl{font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; padding:2px 8px; border-radius:100px; margin-right:8px;}
+.cur-agg-lbl.ok{background:rgba(52,140,80,.14); color:#2f7d49;}
+.cur-agg-lbl.warn{background:rgba(229,64,43,.12); color:var(--red-deep);}
+
+.cur-coleg-refl{margin-top:16px;}
+.cur-coleg-refl summary{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); cursor:pointer;}
+.cur-coleg-refl blockquote{font-family:var(--font-body); font-style:italic; line-height:1.6; margin:12px 0 0; padding-left:14px; border-left:2px solid rgba(22,17,13,.18); font-size:.94rem;}
+.cur-coleg-refl cite{display:block; font-style:normal; font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:4px;}
+
+.cur-coleg-decision{margin-top:20px; padding-top:18px; border-top:1px solid rgba(22,17,13,.1);}
+.cur-coleg-current{font-family:var(--font-body); font-size:.92rem; margin-bottom:12px;}
+.cur-coleg-locked{font-family:var(--font-body); font-style:italic; font-size:.88rem; color:var(--ink-soft);}
+.cur-decform-opts{display:flex; gap:8px; flex-wrap:wrap;}
+.cur-decform-opt{display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(22,17,13,.2); border-radius:100px; padding:7px 14px; cursor:pointer; font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.03em;}
+.cur-decform-opt input{position:absolute; opacity:0; width:0; height:0;}
+.cur-decform-opt.on{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+.cur-decform-sug{font-style:normal; font-size:8.5px; background:var(--lilac); color:#fff; padding:1px 6px; border-radius:100px; letter-spacing:.03em;}
+.cur-decform-note{width:100%; margin-top:12px; border:1px solid rgba(22,17,13,.18); border-radius:2px; padding:10px 12px; font-family:var(--font-body); font-size:.9rem; background:#fff; resize:vertical;}
+.cur-decform-btn{margin-top:12px; background:var(--ink); color:var(--paper); border:none; padding:11px 22px; border-radius:100px; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em;}
+.cur-decform-btn:disabled{opacity:.35; cursor:not-allowed;}

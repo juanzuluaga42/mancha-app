@@ -55,6 +55,9 @@ export default async function CuraduriaPage({ searchParams }) {
             <div className="cur-stat"><b>{reveal.length}</b><span>Falta Fase 2</span></div>
             <div className="cur-stat"><b>{done.length}</b><span>Completadas</span></div>
           </div>
+          {curator.role === 'founder' && (
+            <Link href="/curaduria/colegio" className="cur-room-link">Sala del colegio · decisión colegiada →</Link>
+          )}
         </div>
       </header>
 

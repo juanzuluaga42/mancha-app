@@ -5,9 +5,20 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { createAdminClient } from '@/utils/supabase/admin';
 import {
-  CRITERIA_KEYS, DECISIONS, BIAS_OPTIONS,
+  CRITERIA_KEYS, DECISIONS, BIAS_OPTIONS, OUTCOMES,
   computeCuratorialIndex, validateScores, confidenceProfile,
 } from '@/lib/curatorial';
+
+// Solo el Founder. Devuelve { user } o redirige.
+async function requireFounder() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+  const { data: c } = await supabase
+    .from('cur_curators').select('role').eq('user_id', user.id).eq('active', true).maybeSingle();
+  if (!c || c.role !== 'founder') redirect('/curaduria');
+  return { user };
+}
 
 // Devuelve { user, curator } o redirige si no es curador activo.
 async function requireCurator() {
@@ -125,4 +136,50 @@ export async function submitReveal(formData) {
 
   revalidatePath('/curaduria');
   redirect('/curaduria?done=1');
+}
+
+// ── F3 — abrir/cerrar la ronda (revela las evaluaciones entre curadores) ──
+export async function setRoundStatus(formData) {
+  const { user } = await requireFounder();
+  const roundId = String(formData.get('roundId') || '');
+  const status = String(formData.get('status') || '');
+  if (status !== 'open' && status !== 'closed') redirect('/curaduria/colegio?error=estado');
+
+  const admin = createAdminClient();
+  await admin.from('cur_rounds').update({ status }).eq('id', roundId);
+  await admin.from('cur_audit').insert({
+    actor: user.id,
+    action: status === 'closed' ? 'round_closed' : 'round_reopened',
+    entity: 'cur_round',
+    entity_id: roundId,
+  });
+  revalidatePath('/curaduria/colegio');
+  redirect('/curaduria/colegio');
+}
+
+// ── F3 — el Founder registra la decisión final de una obra ──
+export async function recordDecision(formData) {
+  const { user } = await requireFounder();
+  const workId = String(formData.get('workId') || '');
+  const outcome = String(formData.get('outcome') || '');
+  const note = String(formData.get('note') || '').slice(0, 4000);
+  if (!OUTCOMES.some((o) => o.value === outcome)) redirect('/curaduria/colegio?error=decision');
+
+  const admin = createAdminClient();
+  await admin.from('cur_decisions').upsert({
+    work_id: workId,
+    outcome,
+    note,
+    decided_by: user.id,
+    decided_at: new Date().toISOString(),
+  }, { onConflict: 'work_id' });
+  await admin.from('cur_audit').insert({
+    actor: user.id,
+    action: 'final_decision',
+    entity: 'cur_work',
+    entity_id: workId,
+    meta: { outcome },
+  });
+  revalidatePath('/curaduria/colegio');
+  redirect('/curaduria/colegio?decided=1');
 }

@@ -234,3 +234,32 @@ create policy cur_reveal_read on public.cur_reveal for select to authenticated
 drop policy if exists cur_audit_founder on public.cur_audit;
 create policy cur_audit_founder on public.cur_audit for select to authenticated
   using (public.cur_is_founder());
+
+-- ════════════════════════════════════════════════════════════════
+-- F3 · Decisión colegiada (Council Room)
+-- ════════════════════════════════════════════════════════════════
+-- Un curador puede existir antes de tener cuenta (invitación pendiente).
+alter table public.cur_curators alter column user_id drop not null;
+
+-- Decisión final del Founder por obra.
+create table if not exists public.cur_decisions (
+  work_id     uuid primary key references public.cur_works(id) on delete cascade,
+  outcome     text not null check (outcome in ('selected','not_selected','second_round','hold')),
+  note        text,
+  decided_by  uuid,
+  decided_at  timestamptz not null default now()
+);
+alter table public.cur_decisions enable row level security;
+
+drop policy if exists cur_dec_founder_all on public.cur_decisions;
+create policy cur_dec_founder_all on public.cur_decisions for all to authenticated
+  using (public.cur_is_founder()) with check (public.cur_is_founder());
+drop policy if exists cur_dec_read_closed on public.cur_decisions;
+create policy cur_dec_read_closed on public.cur_decisions for select to authenticated
+  using (
+    public.cur_my_curator_id() is not null
+    and exists (
+      select 1 from public.cur_works w join public.cur_rounds r on r.id = w.round_id
+      where w.id = cur_decisions.work_id and r.status = 'closed'
+    )
+  );

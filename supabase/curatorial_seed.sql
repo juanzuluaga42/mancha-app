@@ -36,3 +36,61 @@ from public.cur_works w
 cross join public.cur_curators c
 where c.role = 'founder' and w.round_id = '11111111-1111-1111-1111-111111111111'
 on conflict (work_id, curator_id) do nothing;
+
+-- ════════════════════════════════════════════════════════════════
+-- F3 · seed del colegio — 2 curadores más (sin cuenta aún) con sus
+-- evaluaciones selladas, para poblar la Sala del colegio (3 miradas).
+-- ════════════════════════════════════════════════════════════════
+insert into public.cur_curators (id, user_id, display_name, role) values
+ ('33333333-0000-0000-0000-0000000000b0', null, 'Consejo · Curador II', 'council'),
+ ('33333333-0000-0000-0000-0000000000c0', null, 'Consejo · Curador III', 'council')
+on conflict (id) do nothing;
+
+insert into public.cur_assignments (round_id, work_id, curator_id, phase)
+select '11111111-1111-1111-1111-111111111111', w.id, c.id, 'done'
+from public.cur_works w
+cross join (values
+  ('33333333-0000-0000-0000-0000000000b0'::uuid),
+  ('33333333-0000-0000-0000-0000000000c0'::uuid)) c(id)
+where w.round_id = '11111111-1111-1111-1111-111111111111'
+on conflict (work_id, curator_id) do nothing;
+
+-- Evaluaciones con índice calculado por los pesos reales
+-- (A1 consenso alto, A2 divergencia, A3 parcial).
+with crit(key, w, ord) as (values
+  ('originalidad',0.15,1),('permanencia',0.13,2),('fuerzaVisual',0.12,3),
+  ('profundidad',0.12,4),('lenguaje',0.10,5),('tecnica',0.09,6),
+  ('composicion',0.09,7),('coherencia',0.08,8),('valorColeccion',0.07,9),('afinidad',0.05,10)
+),
+data(work_id, curator_id, scores_arr, conf_arr, reflection, decision) as (values
+  ('22222222-0000-0000-0000-000000000001'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,
+    array[9,8,9,8,8,8,8,8,7,7], array['high','high','high','medium','high','high','high','high','medium','medium'],
+    'La materia no representa el peso: lo ejerce. Hay un control raro del accidente. Permanece.', 'recommend'),
+  ('22222222-0000-0000-0000-000000000001'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,
+    array[8,8,9,7,8,9,8,7,8,7], array['high','medium','high','medium','high','high','high','medium','high','medium'],
+    'Presencia indiscutible. La superficie sostiene la mirada larga. Entra al estándar.', 'recommend'),
+  ('22222222-0000-0000-0000-000000000002'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,
+    array[7,6,7,8,7,6,7,7,6,6], array['high','medium','high','high','medium','medium','high','high','medium','medium'],
+    'La idea de cartografía imposible es fértil; la ejecución la acompaña sin brillar. Con observaciones.', 'recommend_notes'),
+  ('22222222-0000-0000-0000-000000000002'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,
+    array[4,4,5,5,4,6,5,4,4,5], array['medium','low','medium','medium','low','high','medium','low','low','medium'],
+    'El concepto promete más de lo que la obra entrega. La línea se repite sin tensión. No alcanza el estándar.', 'not_recommend'),
+  ('22222222-0000-0000-0000-000000000003'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,
+    array[6,7,6,6,7,7,6,6,6,6], array['medium','high','medium','medium','high','high','medium','medium','medium','medium'],
+    'Oficio claro, voz aún en formación. Pediría una segunda mirada antes de concluir.', 'second_review'),
+  ('22222222-0000-0000-0000-000000000003'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,
+    array[7,7,7,6,7,7,7,7,6,7], array['high','high','high','medium','high','high','high','high','medium','high'],
+    'El error como método funciona; la serie tiene coherencia. Entra con matices.', 'recommend_notes')
+),
+built as (
+  select d.work_id, d.curator_id, d.reflection, d.decision,
+    jsonb_object_agg(c.key, jsonb_build_object('score', d.scores_arr[c.ord], 'confidence', d.conf_arr[c.ord], 'note', '')) as scores,
+    round((sum(d.scores_arr[c.ord] * c.w) * 10)::numeric, 1) as idx
+  from data d cross join crit c
+  group by d.work_id, d.curator_id, d.reflection, d.decision
+)
+insert into public.cur_evaluations (assignment_id, scores, reflection, decision, curatorial_index)
+select a.id, b.scores, b.reflection, b.decision, b.idx
+from built b
+join public.cur_assignments a on a.work_id = b.work_id and a.curator_id = b.curator_id
+on conflict (assignment_id) do nothing;
