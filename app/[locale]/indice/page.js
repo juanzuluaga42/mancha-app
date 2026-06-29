@@ -10,7 +10,6 @@ import { formatCalendarDate } from '@/lib/dates';
 import {
   accessionNo,
   transactionStatus,
-  isCanon,
   isSealed,
   seasonCode,
   seasonName,
@@ -76,15 +75,11 @@ export default async function IndexPage() {
           location: artist.location,
           accession: accessionNo(ordinal, number),
           status: transactionStatus(piece),
-          canon: isCanon(piece),
         });
       }
     }
-    // The Canon primero (honor curatorial), luego el resto.
-    works.sort((a, b) => (b.canon ? 1 : 0) - (a.canon ? 1 : 0));
     const collected = works.filter((w) => w.status === 'collected').length;
-    const canon = works.filter((w) => w.canon).length;
-    return { ...s, ordinal, works, collected, canon };
+    return { ...s, ordinal, works, collected };
   }).filter((e) => e.works.length > 0);
 
   const hasWorks = editions.length > 0;
@@ -136,12 +131,6 @@ export default async function IndexPage() {
                     <span>{t('works', { count: edition.works.length })}</span>
                     <span className="idx-stat-sep">·</span>
                     <span>{t('collectedCount', { count: edition.collected })}</span>
-                    {edition.canon > 0 && (
-                      <>
-                        <span className="idx-stat-sep">·</span>
-                        <span className="idx-stat-canon">{t('canonCount', { count: edition.canon })}</span>
-                      </>
-                    )}
                   </div>
                 </div>
 
@@ -158,7 +147,6 @@ export default async function IndexPage() {
                             // eslint-disable-next-line @next/next/no-img-element
                             ? <img src={img} alt={w.title} />
                             : <span className="idx-work-initials">{initials}</span>}
-                          {w.canon && <span className="idx-canon" title={t('canonLabel')}>{t('canonLabel')}</span>}
                           <span className={`idx-status ${w.status}`}>{statusLabel}</span>
                         </div>
                         <div className="idx-work-body">

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
-import { approveArtist, rejectArtist, markAsSold, sendPaymentReminder, sealSeason, toggleCanon } from './actions';
+import { approveArtist, rejectArtist, markAsSold, sendPaymentReminder, sealSeason } from './actions';
 import { cap } from '@/lib/utils';
 import { isSealed } from '@/lib/provenance';
 
@@ -224,13 +224,6 @@ export default async function AdminPage() {
                             )}
                           </p>
                         )}
-                        <form action={toggleCanon} style={{ marginTop: 6 }}>
-                          <input type="hidden" name="pieceId" value={r.id} />
-                          <input type="hidden" name="next" value={(!r.inCanon).toString()} />
-                          <button type="submit" className={`admin-canon-toggle${r.inCanon ? ' on' : ''}`}>
-                            {r.inCanon ? '★ En el Canon' : '☆ Añadir al Canon'}
-                          </button>
-                        </form>
                       </div>
 
                       <div className="admin-bid-amount">

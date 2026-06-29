@@ -194,22 +194,6 @@ export async function sealSeason(formData) {
   revalidatePath('/');
 }
 
-// Marca / desmarca una obra como parte de The Canon de su temporada.
-export async function toggleCanon(formData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== ADMIN_EMAIL) redirect('/');
-
-  const pieceId = formData.get('pieceId');
-  const next = formData.get('next') === 'true';
-  const admin = createAdminClient();
-
-  await admin.from('pieces').update({ in_canon: next }).eq('id', pieceId);
-
-  revalidatePath('/admin');
-  revalidatePath('/indice');
-  revalidatePath(`/obras/${pieceId}`);
-}
 
 export async function sendPaymentReminder(formData) {
   const supabase = await createClient();

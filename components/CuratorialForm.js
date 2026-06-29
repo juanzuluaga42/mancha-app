@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { CRITERIA, CONFIDENCE, DECISIONS, computeCuratorialIndex } from '@/lib/curatorial';
+import { useTranslations, useLocale } from 'next-intl';
+import { CRITERIA, CONFIDENCE, DECISIONS, computeCuratorialIndex, optLabel, optDesc } from '@/lib/curatorial';
 import { submitEvaluation } from '@/app/[locale]/curaduria/actions';
 
 // Formulario de los 10 criterios + reflexión + decisión (Fase 1).
 // Calcula el Curatorial Index en vivo, pero el algoritmo informa, no decide.
 export default function CuratorialForm({ assignmentId }) {
+  const t = useTranslations('curaduria');
+  const locale = useLocale();
   const [scores, setScores] = useState(() =>
     Object.fromEntries(CRITERIA.map((c) => [c.key, { score: 0, confidence: '', note: '' }]))
   );
@@ -24,8 +27,8 @@ export default function CuratorialForm({ assignmentId }) {
       <input type="hidden" name="assignmentId" value={assignmentId} />
 
       <div className="cur-form-head">
-        <h2>Diez criterios. Mismos para todos.</h2>
-        <p>Cada criterio: puntuación 1–10, nivel de confianza y observaciones. Solo la calidad de la obra.</p>
+        <h2>{t('form.title')}</h2>
+        <p>{t('form.sub')}</p>
       </div>
 
       <ol className="cur-crit-list">
@@ -37,8 +40,8 @@ export default function CuratorialForm({ assignmentId }) {
                 <div className="cur-crit-label">
                   <span className="cur-crit-n">{String(c.n).padStart(2, '0')}</span>
                   <div>
-                    <h3>{c.label} <em className="cur-crit-w">{Math.round(c.weight * 100)}%</em></h3>
-                    <p>{c.desc}</p>
+                    <h3>{optLabel(c, locale)} <em className="cur-crit-w">{Math.round(c.weight * 100)}%</em></h3>
+                    <p>{optDesc(c, locale)}</p>
                   </div>
                 </div>
                 <output className={`cur-crit-score${v.score ? ' has' : ''}`}>{v.score || '–'}</output>
@@ -49,7 +52,7 @@ export default function CuratorialForm({ assignmentId }) {
                 value={v.score || 1}
                 className="cur-range"
                 onChange={(e) => set(c.key, { score: parseInt(e.target.value, 10) })}
-                aria-label={`Puntuación ${c.label}`}
+                aria-label={optLabel(c, locale)}
               />
               <input type="hidden" name={`score_${c.key}`} value={v.score || ''} />
 
@@ -62,14 +65,14 @@ export default function CuratorialForm({ assignmentId }) {
                         checked={v.confidence === cf.value}
                         onChange={() => set(c.key, { confidence: cf.value })}
                       />
-                      {cf.label}
+                      {optLabel(cf, locale)}
                     </label>
                   ))}
                 </div>
                 <input
                   type="text" name={`note_${c.key}`} value={v.note}
                   onChange={(e) => set(c.key, { note: e.target.value })}
-                  placeholder="Observaciones (opcional)"
+                  placeholder={t('form.notesPh')}
                   className="cur-note" maxLength={2000}
                 />
               </div>
@@ -80,18 +83,18 @@ export default function CuratorialForm({ assignmentId }) {
 
       {/* Reflexión curatorial */}
       <div className="cur-reflection">
-        <h3>Reflexión curatorial</h3>
-        <p>Un texto con la profundidad de una cartela razonada de museo, no un comentario superficial.</p>
+        <h3>{t('form.reflectionTitle')}</h3>
+        <p>{t('form.reflectionSub')}</p>
         <textarea
           name="reflection" rows={6} maxLength={8000}
-          placeholder="¿Qué sostiene esta obra? ¿Qué resiste el paso del tiempo?"
+          placeholder={t('form.reflectionPh')}
           className="cur-reflection-ta"
         />
       </div>
 
       {/* Decisión */}
       <div className="cur-decision">
-        <h3>Decisión</h3>
+        <h3>{t('form.decision')}</h3>
         <div className="cur-decision-grid">
           {DECISIONS.map((d) => (
             <label key={d.value} className={`cur-decision-opt${decision === d.value ? ' on' : ''}`}>
@@ -101,8 +104,8 @@ export default function CuratorialForm({ assignmentId }) {
                 onChange={() => setDecision(d.value)}
                 required
               />
-              <span className="cur-decision-label">{d.label}</span>
-              <span className="cur-decision-desc">{d.desc}</span>
+              <span className="cur-decision-label">{optLabel(d, locale)}</span>
+              <span className="cur-decision-desc">{optDesc(d, locale)}</span>
             </label>
           ))}
         </div>
@@ -110,15 +113,15 @@ export default function CuratorialForm({ assignmentId }) {
 
       <div className="cur-form-foot">
         <div className="cur-index-live">
-          <span className="cur-index-live-lab">Curatorial Index</span>
+          <span className="cur-index-live-lab">{t('form.index')}</span>
           <b className={liveIndex != null ? 'ready' : ''}>{liveIndex != null ? liveIndex.toFixed(1) : '—'}</b>
-          <span className="cur-index-live-note">El algoritmo informa, nunca decide.</span>
+          <span className="cur-index-live-note">{t('form.indexNote')}</span>
         </div>
         <button type="submit" className="cur-seal-btn" disabled={!complete || !decision}>
-          Sellar evaluación →
+          {t('form.seal')}
         </button>
       </div>
-      <p className="cur-seal-warn">Al sellar, las puntuaciones, la reflexión y la decisión quedan inmutables. Recién entonces se revela el artista (Fase 2).</p>
+      <p className="cur-seal-warn">{t('form.sealWarn')}</p>
     </form>
   );
 }

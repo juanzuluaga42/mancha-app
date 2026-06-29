@@ -1,16 +1,11 @@
 import { redirect } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import Nav from '@/components/Nav';
 import { resolveCurator } from '@/lib/curatorAccess';
 
 export const metadata = { title: 'MANCHA — Mi perfil curatorial' };
-
-const ROLE_LABEL = {
-  founder: 'Founder',
-  council: 'Founding Curatorial Council',
-  guest: 'Guest Curator',
-};
 
 export default async function PerfilPage() {
   const supabase = await createClient();
@@ -18,6 +13,10 @@ export default async function PerfilPage() {
   if (!user) redirect('/login');
   const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
+  if (curator.role !== 'founder' && !curator.onboarding_completed_at) redirect('/curaduria/bienvenida');
+
+  const t = await getTranslations('curaduria');
+  const locale = await getLocale();
 
   const [{ data: row }, { data: assignments }] = await Promise.all([
     supabase.from('cur_curators').select('display_name, role, created_at, email').eq('id', curator.id).maybeSingle(),
@@ -29,9 +28,10 @@ export default async function PerfilPage() {
   const rounds = new Set(list.map((a) => a.round_id)).size;
   const completed = list.filter((a) => a.phase === 'done').length;
   const since = row?.created_at
-    ? new Date(row.created_at).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })
+    ? new Date(row.created_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-AR', { month: 'long', year: 'numeric' })
     : '—';
-  const roleLabel = ROLE_LABEL[curator.role] || ROLE_LABEL.council;
+  const roleLabel = curator.role === 'founder' ? t('roleFounder')
+    : curator.role === 'guest' ? t('roleGuest') : t('roleCouncil');
 
   return (
     <>
@@ -39,36 +39,32 @@ export default async function PerfilPage() {
       <header className="cur-header">
         <div className="wrap">
           <p className="eyebrow" style={{ color: 'var(--lilac)' }}>{roleLabel}</p>
-          <h1 className="cur-header-title">{row?.display_name || 'Curador'}</h1>
-          <p className="cur-header-sub">Tu reconocimiento es tu contribución real — no medallas, no puntos, no rankings.</p>
-          <Link href="/curaduria" className="cur-back" style={{ marginTop: 18 }}>← Sala curatorial</Link>
+          <h1 className="cur-header-title">{row?.display_name || t('profile.curator')}</h1>
+          <p className="cur-header-sub">{t('profile.sub')}</p>
+          <Link href="/curaduria" className="cur-back" style={{ marginTop: 18 }}>{t('backRoom')}</Link>
         </div>
       </header>
 
       <div className="cur-body">
         <div className="wrap" style={{ maxWidth: 820 }}>
-          {/* Contribución real */}
           <section className="cur-section">
-            <div className="cur-section-head"><h2>Contribución</h2></div>
+            <div className="cur-section-head"><h2>{t('profile.contribution')}</h2></div>
             <div className="cur-stats">
-              <div className="cur-stat"><b>{reviewed}</b><span>Obras evaluadas</span></div>
-              <div className="cur-stat"><b>{completed}</b><span>Revisiones completas</span></div>
-              <div className="cur-stat"><b>{rounds}</b><span>Rondas</span></div>
-              <div className="cur-stat"><b style={{ fontSize: '1.2rem', lineHeight: 1.6 }}>{since}</b><span>Miembro desde</span></div>
+              <div className="cur-stat"><b>{reviewed}</b><span>{t('profile.worksEvaluated')}</span></div>
+              <div className="cur-stat"><b>{completed}</b><span>{t('profile.reviewsDone')}</span></div>
+              <div className="cur-stat"><b>{rounds}</b><span>{t('profile.rounds')}</span></div>
+              <div className="cur-stat"><b style={{ fontSize: '1.2rem', lineHeight: 1.6 }}>{since}</b><span>{t('profile.memberSince')}</span></div>
             </div>
           </section>
 
-          {/* Reconocimiento institucional */}
           <section className="cur-section">
-            <div className="cur-section-head"><h2>Reconocimiento institucional</h2></div>
+            <div className="cur-section-head"><h2>{t('profile.recognition')}</h2></div>
             <div className="cur-cert-card">
               <div className="cur-cert-info">
                 <span className="cur-cert-role">{roleLabel}</span>
-                <p className="cur-cert-desc">
-                  Tu nombramiento queda en el registro permanente de MANCHA. Puedes descargar tu certificado institucional.
-                </p>
+                <p className="cur-cert-desc">{t('profile.certDesc')}</p>
               </div>
-              <a href="/curaduria/certificado" className="cur-decform-btn" download>Descargar certificado ↓</a>
+              <a href="/curaduria/certificado" className="cur-decform-btn" download>{t('profile.downloadCert')}</a>
             </div>
           </section>
         </div>

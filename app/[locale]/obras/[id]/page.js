@@ -9,7 +9,7 @@ import WaitlistForm from '@/components/WaitlistForm';
 import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { toggleFavorite, placeBid } from '@/app/actions';
 import { cap } from '@/lib/utils';
-import { isSealed, isCanon, transactionStatus, provenanceLine, seasonName as fmtSeasonName } from '@/lib/provenance';
+import { isSealed, transactionStatus, provenanceLine, seasonName as fmtSeasonName } from '@/lib/provenance';
 
 const ENQUIRE_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -64,7 +64,6 @@ export default async function PiecePage({ params, searchParams }) {
   const seasonClosed = isSealed(seasonObj);
   const collected = piece.sold === true || !!piece.paid_at;
   const lifecycle = transactionStatus(piece);       // collected | available_by_request | withdrawn
-  const canon = isCanon(piece);
   const accession = piece.accession ? provenanceLine(seasonOrdinal, piece.accession) : null;
 
   const amounts = (piece.bids ?? []).map((b) => Number(b.amount));
@@ -132,10 +131,9 @@ export default async function PiecePage({ params, searchParams }) {
               <SelloSeleccionado seasonName={seasonName} />
 
               {/* Procedencia (temporada sellada) */}
-              {(accession || canon) && (
+              {accession && (
                 <div className="piece-prov">
                   {accession && <span className="piece-prov-line">{accession}</span>}
-                  {canon && <span className="piece-canon">{t('canonLabel')}</span>}
                   {collected && (
                     <Link href={`/obras/${piece.id}/certificado`} className="piece-prov-cert">{t('viewCertificate')} →</Link>
                   )}
