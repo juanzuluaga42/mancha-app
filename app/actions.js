@@ -3,9 +3,10 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { getTranslations } from 'next-intl/server';
-import { sendEmail, brandedEmail } from '@/lib/email';
-import { safePath, escapeHtml } from '@/lib/utils';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { sendEmail } from '@/lib/email';
+import { bidPlaced, outbid } from '@/lib/emails';
+import { safePath } from '@/lib/utils';
 
 export async function toggleFavorite(formData) {
   const supabase = await createClient();
@@ -66,7 +67,7 @@ export async function placeBid(formData) {
   // Identificar al líder anterior para notificarle si lo superan
   const { data: prevBids } = await supabase
     .from('bids')
-    .select('amount, buyer_id, buyer:profiles(email, full_name)')
+    .select('amount, buyer_id, buyer:profiles(email, full_name, locale)')
     .eq('piece_id', pieceId)
     .order('amount', { ascending: false })
     .limit(1);
@@ -95,50 +96,35 @@ export async function placeBid(formData) {
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
+  const locale = await getLocale();
+  const artistName = pieceCheck.artists?.display_name ?? (locale === 'en' ? 'the current season' : 'la temporada actual');
 
-  // Email al ex-líder: "te superaron"
-  if (!error && prevLeaderIsOther && prevLeader.buyer?.email) {
-    await sendEmail({
-      to: prevLeader.buyer.email,
-      subject: `Alguien superó tu puja por "${pieceCheck.title}" — MANCHA`,
-      html: brandedEmail({
-        heading: 'Te superaron',
-        lead: `${escapeHtml(prevLeader.buyer.full_name || 'Coleccionista')}, todavía estás a tiempo.`,
-        paragraphs: [
-          `Otra persona acaba de pujar más alto que tú por <b>“${escapeHtml(pieceCheck.title)}”</b>, de ${escapeHtml(pieceCheck.artists?.display_name ?? 'la temporada actual')}.`,
-          `En MANCHA cada obra es única y la temporada cierra para siempre: cuando termina, lo no adquirido se va. Si esta pieza te mueve, aún puedes recuperar la delantera.`,
-        ],
-        cta: { label: 'Volver a pujar', href: `${baseUrl}/obras/${pieceId}` },
-        signoff: 'El equipo de MANCHA',
-        note: 'Recibes este aviso porque tenías la puja más alta.',
-      }),
-    });
+  // Guarda el idioma del pujador para futuros correos (ganaste / te superaron).
+  if (!error) {
+    await supabase.from('profiles').update({ locale }).eq('id', user.id);
   }
 
-  if (user.email) {
-    const { data: piece } = await supabase
-      .from('pieces')
-      .select('title, artists(display_name)')
-      .eq('id', pieceId)
-      .maybeSingle();
+  // Email al ex-líder: "te superaron" — en SU idioma.
+  if (!error && prevLeaderIsOther && prevLeader.buyer?.email) {
+    const recLocale = prevLeader.buyer.locale === 'en' ? 'en' : 'es';
+    const { subject, html } = outbid(recLocale, {
+      name: prevLeader.buyer.full_name || '',
+      title: pieceCheck.title,
+      artist: pieceCheck.artists?.display_name ?? (recLocale === 'en' ? 'the current season' : 'la temporada actual'),
+      url: `${baseUrl}/obras/${pieceId}`,
+    });
+    await sendEmail({ to: prevLeader.buyer.email, subject, html });
+  }
 
-    if (piece) {
-      await sendEmail({
-        to: user.email,
-        subject: `Tu puja por "${piece.title}" quedó registrada — MANCHA`,
-        html: brandedEmail({
-          heading: 'Tu puja quedó registrada',
-          lead: 'Vas a la cabeza.',
-          paragraphs: [
-            `Pujaste <b>$${amount.toLocaleString('es-MX')} USD</b> por <b>“${escapeHtml(piece.title)}”</b>, de ${escapeHtml(piece.artists?.display_name ?? 'la temporada actual')}.`,
-            `Por ahora eres la oferta más alta. Si alguien te supera antes de que cierre la temporada, te lo diremos a tiempo para que decidas.`,
-            `Si ganas, te escribiremos por correo para coordinar el pago seguro y el envío de la obra, con su certificado de colección.`,
-          ],
-          cta: { label: 'Ver la obra', href: `${baseUrl}/obras/${pieceId}` },
-          signoff: 'El equipo de MANCHA',
-        }),
-      });
-    }
+  // Email al pujador: "tu puja quedó registrada" — en su idioma actual.
+  if (!error && user.email) {
+    const { subject, html } = bidPlaced(locale, {
+      amount: amount.toLocaleString(locale === 'en' ? 'en-US' : 'es-AR'),
+      title: pieceCheck.title,
+      artist: artistName,
+      url: `${baseUrl}/obras/${pieceId}`,
+    });
+    await sendEmail({ to: user.email, subject, html });
   }
 
   redirect(`${redirectTo}?success=${encodeURIComponent(extended ? ta('bidExtended') : ta('bidSuccess'))}`);

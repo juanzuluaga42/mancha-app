@@ -2,8 +2,9 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { sendEmail, brandedEmail, notifyAdmin } from '@/lib/email';
+import { waitlist as waitlistEmail } from '@/lib/emails';
 import { escapeHtml } from '@/lib/utils';
 import { safePath } from '@/lib/utils';
 
@@ -30,25 +31,9 @@ export async function joinWaitlist(formData) {
     pieceTitle = piece?.title ?? null;
   }
 
-  await sendEmail({
-    to: email,
-    subject: pieceTitle ? `Te avisamos sobre "${pieceTitle}" — MANCHA` : 'Estás en la lista de espera de MANCHA',
-    html: brandedEmail({
-      heading: pieceTitle ? 'Te avisaremos' : 'Estás en la lista',
-      lead: pieceTitle ? undefined : 'Bienvenido a MANCHA.',
-      paragraphs: pieceTitle
-        ? [
-            `Anotamos tu interés en <b>“${escapeHtml(pieceTitle)}”</b>.`,
-            `Te escribiremos en cuanto haya novedades sobre esta obra. En MANCHA cada pieza es única: avisamos a tiempo para que no se te escape.`,
-          ]
-        : [
-            `Quedaste en la lista de espera. Serás de los primeros en saber cuándo abre una nueva temporada o entran nuevos artistas.`,
-            `MANCHA es una galería por temporadas: pocas obras, elegidas a mano, disponibles por tiempo limitado. Cuando algo se mueva, te llega aquí primero.`,
-          ],
-      signoff: 'El equipo de MANCHA',
-      note: 'Recibes este correo porque dejaste tu dirección en manchagallery.com.',
-    }),
-  });
+  const locale = await getLocale();
+  const wl = waitlistEmail(locale, { pieceTitle });
+  await sendEmail({ to: email, subject: wl.subject, html: wl.html });
 
   // Aviso interno de nuevo interesado / lista de espera.
   await notifyAdmin({

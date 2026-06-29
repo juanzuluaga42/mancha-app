@@ -5,8 +5,11 @@ import { createAdminClient } from '@/utils/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { sendEmail, brandedEmail } from '@/lib/email';
+import { artistSelected, artistRejected, bidWon, paymentReminder } from '@/lib/emails';
 import { createCheckoutLink } from '@/lib/stripe';
 import { escapeHtml } from '@/lib/utils';
+
+const recLoc = (v) => (v === 'en' ? 'en' : 'es');
 
 const ADMIN_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -17,25 +20,16 @@ export async function approveArtist(formData) {
 
   const artistId = formData.get('artistId');
 
-  const { data: artist } = await supabase.from('artists').select('display_name, profiles(email)').eq('id', artistId).maybeSingle();
+  const { data: artist } = await supabase.from('artists').select('display_name, profiles(email, locale)').eq('id', artistId).maybeSingle();
 
   await supabase.from('artists').update({ status: 'approved' }).eq('id', artistId);
 
   if (artist?.profiles?.email) {
-    await sendEmail({
-      to: artist.profiles.email,
-      subject: '¡Fuiste seleccionado para MANCHA!',
-      html: brandedEmail({
-        heading: 'Fuiste seleccionado',
-        lead: `Bienvenido a MANCHA, ${escapeHtml(artist.display_name)}.`,
-        paragraphs: [
-          `Entre muchas miradas, la tuya entró a esta temporada. Tus obras ya son visibles en el catálogo, frente a coleccionistas que buscan descubrir antes que el mundo.`,
-          `Si aún no lo hiciste, puedes completar hasta <b>3 piezas</b> desde tu cuenta. Cuida cada imagen y cada precio de salida: así se construye una temporada que vale algo.`,
-        ],
-        cta: { label: 'Ir a mi cuenta', href: 'https://manchagallery.com/cuenta' },
-        signoff: 'El equipo de MANCHA',
-      }),
+    const { subject, html } = artistSelected(recLoc(artist.profiles.locale), {
+      name: artist.display_name,
+      url: 'https://manchagallery.com/cuenta',
     });
+    await sendEmail({ to: artist.profiles.email, subject, html });
   }
 
   revalidatePath('/admin');
@@ -49,24 +43,13 @@ export async function rejectArtist(formData) {
 
   const artistId = formData.get('artistId');
 
-  const { data: artist } = await supabase.from('artists').select('display_name, profiles(email)').eq('id', artistId).maybeSingle();
+  const { data: artist } = await supabase.from('artists').select('display_name, profiles(email, locale)').eq('id', artistId).maybeSingle();
 
   await supabase.from('artists').update({ status: 'rejected' }).eq('id', artistId);
 
   if (artist?.profiles?.email) {
-    await sendEmail({
-      to: artist.profiles.email,
-      subject: 'Tu postulación a MANCHA',
-      html: brandedEmail({
-        heading: 'Sobre tu postulación',
-        paragraphs: [
-          `Gracias por mostrarnos tu trabajo. Lo miramos con cuidado.`,
-          `Esta vez no avanzamos con tu perfil para la temporada actual. No es un juicio sobre tu obra entera: cada temporada entra un grupo pequeño y muchas miradas valiosas quedan fuera por espacio, no por falta de mérito.`,
-          `Puedes volver a postular en una próxima convocatoria. Seguiremos atentos a lo que hagas.`,
-        ],
-        signoff: 'El equipo de MANCHA',
-      }),
-    });
+    const { subject, html } = artistRejected(recLoc(artist.profiles.locale), { name: artist.display_name });
+    await sendEmail({ to: artist.profiles.email, subject, html });
   }
 
   revalidatePath('/admin');
@@ -140,7 +123,7 @@ export async function markAsSold(formData) {
 
   const { data: piece } = await supabase
     .from('pieces')
-    .select('title, bids(amount, buyer:profiles(full_name, email))')
+    .select('title, bids(amount, buyer:profiles(full_name, email, locale))')
     .eq('id', pieceId)
     .maybeSingle();
 
@@ -156,24 +139,14 @@ export async function markAsSold(formData) {
       amountUsd: winner.amount,
       buyerEmail: winner.buyer.email,
     });
-
-    await sendEmail({
-      to: winner.buyer.email,
-      subject: `¡Ganaste la puja por "${piece.title}"! — MANCHA`,
-      html: brandedEmail({
-        heading: 'Ganaste la puja',
-        lead: `Felicitaciones, ${escapeHtml(winner.buyer.full_name || '')}.`,
-        paragraphs: [
-          `Tu puja de <b>$${Number(winner.amount).toLocaleString('es-AR')} USD</b> por <b>“${escapeHtml(piece.title)}”</b> fue la más alta. La obra es tuya.`,
-          checkoutUrl
-            ? `Completa el pago de forma segura para cerrar la adquisición. Apenas se confirme, recibirás tu certificado de colección y te escribiremos para coordinar el envío.`
-            : `Te escribimos por separado para coordinar el pago seguro y el envío de la obra.`,
-        ],
-        cta: checkoutUrl ? { label: 'Pagar ahora', href: checkoutUrl } : undefined,
-        signoff: 'El equipo de MANCHA',
-        note: 'El cobro se realiza en USD a través de un pago seguro.',
-      }),
+    const loc = recLoc(winner.buyer.locale);
+    const { subject, html } = bidWon(loc, {
+      name: winner.buyer.full_name || '',
+      amount: Number(winner.amount).toLocaleString(loc === 'en' ? 'en-US' : 'es-AR'),
+      title: piece.title,
+      checkoutUrl,
     });
+    await sendEmail({ to: winner.buyer.email, subject, html });
   }
 
   revalidatePath('/admin');
@@ -247,7 +220,7 @@ export async function sendPaymentReminder(formData) {
 
   const { data: piece } = await supabase
     .from('pieces')
-    .select('title, bids(amount, buyer:profiles(full_name, email))')
+    .select('title, bids(amount, buyer:profiles(full_name, email, locale))')
     .eq('id', pieceId)
     .maybeSingle();
 
@@ -263,24 +236,12 @@ export async function sendPaymentReminder(formData) {
       amountUsd: winner.amount,
       buyerEmail: winner.buyer.email,
     });
-
-    await sendEmail({
-      to: winner.buyer.email,
-      subject: `Recordatorio: tu pago por "${piece.title}" sigue pendiente — MANCHA`,
-      html: brandedEmail({
-        heading: 'Tu obra te espera',
-        lead: `Hola ${escapeHtml(winner.buyer.full_name || '')}.`,
-        paragraphs: [
-          `Ganaste la puja por <b>“${escapeHtml(piece.title)}”</b>, pero todavía no vemos tu pago completado.`,
-          checkoutUrl
-            ? `Puedes terminar la compra de forma segura desde el botón de abajo. Apenas se confirme, recibirás tu certificado de colección.`
-            : `Escríbenos para coordinar el pago y no perder la pieza.`,
-        ],
-        cta: checkoutUrl ? { label: 'Completar mi pago', href: checkoutUrl } : undefined,
-        signoff: 'El equipo de MANCHA',
-        note: 'Si el pago no se completa en los próximos días, podríamos ofrecer la obra a la siguiente puja más alta.',
-      }),
+    const { subject, html } = paymentReminder(recLoc(winner.buyer.locale), {
+      name: winner.buyer.full_name || '',
+      title: piece.title,
+      checkoutUrl,
     });
+    await sendEmail({ to: winner.buyer.email, subject, html });
   }
 
   revalidatePath('/admin');

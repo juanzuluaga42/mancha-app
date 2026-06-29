@@ -2,11 +2,13 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { getLocale } from 'next-intl/server';
 import { notifyAdmin, brandedEmail } from '@/lib/email';
 import { escapeHtml } from '@/lib/utils';
 
 export async function signUp(formData) {
   const supabase = await createClient();
+  const locale = await getLocale();
 
   const email = formData.get('email');
   const password = formData.get('password');
@@ -14,10 +16,9 @@ export async function signUp(formData) {
   const role = formData.get('role') === 'artist' ? 'artist' : 'buyer';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
-  // Datos del artista guardados en metadata: al confirmar el correo se usa para
-  // crear su perfil de artista (ver app/auth/confirm/route.js). Las obras se suben
-  // después, ya con la cuenta confirmada, desde /cuenta.
-  const data = { full_name, role };
+  // Datos guardados en metadata. Al confirmar el correo se usan para crear el
+  // perfil (ver app/auth/confirm/route.js) y para fijar el idioma del usuario.
+  const data = { full_name, role, locale };
   if (role === 'artist') {
     data.medium = formData.get('medium') || null;
     data.location = formData.get('location') || null;

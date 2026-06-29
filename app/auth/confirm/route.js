@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { sendEmail, brandedEmail } from '@/lib/email';
-import { escapeHtml } from '@/lib/utils';
+import { sendEmail } from '@/lib/email';
+import { artistReminder } from '@/lib/emails';
 
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
@@ -17,6 +17,11 @@ export async function GET(request) {
       // que se guardó en el registro. Las obras se suben luego desde /cuenta.
       const { data: { user } } = await supabase.auth.getUser();
       const meta = user?.user_metadata ?? {};
+      const loc = meta.locale === 'en' ? 'en' : 'es';
+      // Persiste el idioma del usuario para enviarle correos en su lengua.
+      if (user) {
+        await supabase.from('profiles').update({ locale: loc }).eq('id', user.id);
+      }
       if (user && meta.role === 'artist') {
         const { data: existing } = await supabase.from('artists').select('id').eq('profile_id', user.id).maybeSingle();
         if (!existing) {
@@ -34,22 +39,11 @@ export async function GET(request) {
           // Recordatorio inmediato (decisión 3a): acaba de registrarse sin obras.
           if (!insertError && user.email) {
             const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || origin;
-            await sendEmail({
-              to: user.email,
-              subject: 'Tu cuenta de artista en MANCHA está lista — sube tus obras',
-              html: brandedEmail({
-                heading: 'Tu cuenta de artista está lista',
-                lead: `Bienvenido a MANCHA, ${escapeHtml(meta.full_name || '')}.`,
-                paragraphs: [
-                  `Confirmaste tu correo: ya eres parte del proceso de selección de la temporada.`,
-                  `Todavía no subiste ninguna obra, y ese es el paso que falta. MANCHA solo puede revisar tu trabajo cuando hay al menos una pieza cargada.`,
-                  `Entra a tu cuenta y sube <b>hasta 3 obras</b> —imagen en alta calidad, título, técnica y precio de salida— antes de que cierre la convocatoria. Cada temporada entra un grupo pequeño, elegido a mano: la calidad de lo que subas es lo que define tu lugar.`,
-                ],
-                cta: { label: 'Subir mis obras', href: `${siteUrl}/cuenta` },
-                signoff: 'El equipo de MANCHA',
-                note: 'Si no creaste esta cuenta, puedes ignorar este mensaje.',
-              }),
+            const { subject, html } = artistReminder(loc, {
+              name: meta.full_name || '',
+              url: `${siteUrl}/cuenta`,
             });
+            await sendEmail({ to: user.email, subject, html });
           }
         }
       }

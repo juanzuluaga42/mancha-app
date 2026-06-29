@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { createAdminClient } from '@/utils/supabase/admin';
 import { sendEmail, brandedEmail, notifyAdmin } from '@/lib/email';
+import { paymentConfirmed, recipientLocale } from '@/lib/emails';
 import { escapeHtml } from '@/lib/utils';
 
 export async function POST(request) {
@@ -59,21 +60,13 @@ export async function POST(request) {
 
       const buyerEmail = session.customer_details?.email;
       if (buyerEmail) {
-        await sendEmail({
-          to: buyerEmail,
-          subject: `Tu pago por "${piece?.title ?? pieceId}" fue confirmado — MANCHA`,
-          html: brandedEmail({
-            heading: 'Ya es tuya',
-            lead: 'Gracias por coleccionar antes que el mundo.',
-            paragraphs: [
-              `Confirmamos tu pago de <b>$${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')} USD</b> por <b>“${escapeHtml(piece?.title ?? pieceId)}”</b>.`,
-              `Esta obra es única y ahora forma parte de tu colección. Generamos un <b>certificado de colección</b> a tu nombre que acredita que la descubriste aquí.`,
-              `En las próximas horas te escribimos para coordinar el envío con embalaje de obra de arte.`,
-            ],
-            cta: { label: 'Ver mi certificado', href: `${baseUrl}/obras/${pieceId}/certificado` },
-            signoff: 'El equipo de MANCHA',
-          }),
+        const loc = await recipientLocale(supabase, { email: buyerEmail });
+        const { subject, html } = paymentConfirmed(loc, {
+          amount: ((session.amount_total ?? 0) / 100).toLocaleString(loc === 'en' ? 'en-US' : 'es-AR'),
+          title: piece?.title ?? pieceId,
+          certUrl: `${baseUrl}/obras/${pieceId}/certificado`,
         });
+        await sendEmail({ to: buyerEmail, subject, html });
       }
     }
   }
