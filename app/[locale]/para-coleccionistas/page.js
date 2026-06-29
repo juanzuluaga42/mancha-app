@@ -27,10 +27,13 @@ export default async function ParaColeccionistasPage({ searchParams }) {
   const convocatoria = isConvocatoria();
   const temporadaActiva = isTemporadaActiva();
 
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const loggedIn = !!user;
+
   let season = null;
   let allArtists = [];
   if (temporadaActiva) {
-    const supabase = await createClient();
     const { data: s } = await supabase.from('seasons').select('*').eq('is_current', true).maybeSingle();
     season = s;
     const { data: artists } = await supabase
@@ -72,6 +75,11 @@ export default async function ParaColeccionistasPage({ searchParams }) {
               <>
                 <Link href="/obras" className="tsr-cta-primary">{t('viewCatalogue')}</Link>
                 <Link href="/seleccionados" className="tsr-cta-ghost">{t('theSelected')}</Link>
+              </>
+            ) : loggedIn ? (
+              <>
+                <Link href="/notas" className="tsr-cta-primary">{t('readNotes')}</Link>
+                <Link href="/antes-que-el-mundo" className="tsr-cta-ghost">{t('beforeWorld')}</Link>
               </>
             ) : (
               <>
@@ -219,8 +227,8 @@ export default async function ParaColeccionistasPage({ searchParams }) {
         </div>
       </section>
 
-      {/* ── AVISO / WAITLIST ─────────────────────────────── */}
-      {!temporadaActiva && (
+      {/* ── AVISO / WAITLIST (oculto si ya hay sesión) ───── */}
+      {!temporadaActiva && !loggedIn && (
         <section className="tsr-aviso" id="aviso">
           <div className="wrap tsr-aviso-inner">
             <div className="tsr-aviso-text" data-reveal>
