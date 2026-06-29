@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MANCHA — Curatorial Portal · Design &amp; Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF3E6; --ink:#16110D; --red:#E5402B; --red-deep:#A82A1C;
+    --yellow:#F2B705; --lilac:#8E6FD1; --green:#3f9b6b;
+    --display:'Unbounded',system-ui,sans-serif;
+    --serif:'Newsreader',Georgia,serif;
+    --mono:'Space Mono',ui-monospace,monospace;
+    --ui:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  }
+  html[data-theme="light"]{
+    --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F2EC; --line:rgba(22,17,13,.10);
+    --tx:#1a1612; --tx-soft:#6B6359; --tx-faint:rgba(22,17,13,.42); --accent:var(--red-deep);
+    --shadow:0 1px 2px rgba(22,17,13,.04),0 8px 30px rgba(22,17,13,.05);
+  }
+  html[data-theme="dark"]{
+    --bg:#0D0C0A; --surface:#15110C; --surface-2:#1d1812; --line:rgba(250,243,230,.11);
+    --tx:#FAF3E6; --tx-soft:rgba(250,243,230,.6); --tx-faint:rgba(250,243,230,.36); --accent:var(--red);
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--serif);font-size:16.5px;line-height:1.62;transition:background .4s,color .4s;}
+  .shell{display:flex;min-height:100vh;}
+  .side{width:280px;flex:none;position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto;border-right:1px solid var(--line);padding:28px 20px 40px;background:var(--surface);}
+  .main{flex:1;min-width:0;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 44px;}
+
+  .brand{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03em;display:block;text-decoration:none;color:var(--tx);}
+  .brand .dot{color:var(--red);}
+  .side-tag{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--tx-faint);margin:3px 0 22px;}
+  .nav a{display:block;font-family:var(--ui);font-size:12.5px;letter-spacing:.01em;color:var(--tx-soft);text-decoration:none;padding:6px 9px;border-radius:6px;transition:.14s;}
+  .nav a:hover{color:var(--tx);background:var(--surface-2);}
+  .nav a.active{color:var(--tx);background:var(--surface-2);font-weight:500;}
+  .nav a b{color:var(--red);font-family:var(--mono);font-size:10px;margin-right:8px;}
+  .side-foot{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);}
+  .toggle{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:7px 13px;cursor:pointer;}
+
+  .topbar{display:none;position:sticky;top:0;z-index:40;align-items:center;justify-content:space-between;padding:13px 20px;background:var(--surface);border-bottom:1px solid var(--line);}
+  .burger{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:6px;}
+  .burger span{width:22px;height:2px;background:var(--tx);display:block;border-radius:2px;}
+
+  .hero{padding:104px 0 64px;border-bottom:1px solid var(--line);}
+  .hero .eyebrow{color:var(--red);}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.04;letter-spacing:-.035em;margin:18px 0 22px;}
+  .hero h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent);}
+  .hero .lede{font-size:20px;color:var(--tx-soft);max-width:62ch;}
+  .hero .credits{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);margin-top:30px;line-height:2;}
+
+  section.doc{padding:70px 0;border-bottom:1px solid var(--line);scroll-margin-top:16px;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx-faint);margin:0 0 8px;}
+  .sec-num{font-family:var(--mono);font-weight:700;color:var(--red);}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.55rem,3.2vw,2.2rem);letter-spacing:-.02em;line-height:1.12;margin:6px 0 16px;}
+  h3{font-family:var(--display);font-weight:600;font-size:1.12rem;letter-spacing:-.01em;margin:32px 0 10px;}
+  h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin:22px 0 8px;}
+  p{margin:0 0 14px;}strong{font-weight:600;}em{font-style:italic;}
+  .lede{font-size:18.5px;color:var(--tx);margin-bottom:20px;}
+  ul,ol{margin:0 0 15px;padding-left:1.15em;}li{margin:0 0 6px;}li::marker{color:var(--red);}
+  code{font-family:var(--mono);font-size:.82em;background:var(--surface-2);padding:1px 6px;border-radius:4px;}
+  blockquote{margin:22px 0;padding:16px 22px;border-left:3px solid var(--red);background:var(--surface);box-shadow:var(--shadow);border-radius:0 6px 6px 0;font-style:italic;font-size:18px;}
+  blockquote p:last-child{margin:0;}
+  hr{border:0;border-top:1px solid var(--line);margin:28px 0;}
+
+  .cards{display:grid;gap:16px;margin:20px 0;}
+  .c2{grid-template-columns:1fr 1fr;}.c3{grid-template-columns:repeat(3,1fr);}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;box-shadow:var(--shadow);}
+  .card h3{margin-top:0;}
+  .card .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:8px;}
+
+  .kv{margin:8px 0 0;border-top:1px solid var(--line);}
+  .kv div{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px;}
+  .kv dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);padding-top:3px;}
+  .kv dd{margin:0;}
+
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);}
+  td .mono{font-family:var(--mono);font-size:12px;}
+  .ok{color:var(--green);font-weight:700;}.no{color:var(--red);font-weight:700;}.mid{color:var(--yellow-deep,#C68F00);font-weight:700;}
+
+  .dd{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+  .dd .col{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--surface);box-shadow:var(--shadow);}
+  .dd h4{margin:0 0 10px;}.dd .yes h4{color:var(--green);}.dd .no h4{color:var(--red);}
+  .dd ul{padding-left:1.05em;margin:0;}.dd li{font-size:14px;}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid var(--line);color:var(--tx-soft);margin:0 4px 5px 0;}
+  .pill.red{border-color:var(--red);color:var(--red);}
+
+  .callout{border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;padding:16px 20px;margin:22px 0;background:var(--surface);box-shadow:var(--shadow);}
+  .callout .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:6px;}
+
+  pre.schema{background:var(--ink);color:var(--paper);border-radius:8px;padding:16px 18px;margin:14px 0;font-family:var(--mono);font-size:12px;line-height:1.65;white-space:pre-wrap;overflow:auto;}
+  html[data-theme="light"] pre.schema{background:#1a1612;}
+  pre.schema .k{color:#F2B705;}.pre.schema .c{color:#8E6FD1;}
+
+  /* ── product mockups ── */
+  .mock{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0;box-shadow:var(--shadow);font-family:var(--ui);background:var(--surface);}
+  .mock-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--surface-2);}
+  .mock-bar i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;}
+  .mock-bar span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);margin-left:8px;}
+  .mock-body{padding:22px;}
+  .mk-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx-faint);}
+  .mk-h{font-family:var(--display);font-weight:700;font-size:1.5rem;letter-spacing:-.02em;margin:4px 0 2px;}
+  .mk-sub{font-size:13px;color:var(--tx-soft);}
+
+  /* blind review viewer */
+  .viewer{display:grid;grid-template-columns:1.5fr 1fr;gap:0;min-height:340px;}
+  .viewer .stage{background:
+      repeating-linear-gradient(135deg, rgba(127,127,127,.04) 0 14px, transparent 14px 15px),
+      radial-gradient(120% 90% at 50% 38%, rgba(142,111,209,.10), transparent 60%),
+      var(--ink);
+    display:flex;align-items:center;justify-content:center;position:relative;border-radius:10px;color:rgba(250,243,230,.5);}
+  html[data-theme="light"] .viewer .stage{background:radial-gradient(120% 90% at 50% 38%, rgba(142,111,209,.10), transparent 60%),#14110c;}
+  .viewer .frame{width:46%;aspect-ratio:4/5;background:repeating-linear-gradient(135deg,#221b12 0 13px,#2a2118 13px 14px);border:1px solid rgba(250,243,230,.12);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .viewer .stage .tools{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
+  .viewer .stage .tools b{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:rgba(250,243,230,.6);background:rgba(0,0,0,.4);border:1px solid rgba(250,243,230,.14);padding:5px 9px;border-radius:100px;font-weight:400;}
+  .viewer .stage .anon{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(250,243,230,.55);}
+  .viewer .panel{padding:18px 20px;}
+  .crit{padding:11px 0;border-bottom:1px solid var(--line);}
+  .crit .top{display:flex;justify-content:space-between;align-items:baseline;}
+  .crit .nm{font-family:var(--ui);font-size:13px;font-weight:600;}
+  .crit .sc{font-family:var(--mono);font-size:13px;color:var(--red);}
+  .crit .bar{height:5px;border-radius:3px;background:var(--surface-2);margin:7px 0 4px;overflow:hidden;}
+  .crit .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red-deep));border-radius:3px;}
+  .crit .conf{font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);}
+
+  /* score / consensus */
+  .scorerow{display:flex;align-items:center;gap:14px;margin:6px 0;font-size:13.5px;}
+  .scorerow .lab{width:210px;font-family:var(--ui);}
+  .scorerow .track{flex:1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden;}
+  .scorerow .track i{display:block;height:100%;background:var(--red);border-radius:5px;}
+  .scorerow .w{width:48px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--tx-soft);}
+
+  .consensus{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0;}
+  .cura{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface);box-shadow:var(--shadow);text-align:center;}
+  .cura .idx{font-family:var(--display);font-weight:800;font-size:1.9rem;}
+  .cura .nm{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);margin-top:4px;}
+  .cura .dec{font-family:var(--ui);font-size:11px;color:var(--tx-soft);margin-top:6px;}
+
+  /* certificate */
+  .cert{border:1px solid var(--line);border-radius:12px;padding:34px;text-align:center;background:
+      radial-gradient(100% 80% at 50% 0%, rgba(229,64,43,.05), transparent 60%),var(--surface);box-shadow:var(--shadow);margin:20px 0;}
+  .cert .seal{width:46px;height:46px;border-radius:50%;border:2px solid var(--red);display:inline-flex;align-items:center;justify-content:center;color:var(--red);font-family:var(--display);font-weight:800;margin-bottom:14px;}
+  .cert .ct-k{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--tx-faint);}
+  .cert .ct-name{font-family:var(--display);font-weight:800;font-size:1.7rem;letter-spacing:-.02em;margin:8px 0 4px;}
+  .cert .ct-role{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--tx-soft);}
+  .cert .ct-foot{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);margin-top:20px;}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+  footer.f{padding:54px 0 80px;text-align:center;color:var(--tx-faint);font-style:italic;}
+  footer.f .brand{font-style:normal;margin-bottom:10px;}
+
+  @media(max-width:900px){
+    .side{display:none;position:fixed;z-index:50;width:270px;}
+    .side.open{display:block;}
+    .topbar{display:flex;}
+    .wrap{padding:0 22px;}
+    .c2,.c3,.dd,.consensus{grid-template-columns:1fr;}
+    .viewer{grid-template-columns:1fr;}
+    .kv div{grid-template-columns:120px 1fr;}
+    .scorerow .lab{width:140px;}
+  }
+  @media print{.side,.topbar{display:none;}.reveal{opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">MANCHA<span class="dot">.</span></span>
+  <button class="burger" onclick="document.querySelector('.side').classList.toggle('open')"><span></span><span></span><span></span></button>
+</div>
+
+<div class="shell">
+  <aside class="side">
+    <a href="#top" class="brand">MANCHA<span class="dot">.</span></a>
+    <p class="side-tag">Curatorial Portal · Spec v1.0</p>
+    <nav class="nav" id="nav">
+      <a href="#s0"><b>00</b>Premisa</a>
+      <a href="#s1"><b>01</b>Filosofía curatorial</a>
+      <a href="#s2"><b>02</b>Principios de diseño</a>
+      <a href="#s3"><b>03</b>Roles, permisos, seguridad</a>
+      <a href="#s4"><b>04</b>Arquitectura (mapa)</a>
+      <a href="#s5"><b>05</b>Dashboard</a>
+      <a href="#s6"><b>06</b>Mi Perfil</a>
+      <a href="#s7"><b>07</b>Curatorial Review · Blind</a>
+      <a href="#s8"><b>08</b>Los 10 criterios</a>
+      <a href="#s9"><b>09</b>Reflexión &amp; Decisión</a>
+      <a href="#s10"><b>10</b>Fase 2 · Reveal &amp; sesgo</a>
+      <a href="#s11"><b>11</b>Algoritmo de puntuación</a>
+      <a href="#s12"><b>12</b>Decisión colegiada</a>
+      <a href="#s13"><b>13</b>Curator Picks &amp; Journal</a>
+      <a href="#s14"><b>14</b>Eventos · Recursos · Mensajería</a>
+      <a href="#s15"><b>15</b>Reconocimiento &amp; Certificado</a>
+      <a href="#s16"><b>16</b>Modelo de datos &amp; RLS</a>
+      <a href="#s17"><b>17</b>Oportunidades (referencia mundial)</a>
+      <a href="#s18"><b>18</b>Roadmap</a>
+    </nav>
+    <div class="side-foot"><button class="toggle" id="themeBtn">◐ <span>Tema</span></button></div>
+  </aside>
+
+  <main class="main" id="top">
+    <header class="hero">
+      <div class="wrap">
+        <p class="eyebrow">MANCHA · Curatorial Portal</p>
+        <h1>El software interno de una <em>institución artística</em> internacional.</h1>
+        <p class="lede">No un panel de administración. La sala privada donde el Founding Curatorial Council evalúa obra a ciegas, decide en colegio y construye —con cada juicio— el estándar de MANCHA.</p>
+        <p class="credits">
+          Product Designer (Apple · Stripe · Linear) · UX (herramientas pro) · Staff Engineer (Next.js · Supabase) · Arquitecto de software<br>
+          Curador de museo internacional · Director de galerías · Especialista en marketplaces de arte · Diseñador de experiencias premium
+        </p>
+      </div>
+    </header>
+
+    <!-- 00 -->
+    <section class="doc" id="s0"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">00</span> · Premisa</p>
+      <h2>Pertenecer, no administrar.</h2>
+      <p class="lede">El objetivo no es que un curador "use una herramienta". Es que sienta que pertenece al consejo de una gran institución — que cada pantalla respire confianza, rigor y calidad. Apple, Linear, Stripe y Notion como referencia de simplicidad; un museo internacional como referencia de gravedad.</p>
+      <blockquote>Si una pantalla se siente como un CRM, está mal. Si se siente como entrar a una sala de evaluación privada de un museo, está bien.</blockquote>
+      <p>Este documento es la fuente de verdad de diseño y arquitectura del portal: filosofía, cada pantalla, el algoritmo de puntuación, el modelo de datos, los permisos y auditoría, y las oportunidades que lo convierten en referencia mundial. Es coherente con el Brand System de MANCHA (tinta, papel, el punto rojo, Unbounded/Newsreader/Space Mono) y con el sistema de ciclo de vida de la obra (The Index · The Canon).</p>
+    </div></section>
+
+    <!-- 01 -->
+    <section class="doc" id="s1"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">01</span> · Filosofía curatorial</p>
+      <h2>La obra habla primero. El artista, después.</h2>
+      <p class="lede">Es el principio que define toda la arquitectura. Una obra extraordinaria puede venir de un artista completamente desconocido. Por eso la primera evaluación es <strong>ciega y objetiva</strong>: nada de prestigio, seguidores, currículum o mercado puede tocar el juicio inicial.</p>
+      <div class="dd">
+        <div class="col yes"><h4>✓ El sistema garantiza</h4><ul>
+          <li>La primera mirada es solo a la obra, en condiciones de galería.</li>
+          <li>Tres juicios independientes, ocultos entre sí hasta cerrar.</li>
+          <li>La evaluación inicial es <strong>inmutable</strong> — ni el propio curador puede editarla luego.</li>
+          <li>El sesgo se mide: en Fase 2 registramos si la información del artista cambia la percepción.</li>
+        </ul></div>
+        <div class="col no"><h4>✗ El sistema impide</h4><ul>
+          <li>Que el prestigio influya en el juicio inicial (no se transmite al cliente).</li>
+          <li>Que un curador apruebe directamente (solo el Founder decide).</li>
+          <li>Que un curador vea las evaluaciones ajenas antes de cerrar.</li>
+          <li>Gamificación, puntos, rankings o medallas.</li>
+        </ul></div>
+      </div>
+      <div class="callout"><span class="lbl">Decisión de arquitectura</span>La ceguera <strong>no es una capa de UI</strong>: es de datos. Durante la Fase 1 la API jamás envía al cliente del curador ningún campo identificativo del artista. No se puede "inspeccionar elemento" para ver lo oculto — no está ahí.</div>
+    </div></section>
+
+    <!-- 02 -->
+    <section class="doc" id="s2"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">02</span> · Principios de diseño</p>
+      <h2>Calma, espacio, obra.</h2>
+      <div class="cards c3">
+        <div class="card"><span class="lbl">Obra protagonista</span><p>La imagen de la obra siempre domina. La UI se retira: tipografía discreta, controles que aparecen al necesitarse.</p></div>
+        <div class="card"><span class="lbl">Minimalismo Linear/Stripe</span><p>Una acción primaria por pantalla. Densidad baja. Jerarquía clara. Nada decorativo sin función.</p></div>
+        <div class="card"><span class="lbl">Espacio en blanco</span><p>Aire generoso. El vacío comunica seriedad — como las salas de un museo.</p></div>
+        <div class="card"><span class="lbl">Claro y oscuro</span><p>Claro por defecto (precisión, lectura); oscuro para la sala de evaluación (la obra brilla en penumbra). Persistente por usuario.</p></div>
+        <div class="card"><span class="lbl">Microanimaciones</span><p>Transiciones de 150–300ms, easing suave. Nunca rebotes ni confeti. La elegancia está en lo sutil.</p></div>
+        <div class="card"><span class="lbl">A11y · i18n</span><p>Contraste AA, foco visible, navegable por teclado, lectores de pantalla. Multilenguaje (ES/EN base) en toda la UI.</p></div>
+      </div>
+      <h4>Sistema visual del portal</h4>
+      <div class="kv">
+        <div><dt>Color</dt><dd>Neutros cálidos + <strong>un</strong> acento rojo. Verde solo para "consenso/recomendar", ámbar para "atención", lila para datos. Nunca semáforos saturados.</dd></div>
+        <div><dt>Tipografía</dt><dd>Unbounded (titulares, cifras), Newsreader (lectura, reflexiones), Space Mono (labels, IDs, datos). UI de controles: sans del sistema para neutralidad de herramienta.</dd></div>
+        <div><dt>Layout</dt><dd>Sidebar fija + lienzo amplio. Radios suaves (8–14px), sombras casi imperceptibles, líneas hairline.</dd></div>
+        <div><dt>Movimiento</dt><dd>Reveal al entrar, focus-within para mostrar herramientas, vistas que hacen "cross-fade", nunca "slide" agresivo.</dd></div>
+      </div>
+    </div></section>
+
+    <!-- 03 -->
+    <section class="doc" id="s3"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">03</span> · Roles, permisos y seguridad</p>
+      <h2>Solo lo que existe de verdad.</h2>
+      <p class="lede">Mientras la plataforma comienza, existen únicamente tres roles. Nada de "Senior Fellow" o "Advisory Board" hasta que sean reales. El prestigio se construye con contribuciones verificables, jamás con mecánicas.</p>
+      <div class="cards c3">
+        <div class="card"><span class="lbl">Founder</span><p>Visión y decisión final. Ve todo, asigna revisiones, toma la decisión definitiva, publica noticias internas y mensajes. No evalúa a ciegas (no contamina el colegio).</p></div>
+        <div class="card"><span class="lbl">Founding Curatorial Council</span><p>El consejo fundador. Evalúa obra asignada a ciegas, participa en la decisión colegiada, publica en el Journal y crea Curator Picks. Certificado institucional.</p></div>
+        <div class="card"><span class="lbl">Guest Curator</span><p>Invitado por temporada/proyecto. Evalúa obra asignada; acceso acotado; sin participación en gobierno ni mensajería de consejo.</p></div>
+      </div>
+      <h4>Matriz de permisos (RBAC)</h4>
+      <table>
+        <tr><th>Acción</th><th>Founder</th><th>Council</th><th>Guest</th></tr>
+        <tr><td>Ver obra asignada (Fase 1, ciega)</td><td class="ok">●</td><td class="ok">● solo asignadas</td><td class="ok">● solo asignadas</td></tr>
+        <tr><td>Ver identidad del artista (Fase 2)</td><td class="ok">●</td><td class="ok">tras enviar evaluación</td><td class="ok">tras enviar evaluación</td></tr>
+        <tr><td>Ver evaluaciones de otros</td><td class="ok">●</td><td class="mid">solo al cerrar la ronda</td><td class="no">○</td></tr>
+        <tr><td>Asignar revisiones</td><td class="ok">●</td><td class="no">○</td><td class="no">○</td></tr>
+        <tr><td>Aprobar / decidir obra</td><td class="ok">● final</td><td class="no">○ recomienda</td><td class="no">○ recomienda</td></tr>
+        <tr><td>Publicar Journal / Curator Picks</td><td class="ok">●</td><td class="ok">●</td><td class="mid">con revisión</td></tr>
+        <tr><td>Mensajería de consejo</td><td class="ok">●</td><td class="ok">●</td><td class="no">○</td></tr>
+        <tr><td>Modificar datos críticos del sistema</td><td class="mid">configurable</td><td class="no">○</td><td class="no">○</td></tr>
+      </table>
+      <h4>Seguridad (no negociable)</h4>
+      <ul>
+        <li><strong>RBAC en la base de datos</strong> (Supabase RLS), no solo en la UI. Un curador solo lee filas de obras asignadas y de sus propias evaluaciones.</li>
+        <li><strong>Ceguera a nivel de API</strong>: los campos identificativos viven en una tabla aparte, inaccesible al curador en Fase 1.</li>
+        <li><strong>Inmutabilidad</strong>: una evaluación enviada se sella (no editable). Cambios post-reveal van a un registro separado.</li>
+        <li><strong>Auditoría total</strong>: cada acción (ver, puntuar, enviar, revelar, decidir) se registra con actor, entidad, timestamp e IP en <code>audit_log</code>. Append-only.</li>
+        <li><strong>Conflicto de interés</strong>: acción "Recusarme" si un curador reconoce la obra/artista; se audita y se reasigna.</li>
+      </ul>
+    </div></section>
+
+    <!-- 04 -->
+    <section class="doc" id="s4"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">04</span> · Arquitectura de información</p>
+      <h2>El mapa del portal.</h2>
+      <div class="cards c2">
+        <div class="card"><span class="lbl">Navegación principal</span><p><strong>Dashboard</strong> · <strong>Review</strong> (cola de revisiones) · <strong>The Council Room</strong> (decisión colegiada) · <strong>My Profile</strong> · <strong>Curator Picks</strong> · <strong>Journal</strong> · <strong>Events</strong> · <strong>Resources</strong> · <strong>Messages</strong></p></div>
+        <div class="card"><span class="lbl">Jerarquía de atención</span><p>Lo urgente y lo asignado primero (Review). Lo institucional después (Council, Profile, Journal). Lo de fondo (Events, Resources, Messages) accesible pero discreto.</p></div>
+      </div>
+      <p>El portal vive en una ruta protegida —p. ej. <code>/council</code>— separada del sitio público y del admin actual. Misma identidad de marca, sistema visual propio de "herramienta".</p>
+    </div></section>
+
+    <!-- 05 -->
+    <section class="doc" id="s5"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">05</span> · Dashboard</p>
+      <h2>Una sala de espera digna.</h2>
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>council / dashboard</span></div>
+        <div class="mock-body">
+          <p class="mk-eyebrow">Founding Curatorial Council · Member since 2026</p>
+          <div class="mk-h">Good evening, Elena.</div>
+          <p class="mk-sub">You have <strong>2 works</strong> awaiting your blind review · 1 council round opens for discussion.</p>
+          <div class="cards c3" style="margin-top:18px">
+            <div class="card"><span class="lbl">Pendientes</span><p style="font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0">2</p><p class="mk-sub" style="margin:2px 0 0">obras asignadas</p></div>
+            <div class="card"><span class="lbl">Evaluadas</span><p style="font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0">47</p><p class="mk-sub" style="margin:2px 0 0">esta temporada</p></div>
+            <div class="card"><span class="lbl">Council Room</span><p style="font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0">1</p><p class="mk-sub" style="margin:2px 0 0">ronda en discusión</p></div>
+          </div>
+        </div>
+      </div>
+      <h4>Bloques del dashboard</h4>
+      <div class="kv">
+        <div><dt>Bienvenida</dt><dd>Personalizada, sobria. Nombre, rol, "miembro desde". Saludo por hora.</dd></div>
+        <div><dt>Próximas revisiones</dt><dd>Cola de obras asignadas con miniatura ciega (sin datos del artista) y fecha límite.</dd></div>
+        <div><dt>Council Room</dt><dd>Rondas listas para discusión (cuando hay divergencia) o cerradas a la espera del Founder.</dd></div>
+        <div><dt>Historial</dt><dd>Tus evaluaciones enviadas (inmutables), con acceso a tu reflexión y a la decisión final del Founder.</dd></div>
+        <div><dt>Estadísticas personales</dt><dd>Contribuciones reales: obras evaluadas, Picks publicados, artículos, proyectos. <em>Nunca</em> rankings.</dd></div>
+        <div><dt>Actividad reciente</dt><dd>Línea de tiempo discreta de lo tuyo y del consejo.</dd></div>
+        <div><dt>Noticias internas</dt><dd>Comunicados del Founder y de la institución.</dd></div>
+        <div><dt>Invitaciones &amp; Mensajes</dt><dd>Reuniones del consejo y mensajes del Founder, sin salir del portal.</dd></div>
+      </div>
+    </div></section>
+
+    <!-- 06 -->
+    <section class="doc" id="s6"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">06</span> · Mi Perfil</p>
+      <h2>Una página de la que sentirse orgulloso.</h2>
+      <div class="cards c2">
+        <div class="card"><span class="lbl">Perfil público</span>
+          <p>La cara institucional del curador, enlazable y compartible.</p>
+          <p style="font-size:13.5px;color:var(--tx-soft)">Foto · Nombre · Cargo (uno de los tres roles reales) · País · Idiomas · Especialidades · Biografía · Trayectoria · Instituciones · Exposiciones · Publicaciones · Redes · Sitio · <strong>Miembro desde</strong> · <strong>Founding Member Badge</strong> · Obras evaluadas · <strong>Curator Picks</strong> · Artículos del Journal · Proyectos especiales de MANCHA.</p>
+        </div>
+        <div class="card"><span class="lbl">Perfil privado</span>
+          <p>Configuración y gobierno personal, solo para el titular.</p>
+          <p style="font-size:13.5px;color:var(--tx-soft)">Datos personales · Disponibilidad (cuántas revisiones por ronda) · <strong>Firma digital</strong> · Código de Ética firmado · Acuerdo de colaboración · Preferencias (tema, idioma) · Notificaciones.</p>
+        </div>
+      </div>
+      <div class="callout"><span class="lbl">Sin gamificación</span>El perfil muestra <strong>contribuciones reales y verificables</strong>, no insignias decorativas. El único distintivo es el <strong>Founding Member Badge</strong> (rol real) y, próximamente, el certificado institucional (§15). El prestigio se ve en el trabajo, no en medallas.</div>
+    </div></section>
+
+    <!-- 07 -->
+    <section class="doc" id="s7"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">07</span> · Curatorial Review · Fase 1 (Blind)</p>
+      <h2>El corazón: una sala privada de evaluación.</h2>
+      <p class="lede">No es un formulario. Es una experiencia de análisis. La obra ocupa la pantalla en penumbra de galería; los criterios se invocan al lado. Zoom extremo, detalle, ángulos. Cero información que genere sesgo.</p>
+
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>council / review · work S01-014 · BLIND</span></div>
+        <div class="viewer">
+          <div class="stage">
+            <span class="anon">● Blind review · identidad oculta</span>
+            <div class="frame"></div>
+            <div class="tools"><b>＋ Zoom</b><b>⤢ Detalle</b><b>◷ Ángulos</b><b>◐ Luz</b></div>
+          </div>
+          <div class="panel">
+            <p class="mk-eyebrow">Obra · S01-014</p>
+            <p class="mk-sub" style="margin:4px 0 12px">Óleo sobre lino · 80 × 100 cm · 2025</p>
+            <div class="crit"><div class="top"><span class="nm">Originalidad</span><span class="sc">8</span></div><div class="bar"><i style="width:80%"></i></div><span class="conf">Confianza: alta</span></div>
+            <div class="crit"><div class="top"><span class="nm">Permanencia</span><span class="sc">7</span></div><div class="bar"><i style="width:70%"></i></div><span class="conf">Confianza: media</span></div>
+            <div class="crit"><div class="top"><span class="nm">Fuerza visual</span><span class="sc">9</span></div><div class="bar"><i style="width:90%"></i></div><span class="conf">Confianza: alta</span></div>
+          </div>
+        </div>
+      </div>
+
+      <h4>Lo único visible en Fase 1</h4>
+      <p>Fotografías en máxima resolución · <strong>zoom extremo</strong> y vista de detalle · diferentes ángulos si existen · medidas · técnica · materiales · descripción conceptual <em>anónima</em> (opcional, sin datos identificativos).</p>
+      <h4>Lo que jamás se muestra (ni llega al cliente)</h4>
+      <p style="color:var(--tx-soft)">Nombre · foto · país · edad · género · Instagram · seguidores · premios · estudios · galerías · exposiciones · historial de ventas · precio · currículum · coleccionistas · cualquier dato comercial.</p>
+      <div class="callout"><span class="lbl">Detalle de experiencia</span>El visor calibra color (nota de fidelidad), permite comparar dos detalles lado a lado, y guarda el progreso. El tiempo de observación se registra de forma privada — no para puntuar, sino como señal interna de cuidado (nunca expuesto, nunca gamificado).</div>
+    </div></section>
+
+    <!-- 08 -->
+    <section class="doc" id="s8"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">08</span> · Evaluación curatorial</p>
+      <h2>Diez criterios. Mismos para todos.</h2>
+      <p class="lede">Cada criterio incluye su <strong>explicación</strong>, una <strong>puntuación 1–10</strong>, <strong>observaciones</strong> y el <strong>nivel de confianza</strong> del evaluador. Todos enfocados únicamente en la calidad de la obra.</p>
+      <table>
+        <tr><th>#</th><th>Criterio</th><th>Qué se evalúa</th></tr>
+        <tr><td>1</td><td><strong>Dominio técnico</strong></td><td>Solidez de la ejecución de la técnica utilizada.</td></tr>
+        <tr><td>2</td><td><strong>Fuerza visual</strong></td><td>Impacto y presencia de la obra.</td></tr>
+        <tr><td>3</td><td><strong>Composición</strong></td><td>Equilibrio, ritmo y organización visual coherente.</td></tr>
+        <tr><td>4</td><td><strong>Originalidad</strong></td><td>Identidad propia; evita sentirse derivativa.</td></tr>
+        <tr><td>5</td><td><strong>Lenguaje plástico</strong></td><td>Uso de color, textura, forma, materiales, contraste y luz.</td></tr>
+        <tr><td>6</td><td><strong>Coherencia artística</strong></td><td>Todos los elementos trabajan en una misma dirección.</td></tr>
+        <tr><td>7</td><td><strong>Profundidad conceptual</strong></td><td>Fuerza de la idea y capacidad de la ejecución para comunicarla.</td></tr>
+        <tr><td>8</td><td><strong>Permanencia</strong></td><td>Conservaría su relevancia con el paso del tiempo.</td></tr>
+        <tr><td>9</td><td><strong>Valor para una colección</strong></td><td>Aporte artístico a una colección seria (sin considerar precio ni mercado).</td></tr>
+        <tr><td>10</td><td><strong>Afinidad con la visión de MANCHA</strong></td><td>Representa el estándar internacional que MANCHA construye.</td></tr>
+      </table>
+      <div class="callout"><span class="lbl">Por qué pedir confianza</span>El nivel de confianza por criterio no cambia la nota: <strong>contextualiza</strong>. Una nota alta con confianza baja es distinta de una nota alta con confianza alta. El sistema usa la confianza para señalar dónde el colegio debe conversar (§12) y para medir la solidez de cada juicio.</div>
+    </div></section>
+
+    <!-- 09 -->
+    <section class="doc" id="s9"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">09</span> · Reflexión &amp; Decisión</p>
+      <h2>Un texto de curador, una sola decisión.</h2>
+      <h3>Reflexión curatorial</h3>
+      <p>Tras puntuar, el curador escribe una <strong>reflexión profesional</strong> — un texto con la profundidad de una cartela razonada de museo, no un comentario superficial. El editor es sobrio (Newsreader, foco en la escritura), con un mínimo sugerido y guía editorial discreta. Multilenguaje.</p>
+      <blockquote>"La obra sostiene una tensión rara entre control y abandono. El gesto no decora: estructura. Su permanencia dependerá de si esa tensión resiste la familiaridad — creo que sí."</blockquote>
+      <h3>Decisión (una sola)</h3>
+      <div class="cards c2">
+        <div class="card"><span class="lbl ">Recomendar</span><p>La obra entra al estándar MANCHA sin reservas.</p></div>
+        <div class="card"><span class="lbl">Recomendar con observaciones</span><p>Entra, con matices registrados para el colegio.</p></div>
+        <div class="card"><span class="lbl">Solicitar segunda revisión</span><p>Pide otra mirada antes de concluir.</p></div>
+        <div class="card"><span class="lbl">No recomendar</span><p>No alcanza el estándar — con su justificación.</p></div>
+      </div>
+      <p style="color:var(--tx-soft);font-size:14px">Al enviar, la evaluación se <strong>sella</strong>: puntuaciones, reflexión y decisión quedan inmutables. Recién entonces se desbloquea la Fase 2.</p>
+    </div></section>
+
+    <!-- 10 -->
+    <section class="doc" id="s10"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">10</span> · Fase 2 · Reveal &amp; medición de sesgo</p>
+      <h2>Solo después, el artista.</h2>
+      <p class="lede">Enviada la evaluación, el sistema revela lo que antes estaba prohibido: nombre, trayectoria, exposiciones, biografía, precio, contexto. Entonces hace la pregunta que mide la integridad del proceso.</p>
+      <blockquote>¿La información del artista modifica tu percepción inicial de la obra?<br><span style="font-style:normal;font-family:var(--mono);font-size:12px;color:var(--tx-soft)">○ No cambia · ○ Cambia ligeramente · ○ Cambia significativamente</span></blockquote>
+      <p>Si cambia, el curador debe <strong>justificar objetivamente</strong> el motivo. <strong>La evaluación inicial nunca se modifica</strong> — el cambio vive en un registro aparte, asociado pero separado.</p>
+      <div class="callout"><span class="lbl">Esto es oro institucional</span>Agregado en el tiempo, este dato produce el <strong>Blind Integrity Index</strong> de MANCHA: con qué frecuencia y cuánto la información del artista mueve los juicios. Es una <em>prueba verificable de objetividad</em> que ninguna otra plataforma de arte puede mostrar. (Ver §17.)</div>
+    </div></section>
+
+    <!-- 11 -->
+    <section class="doc" id="s11"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">11</span> · Algoritmo de puntuación</p>
+      <h2>Ponderación inteligente, no promedio plano.</h2>
+      <p class="lede">No todos los criterios pesan igual. La ponderación refleja la filosofía de MANCHA: descubrir lo que el mundo aún no vio (originalidad), que dure (permanencia), con presencia e idea — la técnica es base, no el diferenciador ("voz, no perfección").</p>
+      <div class="scorerow"><span class="lab">Originalidad</span><span class="track"><i style="width:100%"></i></span><span class="w">15%</span></div>
+      <div class="scorerow"><span class="lab">Permanencia</span><span class="track"><i style="width:87%"></i></span><span class="w">13%</span></div>
+      <div class="scorerow"><span class="lab">Fuerza visual</span><span class="track"><i style="width:80%"></i></span><span class="w">12%</span></div>
+      <div class="scorerow"><span class="lab">Profundidad conceptual</span><span class="track"><i style="width:80%"></i></span><span class="w">12%</span></div>
+      <div class="scorerow"><span class="lab">Lenguaje plástico</span><span class="track"><i style="width:67%"></i></span><span class="w">10%</span></div>
+      <div class="scorerow"><span class="lab">Dominio técnico</span><span class="track"><i style="width:60%"></i></span><span class="w">9%</span></div>
+      <div class="scorerow"><span class="lab">Composición</span><span class="track"><i style="width:60%"></i></span><span class="w">9%</span></div>
+      <div class="scorerow"><span class="lab">Coherencia artística</span><span class="track"><i style="width:53%"></i></span><span class="w">8%</span></div>
+      <div class="scorerow"><span class="lab">Valor para una colección</span><span class="track"><i style="width:47%"></i></span><span class="w">7%</span></div>
+      <div class="scorerow"><span class="lab">Afinidad con MANCHA</span><span class="track"><i style="width:33%"></i></span><span class="w">5%</span></div>
+      <p style="font-family:var(--mono);font-size:12px;color:var(--tx-soft);margin-top:14px">Suma = 100%. "Afinidad con MANCHA" se mantiene deliberadamente baja: el estándar no debe premiar la conformidad por encima de la calidad cruda. La obra habla primero.</p>
+
+      <h4>Cómo se calcula</h4>
+      <pre class="schema"><span class="k">Curatorial Index</span> (de cada curador, 0–100)
+  = Σ ( score_i × weight_i ) × 10        // score 1–10, weight fracción
+
+<span class="k">Confidence profile</span>
+  no altera el Index; marca criterios de baja confianza para discusión
+  y produce un "evaluation confidence" (alta / media / baja).
+
+<span class="k">Salidas automáticas por obra</span>
+  · puntuación global (MANCHA Index = media de los 3 Curatorial Index)
+  · fortalezas        (criterios con mayor puntuación media)
+  · aspectos destacados (notas más citadas / coincidentes)
+  · observaciones importantes (criterios con baja confianza o divergencia)
+  · recomendación final (sugerida; el Founder decide)
+  · nivel de consenso  (ver §12)</pre>
+      <p style="color:var(--tx-soft);font-size:14px">El algoritmo <strong>informa, nunca decide</strong>. Es un instrumento para el juicio humano, no un reemplazo. La nota cruda de cada criterio siempre queda visible junto al índice ponderado.</p>
+    </div></section>
+
+    <!-- 12 -->
+    <section class="doc" id="s12"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">12</span> · Decisión colegiada · The Council Room</p>
+      <h2>Ninguna obra depende de una sola opinión.</h2>
+      <p class="lede">Tres curadores evalúan de forma independiente. Nadie ve las respuestas de los demás. Todo permanece oculto hasta que los tres terminan. Recién entonces el sistema compara y revela.</p>
+      <div class="consensus">
+        <div class="cura"><div class="idx" style="color:var(--green)">82</div><div class="nm">Curador A</div><div class="dec">Recomendar</div></div>
+        <div class="cura"><div class="idx" style="color:var(--green)">78</div><div class="nm">Curador B</div><div class="dec">Recomendar c/ obs.</div></div>
+        <div class="cura"><div class="idx" style="color:var(--yellow-deep,#C68F00)">64</div><div class="nm">Curador C</div><div class="dec">Segunda revisión</div></div>
+      </div>
+      <div class="kv">
+        <div><dt>MANCHA Index</dt><dd><strong>74.7</strong> · media de los tres. Junto a la dispersión (desviación) y al mapa de divergencia por criterio.</dd></div>
+        <div><dt>Nivel de consenso</dt><dd><span class="pill">Alto</span> baja dispersión · <span class="pill">Moderado</span> · <span class="pill red">Divergente</span> abre discusión privada obligatoria.</dd></div>
+        <div><dt>Coincidencias</dt><dd>Criterios donde los tres alinean (fortalezas verificadas del juicio colectivo).</dd></div>
+        <div><dt>Diferencias</dt><dd>Criterios con &gt;3 puntos de brecha → resaltados para la conversación.</dd></div>
+        <div><dt>Discusión privada</dt><dd>Hilo en el Council Room, visible solo para los tres + Founder, cuando hay divergencia relevante. Las evaluaciones originales no se editan.</dd></div>
+        <div><dt>Decisión final</dt><dd>La toma <strong>el Founder</strong>, leyendo los tres juicios, el consenso y la discusión. Registra su nota razonada.</dd></div>
+        <div><dt>Auditoría</dt><dd>Toda la ronda —tiempos, notas, reveal, decisión— queda registrada para auditoría. Inmutable.</dd></div>
+      </div>
+      <div class="callout"><span class="lbl">Anti-colusión</span>Asignación <strong>aleatoria</strong> de obras a curadores, IDs anonimizados, y bloqueo de visibilidad cruzada hasta el cierre. Nadie puede "esperar a ver" lo que opina otro.</div>
+    </div></section>
+
+    <!-- 13 -->
+    <section class="doc" id="s13"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">13</span> · Curator Picks &amp; Journal</p>
+      <h2>La voz curatorial, en público.</h2>
+      <div class="cards c2">
+        <div class="card"><span class="lbl">Curator Picks</span>
+          <p>Selecciones curatoriales públicas que aparecen en el perfil del miembro y enriquecen el sitio.</p>
+          <p><span class="pill">Emerging Voices</span><span class="pill">Abstract Perspectives</span><span class="pill">Contemporary Photography</span><span class="pill">Material Explorations</span><span class="pill">Founder Favorites</span></p>
+          <p style="font-size:13.5px;color:var(--tx-soft)">Solo obras del Índice/temporada; cada Pick lleva un texto curatorial breve. Editorial, no "playlist".</p>
+        </div>
+        <div class="card"><span class="lbl">Journal</span>
+          <p>Cada experto publica con su firma: ensayos, análisis, entrevistas, reflexiones, tendencias, recomendaciones.</p>
+          <p style="font-size:13.5px;color:var(--tx-soft)">Asociado al perfil público; alimenta MANCHA Editorial. Editor sobrio, multilenguaje, con flujo de revisión opcional para Guests.</p>
+        </div>
+      </div>
+    </div></section>
+
+    <!-- 14 -->
+    <section class="doc" id="s14"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">14</span> · Eventos · Recursos · Mensajería</p>
+      <h2>La vida institucional.</h2>
+      <div class="cards c3">
+        <div class="card"><span class="lbl">Eventos</span><p>Calendario · reuniones del consejo · conferencias · exposiciones · invitaciones privadas. RSVP y recordatorios dentro del portal.</p></div>
+        <div class="card"><span class="lbl">Recursos</span><p>Manual Curatorial · Código de Ética · Guías de evaluación · Tutoriales · Brand Guidelines. Versionados, siempre accesibles.</p></div>
+        <div class="card"><span class="lbl">Mensajería interna</span><p>Comunicación privada Founder ↔ Consejo ↔ Curadores, sin depender del correo. Hilos, menciones, adjuntos. Council Room reutiliza este motor.</p></div>
+      </div>
+    </div></section>
+
+    <!-- 15 -->
+    <section class="doc" id="s15"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">15</span> · Reconocimiento institucional</p>
+      <h2>Prestigio por contribución, no por puntos.</h2>
+      <p class="lede">Sin gamificación, sin rankings, sin medallas llamativas. Cada perfil muestra únicamente lo real y verificable: miembro desde, rol institucional, especialidades, idiomas, obras evaluadas, Curator Picks publicados, artículos, proyectos especiales.</p>
+      <h4>Certificado institucional (PDF · LinkedIn · sitio web)</h4>
+      <div class="cert">
+        <div class="seal">M</div>
+        <div class="ct-k">MANCHA · Institution for Artistic Discovery</div>
+        <div class="ct-name">Elena Ruiz-Marqués</div>
+        <div class="ct-role">Founding Curatorial Council · since 2026</div>
+        <div class="ct-foot">Verificable en manchagallery.com/council/[id] · firmado por el Founder</div>
+      </div>
+      <p style="color:var(--tx-soft);font-size:14px">Elegante, descargable en PDF y compartible. Con URL de verificación pública (prueba de autenticidad) y firma del Founder. Es el reconocimiento — no una insignia de juego.</p>
+    </div></section>
+
+    <!-- 16 -->
+    <section class="doc" id="s16"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">16</span> · Modelo de datos &amp; RLS</p>
+      <h2>La ceguera vive en el esquema.</h2>
+      <p class="lede">La separación de la identidad del artista en su propia tabla es lo que hace imposible el sesgo en Fase 1: el cliente del curador nunca la consulta. Supabase + RLS imponen los permisos en la base, no en la UI.</p>
+      <pre class="schema"><span class="k">curators</span>(id, profile_id, role[founder|council|guest], member_since,
+  status, specialties[], languages[], availability, signature_url,
+  ethics_signed_at, agreement_signed_at)
+<span class="k">curator_public</span>(curator_id, photo, bio, trajectory, institutions[],
+  exhibitions[], publications[], links[], website)   -- página pública
+
+<span class="k">works</span>(id, media[], technique, materials, dimensions, year,
+  concept_anon)                       -- lo visible en Fase 1
+<span class="k">work_identity</span>(work_id, artist_id, price, sales_history, …)
+  -- TABLA SEPARADA · RLS bloquea a curadores hasta Fase 2
+
+<span class="k">review_rounds</span>(id, work_id, status[open|review|consensus|
+  discussion|decided], mancha_index, dispersion, consensus_level,
+  founder_decision, founder_note, decided_at)
+<span class="k">review_assignments</span>(round_id, curator_id, status, assigned_at)
+  -- asignación aleatoria · RLS: curador ve solo las suyas
+<span class="k">evaluations</span>(id, round_id, curator_id, scores jsonb
+  {criterion:{score,confidence,notes}}, curatorial_index, reflection,
+  decision, submitted_at, locked bool)            -- inmutable al enviar
+<span class="k">evaluation_reveal</span>(evaluation_id, perception_change
+  [none|slight|significant], justification)        -- Fase 2, separado
+
+<span class="k">curator_picks</span>(id, curator_id, title, description, work_ids[],
+  published_at)
+<span class="k">journal_posts</span>(id, curator_id, type, title, body, lang,
+  published_at)
+<span class="k">events</span> · <span class="k">resources</span> · <span class="k">messages</span>(threads, participants)
+<span class="k">audit_log</span>(id, actor_id, action, entity, payload jsonb, ip, at)
+  -- append-only · toda accion sensible</pre>
+      <h4>Reglas RLS clave</h4>
+      <ul>
+        <li><code>work_identity</code>: <code>select</code> denegado a <code>council/guest</code> mientras su <code>evaluation.locked = false</code> para esa obra.</li>
+        <li><code>evaluations</code>: un curador solo lee/escribe las propias; lectura cruzada solo cuando <code>round.status ≥ consensus</code>.</li>
+        <li><code>review_rounds.founder_decision</code>: <code>update</code> solo por <code>founder</code>.</li>
+        <li>Todo <code>insert/update</code> sensible dispara un trigger que escribe en <code>audit_log</code>.</li>
+      </ul>
+    </div></section>
+
+    <!-- 17 -->
+    <section class="doc" id="s17"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">17</span> · Oportunidades · referencia mundial</p>
+      <h2>Lo que ninguna otra plataforma tiene.</h2>
+      <p class="lede">Más allá de lo pedido — funcionalidades que convierten al portal en estándar de la industria. No gamificación: <strong>integridad medible y curaduría como producto.</strong></p>
+      <div class="cards c2">
+        <div class="card"><span class="lbl">Blind Integrity Index</span><p>Métrica institucional pública: cuánto mueve la información del artista a los juicios (de la Fase 2). Prueba verificable de objetividad. Único en el mercado del arte.</p></div>
+        <div class="card"><span class="lbl">Calibration Sessions</span><p>Periódicamente, los tres evalúan una obra de referencia para calibrar la escala y reducir deriva entre curadores. Sin rankings — pura precisión.</p></div>
+        <div class="card"><span class="lbl">Curatorial Dossier → Procedencia</span><p>El expediente curatorial de una obra seleccionada se ata a su procedencia en The Index / The Canon. El juicio queda en la historia de la obra para siempre.</p></div>
+        <div class="card"><span class="lbl">Conflict-of-Interest &amp; Recusal</span><p>Si un curador reconoce la obra/artista, se recusa con un clic; se audita y reasigna. Integridad por diseño.</p></div>
+        <div class="card"><span class="lbl">Council Reliability (privado)</span><p>Alineación de cada curador con el consenso en el tiempo — solo para asignación interna del Founder, nunca expuesto ni como rank.</p></div>
+        <div class="card"><span class="lbl">Reproducción color-fiel</span><p>Perfil de color y nota de calibración del visor: el curador juzga color real, no el de su pantalla. Detalle de museo.</p></div>
+        <div class="card"><span class="lbl">Annual Curatorial Report</span><p>Memoria anual de la institución (consensos, integridad, descubrimientos) — documento de prestigio para prensa y aliados.</p></div>
+        <div class="card"><span class="lbl">Founder's Final Note</span><p>Cada decisión final lleva la nota razonada del Founder, archivada — la voz que cierra el círculo y educa al consejo.</p></div>
+      </div>
+    </div></section>
+
+    <!-- 18 -->
+    <section class="doc" id="s18"><div class="wrap reveal">
+      <p class="eyebrow"><span class="sec-num">18</span> · Roadmap de implementación</p>
+      <h2>Cómo lo construimos (por fases).</h2>
+      <table>
+        <tr><th>Fase</th><th>Entrega</th><th>Núcleo</th></tr>
+        <tr><td><strong>F1 · Cimientos</strong></td><td>Roles + RBAC/RLS + esquema + <code>/council</code> con login y Dashboard</td><td>Seguridad y acceso reales; la base sobre la que todo se apoya.</td></tr>
+        <tr><td><strong>F2 · El corazón</strong></td><td>Blind Review (visor + 10 criterios + confianza) + Reflexión + Decisión + sellado inmutable</td><td>La evaluación a ciegas funcionando de punta a punta para un curador.</td></tr>
+        <tr><td><strong>F3 · Colegio</strong></td><td>Asignación aleatoria de 3 · Fase 2 reveal · algoritmo de índice y consenso · Council Room · decisión del Founder · auditoría</td><td>La decisión colegiada completa.</td></tr>
+        <tr><td><strong>F4 · Institución</strong></td><td>Perfil público/privado · Certificado · Curator Picks · Journal · Eventos · Recursos · Mensajería</td><td>La vida institucional y la cara pública del consejo.</td></tr>
+        <tr><td><strong>F5 · Referencia</strong></td><td>Blind Integrity Index · Calibration · dossier↔procedencia · reportes</td><td>Lo que lo vuelve estándar mundial.</td></tr>
+      </table>
+      <div class="callout"><span class="lbl">Recomendación</span>Empezar por <strong>F1 + F2</strong>: con seguridad real y una evaluación a ciegas impecable ya hay un producto que se siente institucional. F3 desbloquea el valor diferencial (colegio + integridad medible). Puedo construir cada fase con build verde y push, como venimos trabajando.</div>
+    </div></section>
+
+    <footer class="f"><div class="wrap">
+      <div class="brand">MANCHA<span class="dot" style="color:var(--red)">.</span></div>
+      Curatorial Portal · Design &amp; Architecture · v1.0<br>La obra habla primero. El artista, después.
+    </div></footer>
+  </main>
+</div>
+
+<script>
+  (function(){var r=document.documentElement,b=document.getElementById('themeBtn');var s=localStorage.getItem('mancha-cp-theme');if(s)r.setAttribute('data-theme',s);b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';r.setAttribute('data-theme',n);localStorage.setItem('mancha-cp-theme',n);});})();
+  (function(){var l=[].slice.call(document.querySelectorAll('#nav a')),m={};l.forEach(function(a){m[a.getAttribute('href').slice(1)]=a;});
+    var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){l.forEach(function(x){x.classList.remove('active');});var a=m[e.target.id];if(a)a.classList.add('active');}});},{rootMargin:'-25% 0px -68% 0px'});
+    document.querySelectorAll('section.doc,header.hero').forEach(function(s){if(s.id)o.observe(s);});
+    l.forEach(function(a){a.addEventListener('click',function(){document.querySelector('.side').classList.remove('open');});});})();
+  (function(){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');o.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});document.querySelectorAll('.reveal').forEach(function(el){o.observe(el);});})();
+</script>
+</body>
+</html>
