@@ -179,60 +179,83 @@ export async function recordDecision(formData) {
   redirect('/curaduria/colegio?decided=1');
 }
 
-// ── Consejo — el Founder invita o descarta candidatos ──
-export async function inviteCandidate(formData) {
+// ── Consejo · pipeline del Founder ───────────────────────────────
+const PIPELINE_STAGES = ['new', 'reviewing', 'interview', 'on_hold', 'rejected'];
+
+// Mueve un candidato por el pipeline (sin aprobar — eso es approveCandidate).
+export async function setCandidateStage(formData) {
+  const { user } = await requireFounder();
+  const candidateId = String(formData.get('candidateId') || '');
+  const status = String(formData.get('status') || '');
+  if (!PIPELINE_STAGES.includes(status)) redirect('/curaduria/candidatos?error=1');
+  const admin = createAdminClient();
+  await admin.from('cur_candidates').update({ status, reviewed_at: new Date().toISOString() }).eq('id', candidateId);
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'candidate_stage', entity: 'cur_candidate', entity_id: candidateId, meta: { status },
+  });
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos');
+}
+
+// Nota privada del Founder sobre un candidato.
+export async function addCandidateNote(formData) {
+  const { user } = await requireFounder();
+  const candidateId = String(formData.get('candidateId') || '');
+  const body = String(formData.get('body') || '').trim().slice(0, 4000);
+  if (!candidateId || !body) redirect('/curaduria/candidatos');
+  const admin = createAdminClient();
+  await admin.from('cur_candidate_notes').insert({ candidate_id: candidateId, author: user.id, body });
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos');
+}
+
+// Aprobar = alta del curador (onboarding por invitación). Dispara la
+// automatización: crea cur_curators con su email (claim al primer login),
+// vincula candidato, marca 'approved' y envía la bienvenida.
+export async function approveCandidate(formData) {
   const { user } = await requireFounder();
   const candidateId = String(formData.get('candidateId') || '');
   const admin = createAdminClient();
 
   const { data: cand } = await admin
-    .from('cur_candidates').select('id, name, email, status').eq('id', candidateId).maybeSingle();
+    .from('cur_candidates')
+    .select('id, name, email, current_title, specialties, status')
+    .eq('id', candidateId).maybeSingle();
   if (!cand) redirect('/curaduria/candidatos?error=1');
 
-  // Crea la fila del curador con su email (user_id se vincula al primer login).
   const { error: insErr } = await admin.from('cur_curators').insert({
     user_id: null,
     email: cand.email,
     display_name: cand.name,
     role: 'council',
     active: true,
+    candidate_id: cand.id,
+    title: cand.current_title || null,
+    specialties: cand.specialties || [],
   });
-  // Si ya existía (email único), seguimos igual marcando invitado.
-  await admin.from('cur_candidates').update({ status: 'invited' }).eq('id', candidateId);
+  await admin.from('cur_candidates')
+    .update({ status: 'approved', reviewed_at: new Date().toISOString() })
+    .eq('id', candidateId);
   await admin.from('cur_audit').insert({
-    actor: user.id, action: 'curator_invited', entity: 'cur_candidate', entity_id: candidateId,
+    actor: user.id, action: 'candidate_approved', entity: 'cur_candidate', entity_id: candidateId,
     meta: { email: cand.email, duplicate: !!insErr },
   });
 
-  // Aviso al invitado (mejor esfuerzo; no bloquea si falla el correo).
+  // Correo de bienvenida (mejor esfuerzo).
   try {
     const { sendEmail } = await import('@/lib/email');
     const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
     await sendEmail({
       to: cand.email,
-      subject: 'MANCHA · Invitación al Consejo Curatorial',
+      subject: 'MANCHA · Bienvenido al Consejo Curatorial Fundador',
       html: `<p>Hola ${cand.name},</p>
-        <p>Te invitamos a integrar el <strong>Consejo Curatorial Fundador de MANCHA</strong>.</p>
-        <p>Entra con este mismo correo (${cand.email}) en <a href="${site}/curaduria">${site}/curaduria</a>.
-        Si aún no tienes cuenta, créala con este correo: tu acceso al portal se activa automáticamente.</p>
+        <p>Es un honor invitarte a integrar el <strong>Consejo Curatorial Fundador de MANCHA</strong>.</p>
+        <p>Entra con este mismo correo (${cand.email}) en <a href="${site}/curaduria">${site}/curaduria</a> para
+        comenzar tu incorporación. Si aún no tienes cuenta, créala con este correo: tu acceso se activa automáticamente.</p>
         <p>La obra habla primero.</p><p>— MANCHA</p>`,
     });
   } catch {}
 
   revalidatePath('/curaduria/candidatos');
-  redirect('/curaduria/candidatos?invited=1');
-}
-
-export async function setCandidateStatus(formData) {
-  const { user } = await requireFounder();
-  const candidateId = String(formData.get('candidateId') || '');
-  const status = String(formData.get('status') || '');
-  if (!['new', 'declined', 'archived'].includes(status)) redirect('/curaduria/candidatos?error=1');
-  const admin = createAdminClient();
-  await admin.from('cur_candidates').update({ status }).eq('id', candidateId);
-  await admin.from('cur_audit').insert({
-    actor: user.id, action: 'candidate_status', entity: 'cur_candidate', entity_id: candidateId, meta: { status },
-  });
-  revalidatePath('/curaduria/candidatos');
-  redirect('/curaduria/candidatos');
+  redirect('/curaduria/candidatos?approved=1');
 }

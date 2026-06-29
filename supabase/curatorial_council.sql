@@ -38,3 +38,38 @@ create policy cur_cand_founder on public.cur_candidates for select to authentica
 drop policy if exists cur_cand_founder_upd on public.cur_candidates;
 create policy cur_cand_founder_upd on public.cur_candidates for update to authenticated
   using (public.cur_is_founder()) with check (public.cur_is_founder());
+
+-- ════════════════════════════════════════════════════════════════
+-- v2 · Pipeline de aplicación por pasos + perfil/onboarding del curador
+-- ════════════════════════════════════════════════════════════════
+alter table public.cur_candidates drop constraint if exists cur_candidates_status_check;
+alter table public.cur_candidates add constraint cur_candidates_status_check
+  check (status in ('new','reviewing','interview','approved','rejected','on_hold','invited','declined','archived'));
+alter table public.cur_candidates add column if not exists country text;
+alter table public.cur_candidates add column if not exists current_title text;
+alter table public.cur_candidates add column if not exists organization text;
+alter table public.cur_candidates add column if not exists years_experience int;
+alter table public.cur_candidates add column if not exists specialties jsonb not null default '[]'::jsonb;
+alter table public.cur_candidates add column if not exists links text;
+alter table public.cur_candidates add column if not exists availability text;
+alter table public.cur_candidates add column if not exists reviewed_at timestamptz;
+
+create table if not exists public.cur_candidate_notes (
+  id uuid primary key default gen_random_uuid(),
+  candidate_id uuid not null references public.cur_candidates(id) on delete cascade,
+  author uuid, body text not null, created_at timestamptz not null default now()
+);
+alter table public.cur_candidate_notes enable row level security;
+drop policy if exists cur_cand_notes_founder on public.cur_candidate_notes;
+create policy cur_cand_notes_founder on public.cur_candidate_notes for all to authenticated
+  using (public.cur_is_founder()) with check (public.cur_is_founder());
+create index if not exists cur_cand_notes_idx on public.cur_candidate_notes(candidate_id);
+
+alter table public.cur_curators add column if not exists title text;
+alter table public.cur_curators add column if not exists bio text;
+alter table public.cur_curators add column if not exists specialties jsonb not null default '[]'::jsonb;
+alter table public.cur_curators add column if not exists availability text;
+alter table public.cur_curators add column if not exists onboarding_completed_at timestamptz;
+alter table public.cur_curators add column if not exists ethics_accepted_at timestamptz;
+alter table public.cur_curators add column if not exists agreement_accepted_at timestamptz;
+alter table public.cur_curators add column if not exists candidate_id uuid references public.cur_candidates(id) on delete set null;

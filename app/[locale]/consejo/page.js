@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import CursorTrail from '@/components/CursorTrail';
 import LocaleSwitch from '@/components/LocaleSwitch';
-import CouncilForm from '@/components/CouncilForm';
+import CouncilApplication from '@/components/CouncilApplication';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -53,6 +53,20 @@ export default async function ConsejoPage({ searchParams }) {
         <p>{t('beat3c')}</p>
       </section>
 
+      {/* Credibilidad / proceso */}
+      <section className="consejo-proof">
+        <p className="consejo-kicker">{t('proofKicker')}</p>
+        <div className="consejo-proof-grid">
+          {[1, 2, 3].map((n) => (
+            <div className="consejo-proof-card" key={n}>
+              <span className="consejo-proof-n">0{n}</span>
+              <h3>{t(`proof${n}Title`)}</h3>
+              <p>{t(`proof${n}Body`)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="consejo-apply" id="postular">
         <p className="consejo-kicker">{t('formKicker')}</p>
         <h2 className="consejo-title">{t('formTitle')}</h2>
@@ -61,7 +75,7 @@ export default async function ConsejoPage({ searchParams }) {
         {sent ? (
           <div className="consejo-success">{t('success')}</div>
         ) : (
-          <CouncilForm />
+          <CouncilApplication />
         )}
 
         <Link href="/sobre-mancha" className="elegidos-back">{t('back')}</Link>
