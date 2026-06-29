@@ -51,12 +51,16 @@ export default async function CuraduriaPage({ searchParams }) {
             <div className="cur-stat"><b>{reveal.length}</b><span>Falta Fase 2</span></div>
             <div className="cur-stat"><b>{done.length}</b><span>Completadas</span></div>
           </div>
-          {curator.role === 'founder' && (
-            <div className="cur-founder-links">
-              <Link href="/curaduria/colegio" className="cur-room-link">Sala del colegio · decisión colegiada →</Link>
-              <Link href="/curaduria/candidatos" className="cur-room-link">Candidatos al consejo →</Link>
-            </div>
-          )}
+          <div className="cur-founder-links">
+            <Link href="/curaduria/perfil" className="cur-room-link">Mi perfil · certificado →</Link>
+            {curator.role === 'founder' && (
+              <>
+                <Link href="/curaduria/colegio" className="cur-room-link">Sala del colegio →</Link>
+                <Link href="/curaduria/candidatos" className="cur-room-link">Candidatos al consejo →</Link>
+                <Link href="/curaduria/integridad" className="cur-room-link">Blind Integrity Index →</Link>
+              </>
+            )}
+          </div>
         </div>
       </header>
 

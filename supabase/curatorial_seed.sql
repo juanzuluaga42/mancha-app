@@ -94,3 +94,18 @@ select a.id, b.scores, b.reflection, b.decision, b.idx
 from built b
 join public.cur_assignments a on a.work_id = b.work_id and a.curator_id = b.curator_id
 on conflict (assignment_id) do nothing;
+
+-- ── F2 seed · mediciones de sesgo del consejo (para el Blind Integrity Index) ──
+with rev(work_id, curator_id, bias, justification) as (values
+  ('22222222-0000-0000-0000-000000000001'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,'none', null),
+  ('22222222-0000-0000-0000-000000000001'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,'none', null),
+  ('22222222-0000-0000-0000-000000000002'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,'slight','La trayectoria contextualiza la obra, pero la nota se sostiene: el ajuste es marginal.'),
+  ('22222222-0000-0000-0000-000000000002'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,'significant','Saber que es un nombre consagrado tensiona mi lectura inicial; reconozco que me predispone, aunque la obra no cambió.'),
+  ('22222222-0000-0000-0000-000000000003'::uuid,'33333333-0000-0000-0000-0000000000b0'::uuid,'none', null),
+  ('22222222-0000-0000-0000-000000000003'::uuid,'33333333-0000-0000-0000-0000000000c0'::uuid,'slight','El contexto de la serie suma; matiza, no altera, mi valoración.')
+)
+insert into public.cur_reveal (assignment_id, bias, justification)
+select a.id, r.bias, r.justification
+from rev r
+join public.cur_assignments a on a.work_id = r.work_id and a.curator_id = r.curator_id
+on conflict (assignment_id) do nothing;
