@@ -208,6 +208,18 @@ next.config.mjs ← plugin next-intl + securityHeaders + images.remotePatterns
 - **Storage buckets** (públicos): `pieces`, `applications`. Sin policy de listado (solo acceso por URL).
 - Admin = `mancha.gallery@gmail.com` (en código y RLS).
 
+### Tablas del Curatorial Portal (prefijo `cur_`, capa aditiva — ver §14)
+- **cur_curators** (user_id→auth.users *nullable*, email, display_name, role `founder|council|guest`, active). `user_id` nulo = invitado sin cuenta aún. Índice único en `lower(email)`.
+- **cur_rounds** (name, season_id, status `open|closed`). Cerrar revela evaluaciones entre curadores.
+- **cur_works** (round_id, piece_id?, code, title, year, technique, dimensions, materials, statement, image_url, color_note) — cara **ciega** de la obra.
+- **cur_work_identity** (work_id PK, artist_name, artist_bio, artist_location, instagram, prestige_notes, price_usd) — **tabla separada**; RLS solo deja leerla cuando la asignación del curador superó Fase 1.
+- **cur_assignments** (round_id, work_id, curator_id, phase `phase1|phase2|done`, unique(work_id,curator_id)).
+- **cur_evaluations** (assignment_id unique, scores jsonb, reflection, decision, curatorial_index) — **inmutable** (trigger bloquea UPDATE/DELETE).
+- **cur_reveal** (assignment_id unique, bias `none|slight|significant`, justification) — medición de sesgo Fase 2.
+- **cur_decisions** (work_id PK, outcome `selected|not_selected|second_round|hold`, note, decided_by) — decisión final del Founder.
+- **cur_candidates** (name, email, focus, portfolio, statement, status `new|invited|declined|archived`) — expresiones de interés desde `/consejo`.
+- **cur_audit** (append-only). Helpers `cur_my_curator_id()` / `cur_is_founder()` (SECURITY DEFINER, EXECUTE solo `authenticated`).
+
 ---
 
 # 10. Pendientes mayores
@@ -273,3 +285,60 @@ git add -A && git commit -m "..." && git push origin main   # deploy auto en Ver
 9. **Herramientas MCP**: GitHub (`juanzuluaga42/mancha-app`), Vercel (team `manchagallery`, project `prj_V8cppDD5ccFjSOYDsC4RkipzGrvV`), Supabase (`ycvvpttgmrsukaognwfr`). Env vars, toggles de auth, Google consent y Custom Domain SOLO los hace el usuario en dashboards.
 10. **Frente 2 (zona horaria) primero** cuando el usuario lo pida. Calendario vigente: convocatoria 1–31 ago 2026, Temporada 01 abre 1 sep 2026.
 11. **Ejecuta, confirma poco**: el usuario prefiere avances por tandas con build verde y push, e ir diciendo "sigue".
+
+---
+
+# 14. Curatorial Portal (`/curaduria` + `/consejo`)  ⭐ NUEVO
+
+Software interno del **Founding Curatorial Council**. Filosofía: **"la obra habla
+primero, el artista después"** — revisión a ciegas para minimizar el sesgo. **Interno,
+en español** (como el admin; NO se internacionaliza). Excepción: la landing pública
+`/consejo` SÍ es bilingüe (ES/EN). Diseño claro/premium, clases CSS `cur-*` al final de
+`globals.css`. Spec de diseño completa: **`MANCHA-curatorial-portal.html`** (en la raíz).
+
+### Modelo de acceso (clave) — sin rol nuevo
+El acceso se autoriza por **pertenencia a `cur_curators`**, **independiente de
+`profiles.role`**. NO se agregó un tipo de cuenta "experto". Curadores **por invitación**:
+1. Candidato se presenta en `/consejo` → fila en `cur_candidates`.
+2. Founder lo invita desde `/curaduria/candidatos` → crea `cur_curators` con su **email** y `user_id` nulo.
+3. Primer login (email+contraseña o Google): **`lib/curatorAccess.js` → `resolveCurator()`** vincula (claim) la cuenta a la invitación por coincidencia de email (usa service role para encontrar/vincular la fila pendiente).
+Todos los guards del portal pasan por `resolveCurator(supabase, user)`.
+
+### Rutas
+| Ruta | Quién | Qué |
+|---|---|---|
+| `/consejo` | público (ES/EN) | Landing de reclutamiento estilo `/elegidos` + form (namespace `council`). Action `applyToCouncil` en `app/[locale]/consejo/actions.js`. |
+| `/curaduria` | curador | Dashboard: asignaciones por fase. Links de Founder (perfil, colegio, candidatos, integridad). |
+| `/curaduria/revisar/[id]` | curador | **F1** visor ciego (`BlindViewer`) + 10 criterios (`CuratorialForm`) + reflexión + decisión → sella. **F2** reveal de identidad + medición de sesgo (`RevealForm`). |
+| `/curaduria/colegio` | Founder | **F3** Sala del colegio: 3 miradas por obra, MANCHA Index (media), consenso, fortalezas/vigilar; cerrar ronda + decisión final. |
+| `/curaduria/candidatos` | Founder | Revisar candidaturas: invitar (crea curador + email) o descartar. |
+| `/curaduria/perfil` | curador | Contribución real (sin gamificación) + descarga de certificado. |
+| `/curaduria/certificado` | curador | Certificado de nombramiento PNG (`next/og`, descargable). |
+| `/curaduria/integridad` | Founder | **Blind Integrity Index**: agrega `cur_reveal` (% de juicios no movidos al revelar al artista). |
+
+### Archivos núcleo
+- **`lib/curatorial.js`** — `CRITERIA` (10 con pesos, suma 1.00), `computeCuratorialIndex` (`Σ score·peso ·10`, 0–100), `manchaIndex` (media de curadores), `consensusLevel`, `aggregateCriteria`, `suggestedOutcome`, `DECISIONS`/`BIAS_OPTIONS`/`OUTCOMES` + labels.
+- **`lib/curatorAccess.js`** — `resolveCurator` (claim por email).
+- **`app/[locale]/curaduria/actions.js`** — `submitEvaluation` (F1), `submitReveal` (F2), `setRoundStatus`/`recordDecision` (F3), `inviteCandidate`/`setCandidateStatus`. Escrituras sensibles (avance de fase, bitácora, decisiones) con `createAdminClient`; la lectura de identidad va por el cliente del usuario (ceguera a nivel de datos vía RLS).
+- Componentes: `BlindViewer`, `CuratorialForm`, `RevealForm`, `DecisionForm`, `CouncilForm`.
+
+### Pesos del algoritmo (no cambiar sin querer)
+Originalidad 15 · Permanencia 13 · Fuerza visual 12 · Profundidad conceptual 12 ·
+Lenguaje plástico 10 · Dominio técnico 9 · Composición 9 · Coherencia 8 ·
+Valor para colección 7 · Afinidad con MANCHA 5 = **100%**.
+
+### Seguridad (verificada contra la DB)
+- **Ceguera a nivel de datos**: `cur_work_identity` en tabla aparte; RLS solo permite leer la identidad cuando la asignación del curador tiene `phase <> 'phase1'`. Probado: en Fase 1 un curador ve 0 identidades; en Fase 2 ve solo la de SU obra.
+- **Inmutabilidad**: trigger `cur_block_mutation` bloquea UPDATE/DELETE en `cur_evaluations` (ni service role). Probado.
+- `cur_candidates`: cualquiera inserta (con email válido), solo Founder lee. Probado.
+
+### SQL (en `supabase/`)
+- `curatorial.sql` — F1+F2+F3 (tablas, helpers, trigger, RLS).
+- `curatorial_council.sql` — `cur_candidates` + `cur_curators.email`.
+- `curatorial_seed.sql` — Founder + ronda + 3 obras demo + colegio (2 curadores con evaluaciones) + reveals. Idempotente.
+- Aplicar con `mcp__Supabase__apply_migration` / SQL Editor. **Migraciones ya aplicadas a producción.**
+
+### Estado y pendientes del portal
+- **Hecho y en producción**: reclutamiento, aceptación por invitación, F1 (blind review), F2 (algoritmo + reveal/sesgo), F3 (decisión colegiada), reconocimiento/certificado, Blind Integrity Index.
+- **Datos de arranque**: 1 Founder (admin) + 2 curadores demo del consejo + 3 obras + 1 ronda abierta.
+- **Pendiente (aditivo, spec)**: asignación aleatoria de curadores reales a obras nuevas (hoy entran por seed), Journal, Eventos, Recursos, Mensajería interna, Calibration Sessions. Multilingüe del portal interno: deliberadamente NO (solo `/consejo`).
