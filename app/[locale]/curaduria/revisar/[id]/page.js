@@ -29,6 +29,7 @@ export default async function RevisarPage({ params, searchParams }) {
   if (!user) redirect('/login');
   const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
+  if (curator.role !== 'founder' && !curator.onboarding_completed_at) redirect('/curaduria/bienvenida');
 
   const { data: assignment } = await supabase
     .from('cur_assignments')

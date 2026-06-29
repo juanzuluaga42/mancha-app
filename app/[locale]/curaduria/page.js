@@ -21,6 +21,8 @@ export default async function CuraduriaPage({ searchParams }) {
 
   const curator = await resolveCurator(supabase, user);
   if (!curator) redirect('/');
+  // Incorporación obligatoria para curadores nuevos (el Founder no la hace).
+  if (curator.role !== 'founder' && !curator.onboarding_completed_at) redirect('/curaduria/bienvenida');
 
   // Asignaciones del curador con la obra (cara ciega) y, si existe, su evaluación.
   const { data: assignments } = await supabase
@@ -66,6 +68,7 @@ export default async function CuraduriaPage({ searchParams }) {
 
       <div className="cur-body">
         <div className="wrap" style={{ maxWidth: 960 }}>
+          {sp?.welcome && <div className="cur-flash">Bienvenido al consejo. Tu incorporación está completa.</div>}
           {sp?.done && <div className="cur-flash">Evaluación completada. Gracias por tu juicio.</div>}
           {sp?.error === 'asignacion' && <div className="cur-flash is-err">No encontramos esa asignación.</div>}
 

@@ -3850,3 +3850,46 @@ input, textarea, select {
 .cur-public-toggle{background:none; border:1px solid rgba(22,17,13,.2); color:var(--ink-soft); padding:6px 13px; border-radius:100px; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; transition:all .15s ease; flex-shrink:0;}
 .cur-public-toggle:hover{border-color:var(--ink); color:var(--ink);}
 .cur-public-toggle.on{background:rgba(52,140,80,.12); border-color:#2f7d49; color:#2f7d49;}
+
+/* ── Curatorial Portal · Onboarding (Tanda 2) ── */
+.onb-page{background:var(--paper); min-height:100vh; padding:48px 0 100px;}
+.onb-progress{margin-bottom:34px;}
+.onb-progress-track{height:3px; background:rgba(22,17,13,.12); border-radius:100px; overflow:hidden;}
+.onb-progress-track i{display:block; height:100%; background:var(--ink); transition:width .4s cubic-bezier(.4,0,.2,1);}
+.onb-progress span{display:block; margin-top:10px; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft);}
+.onb-step{display:none;}
+.onb-step.is-active{display:block; animation:onb-fade .45s cubic-bezier(.2,.7,.2,1);}
+@keyframes onb-fade{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+.onb-kicker{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--lilac-deep);}
+.onb-title{font-family:var(--font-display); font-weight:800; font-size:clamp(1.6rem,3.4vw,2.3rem); letter-spacing:-0.01em; margin:8px 0 18px;}
+.onb-body{font-family:var(--font-body); font-size:1.05rem; line-height:1.65; color:var(--ink-soft); max-width:60ch;}
+.onb-founder{border-left:3px solid var(--lilac); padding:6px 0 6px 18px; margin:0 0 22px;}
+.onb-founder-label{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-soft);}
+.onb-founder blockquote{font-family:var(--font-body); font-style:italic; font-size:1.18rem; line-height:1.6; color:var(--ink); margin:8px 0 0;}
+.onb-list{list-style:none; padding:0; margin:20px 0; display:flex; flex-direction:column; gap:12px;}
+.onb-list li{font-family:var(--font-body); font-size:1rem; line-height:1.55; padding-left:24px; position:relative; color:var(--ink);}
+.onb-list li::before{content:'—'; position:absolute; left:0; color:var(--red);}
+.onb-check{display:flex; align-items:flex-start; gap:11px; margin-top:24px; padding:14px 16px; border:1px solid rgba(22,17,13,.18); border-radius:2px; cursor:pointer; background:#fff;}
+.onb-check input{margin-top:3px; width:18px; height:18px; accent-color:var(--ink); flex-shrink:0;}
+.onb-check span{font-family:var(--font-body); font-size:.98rem; line-height:1.5;}
+.onb-field{display:flex; flex-direction:column; gap:8px; margin-top:18px;}
+.onb-field label{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);}
+.onb-field input,.onb-field textarea{border:1px solid rgba(22,17,13,.18); border-radius:2px; padding:12px 14px; font-family:var(--font-body); font-size:1rem; background:#fff; resize:vertical;}
+.onb-field input:focus,.onb-field textarea:focus{outline:none; border-color:var(--ink);}
+.onb-sublabel{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin:18px 0 12px;}
+.onb-sublabel i{font-style:normal; opacity:.7;}
+.onb-specs{display:flex; flex-wrap:wrap; gap:9px;}
+.onb-spec{background:#fff; border:1px solid rgba(22,17,13,.2); color:var(--ink); padding:9px 15px; border-radius:100px; font-family:var(--font-mono); font-size:11.5px; cursor:pointer; transition:all .15s ease;}
+.onb-spec:hover{border-color:var(--ink);}
+.onb-spec.on{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+.onb-tut{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px;}
+@media(max-width:560px){ .onb-tut{grid-template-columns:1fr;} }
+.onb-tut-card{border:1px solid rgba(22,17,13,.12); border-radius:2px; padding:18px; background:#fff;}
+.onb-tut-n{font-family:var(--font-mono); font-size:11px; color:var(--lilac-deep);}
+.onb-tut-card h3{font-family:var(--font-display); font-size:1.05rem; margin:8px 0 6px;}
+.onb-tut-card p{font-family:var(--font-body); font-size:.92rem; line-height:1.5; color:var(--ink-soft);}
+.onb-nav{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:36px; padding-top:22px; border-top:1px solid rgba(22,17,13,.12);}
+.onb-back{background:none; border:none; color:var(--ink-soft); font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer;}
+.onb-back:hover{color:var(--ink);}
+.onb-next{margin-left:auto; background:var(--ink); color:var(--paper); border:none; padding:14px 28px; border-radius:100px; font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:.05em; cursor:pointer; transition:opacity .15s ease;}
+.onb-next:disabled{opacity:.35; cursor:not-allowed;}

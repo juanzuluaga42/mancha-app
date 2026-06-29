@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { createAdminClient } from '@/utils/supabase/admin';
 import {
-  CRITERIA_KEYS, DECISIONS, BIAS_OPTIONS, OUTCOMES,
+  CRITERIA_KEYS, DECISIONS, BIAS_OPTIONS, OUTCOMES, SPECIALTY_KEYS,
   computeCuratorialIndex, validateScores, confidenceProfile,
 } from '@/lib/curatorial';
 import { resolveCurator } from '@/lib/curatorAccess';
@@ -283,4 +283,39 @@ export async function toggleCuratorPublic(formData) {
   });
   revalidatePath('/curaduria/candidatos');
   redirect('/curaduria/candidatos');
+}
+
+// ── Onboarding del curador (Tanda 2) ─────────────────────────────
+export async function completeOnboarding(formData) {
+  const { user, curator } = await requireCurator();
+  const ethics = String(formData.get('ethics') || '') === 'on' || String(formData.get('ethics') || '') === 'true';
+  const agreement = String(formData.get('agreement') || '') === 'on' || String(formData.get('agreement') || '') === 'true';
+  if (!ethics || !agreement) redirect('/curaduria/bienvenida?error=acuerdos');
+
+  const title = String(formData.get('title') || '').trim().slice(0, 200);
+  const bio = String(formData.get('bio') || '').trim().slice(0, 2000);
+  const availability = String(formData.get('availability') || '').trim().slice(0, 300);
+  let specialties = [];
+  try {
+    const parsed = JSON.parse(String(formData.get('specialties') || '[]'));
+    if (Array.isArray(parsed)) specialties = parsed.filter((k) => SPECIALTY_KEYS.includes(k)).slice(0, 12);
+  } catch {}
+
+  const now = new Date().toISOString();
+  const admin = createAdminClient();
+  await admin.from('cur_curators').update({
+    title: title || null,
+    bio: bio || null,
+    availability: availability || null,
+    specialties,
+    ethics_accepted_at: now,
+    agreement_accepted_at: now,
+    onboarding_completed_at: now,
+  }).eq('id', curator.id);
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'onboarding_completed', entity: 'cur_curator', entity_id: curator.id,
+  });
+
+  revalidatePath('/curaduria');
+  redirect('/curaduria?welcome=1');
 }
