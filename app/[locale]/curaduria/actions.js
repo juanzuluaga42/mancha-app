@@ -270,3 +270,17 @@ export async function approveCandidate(formData) {
   revalidatePath('/curaduria/candidatos');
   redirect('/curaduria/candidatos?approved=1');
 }
+
+// ── Consejo — mostrar/ocultar a un curador en la página pública /curadores ──
+export async function toggleCuratorPublic(formData) {
+  const { user } = await requireFounder();
+  const curatorId = String(formData.get('curatorId') || '');
+  const next = String(formData.get('next') || '') === 'true';
+  const admin = createAdminClient();
+  await admin.from('cur_curators').update({ public: next }).eq('id', curatorId).neq('role', 'founder');
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'curator_public', entity: 'cur_curator', entity_id: curatorId, meta: { public: next },
+  });
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos');
+}

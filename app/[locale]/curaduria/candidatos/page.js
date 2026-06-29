@@ -5,6 +5,7 @@ import { createAdminClient } from '@/utils/supabase/admin';
 import Nav from '@/components/Nav';
 import CandidatesBoard from '@/components/CandidatesBoard';
 import { resolveCurator } from '@/lib/curatorAccess';
+import { toggleCuratorPublic } from '../actions';
 
 export const metadata = { title: 'MANCHA — Candidatos al consejo' };
 
@@ -21,7 +22,7 @@ export default async function CandidatosPage({ searchParams }) {
   const [{ data: candidates }, { data: notes }, { data: council }] = await Promise.all([
     admin.from('cur_candidates').select('*').order('created_at', { ascending: false }),
     admin.from('cur_candidate_notes').select('*').order('created_at', { ascending: false }),
-    admin.from('cur_curators').select('display_name, email, role, user_id, active').order('created_at', { ascending: true }),
+    admin.from('cur_curators').select('id, display_name, email, role, user_id, active, public').order('created_at', { ascending: true }),
   ]);
 
   // Adjunta notas a cada candidato.
@@ -52,13 +53,27 @@ export default async function CandidatosPage({ searchParams }) {
           {/* Consejo actual */}
           <section className="cur-section">
             <div className="cur-section-head"><h2>Consejo actual</h2><span className="cur-count">{(council ?? []).length}</span></div>
-            <div className="cur-cand-council">
-              {(council ?? []).map((c, i) => (
-                <span key={i} className="cur-council-chip">
-                  {c.display_name}
-                  <i>{c.role === 'founder' ? 'Founder' : c.role === 'guest' ? 'Guest' : 'Consejo'}</i>
-                  {!c.user_id && c.email && <em className="cur-council-pending">invitado · sin entrar</em>}
-                </span>
+            <p className="cur-header-sub" style={{ marginTop: 0, marginBottom: 16, fontSize: '.95rem' }}>
+              Marca “Mostrar en público” para que un curador aparezca en la página <a href="/curadores" target="_blank" rel="noreferrer" style={{ color: 'var(--lilac-deep)' }}>/curadores</a>. Tú (Founder) nunca apareces.
+            </p>
+            <div className="cur-council-rows">
+              {(council ?? []).map((c) => (
+                <div key={c.id} className="cur-council-row">
+                  <span className="cur-council-row-name">
+                    {c.display_name}
+                    <i>{c.role === 'founder' ? 'Founder' : c.role === 'guest' ? 'Guest' : 'Consejo'}</i>
+                    {!c.user_id && c.email && <em className="cur-council-pending">invitado · sin entrar</em>}
+                  </span>
+                  {c.role !== 'founder' && (
+                    <form action={toggleCuratorPublic}>
+                      <input type="hidden" name="curatorId" value={c.id} />
+                      <input type="hidden" name="next" value={(!c.public).toString()} />
+                      <button type="submit" className={`cur-public-toggle${c.public ? ' on' : ''}`}>
+                        {c.public ? '● Público' : '○ Mostrar en público'}
+                      </button>
+                    </form>
+                  )}
+                </div>
               ))}
             </div>
           </section>

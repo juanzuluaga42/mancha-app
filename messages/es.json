@@ -28,7 +28,9 @@
     "beforeWorldTitle": "MANCHA — Antes que el mundo",
     "beforeWorldDesc": "Coleccionar en MANCHA no es comprar un objeto: es llegar primero. El manifiesto para quienes ven antes que el mundo.",
     "councilTitle": "MANCHA — Consejo Curatorial",
-    "councilDesc": "El Consejo Curatorial Fundador de MANCHA. La obra habla primero."
+    "councilDesc": "El Consejo Curatorial Fundador de MANCHA. La obra habla primero.",
+    "curatorsTitle": "MANCHA — El Consejo Curatorial",
+    "curatorsDesc": "Quién selecciona en MANCHA: un consejo curatorial que evalúa cada obra a ciegas. La obra primero."
   },
   "common": {
     "signIn": "Iniciar sesión",
@@ -92,7 +94,8 @@
     "selected": "Los elegidos",
     "catalogue": "Catálogo",
     "manifesto": "Deja una marca",
-    "beforeWorld": "Antes que el mundo"
+    "beforeWorld": "Antes que el mundo",
+    "council": "El Consejo"
   },
   "footer": {
     "tagline": "Institución de descubrimiento artístico. Est. 2026.",
@@ -110,7 +113,8 @@
     "colContact": "Contacto",
     "rights": "© 2026 MANCHA. Institución de descubrimiento artístico.",
     "seasonPre": "Convocatoria 1–31 ago · Temporada 01 abre 1 sep 2026",
-    "seasonActive": "Temporada en curso"
+    "seasonActive": "Temporada en curso",
+    "council": "El Consejo Curatorial"
   },
   "auth": {
     "welcomeBack": "Bienvenido de nuevo",
@@ -756,5 +760,28 @@
       "art_history": "Historia del arte"
     },
     "errorMsg": "No pudimos enviar tu candidatura. Revisa los datos e intenta de nuevo."
+  },
+  "curatorsPage": {
+    "metaTitle": "MANCHA — El Consejo Curatorial",
+    "metaDesc": "Quién selecciona en MANCHA: un consejo curatorial que evalúa cada obra a ciegas. La obra primero.",
+    "kicker": "El estándar",
+    "title1": "Quién mira",
+    "titleEm": "primero",
+    "sub": "Detrás de cada selección de MANCHA hay un consejo curatorial. Evalúa cada obra a ciegas —sin nombre, sin país, sin trayectoria— para que lo único que pese sea la obra.",
+    "p1Title": "Evaluación a ciegas",
+    "p1Body": "Cada obra se juzga sin saber quién la hizo. Primero la obra; después, el artista.",
+    "p2Title": "Juicio colegiado",
+    "p2Body": "Tres miradas independientes construyen cada decisión. Nadie decide solo.",
+    "p3Title": "Registro permanente",
+    "p3Body": "Cada juicio queda en el archivo institucional de MANCHA.",
+    "councilTitle": "El Consejo Curatorial Fundador",
+    "councilSub": "Curadores, críticos e historiadores que prestan su mirada al estándar de MANCHA.",
+    "empty": "El consejo se está formando. Pronto presentaremos a sus miembros.",
+    "founderTitle": "La dirección permanece anónima",
+    "founderBody": "Quien dirige MANCHA elige no figurar. Es coherente con todo lo demás: que hable la obra, no el nombre. Ni siquiera el de quien la presenta.",
+    "ctaExpertsTitle": "¿Eres curador o crítico?",
+    "ctaExpertsBody": "El consejo crece por invitación. Si tu mirada puede sumar, preséntate.",
+    "ctaExpertsBtn": "Postularme al consejo",
+    "ctaPortalBtn": "Acceso al portal"
   }
 }

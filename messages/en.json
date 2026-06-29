@@ -28,7 +28,9 @@
     "beforeWorldTitle": "MANCHA — Before the World",
     "beforeWorldDesc": "Collecting at MANCHA isn't buying an object — it's arriving first. The manifesto for those who see before the world does.",
     "councilTitle": "MANCHA — Curatorial Council",
-    "councilDesc": "MANCHA's Founding Curatorial Council. The work speaks first."
+    "councilDesc": "MANCHA's Founding Curatorial Council. The work speaks first.",
+    "curatorsTitle": "MANCHA — The Curatorial Council",
+    "curatorsDesc": "Who selects at MANCHA: a curatorial council that judges every work blind. The work first."
   },
   "common": {
     "signIn": "Sign in",
@@ -92,7 +94,8 @@
     "selected": "The selected",
     "catalogue": "Catalogue",
     "manifesto": "Leave a mark",
-    "beforeWorld": "Before the World"
+    "beforeWorld": "Before the World",
+    "council": "The Council"
   },
   "footer": {
     "tagline": "Institution for artistic discovery. Est. 2026.",
@@ -110,7 +113,8 @@
     "colContact": "Contact",
     "rights": "© 2026 MANCHA. Institution for artistic discovery.",
     "seasonPre": "Open call Aug 1–31 · Season 01 opens Sep 1, 2026",
-    "seasonActive": "Season in progress"
+    "seasonActive": "Season in progress",
+    "council": "The Curatorial Council"
   },
   "auth": {
     "welcomeBack": "Welcome back",
@@ -756,5 +760,28 @@
       "art_history": "Art history"
     },
     "errorMsg": "We couldn't submit your application. Check your details and try again."
+  },
+  "curatorsPage": {
+    "metaTitle": "MANCHA — The Curatorial Council",
+    "metaDesc": "Who selects at MANCHA: a curatorial council that judges every work blind. The work first.",
+    "kicker": "The standard",
+    "title1": "Who looks",
+    "titleEm": "first",
+    "sub": "Behind every MANCHA selection there’s a curatorial council. It judges each work blind —no name, no country, no résumé— so the only thing that weighs is the work.",
+    "p1Title": "Blind evaluation",
+    "p1Body": "Each work is judged without knowing who made it. The work first; the artist after.",
+    "p2Title": "Collegiate judgment",
+    "p2Body": "Three independent eyes shape every decision. No one decides alone.",
+    "p3Title": "Permanent record",
+    "p3Body": "Every judgment is kept in MANCHA’s institutional archive.",
+    "councilTitle": "The Founding Curatorial Council",
+    "councilSub": "Curators, critics and historians who lend their eye to MANCHA’s standard.",
+    "empty": "The council is being formed. We’ll introduce its members soon.",
+    "founderTitle": "The direction stays anonymous",
+    "founderBody": "Whoever leads MANCHA chooses not to appear. It’s consistent with everything else: let the work speak, not the name — not even the name of who presents it.",
+    "ctaExpertsTitle": "Are you a curator or critic?",
+    "ctaExpertsBody": "The council grows by invitation. If your eye can add something, introduce yourself.",
+    "ctaExpertsBtn": "Apply to the council",
+    "ctaPortalBtn": "Portal access"
   }
 }

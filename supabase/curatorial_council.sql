@@ -73,3 +73,6 @@ alter table public.cur_curators add column if not exists onboarding_completed_at
 alter table public.cur_curators add column if not exists ethics_accepted_at timestamptz;
 alter table public.cur_curators add column if not exists agreement_accepted_at timestamptz;
 alter table public.cur_curators add column if not exists candidate_id uuid references public.cur_candidates(id) on delete set null;
+
+-- Visibilidad pública del curador en /curadores (Founder nunca se muestra).
+alter table public.cur_curators add column if not exists public boolean not null default false;

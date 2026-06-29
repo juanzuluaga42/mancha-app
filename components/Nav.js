@@ -26,6 +26,7 @@ export default async function Nav() {
   const links = prelaunch
     ? [
         { href: '/sobre-mancha', label: t('institution') },
+        { href: '/curadores', label: t('council') },
         ...manifestos,
         { href: '/notas', label: t('notes') },
         { href: '/#compradores', label: `${t('collect')} →` },
@@ -33,6 +34,7 @@ export default async function Nav() {
     : convocatoria
     ? [
         { href: '/sobre-mancha', label: t('institution') },
+        { href: '/curadores', label: t('council') },
         ...manifestos,
         { href: '/notas', label: t('notes') },
         // 'Solicitar acceso' solo para visitantes sin sesión.
@@ -41,6 +43,7 @@ export default async function Nav() {
       ]
     : [
         { href: '/sobre-mancha', label: t('institution') },
+        { href: '/curadores', label: t('council') },
         ...manifestos,
         { href: '/notas', label: t('notes') },
         { href: '/seleccionados', label: t('selected') },
