@@ -118,12 +118,16 @@ $$;
 revoke execute on function public.cur_is_founder() from public;
 grant execute on function public.cur_is_founder() to authenticated;
 
+-- Las helpers solo las necesita 'authenticated' (las RLS corren en su rol); anon no.
+revoke execute on function public.cur_my_curator_id() from anon;
+revoke execute on function public.cur_is_founder() from anon;
+
 -- ════════════════════════════════════════════════════════════════
 -- Inmutabilidad de evaluaciones selladas (bloquea UPDATE/DELETE
 -- incluso para service_role — sello a nivel de datos)
 -- ════════════════════════════════════════════════════════════════
 create or replace function public.cur_block_mutation()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = '' as $$
 begin
   raise exception 'cur_evaluations es inmutable: no se puede modificar ni borrar una evaluación sellada';
 end;
