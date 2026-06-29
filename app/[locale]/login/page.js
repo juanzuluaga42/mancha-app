@@ -1,9 +1,11 @@
 import { getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 import GoogleButton from '@/components/GoogleButton';
+import { createClient } from '@/utils/supabase/server';
 
 import { logIn } from './actions';
 import { safePath } from '@/lib/utils';
@@ -15,6 +17,11 @@ export async function generateMetadata() {
 
 export default async function LoginPage({ searchParams }) {
   const params = await searchParams;
+  // Si ya hay sesión, no mostramos login: directo a la cuenta (o al destino).
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect(safePath(params?.next, '/cuenta'));
+
   const t = await getTranslations('auth');
 
   return (

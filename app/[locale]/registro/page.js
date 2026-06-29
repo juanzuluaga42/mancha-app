@@ -1,10 +1,12 @@
 import { getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import Nav from '@/components/Nav';
 import Splat from '@/components/Splat';
 import Footer from '@/components/Footer';
 import RegistroForm from '@/components/RegistroForm';
 import GoogleButton from '@/components/GoogleButton';
+import { createClient } from '@/utils/supabase/server';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -12,6 +14,11 @@ export async function generateMetadata() {
 }
 
 export default async function RegistroPage({ searchParams }) {
+  // Si ya hay sesión, no tiene sentido "crear cuenta": va a su cuenta.
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect('/cuenta');
+
   const params = await searchParams;
   const defaultRole = params?.role === 'artist' ? 'artist' : 'buyer';
   const t = await getTranslations('auth');

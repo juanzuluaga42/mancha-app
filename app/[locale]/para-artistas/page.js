@@ -28,10 +28,13 @@ export default async function ParaArtistasPage({ searchParams }) {
   const convocatoria = isConvocatoria();
   const temporadaActiva = isTemporadaActiva();
 
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const loggedIn = !!user;
+
   let artistCount = null;
   let season = null;
   if (!prelaunch) {
-    const supabase = await createClient();
     const { count } = await supabase.from('artists').select('id', { count: 'exact', head: true }).eq('status', 'approved');
     artistCount = count;
     if (temporadaActiva) {
@@ -70,20 +73,16 @@ export default async function ParaArtistasPage({ searchParams }) {
             {temporadaActiva && season?.ends_at && <Countdown endsAt={season.ends_at} label={t('seasonClosesIn')} />}
           </div>
           <div className="tsr-ctas">
-            {prelaunch ? (
-              <>
-                <Link href="/registro" className="tsr-cta-primary">{t('ctaNotify')}</Link>
-              </>
-            ) : convocatoria ? (
-              <>
-                <Link href="/postular" className="tsr-cta-primary">{t('ctaApply')}</Link>
-                <Link href="/manifiesto" className="tsr-cta-ghost">{t('ctaCriteria')}</Link>
-              </>
+            {loggedIn ? (
+              <Link href="/cuenta" className="tsr-cta-primary">{t('ctaAccount')}</Link>
+            ) : prelaunch ? (
+              <Link href="/registro" className="tsr-cta-primary">{t('ctaNotify')}</Link>
             ) : (
-              <>
-                <Link href="/postular" className="tsr-cta-primary">{t('ctaApply')}</Link>
-                <Link href="/sobre-mancha" className="tsr-cta-ghost">{t('ctaInstitution')}</Link>
-              </>
+              <Link href="/postular" className="tsr-cta-primary">{t('ctaApply')}</Link>
+            )}
+            {!prelaunch && (convocatoria
+              ? <Link href="/manifiesto" className="tsr-cta-ghost">{t('ctaCriteria')}</Link>
+              : <Link href="/sobre-mancha" className="tsr-cta-ghost">{t('ctaInstitution')}</Link>
             )}
           </div>
         </div>
@@ -168,9 +167,11 @@ export default async function ParaArtistasPage({ searchParams }) {
             ))}
           </div>
           <div className="tsr-steps-cta" data-reveal>
-            {prelaunch
-              ? <Link href="/registro" className="tsr-cta-primary" style={{ display: 'inline-block' }}>{t('stepsCtaNotify')}</Link>
-              : <Link href="/postular" className="tsr-cta-primary" style={{ display: 'inline-block' }}>{t('stepsCtaApply')}</Link>
+            {loggedIn
+              ? <Link href="/cuenta" className="tsr-cta-primary" style={{ display: 'inline-block' }}>{t('ctaAccount')}</Link>
+              : prelaunch
+                ? <Link href="/registro" className="tsr-cta-primary" style={{ display: 'inline-block' }}>{t('stepsCtaNotify')}</Link>
+                : <Link href="/postular" className="tsr-cta-primary" style={{ display: 'inline-block' }}>{t('stepsCtaApply')}</Link>
             }
             <Link href="/sobre-mancha" className="tsr-manifesto-link" style={{ display: 'inline-block', marginTop: 20 }}>{t('ctaInstitution')}</Link>
           </div>
