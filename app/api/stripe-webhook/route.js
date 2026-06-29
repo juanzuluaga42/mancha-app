@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { createAdminClient } from '@/utils/supabase/admin';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail, notifyAdmin } from '@/lib/email';
 import { escapeHtml } from '@/lib/utils';
 
 export async function POST(request) {
@@ -42,15 +42,19 @@ export async function POST(request) {
         .update({ paid_at: new Date().toISOString() })
         .eq('id', pieceId);
 
-      await sendEmail({
-        to: 'mancha.gallery@gmail.com',
-        subject: `💰 Pago confirmado: "${piece?.title ?? pieceId}"`,
-        html: `
-          <div style="font-family: sans-serif;">
-            <p>Stripe confirmó el pago de la pieza "${escapeHtml(piece?.title ?? pieceId)}" por ${escapeHtml(session.customer_details?.email ?? 'un comprador')}.</p>
-            <p>Monto: $${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')}</p>
-          </div>
-        `,
+      await notifyAdmin({
+        subject: `Pago confirmado: "${piece?.title ?? pieceId}"`,
+        html: brandedEmail({
+          heading: 'Pago confirmado',
+          lead: 'Una obra encontró a su coleccionista.',
+          paragraphs: [
+            `Stripe confirmó el pago de <b>“${escapeHtml(piece?.title ?? pieceId)}”</b>.`,
+            `<b>Comprador:</b> ${escapeHtml(session.customer_details?.email ?? 'sin correo')}`,
+            `<b>Monto:</b> $${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')} USD`,
+            `Queda coordinar el envío de la pieza.`,
+          ],
+          note: 'Aviso automático del sistema de MANCHA.',
+        }),
       });
 
       const buyerEmail = session.customer_details?.email;
@@ -58,15 +62,17 @@ export async function POST(request) {
         await sendEmail({
           to: buyerEmail,
           subject: `Tu pago por "${piece?.title ?? pieceId}" fue confirmado — MANCHA`,
-          html: `
-            <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-              <h2 style="margin-bottom: 4px;">¡Gracias, ya es tuya!</h2>
-              <p>Confirmamos tu pago de $${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')} por <strong>"${escapeHtml(piece?.title ?? pieceId)}"</strong>.</p>
-              <p style="margin: 20px 0;"><a href="${baseUrl}/obras/${pieceId}/certificado" style="background:#16110D;color:#FAF3E6;padding:12px 22px;text-decoration:none;font-size:14px;">Ver tu certificado de colección →</a></p>
-              <p>Te escribimos por separado en las próximas horas para coordinar el envío.</p>
-              <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-            </div>
-          `,
+          html: brandedEmail({
+            heading: 'Ya es tuya',
+            lead: 'Gracias por coleccionar antes que el mundo.',
+            paragraphs: [
+              `Confirmamos tu pago de <b>$${((session.amount_total ?? 0) / 100).toLocaleString('es-AR')} USD</b> por <b>“${escapeHtml(piece?.title ?? pieceId)}”</b>.`,
+              `Esta obra es única y ahora forma parte de tu colección. Generamos un <b>certificado de colección</b> a tu nombre que acredita que la descubriste aquí.`,
+              `En las próximas horas te escribimos para coordinar el envío con embalaje de obra de arte.`,
+            ],
+            cta: { label: 'Ver mi certificado', href: `${baseUrl}/obras/${pieceId}/certificado` },
+            signoff: 'El equipo de MANCHA',
+          }),
         });
       }
     }

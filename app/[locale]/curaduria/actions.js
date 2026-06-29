@@ -241,18 +241,29 @@ export async function approveCandidate(formData) {
     meta: { email: cand.email, duplicate: !!insErr },
   });
 
-  // Correo de bienvenida (mejor esfuerzo).
+  // Correo de bienvenida (mejor esfuerzo). Bilingüe: el consejo es internacional.
   try {
-    const { sendEmail } = await import('@/lib/email');
+    const { sendEmail, brandedEmail } = await import('@/lib/email');
+    const { escapeHtml } = await import('@/lib/utils');
     const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
+    const safeName = escapeHtml(cand.name || '');
+    const safeMail = escapeHtml(cand.email || '');
     await sendEmail({
       to: cand.email,
       subject: 'MANCHA · Bienvenido al Consejo Curatorial Fundador',
-      html: `<p>Hola ${cand.name},</p>
-        <p>Es un honor invitarte a integrar el <strong>Consejo Curatorial Fundador de MANCHA</strong>.</p>
-        <p>Entra con este mismo correo (${cand.email}) en <a href="${site}/curaduria">${site}/curaduria</a> para
-        comenzar tu incorporación. Si aún no tienes cuenta, créala con este correo: tu acceso se activa automáticamente.</p>
-        <p>La obra habla primero.</p><p>— MANCHA</p>`,
+      html: brandedEmail({
+        heading: 'Bienvenido al Consejo',
+        lead: `Es un honor, ${safeName}.`,
+        paragraphs: [
+          `Te invitamos a integrar el <b>Consejo Curatorial Fundador de MANCHA</b>: el grupo que evalúa la obra a ciegas y construye, con cada juicio, el estándar de la galería.`,
+          `Tu incorporación comienza al entrar con este mismo correo (<b>${safeMail}</b>). Si todavía no tienes cuenta, créala con este correo y tu acceso al portal se activará automáticamente.`,
+          `<span style="color:#8a8178;">— — —</span>`,
+          `<b>Welcome to the Council.</b> You’re invited to join MANCHA’s Founding Curatorial Council — the group that judges work blind and builds the gallery’s standard with every decision. Sign in with this same email (<b>${safeMail}</b>) to begin your onboarding; if you don’t have an account yet, create one with this email and your access activates automatically.`,
+        ],
+        cta: { label: 'Comenzar incorporación', href: `${site}/curaduria` },
+        signoff: 'MANCHA',
+        note: 'La obra habla primero. The work speaks first.',
+      }),
     });
   } catch {}
 

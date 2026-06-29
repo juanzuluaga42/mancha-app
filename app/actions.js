@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail } from '@/lib/email';
 import { safePath, escapeHtml } from '@/lib/utils';
 
 export async function toggleFavorite(formData) {
@@ -100,19 +100,17 @@ export async function placeBid(formData) {
     await sendEmail({
       to: prevLeader.buyer.email,
       subject: `Alguien superó tu puja por "${pieceCheck.title}" — MANCHA`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">Te superaron, ${escapeHtml(prevLeader.buyer.full_name || '')}.</h2>
-          <p>Alguien acaba de pujar más alto que tú por <strong>"${escapeHtml(pieceCheck.title)}"</strong> de ${escapeHtml(pieceCheck.artists?.display_name ?? 'la temporada actual')}.</p>
-          <p>Puedes volver a pujar cuando quieras — la temporada sigue abierta.</p>
-          <p style="margin: 24px 0;">
-            <a href="${baseUrl}/obras/${pieceId}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">
-              Volver a pujar →
-            </a>
-          </p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Te superaron',
+        lead: `${escapeHtml(prevLeader.buyer.full_name || 'Coleccionista')}, todavía estás a tiempo.`,
+        paragraphs: [
+          `Otra persona acaba de pujar más alto que tú por <b>“${escapeHtml(pieceCheck.title)}”</b>, de ${escapeHtml(pieceCheck.artists?.display_name ?? 'la temporada actual')}.`,
+          `En MANCHA cada obra es única y la temporada cierra para siempre: cuando termina, lo no adquirido se va. Si esta pieza te mueve, aún puedes recuperar la delantera.`,
+        ],
+        cta: { label: 'Volver a pujar', href: `${baseUrl}/obras/${pieceId}` },
+        signoff: 'El equipo de MANCHA',
+        note: 'Recibes este aviso porque tenías la puja más alta.',
+      }),
     });
   }
 
@@ -127,14 +125,17 @@ export async function placeBid(formData) {
       await sendEmail({
         to: user.email,
         subject: `Tu puja por "${piece.title}" quedó registrada — MANCHA`,
-        html: `
-          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-            <h2 style="margin-bottom: 4px;">¡Tu puja quedó registrada!</h2>
-            <p>Pujaste <strong>$${amount.toLocaleString('es-MX')} USD</strong> por <strong>"${escapeHtml(piece.title)}"</strong>, de ${escapeHtml(piece.artists?.display_name ?? 'la temporada actual')}.</p>
-            <p>Eres la oferta más alta en este momento. Si alguien puja más alto antes de que cierre la temporada, te avisaremos. Si ganas, te contactaremos por correo para coordinar el pago y el envío.</p>
-            <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-          </div>
-        `,
+        html: brandedEmail({
+          heading: 'Tu puja quedó registrada',
+          lead: 'Vas a la cabeza.',
+          paragraphs: [
+            `Pujaste <b>$${amount.toLocaleString('es-MX')} USD</b> por <b>“${escapeHtml(piece.title)}”</b>, de ${escapeHtml(piece.artists?.display_name ?? 'la temporada actual')}.`,
+            `Por ahora eres la oferta más alta. Si alguien te supera antes de que cierre la temporada, te lo diremos a tiempo para que decidas.`,
+            `Si ganas, te escribiremos por correo para coordinar el pago seguro y el envío de la obra, con su certificado de colección.`,
+          ],
+          cta: { label: 'Ver la obra', href: `${baseUrl}/obras/${pieceId}` },
+          signoff: 'El equipo de MANCHA',
+        }),
       });
     }
   }

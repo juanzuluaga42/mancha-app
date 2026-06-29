@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail } from '@/lib/email';
 import { escapeHtml } from '@/lib/utils';
 
 export async function GET(request) {
@@ -36,16 +36,19 @@ export async function GET(request) {
             const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || origin;
             await sendEmail({
               to: user.email,
-              subject: 'Completa tu postulación a MANCHA — sube tus obras',
-              html: `
-                <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-                  <h2 style="margin-bottom: 4px;">¡Tu cuenta de artista en MANCHA está lista, ${escapeHtml(meta.full_name || '')}!</h2>
-                  <p>Todavía no subiste ninguna obra. MANCHA solo puede revisar tu trabajo cuando tienes al menos una obra cargada.</p>
-                  <p>Entra a tu cuenta y sube hasta 3 piezas (imagen, título y precio de salida) antes de que cierre la temporada.</p>
-                  <p style="margin: 20px 0;"><a href="${siteUrl}/cuenta" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:2px;text-decoration:none;font-size:14px;">Subir mis obras →</a></p>
-                  <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-                </div>
-              `,
+              subject: 'Tu cuenta de artista en MANCHA está lista — sube tus obras',
+              html: brandedEmail({
+                heading: 'Tu cuenta de artista está lista',
+                lead: `Bienvenido a MANCHA, ${escapeHtml(meta.full_name || '')}.`,
+                paragraphs: [
+                  `Confirmaste tu correo: ya eres parte del proceso de selección de la temporada.`,
+                  `Todavía no subiste ninguna obra, y ese es el paso que falta. MANCHA solo puede revisar tu trabajo cuando hay al menos una pieza cargada.`,
+                  `Entra a tu cuenta y sube <b>hasta 3 obras</b> —imagen en alta calidad, título, técnica y precio de salida— antes de que cierre la convocatoria. Cada temporada entra un grupo pequeño, elegido a mano: la calidad de lo que subas es lo que define tu lugar.`,
+                ],
+                cta: { label: 'Subir mis obras', href: `${siteUrl}/cuenta` },
+                signoff: 'El equipo de MANCHA',
+                note: 'Si no creaste esta cuenta, puedes ignorar este mensaje.',
+              }),
             });
           }
         }

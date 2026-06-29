@@ -3,7 +3,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail, notifyAdmin } from '@/lib/email';
+import { escapeHtml } from '@/lib/utils';
 import { safePath } from '@/lib/utils';
 
 export async function joinWaitlist(formData) {
@@ -32,15 +33,34 @@ export async function joinWaitlist(formData) {
   await sendEmail({
     to: email,
     subject: pieceTitle ? `Te avisamos sobre "${pieceTitle}" — MANCHA` : 'Estás en la lista de espera de MANCHA',
-    html: `
-      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-        <h2 style="margin-bottom: 4px;">${pieceTitle ? '¡Listo!' : '¡Bienvenido a MANCHA!'}</h2>
-        <p>${pieceTitle
-          ? `Te vamos a avisar por correo sobre novedades de "${pieceTitle}".`
-          : 'Te avisamos por correo apenas abramos una nueva temporada o sumemos artistas nuevos.'}</p>
-        <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-      </div>
-    `,
+    html: brandedEmail({
+      heading: pieceTitle ? 'Te avisaremos' : 'Estás en la lista',
+      lead: pieceTitle ? undefined : 'Bienvenido a MANCHA.',
+      paragraphs: pieceTitle
+        ? [
+            `Anotamos tu interés en <b>“${escapeHtml(pieceTitle)}”</b>.`,
+            `Te escribiremos en cuanto haya novedades sobre esta obra. En MANCHA cada pieza es única: avisamos a tiempo para que no se te escape.`,
+          ]
+        : [
+            `Quedaste en la lista de espera. Serás de los primeros en saber cuándo abre una nueva temporada o entran nuevos artistas.`,
+            `MANCHA es una galería por temporadas: pocas obras, elegidas a mano, disponibles por tiempo limitado. Cuando algo se mueva, te llega aquí primero.`,
+          ],
+      signoff: 'El equipo de MANCHA',
+      note: 'Recibes este correo porque dejaste tu dirección en manchagallery.com.',
+    }),
+  });
+
+  // Aviso interno de nuevo interesado / lista de espera.
+  await notifyAdmin({
+    subject: pieceTitle ? `Interesado en "${pieceTitle}"` : 'Nuevo registro en lista de espera',
+    html: brandedEmail({
+      heading: pieceTitle ? 'Nuevo interesado en una obra' : 'Nuevo registro en lista de espera',
+      paragraphs: [
+        `<b>${escapeHtml(email)}</b>`,
+        pieceTitle ? `Obra: <b>“${escapeHtml(pieceTitle)}”</b>` : 'Lista de espera general.',
+      ],
+      note: 'Aviso automático del sistema de MANCHA.',
+    }),
   });
 
   redirect(`${redirectTo}?success=${encodeURIComponent(t('waitlistSuccess'))}`);

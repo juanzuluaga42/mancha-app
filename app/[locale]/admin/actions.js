@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { createAdminClient } from '@/utils/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail } from '@/lib/email';
 import { createCheckoutLink } from '@/lib/stripe';
 import { escapeHtml } from '@/lib/utils';
 
@@ -25,13 +25,16 @@ export async function approveArtist(formData) {
     await sendEmail({
       to: artist.profiles.email,
       subject: '¡Fuiste seleccionado para MANCHA!',
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">¡Bienvenido/a a MANCHA, ${escapeHtml(artist.display_name)}!</h2>
-          <p>Fuiste seleccionado para esta temporada. Tus obras ya son visibles en el catálogo. Si quieres, puedes completar hasta 3 piezas desde tu cuenta.</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Fuiste seleccionado',
+        lead: `Bienvenido a MANCHA, ${escapeHtml(artist.display_name)}.`,
+        paragraphs: [
+          `Entre muchas miradas, la tuya entró a esta temporada. Tus obras ya son visibles en el catálogo, frente a coleccionistas que buscan descubrir antes que el mundo.`,
+          `Si aún no lo hiciste, puedes completar hasta <b>3 piezas</b> desde tu cuenta. Cuida cada imagen y cada precio de salida: así se construye una temporada que vale algo.`,
+        ],
+        cta: { label: 'Ir a mi cuenta', href: 'https://manchagallery.com/cuenta' },
+        signoff: 'El equipo de MANCHA',
+      }),
     });
   }
 
@@ -54,13 +57,15 @@ export async function rejectArtist(formData) {
     await sendEmail({
       to: artist.profiles.email,
       subject: 'Tu postulación a MANCHA',
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">Sobre tu postulación</h2>
-          <p>Gracias por postular a MANCHA. Esta vez no avanzamos con tu perfil para la temporada actual — eso no significa que no puedas volver a intentarlo más adelante.</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Sobre tu postulación',
+        paragraphs: [
+          `Gracias por mostrarnos tu trabajo. Lo miramos con cuidado.`,
+          `Esta vez no avanzamos con tu perfil para la temporada actual. No es un juicio sobre tu obra entera: cada temporada entra un grupo pequeño y muchas miradas valiosas quedan fuera por espacio, no por falta de mérito.`,
+          `Puedes volver a postular en una próxima convocatoria. Seguiremos atentos a lo que hagas.`,
+        ],
+        signoff: 'El equipo de MANCHA',
+      }),
     });
   }
 
@@ -81,13 +86,16 @@ export async function approveApplication(formData) {
     await sendEmail({
       to: application.email,
       subject: '¡Tu postulación a MANCHA fue aceptada!',
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">¡Bienvenido/a a MANCHA, ${application.full_name}!</h2>
-          <p>Tu postulación quedó aprobada. Para empezar a cargar tus piezas, crea tu cuenta de artista en manchagallery.com/registro usando este mismo correo (${application.email}) — va a quedar lista para subir piezas sin pasar por otra revisión.</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Tu postulación fue aceptada',
+        lead: `Bienvenido a MANCHA, ${escapeHtml(application.full_name || '')}.`,
+        paragraphs: [
+          `Nos gustó lo que vimos. Para empezar a cargar tus piezas, crea tu cuenta de artista usando <b>este mismo correo</b> (${escapeHtml(application.email)}).`,
+          `Al registrarte con ese correo, tu cuenta queda lista para subir obras sin pasar por otra revisión. Podrás cargar hasta 3 piezas para la temporada.`,
+        ],
+        cta: { label: 'Crear mi cuenta', href: 'https://manchagallery.com/registro?role=artist' },
+        signoff: 'El equipo de MANCHA',
+      }),
     });
   }
 
@@ -108,13 +116,15 @@ export async function rejectApplication(formData) {
     await sendEmail({
       to: application.email,
       subject: 'Tu postulación a MANCHA',
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">Sobre tu postulación</h2>
-          <p>Gracias por postular a MANCHA, ${application.full_name}. Esta vez no avanzamos con tu perfil para la temporada actual — puedes volver a postular más adelante.</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Sobre tu postulación',
+        paragraphs: [
+          `Gracias por postular a MANCHA, ${escapeHtml(application.full_name || '')}. Lo miramos con atención.`,
+          `Esta vez no avanzamos con tu perfil para la temporada actual. Cada temporada entra un grupo pequeño y muchas buenas miradas quedan fuera por espacio, no por falta de mérito.`,
+          `Puedes volver a postular más adelante. Seguimos atentos a tu trabajo.`,
+        ],
+        signoff: 'El equipo de MANCHA',
+      }),
     });
   }
 
@@ -150,16 +160,19 @@ export async function markAsSold(formData) {
     await sendEmail({
       to: winner.buyer.email,
       subject: `¡Ganaste la puja por "${piece.title}"! — MANCHA`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">¡Felicitaciones, ${escapeHtml(winner.buyer.full_name || '')}!</h2>
-          <p>Tu puja de $${Number(winner.amount).toLocaleString('es-AR')} por <strong>"${escapeHtml(piece.title)}"</strong> fue la más alta. La pieza es tuya.</p>
-          ${checkoutUrl
-            ? `<p style="margin: 20px 0;"><a href="${checkoutUrl}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">Pagar ahora →</a></p><p style="font-size: 13px; color: #666;">Una vez que completes el pago, te escribimos por separado para coordinar el envío.</p>`
-            : `<p>Te escribimos por separado para coordinar el pago y el envío.</p>`}
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Ganaste la puja',
+        lead: `Felicitaciones, ${escapeHtml(winner.buyer.full_name || '')}.`,
+        paragraphs: [
+          `Tu puja de <b>$${Number(winner.amount).toLocaleString('es-AR')} USD</b> por <b>“${escapeHtml(piece.title)}”</b> fue la más alta. La obra es tuya.`,
+          checkoutUrl
+            ? `Completa el pago de forma segura para cerrar la adquisición. Apenas se confirme, recibirás tu certificado de colección y te escribiremos para coordinar el envío.`
+            : `Te escribimos por separado para coordinar el pago seguro y el envío de la obra.`,
+        ],
+        cta: checkoutUrl ? { label: 'Pagar ahora', href: checkoutUrl } : undefined,
+        signoff: 'El equipo de MANCHA',
+        note: 'El cobro se realiza en USD a través de un pago seguro.',
+      }),
     });
   }
 
@@ -254,17 +267,19 @@ export async function sendPaymentReminder(formData) {
     await sendEmail({
       to: winner.buyer.email,
       subject: `Recordatorio: tu pago por "${piece.title}" sigue pendiente — MANCHA`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h2 style="margin-bottom: 4px;">Hola ${escapeHtml(winner.buyer.full_name || '')},</h2>
-          <p>Te escribimos porque ganaste la puja por <strong>"${escapeHtml(piece.title)}"</strong> y todavía no completaste el pago.</p>
-          ${checkoutUrl
-            ? `<p style="margin: 20px 0;"><a href="${checkoutUrl}" style="background:#16110D;color:#FAF3E6;padding:12px 22px;border-radius:100px;text-decoration:none;font-size:14px;">Pagar ahora →</a></p>`
-            : `<p>Escríbenos para coordinar el pago.</p>`}
-          <p style="font-size: 13px; color: #666;">Si no completas el pago en los próximos días, nos reservamos el derecho de ofrecerle la pieza a la siguiente puja más alta.</p>
-          <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-        </div>
-      `,
+      html: brandedEmail({
+        heading: 'Tu obra te espera',
+        lead: `Hola ${escapeHtml(winner.buyer.full_name || '')}.`,
+        paragraphs: [
+          `Ganaste la puja por <b>“${escapeHtml(piece.title)}”</b>, pero todavía no vemos tu pago completado.`,
+          checkoutUrl
+            ? `Puedes terminar la compra de forma segura desde el botón de abajo. Apenas se confirme, recibirás tu certificado de colección.`
+            : `Escríbenos para coordinar el pago y no perder la pieza.`,
+        ],
+        cta: checkoutUrl ? { label: 'Completar mi pago', href: checkoutUrl } : undefined,
+        signoff: 'El equipo de MANCHA',
+        note: 'Si el pago no se completa en los próximos días, podríamos ofrecer la obra a la siguiente puja más alta.',
+      }),
     });
   }
 

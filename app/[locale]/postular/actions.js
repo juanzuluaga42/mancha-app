@@ -2,7 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, brandedEmail } from '@/lib/email';
 
 const MAX_SIZE = 8 * 1024 * 1024;
 
@@ -61,13 +61,15 @@ export async function submitApplication(formData) {
   await sendEmail({
     to: email,
     subject: 'Recibimos tu postulación a MANCHA',
-    html: `
-      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-        <h2 style="margin-bottom: 4px;">¡Recibimos tu postulación, ${full_name}!</h2>
-        <p>La estamos revisando. Si tu trabajo entra en la próxima temporada, te escribimos por este correo con los siguientes pasos.</p>
-        <p style="font-size: 13px; color: #666; margin-top: 24px;">— El equipo de MANCHA</p>
-      </div>
-    `,
+    html: brandedEmail({
+      heading: 'Recibimos tu postulación',
+      lead: `Gracias, ${full_name}.`,
+      paragraphs: [
+        `Tu trabajo ya está en nuestras manos y lo estamos revisando con calma.`,
+        `Cada temporada entra un grupo pequeño, elegido a mano. Si tu obra avanza, te escribiremos por este correo con los siguientes pasos.`,
+      ],
+      signoff: 'El equipo de MANCHA',
+    }),
   });
 
   redirect(`/postular?success=${encodeURIComponent('¡Listo! Recibimos tu postulación. Te avisamos por correo apenas la revisemos.')}`);
