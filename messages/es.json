@@ -753,6 +753,7 @@
       "museum": "Curaduría de museo",
       "market": "Mercado del arte",
       "art_history": "Historia del arte"
-    }
+    },
+    "errorMsg": "No pudimos enviar tu candidatura. Revisa los datos e intenta de nuevo."
   }
 }

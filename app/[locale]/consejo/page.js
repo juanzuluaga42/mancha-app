@@ -21,6 +21,7 @@ export default async function ConsejoPage({ searchParams }) {
   const sp = await searchParams;
   const t = await getTranslations('council');
   const sent = sp?.sent;
+  const errored = sp?.error;
 
   return (
     <div className="elegidos-page">
@@ -75,7 +76,10 @@ export default async function ConsejoPage({ searchParams }) {
         {sent ? (
           <div className="consejo-success">{t('success')}</div>
         ) : (
-          <CouncilApplication />
+          <>
+            {errored && <div className="consejo-error">{t('errorMsg')}</div>}
+            <CouncilApplication />
+          </>
         )}
 
         <Link href="/sobre-mancha" className="elegidos-back">{t('back')}</Link>

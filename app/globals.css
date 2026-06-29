@@ -3792,3 +3792,4 @@ input, textarea, select {
 .cb-note-form{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
 .cb-note-form textarea{border:1px solid rgba(22,17,13,.18); border-radius:2px; padding:10px 12px; font-family:var(--font-body); font-size:.9rem; background:#fff; resize:vertical;}
 .cb-note-form button{align-self:flex-start;}
+.consejo-error{margin-top:24px; border:1px solid var(--red); background:rgba(229,64,43,0.08); color:#FAF3E6; padding:16px 18px; font-family:var(--font-body); font-size:.98rem; line-height:1.5;}

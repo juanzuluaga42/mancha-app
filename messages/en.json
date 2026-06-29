@@ -753,6 +753,7 @@
       "museum": "Museum curation",
       "market": "Art market",
       "art_history": "Art history"
-    }
+    },
+    "errorMsg": "We couldn't submit your application. Check your details and try again."
   }
 }
