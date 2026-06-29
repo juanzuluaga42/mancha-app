@@ -94,9 +94,10 @@ export async function placeBid(formData) {
     redirect(`${redirectTo}?error=${encodeURIComponent(ta('bidError'))}`);
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
+
   // Email al ex-líder: "te superaron"
   if (!error && prevLeaderIsOther && prevLeader.buyer?.email) {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
     await sendEmail({
       to: prevLeader.buyer.email,
       subject: `Alguien superó tu puja por "${pieceCheck.title}" — MANCHA`,
