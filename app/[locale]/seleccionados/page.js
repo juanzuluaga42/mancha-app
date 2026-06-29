@@ -9,6 +9,7 @@ import LocalDate from '@/components/LocalDate';
 import { cap } from '@/lib/utils';
 import { formatCalendarDate } from '@/lib/dates';
 import { isPreLaunch, isConvocatoria } from '@/lib/fase';
+import { seasonName } from '@/lib/provenance';
 import { redirect } from 'next/navigation';
 
 export async function generateMetadata() {
@@ -182,7 +183,7 @@ export default async function SeleccionadosPage() {
               <div className="sel-past-season" key={season.id}>
                 <div className="sel-past-season-head">
                   <div>
-                    <h3 className="sel-past-season-name">{season.name}</h3>
+                    <h3 className="sel-past-season-name">{seasonName(season.name, locale)}</h3>
                     <p className="sel-past-season-dates">
                       {formatCalendarDate(season.starts_at, locale, { month: 'long', year: 'numeric' })}
                       {' — '}

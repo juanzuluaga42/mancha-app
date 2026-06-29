@@ -12,6 +12,7 @@ import { createClient } from '@/utils/supabase/server';
 import { isPreLaunch, isConvocatoria, isTemporadaActiva } from '@/lib/fase';
 import { getArticles } from '@/lib/news';
 import { LAUNCH } from '@/lib/dates';
+import { seasonName } from '@/lib/provenance';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -95,7 +96,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
             <span>
               {prelaunch || convocatoria
                 ? t('galleryOpensSep')
-                : t('seasonInProgress', { name: season?.name ?? 'Temporada 01' })}
+                : t('seasonInProgress', { name: seasonName(season?.name ?? 'Temporada 01', locale) })}
             </span>
           </div>
         </div>
@@ -166,7 +167,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
             <div className="hp-season-head">
               <div>
                 <p className="eyebrow" style={{ color: 'var(--ink-soft)' }}>{t('seasonCurrentKicker')}</p>
-                <h2 className="hp-season-title">{season?.name ?? t('currentArtistsFallback')}</h2>
+                <h2 className="hp-season-title">{season?.name ? seasonName(season.name, locale) : t('currentArtistsFallback')}</h2>
               </div>
               <Link href="/seleccionados" className="hp-season-all">{t('viewAll')}</Link>
             </div>

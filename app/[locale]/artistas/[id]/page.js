@@ -11,6 +11,7 @@ import Toast from '@/components/Toast';
 import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { cap } from '@/lib/utils';
 import { isPreLaunch, isConvocatoria, isCatalogHidden } from '@/lib/fase';
+import { seasonName as fmtSeasonName } from '@/lib/provenance';
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -46,7 +47,7 @@ export default async function ArtistPage({ params, searchParams }) {
   if (!artist) notFound();
 
   const redirectTo = `/artistas/${artist.id}`;
-  const seasonName = artist.season?.name ?? null;
+  const seasonName = artist.season?.name ? fmtSeasonName(artist.season.name, locale) : null;
 
   function bidInfo(piece) {
     const amounts = (piece.bids ?? []).map((b) => Number(b.amount));

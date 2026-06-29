@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 
 import ObrasCatalog from '@/components/ObrasCatalog';
 import { isTemporadaActiva } from '@/lib/fase';
+import { seasonName } from '@/lib/provenance';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -21,6 +22,7 @@ export default async function ObrasPage() {
     redirect('/?from=obras');
   }
   const t = await getTranslations('catalog');
+  const locale = await getLocale();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -53,7 +55,7 @@ export default async function ObrasPage() {
         <Splat width="80px" height="70px" top="40%" left="6%" color="red" rotate={8} radius="r4" />
         <Splat width="60px" height="54px" top="-28px" left="42%" color="red" rotate={-12} radius="r2" />
         <div className="wrap">
-          <p className="eyebrow obras-header-eyebrow">{season?.name ?? t('headerEyebrowFallback')}</p>
+          <p className="eyebrow obras-header-eyebrow">{season?.name ? seasonName(season.name, locale) : t('headerEyebrowFallback')}</p>
           <h1 className="obras-header-title">
             {t('title1')}<br />
             <em>{t('titleEm')}</em>

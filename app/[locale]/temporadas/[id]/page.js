@@ -9,14 +9,16 @@ import LocalDate from '@/components/LocalDate';
 import { cap } from '@/lib/utils';
 import { formatCalendarDate } from '@/lib/dates';
 import { isCatalogHidden } from '@/lib/fase';
+import { seasonName } from '@/lib/provenance';
 
 const GRADIENTS = ['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10','g11','g12'];
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
+  const locale = await getLocale();
   const supabase = await createClient();
   const { data: season } = await supabase.from('seasons').select('name').eq('id', id).maybeSingle();
-  return { title: season ? `MANCHA — ${season.name}` : 'MANCHA — Temporada' };
+  return { title: season ? `MANCHA — ${seasonName(season.name, locale)}` : 'MANCHA — Temporada' };
 }
 
 export default async function TemporadaPage({ params }) {
@@ -63,7 +65,7 @@ export default async function TemporadaPage({ params }) {
             </span>
           </div>
 
-          <h1 className="temporada-title">{season.name}</h1>
+          <h1 className="temporada-title">{seasonName(season.name, locale)}</h1>
 
           <div className="temporada-stats">
             <div className="temporada-stat">

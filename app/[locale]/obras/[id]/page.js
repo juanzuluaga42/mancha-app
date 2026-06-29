@@ -9,7 +9,7 @@ import WaitlistForm from '@/components/WaitlistForm';
 import SelloSeleccionado from '@/components/SelloSeleccionado';
 import { toggleFavorite, placeBid } from '@/app/actions';
 import { cap } from '@/lib/utils';
-import { isSealed, isCanon, transactionStatus, provenanceLine } from '@/lib/provenance';
+import { isSealed, isCanon, transactionStatus, provenanceLine, seasonName as fmtSeasonName } from '@/lib/provenance';
 
 const ENQUIRE_EMAIL = 'mancha.gallery@gmail.com';
 
@@ -58,7 +58,7 @@ export default async function PiecePage({ params, searchParams }) {
     const idx = list.findIndex((s) => s.id === piece.artists.season_id);
     seasonObj = idx >= 0 ? list[idx] : null;
     seasonOrdinal = idx >= 0 ? idx + 1 : 0;
-    seasonName = seasonObj?.name ?? null;
+    seasonName = seasonObj?.name ? fmtSeasonName(seasonObj.name, locale) : null;
   }
   // Una temporada sellada (o cerrada en el tiempo) saca la obra del piso abierto.
   const seasonClosed = isSealed(seasonObj);
