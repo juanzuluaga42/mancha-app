@@ -55,6 +55,7 @@ export default async function CuraduriaPage({ searchParams }) {
             <Link href="/curaduria/perfil" className="cur-room-link">{t('dash.linkProfile')}</Link>
             {curator.role === 'founder' && (
               <>
+                <Link href="/curaduria/asignar" className="cur-room-link">{t('dash.linkAssign')}</Link>
                 <Link href="/curaduria/colegio" className="cur-room-link">{t('dash.linkCollege')}</Link>
                 <Link href="/curaduria/candidatos" className="cur-room-link">{t('dash.linkCandidates')}</Link>
                 <Link href="/curaduria/integridad" className="cur-room-link">{t('dash.linkIntegrity')}</Link>

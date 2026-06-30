@@ -12,7 +12,10 @@ function diff(target) {
   return { days, hours, mins, secs, ended: ms === 0 };
 }
 
-export default function Countdown({ endsAt, label = 'Cierra en' }) {
+// Countdown editorial de MANCHA. `tone`: 'dark' sobre héroes oscuros, 'light'
+// sobre papel. `startsAt` (opcional) dibuja una barra de "tiempo restante" de
+// la ventana — útil para la convocatoria (cuánto queda del 1–31 ago).
+export default function Countdown({ endsAt, startsAt, label = 'Cierra en', tone = 'light' }) {
   const u = useTranslations('countdown');
   const [t, setT] = useState(null);
 
@@ -22,24 +25,38 @@ export default function Countdown({ endsAt, label = 'Cierra en' }) {
     return () => clearInterval(id);
   }, [endsAt]);
 
-  if (!t) return null;
+  if (!t || t.ended) return null;
 
-  if (t.ended) {
-    return null;
+  // Barra de ventana: fracción de tiempo que aún queda (se encoge hacia el cierre).
+  let remaining = null;
+  if (startsAt) {
+    const start = new Date(startsAt).getTime();
+    const end = new Date(endsAt).getTime();
+    const now = Date.now();
+    if (end > start) remaining = Math.max(0, Math.min(100, ((end - now) / (end - start)) * 100));
   }
 
+  const units = [
+    { k: 'd', v: t.days, l: u('days', { count: t.days }) },
+    { k: 'h', v: String(t.hours).padStart(2, '0'), l: u('hours') },
+    { k: 'm', v: String(t.mins).padStart(2, '0'), l: u('mins') },
+    { k: 's', v: String(t.secs).padStart(2, '0'), l: u('secs') },
+  ];
+
   return (
-    <div className="countdown" role="timer" aria-label={label}>
-      <span className="countdown-label">{label}</span>
-      <div className="countdown-units">
-        <span className="cd-unit"><b>{t.days}</b>{u('days', { count: t.days })}</span>
-        <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.hours).padStart(2, '0')}</b>{u('hours')}</span>
-        <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.mins).padStart(2, '0')}</b>{u('mins')}</span>
-        <span className="cd-sep">·</span>
-        <span className="cd-unit"><b>{String(t.secs).padStart(2, '0')}</b>{u('secs')}</span>
+    <div className={`mcd mcd--${tone}`} role="timer" aria-label={`${label}: ${t.days}d ${t.hours}h ${t.mins}m`}>
+      <div className="mcd-label"><span className="mcd-dot" aria-hidden="true" />{label}</div>
+      <div className="mcd-units">
+        {units.map((un) => (
+          <div className="mcd-u" key={un.k}>
+            <b>{un.v}</b>
+            <span className="mcd-u-l">{un.l}</span>
+          </div>
+        ))}
       </div>
+      {remaining != null && (
+        <div className="mcd-bar" aria-hidden="true"><i style={{ width: `${remaining}%` }} /></div>
+      )}
     </div>
   );
 }

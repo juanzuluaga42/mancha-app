@@ -65,7 +65,7 @@ export default async function ParaColeccionistasPage({ searchParams }) {
           </h1>
           <div className="tsr-hero-cd">
             {(prelaunch || convocatoria) && (
-              <Countdown endsAt={LAUNCH} label={t('galleryOpensIn')} />
+              <Countdown endsAt={LAUNCH} label={t('galleryOpensIn')} tone="dark" />
             )}
             {temporadaActiva && (
               <p className="tsr-hero-now">{t('nowShowing')}</p>

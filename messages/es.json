@@ -862,7 +862,8 @@
       "tagReveal": "Falta Fase 2 · reveal",
       "tagDone": "Completada",
       "untitled": "Sin título",
-      "indexTitle": "Tu Curatorial Index"
+      "indexTitle": "Tu Curatorial Index",
+      "linkAssign": "Asignar obras →"
     },
     "review": {
       "errIncomplete": "Faltan criterios por puntuar o nivel de confianza.",

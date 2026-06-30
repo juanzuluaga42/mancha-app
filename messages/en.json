@@ -862,7 +862,8 @@
       "tagReveal": "Phase 2 · reveal pending",
       "tagDone": "Completed",
       "untitled": "Untitled",
-      "indexTitle": "Your Curatorial Index"
+      "indexTitle": "Your Curatorial Index",
+      "linkAssign": "Assign works →"
     },
     "review": {
       "errIncomplete": "Some criteria are missing a score or confidence level.",
