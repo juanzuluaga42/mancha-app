@@ -216,7 +216,7 @@ next.config.mjs ← plugin next-intl + securityHeaders + images.remotePatterns
 - **cur_assignments** (round_id, work_id, curator_id, phase `phase1|phase2|done`, unique(work_id,curator_id)).
 - **cur_evaluations** (assignment_id unique, scores jsonb, reflection, decision, curatorial_index) — **inmutable** (trigger bloquea UPDATE/DELETE).
 - **cur_reveal** (assignment_id unique, bias `none|slight|significant`, justification) — medición de sesgo Fase 2.
-- **cur_decisions** (work_id PK, outcome `selected|not_selected|second_round|hold`, note, decided_by) — decisión final del Founder.
+- **cur_decisions** (work_id PK, outcome `selected|not_selected`, note, decided_by) — decisión final del Founder (solo dos salidas: entra o no).
 - **cur_candidates** (name, email, focus, portfolio, statement, status `new|invited|declined|archived`) — expresiones de interés desde `/consejo`.
 - **cur_audit** (append-only). Helpers `cur_my_curator_id()` / `cur_is_founder()` (SECURITY DEFINER, EXECUTE solo `authenticated`).
 

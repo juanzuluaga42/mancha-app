@@ -48,7 +48,9 @@ export default async function CandidatosPage({ searchParams }) {
       <div className="cur-body">
         <div className="wrap" style={{ maxWidth: 980 }}>
           {sp?.approved && <div className="cur-flash">Candidato aprobado e incorporado. Su acceso se activa al entrar con su correo.</div>}
-          {sp?.error && <div className="cur-flash is-err">No pudimos completar la acción.</div>}
+          {sp?.deleted && <div className="cur-flash">Candidatura eliminada.</div>}
+          {sp?.error === 'delete' && <div className="cur-flash is-err">Solo puedes eliminar candidaturas rechazadas o en pausa.</div>}
+          {sp?.error && sp.error !== 'delete' && <div className="cur-flash is-err">No pudimos completar la acción.</div>}
 
           {/* Consejo actual */}
           <section className="cur-section">

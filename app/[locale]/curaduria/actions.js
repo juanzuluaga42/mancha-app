@@ -197,6 +197,28 @@ export async function setCandidateStage(formData) {
   redirect('/curaduria/candidatos');
 }
 
+// Elimina definitivamente una candidatura ya descartada (rechazada o en pausa).
+// Nunca borra una candidatura activa ni una ya aprobada (esa vive como curador).
+export async function deleteCandidate(formData) {
+  const { user } = await requireFounder();
+  const candidateId = String(formData.get('candidateId') || '');
+  if (!candidateId) redirect('/curaduria/candidatos?error=1');
+  const admin = createAdminClient();
+  const { data: cand } = await admin
+    .from('cur_candidates').select('id, status').eq('id', candidateId).maybeSingle();
+  if (!cand || !['rejected', 'on_hold'].includes(cand.status)) {
+    redirect('/curaduria/candidatos?error=delete');
+  }
+  // Las notas caen por ON DELETE CASCADE.
+  await admin.from('cur_candidates').delete().eq('id', candidateId);
+  await admin.from('cur_audit').insert({
+    actor: user.id, action: 'candidate_deleted', entity: 'cur_candidate', entity_id: candidateId,
+    meta: { status: cand.status },
+  });
+  revalidatePath('/curaduria/candidatos');
+  redirect('/curaduria/candidatos?deleted=1');
+}
+
 // Nota privada del Founder sobre un candidato.
 export async function addCandidateNote(formData) {
   const { user } = await requireFounder();
@@ -318,4 +340,146 @@ export async function completeOnboarding(formData) {
 
   revalidatePath('/curaduria');
   redirect('/curaduria?welcome=1');
+}
+
+// ════════════════════════════════════════════════════════════════
+// Founder · gestión de revisión: rondas, obras y asignación de curadores
+// ════════════════════════════════════════════════════════════════
+
+// Crea una ronda de revisión nueva (abierta).
+export async function createRound(formData) {
+  const { user } = await requireFounder();
+  const name = String(formData.get('name') || '').trim().slice(0, 200) || 'Ronda de revisión';
+  const admin = createAdminClient();
+  const { data: round } = await admin.from('cur_rounds').insert({ name, status: 'open' }).select('id').single();
+  await admin.from('cur_audit').insert({ actor: user.id, action: 'round_created', entity: 'cur_round', entity_id: round?.id });
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar');
+}
+
+// Código incremental "OBRA · A{n}" dentro de una ronda.
+async function nextWorkCode(admin, roundId) {
+  const { count } = await admin.from('cur_works').select('id', { count: 'exact', head: true }).eq('round_id', roundId);
+  return `OBRA · A${(count ?? 0) + 1}`;
+}
+
+// Importa una obra a revisión desde una pieza aprobada (separa la identidad).
+export async function addWorkFromPiece(formData) {
+  const { user } = await requireFounder();
+  const pieceId = String(formData.get('pieceId') || '');
+  const roundId = String(formData.get('roundId') || '');
+  if (!pieceId || !roundId) redirect('/curaduria/asignar?error=1');
+  const admin = createAdminClient();
+
+  // Evita duplicar la misma pieza.
+  const { data: dup } = await admin.from('cur_works').select('id').eq('piece_id', pieceId).maybeSingle();
+  if (dup) redirect('/curaduria/asignar?error=dup');
+
+  const { data: piece } = await admin
+    .from('pieces')
+    .select('title, year, technique, dimensions, image_url, min_bid, description, artists(display_name, location, bio)')
+    .eq('id', pieceId).maybeSingle();
+  if (!piece) redirect('/curaduria/asignar?error=1');
+
+  const code = await nextWorkCode(admin, roundId);
+  const { data: work } = await admin.from('cur_works').insert({
+    round_id: roundId, piece_id: pieceId, code,
+    title: piece.title, year: piece.year, technique: piece.technique,
+    dimensions: piece.dimensions, statement: piece.description || null, image_url: piece.image_url,
+  }).select('id').single();
+  await admin.from('cur_work_identity').insert({
+    work_id: work.id,
+    artist_name: piece.artists?.display_name || null,
+    artist_location: piece.artists?.location || null,
+    artist_bio: piece.artists?.bio || null,
+    price_usd: piece.min_bid ?? null,
+  });
+  await admin.from('cur_audit').insert({ actor: user.id, action: 'work_added', entity: 'cur_work', entity_id: work.id, meta: { from: 'piece' } });
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar?added=1');
+}
+
+// Crea una obra a revisar manualmente (cara ciega + identidad).
+export async function addWorkManual(formData) {
+  const { user } = await requireFounder();
+  const roundId = String(formData.get('roundId') || '');
+  const s = (k, n) => String(formData.get(k) || '').trim().slice(0, n);
+  const title = s('title', 200);
+  if (!roundId || !title) redirect('/curaduria/asignar?error=1');
+  const admin = createAdminClient();
+  const code = await nextWorkCode(admin, roundId);
+  const yearRaw = parseInt(formData.get('year'), 10);
+  const { data: work } = await admin.from('cur_works').insert({
+    round_id: roundId, code, title,
+    year: Number.isFinite(yearRaw) ? yearRaw : null,
+    technique: s('technique', 200) || null, dimensions: s('dimensions', 120) || null,
+    materials: s('materials', 300) || null, statement: s('statement', 2000) || null,
+    image_url: s('image_url', 600) || null, color_note: s('color_note', 300) || null,
+  }).select('id').single();
+  await admin.from('cur_work_identity').insert({
+    work_id: work.id,
+    artist_name: s('artist_name', 200) || null,
+    artist_location: s('artist_location', 200) || null,
+    artist_bio: s('artist_bio', 2000) || null,
+    instagram: s('instagram', 120) || null,
+    prestige_notes: s('prestige_notes', 1000) || null,
+    price_usd: Number.isFinite(parseFloat(formData.get('price_usd'))) ? parseFloat(formData.get('price_usd')) : null,
+  });
+  await admin.from('cur_audit').insert({ actor: user.id, action: 'work_added', entity: 'cur_work', entity_id: work.id, meta: { from: 'manual' } });
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar?added=1');
+}
+
+// Pool de curadores asignables: consejo/guest activos (no el Founder).
+async function assignablePool(admin, roundId, workId) {
+  const { data: curators } = await admin
+    .from('cur_curators').select('id').in('role', ['council', 'guest']).eq('active', true);
+  const { data: already } = await admin.from('cur_assignments').select('curator_id').eq('work_id', workId);
+  const taken = new Set((already ?? []).map((a) => a.curator_id));
+  return (curators ?? []).map((c) => c.id).filter((id) => !taken.has(id));
+}
+
+// Asigna N curadores al azar a una obra (por defecto 3). Reduce el sesgo.
+export async function assignCuratorsRandom(formData) {
+  const { user } = await requireFounder();
+  const workId = String(formData.get('workId') || '');
+  const roundId = String(formData.get('roundId') || '');
+  const count = Math.min(5, Math.max(1, parseInt(formData.get('count'), 10) || 3));
+  const admin = createAdminClient();
+  const pool = await assignablePool(admin, roundId, workId);
+  // Mezcla (Fisher–Yates) y toma N.
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  const pick = pool.slice(0, count);
+  if (pick.length) {
+    await admin.from('cur_assignments').insert(pick.map((cid) => ({ round_id: roundId, work_id: workId, curator_id: cid, phase: 'phase1' })));
+    await admin.from('cur_audit').insert({ actor: user.id, action: 'curators_assigned', entity: 'cur_work', entity_id: workId, meta: { mode: 'random', n: pick.length } });
+  }
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar');
+}
+
+// Asigna / quita un curador puntual.
+export async function assignCuratorManual(formData) {
+  const { user } = await requireFounder();
+  const workId = String(formData.get('workId') || '');
+  const roundId = String(formData.get('roundId') || '');
+  const curatorId = String(formData.get('curatorId') || '');
+  const admin = createAdminClient();
+  await admin.from('cur_assignments').insert({ round_id: roundId, work_id: workId, curator_id: curatorId, phase: 'phase1' });
+  await admin.from('cur_audit').insert({ actor: user.id, action: 'curators_assigned', entity: 'cur_work', entity_id: workId, meta: { mode: 'manual', curatorId } });
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar');
+}
+
+// Quita una asignación (solo si el curador aún no evaluó — la evaluación es inmutable).
+export async function unassignCurator(formData) {
+  const { user } = await requireFounder();
+  const assignmentId = String(formData.get('assignmentId') || '');
+  const admin = createAdminClient();
+  const { data: ev } = await admin.from('cur_evaluations').select('id').eq('assignment_id', assignmentId).maybeSingle();
+  if (ev) redirect('/curaduria/asignar?error=evaluada');
+  await admin.from('cur_assignments').delete().eq('id', assignmentId);
+  await admin.from('cur_audit').insert({ actor: user.id, action: 'curator_unassigned', entity: 'cur_assignment', entity_id: assignmentId });
+  revalidatePath('/curaduria/asignar');
+  redirect('/curaduria/asignar');
 }

@@ -244,7 +244,7 @@ alter table public.cur_curators alter column user_id drop not null;
 -- Decisión final del Founder por obra.
 create table if not exists public.cur_decisions (
   work_id     uuid primary key references public.cur_works(id) on delete cascade,
-  outcome     text not null check (outcome in ('selected','not_selected','second_round','hold')),
+  outcome     text not null check (outcome in ('selected','not_selected')),
   note        text,
   decided_by  uuid,
   decided_at  timestamptz not null default now()

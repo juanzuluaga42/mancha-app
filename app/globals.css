@@ -3784,6 +3784,9 @@ input, textarea, select {
 .cb-stage-btn{background:none; border:1px solid rgba(22,17,13,.18); border-radius:100px; padding:6px 13px; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); cursor:pointer; transition:all .15s ease;}
 .cb-stage-btn:hover:not(:disabled){border-color:var(--ink); color:var(--ink);}
 .cb-stage-btn.on{background:rgba(22,17,13,.06); border-color:var(--ink); color:var(--ink); cursor:default;}
+.cb-delete-form{margin-top:14px;}
+.cb-delete-btn{background:none; border:1px solid rgba(229,64,43,.35); color:var(--red); padding:6px 13px; border-radius:100px; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; cursor:pointer; transition:all .15s ease;}
+.cb-delete-btn:hover{background:var(--red); border-color:var(--red); color:#FAF3E6;}
 .cb-notes{margin-top:16px;}
 .cb-notes summary{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); cursor:pointer;}
 .cb-note{border-left:2px solid rgba(142,111,209,.4); padding-left:12px; margin-top:12px;}

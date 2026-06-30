@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { CANDIDATE_STAGES, stageLabel, stageClass, specialtyEs } from '@/lib/curatorial';
-import { setCandidateStage, addCandidateNote, approveCandidate } from '@/app/[locale]/curaduria/actions';
+import { setCandidateStage, addCandidateNote, approveCandidate, deleteCandidate } from '@/app/[locale]/curaduria/actions';
 
 export default function CandidatesBoard({ candidates }) {
   const [q, setQ] = useState('');
@@ -65,6 +65,7 @@ export default function CandidatesBoard({ candidates }) {
 
 function CandidateCard({ c }) {
   const approved = c.status === 'approved';
+  const discarded = c.status === 'rejected' || c.status === 'on_hold';
   const dateStr = c.created_at
     ? new Date(c.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })
     : '';
@@ -122,6 +123,18 @@ function CandidateCard({ c }) {
             </form>
           ))}
         </div>
+      )}
+
+      {/* Eliminar definitivamente una candidatura ya descartada */}
+      {discarded && (
+        <form
+          action={deleteCandidate}
+          className="cb-delete-form"
+          onSubmit={(e) => { if (!confirm(`¿Eliminar definitivamente la candidatura de ${c.name}? No se puede deshacer.`)) e.preventDefault(); }}
+        >
+          <input type="hidden" name="candidateId" value={c.id} />
+          <button type="submit" className="cb-delete-btn">Eliminar candidatura</button>
+        </form>
       )}
 
       {/* Notas privadas */}
