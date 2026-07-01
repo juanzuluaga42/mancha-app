@@ -208,7 +208,8 @@
     "avisoTitle1": "Sé el primero en ver",
     "avisoTitle2": "la Temporada 01.",
     "avisoSub": "La galería abre el 1 de septiembre. Deja tu correo y te avisamos en el momento en que el catálogo esté listo — antes que nadie.",
-    "waitlistLabel": "Avísame cuando abra →"
+    "waitlistLabel": "Avísame cuando abra →",
+    "galleryOpenNow": "La galería ya abrió"
   },
   "artists": {
     "heroTag": "MANCHA · Para artistas · Temporada 01 · 2026",
@@ -269,7 +270,9 @@
     "avisoSubPre": "Deja tu correo y te avisamos en el momento exacto en que la convocatoria abra.",
     "avisoSubConv": "La convocatoria cierra el 31 de agosto. La Temporada 01 abre el 1 de septiembre.",
     "avisoSubActive": "Una vez que entras a MANCHA, quedas en el registro para siempre.",
-    "waitlistLabel": "Avisarme cuando abra →"
+    "waitlistLabel": "Avisarme cuando abra →",
+    "convOpenedNow": "La convocatoria ya abrió",
+    "convClosedNow": "La convocatoria cerró"
   },
   "about": {
     "heroKicker": "Sobre MANCHA",
@@ -685,7 +688,10 @@
     "ctaInstitution": "La institución →",
     "back": "← Todas las notas",
     "prevDir": "← Anterior",
-    "nextDir": "Siguiente →"
+    "nextDir": "Siguiente →",
+    "readingTime": "{min} min de lectura",
+    "share": "Compartir",
+    "copied": "Enlace copiado"
   },
   "council": {
     "line1": "Antes de que una obra sea historia,",

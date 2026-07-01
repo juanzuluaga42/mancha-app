@@ -439,6 +439,47 @@ async function assignablePool(admin, roundId, workId) {
   return (curators ?? []).map((c) => c.id).filter((id) => !taken.has(id));
 }
 
+// Avisa por correo a los curadores recién asignados (mejor esfuerzo, bilingüe).
+async function notifyAssignedCurators(admin, curatorIds) {
+  if (!curatorIds || !curatorIds.length) return;
+  try {
+    const { sendEmail, brandedEmail } = await import('@/lib/email');
+    const { escapeHtml } = await import('@/lib/utils');
+    const site = process.env.NEXT_PUBLIC_SITE_URL || 'https://manchagallery.com';
+    const { data: curs } = await admin.from('cur_curators').select('id, email, display_name, user_id').in('id', curatorIds);
+    for (const c of curs || []) {
+      if (!c.email) continue;
+      let locale = 'es';
+      if (c.user_id) {
+        const { data: prof } = await admin.from('profiles').select('locale').eq('id', c.user_id).maybeSingle();
+        if (prof?.locale === 'en') locale = 'en';
+      }
+      const en = locale === 'en';
+      const name = escapeHtml(c.display_name || '');
+      await sendEmail({
+        to: c.email,
+        subject: en ? 'MANCHA · A new work to review' : 'MANCHA · Una nueva obra para revisar',
+        html: brandedEmail({
+          heading: en ? 'A work awaits your eye' : 'Una obra espera tu mirada',
+          lead: en ? `Hello${name ? ', ' + name : ''}.` : `Hola${name ? ', ' + name : ''}.`,
+          paragraphs: en
+            ? [
+                'A new work has been assigned to you for <b>blind review</b> in the curatorial room. You’ll judge it without knowing who made it — the work first, the artist after.',
+                'Enter the portal whenever you’re ready. Your evaluation stays sealed the moment you submit it.',
+              ]
+            : [
+                'Se te asignó una nueva obra para <b>revisión a ciegas</b> en la sala curatorial. La evaluarás sin saber quién la hizo — primero la obra; después, el artista.',
+                'Entra al portal cuando puedas. Tu evaluación queda sellada en cuanto la envías.',
+              ],
+          cta: { label: en ? 'Go to the curatorial room' : 'Ir a la sala curatorial', href: `${site}/curaduria` },
+          signoff: 'MANCHA',
+          note: 'La obra habla primero. The work speaks first.',
+        }),
+      });
+    }
+  } catch {}
+}
+
 // Asigna N curadores al azar a una obra (por defecto 3). Reduce el sesgo.
 export async function assignCuratorsRandom(formData) {
   const { user } = await requireFounder();
@@ -453,6 +494,7 @@ export async function assignCuratorsRandom(formData) {
   if (pick.length) {
     await admin.from('cur_assignments').insert(pick.map((cid) => ({ round_id: roundId, work_id: workId, curator_id: cid, phase: 'phase1' })));
     await admin.from('cur_audit').insert({ actor: user.id, action: 'curators_assigned', entity: 'cur_work', entity_id: workId, meta: { mode: 'random', n: pick.length } });
+    await notifyAssignedCurators(admin, pick);
   }
   revalidatePath('/curaduria/asignar');
   redirect('/curaduria/asignar');
@@ -467,6 +509,7 @@ export async function assignCuratorManual(formData) {
   const admin = createAdminClient();
   await admin.from('cur_assignments').insert({ round_id: roundId, work_id: workId, curator_id: curatorId, phase: 'phase1' });
   await admin.from('cur_audit').insert({ actor: user.id, action: 'curators_assigned', entity: 'cur_work', entity_id: workId, meta: { mode: 'manual', curatorId } });
+  await notifyAssignedCurators(admin, [curatorId]);
   revalidatePath('/curaduria/asignar');
   redirect('/curaduria/asignar');
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 function diff(target) {
   const ms = Math.max(0, new Date(target).getTime() - Date.now());
@@ -15,7 +16,7 @@ function diff(target) {
 // Countdown editorial de MANCHA. `tone`: 'dark' sobre héroes oscuros, 'light'
 // sobre papel. `startsAt` (opcional) dibuja una barra de "tiempo restante" de
 // la ventana — útil para la convocatoria (cuánto queda del 1–31 ago).
-export default function Countdown({ endsAt, startsAt, label = 'Cierra en', tone = 'light' }) {
+export default function Countdown({ endsAt, startsAt, label = 'Cierra en', tone = 'light', endedLabel, endedHref }) {
   const u = useTranslations('countdown');
   const [t, setT] = useState(null);
 
@@ -25,7 +26,19 @@ export default function Countdown({ endsAt, startsAt, label = 'Cierra en', tone 
     return () => clearInterval(id);
   }, [endsAt]);
 
-  if (!t || t.ended) return null;
+  if (!t) return null;
+
+  // Al llegar a cero no desaparece: muta a un aviso/CTA (evita un hueco confuso).
+  if (t.ended) {
+    if (!endedLabel) return null;
+    return (
+      <div className={`mcd mcd--${tone} mcd--ended`} role="status">
+        {endedHref
+          ? <Link href={endedHref} className="mcd-ended-cta"><span className="mcd-dot" aria-hidden="true" />{endedLabel} →</Link>
+          : <div className="mcd-label"><span className="mcd-dot" aria-hidden="true" />{endedLabel}</div>}
+      </div>
+    );
+  }
 
   // Barra de ventana: fracción de tiempo que aún queda (se encoge hacia el cierre).
   let remaining = null;

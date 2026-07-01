@@ -3972,3 +3972,33 @@ input, textarea, select {
 .asg-x:hover{color:var(--red);}
 .asg-actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
 .asg-manual-assign{display:flex; gap:6px;}
+
+/* ── Countdown · estado "terminado" (CTA en vez de desaparecer) ── */
+.mcd--ended .mcd-ended-cta{display:inline-flex; align-items:center; gap:9px; font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--red); border:1.5px solid currentColor; padding:11px 20px; border-radius:100px; transition:opacity .15s ease;}
+.mcd--ended.mcd--dark .mcd-ended-cta{color:var(--yellow);}
+.mcd--ended .mcd-ended-cta:hover{opacity:.75;}
+
+/* ════════════════════════════════════════════════════════════════
+   Accesibilidad · respeta prefers-reduced-motion.
+   Quien pide menos movimiento no ve pulsos, reveals ni transiciones largas.
+   ════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .mcd-dot { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* ── Editorial · barra de progreso, drop cap, compartir ── */
+.nota-progress{position:fixed; top:0; left:0; right:0; height:3px; z-index:60; background:transparent; pointer-events:none;}
+.nota-progress i{display:block; height:100%; background:var(--red); width:0; transition:width .1s linear;}
+.nota-header-share{margin-top:24px;}
+.nota-share{display:inline-flex; align-items:center; gap:9px; background:none; border:1.5px solid rgba(22,17,13,.2); color:var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em; padding:9px 16px; border-radius:100px; cursor:pointer; transition:border-color .15s ease, color .15s ease;}
+.nota-share:hover{border-color:var(--ink);}
+.nota-share-dot{width:6px; height:6px; border-radius:50%; background:var(--red);}
+/* Capital destacada en el primer párrafo del cuerpo. */
+.nota-content > p:first-of-type::first-letter{font-family:var(--font-display); font-weight:800; font-size:3.4em; line-height:.82; float:left; margin:8px 12px 0 0; color:var(--red);}

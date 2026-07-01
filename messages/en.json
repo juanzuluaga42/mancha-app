@@ -208,7 +208,8 @@
     "avisoTitle1": "Be the first to see",
     "avisoTitle2": "Season 01.",
     "avisoSub": "The gallery opens September 1. Leave your email and we'll let you know the moment the catalogue is ready — before anyone else.",
-    "waitlistLabel": "Notify me when it opens →"
+    "waitlistLabel": "Notify me when it opens →",
+    "galleryOpenNow": "The gallery is now open"
   },
   "artists": {
     "heroTag": "MANCHA · For artists · Season 01 · 2026",
@@ -269,7 +270,9 @@
     "avisoSubPre": "Leave your email and we'll let you know the exact moment the open call opens.",
     "avisoSubConv": "The open call closes August 31. Season 01 opens September 1.",
     "avisoSubActive": "Once you're in MANCHA, you stay in the registry forever.",
-    "waitlistLabel": "Notify me when it opens →"
+    "waitlistLabel": "Notify me when it opens →",
+    "convOpenedNow": "The open call is now open",
+    "convClosedNow": "The open call has closed"
   },
   "about": {
     "heroKicker": "About MANCHA",
@@ -685,7 +688,10 @@
     "ctaInstitution": "The institution →",
     "back": "← All notes",
     "prevDir": "← Previous",
-    "nextDir": "Next →"
+    "nextDir": "Next →",
+    "readingTime": "{min} min read",
+    "share": "Share",
+    "copied": "Link copied"
   },
   "council": {
     "line1": "Before a work makes history,",

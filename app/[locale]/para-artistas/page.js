@@ -68,8 +68,8 @@ export default async function ParaArtistasPage({ searchParams }) {
             )}
           </h1>
           <div className="tsr-hero-cd">
-            {prelaunch && <Countdown endsAt={CONV_OPEN} label={t('convOpensIn')} tone="dark" />}
-            {convocatoria && <Countdown endsAt={CONV_CLOSE} startsAt={CONV_OPEN} label={t('convClosesIn')} tone="dark" />}
+            {prelaunch && <Countdown endsAt={CONV_OPEN} label={t('convOpensIn')} tone="dark" endedLabel={t('convOpenedNow')} endedHref="/postular" />}
+            {convocatoria && <Countdown endsAt={CONV_CLOSE} startsAt={CONV_OPEN} label={t('convClosesIn')} tone="dark" endedLabel={t('convClosedNow')} />}
             {temporadaActiva && <p className="tsr-hero-now">{t('nowShowing')}</p>}
           </div>
           <div className="tsr-ctas">
